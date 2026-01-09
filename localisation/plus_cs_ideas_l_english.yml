@@ -1,0 +1,92 @@
+﻿l_english:
+ war_reparations:0 "War Reparations"
+ war_reparations_desc:0 "This country is currently paying war reparations to [?war_reps_to.GetNameDef]"
+ peace_disarmed_nation:0 "Disarmed Nation"
+ peace_civilian_economy:0 "Civilian Economy"
+ ceasefire_economic_tribute:0 "Economic Tribute for Ceasefire"
+ 
+ # FIX: Renamed to avoid duplicate with decision
+ idea_conditional_surrender:0 "Conditional Surrender (Spirit)"
+ 
+ internal_crisis_low:0 "Low Internal Crisis"
+ internal_crisis_medium:0 "Medium Internal Crisis"
+ internal_crisis_high:0 "High Internal Crisis"
+ revanchism_spirit:0 "Spirit of Revanchism"
+ revanchism_spirit_desc:0 "The loss of our core territories has ignited a thirst for revenge. We will reclaim what is ours at any cost."
+ successful_negotiator:0 "Successful Negotiator"
+ successful_negotiator_desc:0 "This leader has secured a favorable peace, strengthening their authority."
+ humiliated_leader:0 "Humiliated Leader"
+ humiliated_leader_desc:0 "Accepting shameful peace terms has stained this leader's reputation."
+
+ # --- NEW MECHANICS: Shadow Economy 5.0 ---
+ 
+ shadow_econ_civilian:0 "Investment Haven"
+ shadow_econ_civilian_desc:0 "§GPeace Niche:§! Business booms while guns are silent. Provides massive Political Power and chance for §YPrivate Investments§!.\n\n§RIneffective at war.§!"
+ 
+ shadow_econ_early:0 "Engineering Prep"
+ shadow_econ_early_desc:0 "§GLogistics Niche:§! State focuses on infrastructure and defense. Best for building bunkers, radar, and roads before the war."
+ 
+ shadow_econ_partial:0 "Quality Production"
+ shadow_econ_partial_desc:0 "§GBalance:§! The sweet spot. Factories operate at peak efficiency and quality, but without forcing mass output."
+ 
+ shadow_econ_war:0 "War Assembly Line"
+ shadow_econ_war_desc:0 "§GQuantity:§! Mass production of weapons at the cost of quality (reliability). \n\n§RWarning:§! Extended use in peacetime will cause §YEconomic Overheating§!."
+ 
+ shadow_econ_total:0 "Total Exhaustion"
+ shadow_econ_total_desc:0 "§RDesperation:§! The country is a single military camp. Max construction speed at the cost of destroying §YScience§! and §YStability§!."
+
+ # Manpower Strain
+ manpower_strain_mild:0 "§YLabor Shortage§!"
+ manpower_strain_mild_desc:0 "Mobilization affects the economy. Skilled engineers are replaced by apprentices. Production dips."
+ manpower_strain_high:0 "§OLabor Market Crisis§!"
+ manpower_strain_high_desc:0 "Too many men drafted. Factories fail to meet quotas. Logistics struggle."
+ manpower_strain_collapse:0 "§RDemographic Collapse§!"
+ manpower_strain_collapse_desc:0 "Economy paralyzed. No able-bodied men left. The army is on the verge of dissolution."
+
+ # Desperate Defense
+ desperate_defense_effort:0 "§GDesperate Defense§!"
+ desperate_defense_effort_desc:0 "The enemy treads on our soil! Patriotic surge compensates for lack of resources."
+
+ # Shadow Conscription Penalties
+ shadow_law_service_penalty:0 "Mobilization Cost: Service by Requirement"
+ shadow_law_adults_penalty:0 "Mobilization Cost: All Adults Serve"
+ shadow_law_scraping_penalty:0 "Mobilization Cost: Scraping the Barrel"
+
+ # --- NEW: Submission Mechanics (Ideas only) ---
+ rapid_autonomy_recovery:0 "Path to Independence"
+ rapid_autonomy_recovery_desc:0 "We were forced to submit, but we are quietly rebuilding our strength."
+ fight_for_survival:0 "Fight for Survival"
+ fight_for_survival_desc:0 "They refused our surrender. We must fight to the last man."
+ intervention_reward:0 "Intervention Mandate"
+ intervention_reward_desc:0 "We stepped in to save a nation. This boosts our stability."
+
+ # Officer Chaos
+ officer_shortage_mild:0 "§YCommand Confusion§!"
+ officer_shortage_mild_desc:0 "Rapid expansion diluted officer quality. Orders are delayed."
+ officer_shortage_high:0 "§OOfficer Corps Crisis§!"
+ officer_shortage_high_desc:0 "Lack of competent leaders. Coordination is breaking down."
+ officer_shortage_collapse:0 "§RGeneral Staff Collapse§!"
+ officer_shortage_collapse_desc:0 "Chain of command disintegrated. Panic rules the HQ."
+
+ # --- NEW: Industrial Inertia & Inflation ---
+ war_inflation_crisis:0 "War Inflation Crisis"
+ war_inflation_crisis_desc:0 "The war has dragged on too long. Currency is devalued, and civilian construction is slowing down."
+
+ economic_retooling_shock_minor:0 "Minor Retooling Shock"
+ economic_retooling_shock_minor_desc:0 "Factories are adapting to new quotas. Temporary dip in production efficiency."
+ 
+ economic_retooling_shock_medium:0 "Industrial Retooling"
+ economic_retooling_shock_medium_desc:0 "Significant changes in logistics and production lines. Factories are temporarily underperforming."
+ 
+ economic_retooling_shock_major:0 "Industrial Paralysis"
+ economic_retooling_shock_major_desc:0 "Drastic economic shifts have caused chaos. Machinery is being replaced, workshops rebuilt. Production collapses."
+
+ # --- NEW: Puppet Benefit Idea ---
+ high_status_puppet_benefit:0 "Privileged Subject"
+ high_status_puppet_benefit_desc:0 "We peacefully accepted the new order. In exchange for our loyalty, our new overlord invests in our economy and guarantees stability."
+
+ panic_retreat_shock:0 "Panic Retreat Shock"
+ panic_retreat_shock_desc:0 "The loss of key cities has triggered a wave of panic in the army. Organization is plummeting, soldiers are deserting. We need to take harsh measures!"
+
+ # National Spirit Description
+ conditional_surrender_desc:0 "This country has admitted defeat on conditions. It cannot join factions or create alliances while treaty restrictions are active."

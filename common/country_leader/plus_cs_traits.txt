@@ -1,0 +1,15 @@
+leader_traits = {
+	successful_negotiator = {
+		name = successful_negotiator
+		random = no
+		political_power_gain = 0.05
+		ai_will_do = { factor = 1 }
+	}
+
+	humiliated_leader = {
+		name = humiliated_leader
+		random = no
+		stability_factor = -0.10
+		ai_will_do = { factor = 1 }
+	}
+}

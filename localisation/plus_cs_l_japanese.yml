@@ -1,0 +1,238 @@
+﻿l_japanese:
+ # --- カテゴリ: 決断 ---
+ peace_options:0 "平和的選択肢"
+ peace_treaty:0 "講和条約"
+
+ # --- 決断 (Decisions) ---
+ conditional_surrender:0 "条件付き降伏"
+ white_peace:0 "白紙講和"
+ ceasefire:0 "停戦"
+ propose_peace:0 "和平の提案"
+ propose_peace_desc:0 "我々の勝利点: [?vp@FROM|Y0] ([?p|Y2%])"
+ ceasefire_end:0 "停戦の終了"
+ peace_war_reparations:0 "戦争賠償"
+ peace_war_reparations_limit:0 "現在、2カ国以上に賠償金を支払っていないこと"
+ peace_war_reparations_cost:0 "[?pts|R0] £victory_points (現在: [?vp@FROM|Y0] £victory_points ) "
+ peace_pay_war_reparations:0 "[From.GetNameDef]への賠償金支払い"
+ peace_disarm:0 "国家の武装解除"
+ peace_take_state:0 "[From.GetName]の割譲"
+ peace_take_state_cost:0 "[?From.state_strategic_value|R0] £victory_points (現在: [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_puppet:0 "[From.GetName]の傀儡化"
+ peace_puppet_cost:0 "[?pts|R0] £victory_points (現在: [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_set_dmz:0 "[From.GetName]の非武装化"
+ peace_liberate:0 "[From.GetName]の解放"
+ peace_claim:0 "[From.GetName]の請求権"
+
+ # --- イベント (Events) ---
+ plus_cs.1.t:0 "[From.GetnameDefCap]が和平を提案"
+ plus_cs.1.d:0 "[From.GetAdjective]の指導者[From.GetLeader]は、[From.GetName]との和平交渉に入ることを提案しました。"
+ plus_cs.1.a:0 "他に選択肢はない"
+ plus_cs.1.b:0 "決して降伏しない！"
+ plus_cs.2.t:0 "[From.GetNameDefCap]が条件付き降伏の交渉を求めています"
+ plus_cs.2.d:0 "[From.GetLeader]は、[From.GetNameDef]の条件付き降伏に向けた交渉を開始する意思を[This.GetNameDef]に伝えました。"
+ plus_cs.2.a:0 "平和を取り戻さねばならない"
+ plus_cs.2.b:0 "無条件降伏以外は認めない！"
+ plus_cs.3.t:0 "簡易降伏モード"
+ plus_cs.3.d:0 "このモードを有効にすると、敵国が和平交渉に応じる可能性が高くなります。\n§R注意§!\n平和的選択肢は「決断」セクションにあります。"
+ plus_cs.3.a:0 "有効にする"
+ plus_cs.3.b:0 "有効にしない"
+ plus_cs.4.t:0 "[From.GetNameDefCap]が白紙講和を提案"
+ plus_cs.4.d:0 "[From.GetAdjective]の指導者[From.GetLeader]は、両国間の白紙講和を提案しました。"
+ plus_cs.4.a:0 "この無益な戦いを終わらせよう"
+ plus_cs.4.b:0 "そう簡単には諦めない"
+ plus_cs.5.t:0 "[From.GetNameDefCap]が降伏を拒否"
+ plus_cs.5.d:0 "[From.GetAdjectiveCap]の指導者[From.GetLeader]は、我々への降伏を拒否しました。"
+ plus_cs.5.a:0 "彼らは不可避な結末を先延ばしにしているだけだ"
+ plus_cs.6.t:0 "[From.GetNameDefCap]が和平交渉を拒否"
+ plus_cs.6.d:0 "[From.GetAdjectiveCap]の指導者[From.GetLeader]は、戦争を早期に終わらせる機会を無駄にしました。"
+ plus_cs.6.a:0 "なんてことだ！"
+ plus_cs.7.t:0 "[From.GetNameDefCap]が停戦を提案"
+ plus_cs.7.d:0 "本日、[From.GetLeader]と[From.GetRulingParty]は、敵対行為の一時停止を呼びかけました。"
+ plus_cs.7.a:0 "これが恒久的な平和への道となるかもしれない"
+ plus_cs.8.t:0 "高まる不安"
+ plus_cs.8.d:0 "危機により国内の不安が高まっています。反対派が勢力を増し、国は混乱の瀬戸際にあります。"
+ plus_cs.8.a:0 "暴動を鎮圧する"
+ plus_cs.8.b:0 "エスカレートさせる"
+ plus_cs.1.b.tooltip_1:0 "我々の困難な状況にもかかわらず和平を拒否したことに、国民は失望している。"
+ plus_cs.1.b.tooltip_2:0 "国家が疲弊している中での和平拒否は、深刻な不満を引き起こしている！"
+ plus_cs.2.b.tooltip_1:0 "敵が降伏する準備ができていたのに、なぜ戦争を続けるのか国民は理解していない。"
+ plus_cs.2.b.tooltip_2:0 "国家が疲弊している中で降伏の受け入れを拒否したことは、深刻な不満を引き起こしている！"
+ plus_cs.4.b.tooltip_1:0 "戦線が膠着している中で「白紙講和」を拒否することは、士気を低下させる。"
+
+ # --- 追加翻訳 ---
+ plus_cs.9.t:0 "[From.GetNameDefCap]で大規模な反乱が発生"
+ plus_cs.9.d:0 "諜報報告によると、[From.GetNameDef]は深刻な国内危機に苦しんでいます。大規模な反乱とストライキが発生し、軍需産業が麻痺し、人的資源に多大な損失が出ています。これは我々にとって絶好の機会です。"
+ plus_cs.9.a:0 "素晴らしい。"
+ plus_cs.1001.t:0 "将軍が戦死"
+ plus_cs.1001.d:0 "前線での激しい戦闘により、貴重な指導者が失われました。[?plus_cs_killed_leader_id.GetHisHer]の攻撃的な戦術で知られる[?plus_cs_killed_leader_id.GetName]将軍は、部隊を指揮中に戦死しました。この損失は我々の指揮系統にとって大きな打撃です。"
+ plus_cs.1001.a:0 "悲劇的な損失だ。"
+ plus_cs.1002.t:0 "元帥が負傷"
+ plus_cs.1002.d:0 "前線から悲報が届きました。[?plus_cs_wounded_leader_id.GetName]元帥が砲撃に巻き込まれ、重傷を負いました。[?plus_cs_wounded_leader_id.GetHisHer]の状態は予断を許さず、指揮に復帰できるかは不明です。"
+ plus_cs.1002.a:0 "[?plus_cs_wounded_leader_id.GetHisHer]の回復を祈らねばならない。"
+
+ # --- 国民精神 (Ideas) ---
+ war_reparations:0 "戦争賠償"
+ war_reparations_desc:0 "この国は現在、[?war_reps_to.GetNameDef]に戦争賠償を支払っています。"
+ peace_disarmed_nation:0 "武装解除された国家"
+ peace_civilian_economy:0 "民需経済"
+ ceasefire_economic_tribute:0 "停戦のための経済的貢納"
+ 
+ # 修正: 決断との重複を避けるための新しいキー
+ idea_conditional_surrender:0 "条件付き降伏 (精神)"
+ 
+ internal_crisis_low:0 "国内危機 (低)"
+ internal_crisis_medium:0 "国内危機 (中)"
+ internal_crisis_high:0 "国内危機 (高)"
+ revanchism_spirit:0 "復讐の精神"
+ revanchism_spirit_desc:0 "中核州の喪失は、国民の心に復讐の炎を点火しました。我々は何としてでも失地を回復するでしょう。"
+ successful_negotiator:0 "成功した交渉人"
+ successful_negotiator_desc:0 "この指導者は有利な和平を確保し、エリート層と国民の間での権威を強化しました。"
+ humiliated_leader:0 "屈辱を受けた指導者"
+ humiliated_leader_desc:0 "屈辱的な和平条件（武装解除）を受け入れたことで、この指導者の評判は地に落ちました。国民は彼を弱腰だと見なしています。"
+
+ # --- 新メカニクス: 経済 5.0 (日本語) ---
+ 
+ shadow_econ_civilian:0 "投資の楽園"
+ shadow_econ_civilian_desc:0 "§G平和の恩恵:§! 銃声が止んでいる間、ビジネスは繁栄します。政治力の大きな増加と、§Y民間投資§!の機会を提供します。\n\n§R戦時には非効率です。§!"
+ 
+ shadow_econ_early:0 "工学的準備"
+ shadow_econ_early_desc:0 "§G兵站の恩恵:§! 国家はインフラと防衛に重点を置きます。開戦前に要塞、レーダー、道路を建設するのに最適です。"
+ 
+ shadow_econ_partial:0 "品質重視の生産"
+ shadow_econ_partial_desc:0 "§Gバランス:§! 最適解です。工場は無理な増産をせず、最高の効率と品質で稼働します。"
+ 
+ shadow_econ_war:0 "軍需組立ライン"
+ shadow_econ_war_desc:0 "§G量産:§! 品質（信頼性）を犠牲にして兵器を大量生産します。\n\n§R警告:§! 平時に長期間使用すると、§Y経済の過熱§!を引き起こします。"
+ 
+ shadow_econ_total:0 "完全な消耗"
+ shadow_econ_total_desc:0 "§R絶望:§! 国家は一つの巨大な軍事キャンプと化します。§Y科学§!と§Y安定度§!の崩壊を代償に、建設速度を最大化します。"
+
+ # --- その他のメカニクス ---
+ 
+ manpower_strain_mild:0 "§Y労働力不足§!"
+ manpower_strain_mild_desc:0 "動員が経済に影響を及ぼし始めています。機械はアイドル状態になり、熟練した技術者は見習いに置き換えられています。"
+ manpower_strain_high:0 "§O労働市場の危機§!"
+ manpower_strain_high_desc:0 "あまりにも多くの男性が徴兵されました。工場はノルマを達成できず、物流は滞っています。"
+ manpower_strain_collapse:0 "§R人口動態の崩壊§!"
+ manpower_strain_collapse_desc:0 "経済は麻痺しています。働ける男性はほとんど残っておらず、皆、塹壕にいるか死亡しました。"
+
+ desperate_defense_effort:0 "§G決死の防衛§!"
+ desperate_defense_effort_desc:0 "敵が我々の土を踏んでいる！ 今や兵士と労働者の区別はない。"
+
+ shadow_law_service_penalty:0 "動員コスト: 無差別徴兵"
+ shadow_law_adults_penalty:0 "動員コスト: 全成人徴兵"
+ shadow_law_scraping_penalty:0 "動員コスト: 総動員"
+
+ # --- 外見タグ ---
+ COUNTRY_subject:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
+
+# --- 新機能: 名誉ある服従 ---
+ offer_honorable_submission:0 "名誉ある服従を申し出る"
+ offer_honorable_submission_desc:0 "状況は危機的です。保護と引き換えに、敵の従属国となることを提案します。"
+ 
+ plus_cs_coalition_name:0 "救国連合"
+
+ rapid_autonomy_recovery:0 "独立への道"
+ rapid_autonomy_recovery_desc:0 "我々は服従を強いられましたが、魂までは砕かれていません。密かに力を蓄えています。"
+ fight_for_survival:0 "生存のための戦い"
+ fight_for_survival_desc:0 "彼らは我々の降伏を拒否しました。彼らが望むのは我々の絶滅です。最後の一人になるまで戦わねばなりません。"
+ intervention_reward:0 "介入のマンデート"
+ intervention_reward_desc:0 "我々は国家を滅亡から救うために介入しました。これにより国内の安定が強化されます。"
+
+ plus_cs.submission.1.t:0 "[From.GetNameDefCap]が服従を申し出る"
+ plus_cs.submission.1.d:0 "[From.GetNameDef]は勝利できないことを悟っています。彼らを助命するなら、我々の傀儡となるという名誉ある服従を提案しています。"
+ plus_cs.submission.1.a:0 "服従を受け入れる（傀儡化）"
+ plus_cs.submission.1.b:0 "慈悲はない！ 完全征服だ！"
+
+ plus_cs.submission.2.t:0 "条件受諾"
+ plus_cs.submission.2.d:0 "敵は我々の条件を受け入れました。我々は従属国となりましたが、戦争を生き延びました。"
+ plus_cs.submission.2.a:0 "苦い平和も、破滅よりはマシだ。"
+
+ plus_cs.submission.3.t:0 "服従拒否！"
+ plus_cs.submission.3.d:0 "彼らは拒否しました！ 外交の希望は絶たれました。生存のために戦うしかありません！"
+ plus_cs.submission.3.a:0 "総動員だ！ 祖国を守れ！"
+
+ plus_cs.submission.4.t:0 "[From.GetNameDef]からの嘆願"
+ plus_cs.submission.4.d:0 "[From.GetNameDef]は全滅の危機に瀕しています。彼らは介入を懇願しています。"
+ plus_cs.submission.4.a:0 "介入しなければならない！（参戦）"
+ plus_cs.submission.4.b:0 "我々の戦いではない。"
+
+# 将校の混乱
+ officer_shortage_mild:0 "§Y指揮系統の混乱§!"
+ officer_shortage_mild_desc:0 "軍の急速な拡大により、将校の質が低下しています。命令が遅延しています。"
+ officer_shortage_high:0 "§O将校不足の危機§!"
+ officer_shortage_high_desc:0 "有能な指揮官が不足しています。部隊間の連携が崩壊しています。"
+ officer_shortage_collapse:0 "§R参謀本部の崩壊§!"
+ officer_shortage_collapse_desc:0 "指揮系統は事実上崩壊しました。司令部はパニックに陥っています。"
+
+# --- PP決断: 危機管理 ---
+ decision_category_crisis_management:0 "危機管理"
+ decree_stop_panic:0 "命令：「一歩も下がるな！」"
+ decree_stop_panic_desc:0 "主要都市の喪失後、パニックが広がっています。秩序を直ちに回復するために、厳しい命令を下さなければなりません。"
+ decree_internal_stability:0 "国内プロパガンダキャンペーン"
+ decree_internal_stability_desc:0 "戦争は不安を引き起こしています。国民を落ち着かせ、内部危機を軽減するために大規模なプロパガンダが必要です。"
+
+ # --- PP決断: 経済刺激策 ---
+ decision_category_economic_stimulus:0 "経済刺激策"
+ stimulus_civilian_sector:0 "民需部門への補助金"
+ stimulus_civilian_sector_desc:0 "民間企業に政治的資本を注入し、民需建設を加速させます。§Y投資の楽園§!経済が必要です。"
+ stimulus_state_contract:0 "政府建設契約"
+ stimulus_state_contract_desc:0 "軍需と民需のバランスをとるための国家による直接介入。§Y工学的準備§!または§Y品質重視の生産§!経済が必要です。"
+ stimulus_mil_industrial_complex:0 "軍産複合体への注入"
+ stimulus_mil_industrial_complex_desc:0 "兵器産業を人為的に支えます。高価ですが、総力戦生産には不可欠です。§Y軍需組立ライン§!または§Y完全な消耗§!経済が必要です。"
+
+# --- 新機能: 産業の慣性とインフレ ---
+ war_inflation_crisis:0 "戦時インフレ危機"
+ war_inflation_crisis_desc:0 "戦争が長引きすぎています。通貨は切り下げられ、民間建設は停滞しています。"
+
+ economic_retooling_shock_minor:0 "軽微な産業転換ショック"
+ economic_retooling_shock_minor_desc:0 "工場は新しいノルマに適応しようとしています。生産効率が一時的に低下します。"
+ 
+ economic_retooling_shock_medium:0 "産業の再編"
+ economic_retooling_shock_medium_desc:0 "物流と生産ラインの大幅な変更。工場は一時的に能力を下回る稼働を強いられます。"
+ 
+ economic_retooling_shock_major:0 "産業の麻痺"
+ economic_retooling_shock_major_desc:0 "急激な経済転換が混乱を引き起こしました。機械設備の交換が行われています。生産は崩壊状態です。"
+
+# --- 新機能: 傀儡国の運命 ---
+ plus_cs.puppet_fate.t:0 "宗主国の崩壊"
+ plus_cs.puppet_fate.d:0 "我が国政府に衝撃的なニュースが届きました。宗主国が降伏し、[event_target:new_potential_master.GetNameDef]の条件を受け入れました。旧秩序は崩壊しました。\n\n勝者は我々に直ちに武器を置き、彼らの権威を認めるよう要求しています。代案は完全な独立ですが、彼らの強力な軍事機構との戦争状態は継続します。"
+ plus_cs.puppet_fate.a:0 "新しい主人を認める（経済ボーナス）"
+ plus_cs.puppet_fate.b:0 "我々は戦う！ 独立のために！"
+
+ # 新しい国民精神
+ high_status_puppet_benefit:0 "特権的な従属国"
+ high_status_puppet_benefit_desc:0 "我々は平和的に新秩序を受け入れました。忠誠と引き換えに、新たな宗主国は経済に投資し、安定を保証してくれます。"
+# В секцию "国民精神" (Ideas)
+ panic_retreat_shock:0 "撤退パニックの衝撃"
+ panic_retreat_shock_desc:0 "主要都市の喪失は軍内にパニックの波を引き起こしました。組織率は急落し、兵士は脱走しています。我々は厳しい措置を講じなければなりません！"
+
+ # В секцию "決断" (Decisions)
+ offer_preventive_submission:0 "予防的服従の申し出"
+ offer_preventive_submission_desc:0 "大国との戦争は自殺行為です。都市が破壊される前に、彼らの保護国となることを申し出なければなりません。"
+
+# --- 修正と追加 (Fixes and Additions) ---
+ 
+ # 降伏イベントで欠落していた選択肢
+ plus_cs.submission.1.c:0 "要求された領土を割譲する（和平）"
+
+ # イベント 205: 戦争なき領土喪失
+ plus_cs.submission.5.t:0 "領土的譲歩"
+ plus_cs.submission.5.d:0 "全面戦争を回避するため、我々は領土を侵略者に引き渡すことを余儀なくされました。これは国家的恥辱ですが、兵士たちの命は救われました。"
+ plus_cs.submission.5.a:0 "我々はこのことを決して忘れないだろう。"
+
+ # イベント 300: 革命家のジレンマ
+ plus_cs.300.t:0 "革命の運命"
+ plus_cs.300.d:0 "内戦は激化しました。正統政府は大国と交戦状態にあります。我々には選択肢があります。敵の敵に庇護を求めるか、あるいは混乱に乗じて武力で権力を掌握するかです。"
+ plus_cs.300.a:0 "庇護を求める（大国の傀儡となる）"
+ plus_cs.300.b:0 "支配者などいらない！（全勢力に宣戦布告し権力を奪取する）"
+
+ # イベント 305 (コードでは 301 キーを使用): クーデター成功
+ plus_cs.301.t:0 "新秩序"
+ plus_cs.301.d:0 "外国の支援のおかげで、旧体制は崩壊しました。現在、我々が国を支配していますが、後援者には借りができました。"
+ plus_cs.301.a:0 "我々の新たな同盟万歳！"
+
+ # 国民精神の説明 (コードが id=conditional_surrender を使用している場合)
+ conditional_surrender_desc:0 "この国は条件付きで敗北を認めました。条約の制限が有効である限り、陣営への参加や同盟の結成はできません。"

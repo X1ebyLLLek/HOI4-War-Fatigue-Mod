@@ -1,0 +1,1328 @@
+add_namespace = plus_cs
+
+country_event = {
+	id = plus_cs.1
+	title = plus_cs.1.t
+	desc = plus_cs.1.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_conference
+
+	option = {
+		name = plus_cs.1.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				FROM = { surrender_progress > 0.85 }
+				NOT = { has_country_flag = plus_cs_war_strain }
+				NOT = { has_country_flag = plus_cs_exhausted }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					any_owned_state = { is_claimed_by = ROOT }
+				}
+			}
+			modifier = {
+				add = 50
+				has_country_flag = plus_cs_war_strain
+			}
+			modifier = {
+				add = 200
+				has_country_flag = plus_cs_exhausted
+			}
+			modifier = {
+				add = 100
+				has_country_flag = plus_cs_stalemate
+			}
+			modifier = {
+				factor = 2.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0.2
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+				FROM = { surrender_progress > 0.5 }
+				NOT = { has_country_flag = plus_cs_exhausted }
+			}
+		}
+
+		every_country = {
+			limit = {
+				OR = {
+					AND = {
+						ROOT = { is_faction_leader = no }
+						OR = {
+							tag = ROOT
+							is_puppet_of = ROOT
+						}
+					}
+					AND = {
+						ROOT = { is_faction_leader = yes }
+						is_in_faction_with = ROOT
+					}
+					has_war_with = ROOT
+				}
+			}
+			every_owned_state = {
+				add_to_temp_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+			}
+		}
+
+		if = {
+			limit = {
+				FROM = { is_faction_leader = no }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { is_faction_leader = no }
+							OR = {
+								tag = ROOT
+								is_puppet_of = ROOT
+							}
+						}
+						AND = {
+							ROOT = { is_faction_leader = yes }
+							is_in_faction_with = ROOT
+						}
+					}
+				}
+				every_owned_state = {
+					every_country = {
+						limit = {
+							OR = {
+								tag = FROM
+								is_puppet_of = FROM
+							}
+						}
+						set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+						activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_puppet }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_liberate }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+					set_variable = { state_taken = 0 }
+				}
+			}
+		}
+		else = {
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { is_faction_leader = no }
+							OR = {
+								tag = ROOT
+								is_puppet_of = ROOT
+							}
+						}
+						AND = {
+							ROOT = { is_faction_leader = yes }
+							is_in_faction_with = ROOT
+						}
+					}
+				}
+				every_owned_state = {
+					every_country = {
+						limit = {
+							is_in_faction_with = FROM
+							has_war_with = ROOT
+						}
+						set_variable = { og_vp@PREV.PREV = cnt_og_vp@PREV.PREV }
+						activate_targeted_decision = { target = PREV.PREV decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV.PREV decision = peace_disarm }
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_puppet }
+						activate_targeted_decision = { target = PREV decision = peace_liberate }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+					set_variable = { state_taken = 0 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			white_peace = FROM
+			set_truce = {
+				target = FROM
+				days = 720
+			}
+		}
+		else = {
+			every_enemy_country = {
+				limit = {
+					is_in_faction_with = FROM
+				}
+				white_peace = ROOT
+				set_truce = {
+					target = ROOT
+					days = 720
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			leave_faction = yes
+			add_timed_idea = {
+				idea = conditional_surrender
+				days = 720
+			}
+		}
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+		}
+	}
+
+	option = {
+		name = plus_cs.1.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 3.0
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+			modifier = {
+				add = 100
+				FROM = {
+					any_owned_state = { is_claimed_by = ROOT }
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+					has_country_flag = plus_cs_stalemate
+				}
+			}
+		}
+		
+		add_war_support = 0.05
+		add_stability = 0.02
+		
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_war_strain
+					has_country_flag = plus_cs_stalemate
+				}
+			}
+			add_war_support = -0.10
+			add_stability = -0.05
+			custom_effect_tooltip = plus_cs.1.b.tooltip_1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			add_war_support = -0.15
+			add_stability = -0.10
+			custom_effect_tooltip = plus_cs.1.b.tooltip_2
+		}
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			news_event = { id = plus_cs.5 }
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.2
+	title = plus_cs.2.t
+	desc = plus_cs.2.d
+	is_triggered_only = yes
+	picture = GFX_report_event_imperial_conference
+
+	immediate = {
+		set_temp_variable = { cnt_og_vp = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					AND = {
+						FROM = { is_faction_leader = no }
+						OR = {
+							tag = FROM
+							is_puppet_of = FROM
+						}
+					}
+					AND = {
+						FROM = { is_faction_leader = yes }
+						is_in_faction_with = FROM
+					}
+				}
+			}
+			every_owned_state = {
+				add_to_temp_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+			}
+		}
+	}
+
+	option = {
+		name = plus_cs.2.a
+		ai_chance = {
+			base = 100
+		}
+
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = ROOT
+						is_puppet_of = ROOT
+					}
+				}
+				every_state = {
+					limit = {
+						owner = {
+							OR = {
+								AND = {
+									FROM = { is_faction_leader = no }
+									OR = {
+										tag = FROM
+										is_puppet_of = FROM
+									}
+								}
+								AND = {
+									FROM = { is_faction_leader = yes }
+									is_in_faction_with = FROM
+								}
+							}
+						}
+					}
+					PREV = {
+						set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+						activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_puppet }
+						activate_targeted_decision = { target = PREV decision = peace_liberate }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+				}
+			}
+		}
+		else = {
+			every_state = {
+				limit = {
+					owner = {
+						OR = {
+							AND = {
+								FROM = { is_faction_leader = no }
+								OR = {
+									tag = FROM
+									is_puppet_of = FROM
+								}
+							}
+							AND = {
+								FROM = { is_faction_leader = yes }
+								is_in_faction_with = FROM
+							}
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						is_in_faction_with = ROOT
+						has_war_with = FROM
+					}
+					set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+					activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+					activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+					activate_targeted_decision = { target = PREV decision = peace_take_state }
+					activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+					activate_targeted_decision = { target = PREV decision = peace_puppet }
+					activate_targeted_decision = { target = PREV decision = peace_liberate }
+					activate_targeted_decision = { target = PREV decision = peace_claim }
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			white_peace = FROM
+			set_truce = {
+				target = FROM
+				days = 720
+			}
+		}
+		else = {
+			every_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+				}
+				white_peace = FROM
+				set_truce = {
+					target = FROM
+					days = 720
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_faction_leader = no }
+			}
+			FROM = {
+				leave_faction = yes
+				add_timed_idea = {
+					idea = conditional_surrender
+					days = 720
+				}
+			}
+		}
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+		}
+	}
+
+	option = {
+		name = plus_cs.2.b
+		ai_chance = { base = 0 }
+		
+		add_war_support = 0.05
+		add_stability = 0.02
+
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_war_strain
+					has_country_flag = plus_cs_stalemate
+				}
+			}
+			add_war_support = -0.10
+			add_stability = -0.10
+			custom_effect_tooltip = plus_cs.2.b.tooltip_1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			add_war_support = -0.15
+			add_stability = -0.15
+			custom_effect_tooltip = plus_cs.2.b.tooltip_2
+		}
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			news_event = { id = plus_cs.6 }
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.3
+	title = plus_cs.3.t
+	desc = plus_cs.3.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty1
+
+	option = {
+		name = plus_cs.3.a
+		set_global_flag = plus_cs_easy_surrender_mode
+	}
+
+	option = {
+		name = plus_cs.3.b
+		clr_global_flag = plus_cs_easy_surrender_mode
+	}
+}
+
+country_event = {
+	id = plus_cs.4
+	title = plus_cs.4.t
+	desc = plus_cs.4.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty2
+
+	option = {
+		name = plus_cs.4.a
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 500
+				has_country_flag = plus_cs_stalemate
+			}
+			modifier = {
+				add = 50
+				has_dynamic_modifier = war_inflation_crisis
+			}
+			modifier = {
+				add = 150
+				has_country_flag = plus_cs_exhausted
+			}
+			modifier = {
+				add = 50
+				has_country_flag = plus_cs_war_strain
+			}
+			modifier = {
+				factor = 3.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0.05
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+				NOT = { has_country_flag = plus_cs_stalemate }
+				NOT = { has_country_flag = plus_cs_exhausted }
+			}
+			modifier = {
+				factor = 0
+				FROM = { surrender_progress > 0.1 }
+				NOT = { has_country_flag = plus_cs_exhausted }
+			}
+			modifier = {
+				factor = 0.1
+				has_war_support > 0.8
+			}
+		}
+		white_peace = FROM
+		set_truce = {
+			target = FROM
+			days = 720
+		}
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+		}
+	}
+
+	option = {
+		name = plus_cs.4.b
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 2.0
+				has_war_support > 0.8
+			}
+			modifier = {
+				factor = 0.5
+				has_war_support < 0.4
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = plus_cs_stalemate
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = plus_cs_exhausted
+			}
+			modifier = {
+				add = 100
+				FROM = { surrender_progress > 0.15 }
+			}
+		}
+		
+		add_war_support = 0.05
+		add_stability = 0.02
+
+		if = {
+			limit = {
+				has_country_flag = plus_cs_stalemate
+			}
+			add_war_support = -0.10
+			add_stability = -0.05
+			custom_effect_tooltip = plus_cs.4.b.tooltip_1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			add_war_support = -0.12
+			add_stability = -0.08
+			custom_effect_tooltip = plus_cs.1.b.tooltip_2
+		}
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+		}
+	}
+}
+
+news_event = {
+	id = plus_cs.5
+	title = plus_cs.5.t
+	desc = plus_cs.5.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty2
+
+	option = {
+		name = plus_cs.5.a
+	}
+}
+
+news_event = {
+	id = plus_cs.6
+	title = plus_cs.6.t
+	desc = plus_cs.6.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty2
+
+	option = {
+		name = plus_cs.6.a
+	}
+}
+
+country_event = {
+	id = plus_cs.7
+	title = plus_cs.7.t
+	desc = plus_cs.7.d
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.7.a
+		set_temp_variable = { cont = global.province_controllers }
+		white_peace = FROM
+		set_truce = {
+			target = FROM
+			days = 14
+		}
+		for_each_loop = {
+			array = var:cont
+			var:v = {
+				add_political_power = 1
+				set_province_controller = var:i
+			}
+		}
+		activate_targeted_decision = {
+			target = FROM
+			decision = ceasefire_end
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.8
+	title = plus_cs.8.t
+	desc = plus_cs.8.d
+	is_triggered_only = yes
+	picture = GFX_news_event_generic_revolters
+
+	option = {
+		name = plus_cs.8.a
+		add_stability = 0.10
+		remove_ideas = internal_crisis_high
+		add_timed_idea = { idea = internal_crisis_medium days = 30 }
+		clr_country_flag = civil_war_risk_active
+	}
+
+	option = {
+		name = plus_cs.8.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.1
+				has_government = democratic
+			}
+		}
+		random_list = {
+			70 = {
+				if = {
+					limit = { has_government = democratic }
+					random_list = {
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = fascism
+									size = 0.3
+								}
+							}
+						}
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = communism
+									size = 0.3
+								}
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = { has_government = neutrality }
+					random_list = {
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = fascism
+									size = 0.3
+								}
+							}
+						}
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = communism
+									size = 0.3
+								}
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = { has_government = fascism }
+					random_list = {
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = democratic
+									size = 0.3
+								}
+							}
+						}
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = communism
+									size = 0.3
+								}
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = { has_government = communism }
+					random_list = {
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = democratic
+									size = 0.3
+								}
+							}
+						}
+						50 = {
+							if = {
+								limit = {
+									NOT = { has_civil_war = yes }
+								}
+								start_civil_war = {
+									ideology = fascism
+									size = 0.3
+								}
+							}
+						}
+					}
+				}
+			}
+			30 = {
+				if = {
+					limit = { any_enemy_country = { has_war_with = ROOT } }
+					random_enemy_country = {
+						limit = { has_war_with = ROOT }
+						ROOT = {
+							add_manpower = -0.1
+							every_owned_state = {
+								remove_building = {
+									type = arms_factory
+									level = 1
+								}
+							}
+							add_war_support = -0.05
+							add_stability = -0.05
+						}
+						FROM = {
+							news_event = { id = plus_cs.9 }
+						}
+					}
+				}
+				else = {
+					start_civil_war = { ideology = democratic size = 0.3 }
+				}
+			}
+		}
+		add_stability = -0.15
+	}
+}
+
+news_event = {
+	id = plus_cs.9
+	title = plus_cs.9.t
+	desc = plus_cs.9.d
+	is_triggered_only = yes
+	picture = GFX_news_event_generic_revolters
+
+	option = {
+		name = plus_cs.9.a
+	}
+}
+
+country_event = {
+	id = plus_cs.1001
+	title = plus_cs.1001.t
+	desc = plus_cs.1001.d
+	picture = GFX_news_event_generic_division_destroyed
+	is_triggered_only = yes
+
+	immediate = {
+		random_character = {
+			limit = {
+				is_army_leader = yes
+				is_field_marshal = no
+				NOT = { has_trait = ruler_trait }
+			}
+			save_event_target_as = plus_cs_killed_general
+		}
+	}
+	option = {
+		name = plus_cs.1001.a
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = { has_event_target = plus_cs_killed_general }
+			retire_character = event_target:plus_cs_killed_general
+		}
+		
+		add_political_power = -0.05
+		add_stability = -0.02
+	}
+}
+
+country_event = {
+	id = plus_cs.1002
+	title = plus_cs.1002.t
+	desc = plus_cs.1002.d
+	picture = GFX_news_event_generic_division_destroyed
+	is_triggered_only = yes
+
+	immediate = {
+		random_character = {
+			limit = {
+				is_field_marshal = yes
+				NOT = { has_trait = ruler_trait }
+			}
+			save_event_target_as = plus_cs_wounded_general
+		}
+	}
+	option = {
+		name = plus_cs.1002.a
+		ai_chance = { factor = 100 }
+		random_list = {
+			20 = {
+				if = {
+					limit = { has_event_target = plus_cs_wounded_general }
+					retire_character = event_target:plus_cs_wounded_general
+				}
+				add_political_power = -0.03
+			}
+			80 = {
+				if = {
+					limit = { has_event_target = plus_cs_wounded_general }
+					add_trait = {
+						character = event_target:plus_cs_wounded_general
+						trait = wounded
+					}
+				}
+				add_war_support = -0.01
+			}
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.201
+	title = plus_cs.submission.1.t
+	desc = plus_cs.submission.1.d
+	picture = GFX_report_event_generic_conference
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.submission.1.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				has_government = democratic
+			}
+			modifier = {
+				add = 50
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_war_strain
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					any_owned_state = { is_claimed_by = ROOT }
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = { is_core_of = ROOT }
+			}
+			modifier = {
+				factor = 0.5
+				has_government = fascism
+			}
+		}
+
+		FROM = {
+			every_subject_country = {
+				limit = { is_subject = yes }
+				ROOT = { save_event_target_as = new_potential_master }
+				country_event = { id = plus_cs.210 }
+			}
+		}
+
+		white_peace = FROM
+		if = {
+			limit = { is_in_faction = yes }
+			FROM = { leave_faction = yes }
+		}
+		
+		puppet = FROM
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			country_event = { id = plus_cs.202 }
+		}
+		
+		add_political_power = 50
+	}
+
+	option = {
+		name = plus_cs.submission.1.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_war_strain
+				}
+			}
+			modifier = {
+				add = 100
+				FROM = {
+					any_owned_state = { is_claimed_by = ROOT }
+				}
+			}
+			modifier = {
+				factor = 2.0
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+		}
+
+		add_war_support = 0.05
+		add_political_power = -50
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			country_event = { id = plus_cs.203 }
+		}
+	}
+	
+	option = {
+		name = plus_cs.submission.1.c
+		trigger = {
+			FROM = {
+				any_owned_state = {
+					OR = {
+						is_claimed_by = ROOT
+						is_core_of = ROOT
+					}
+				}
+			}
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 2.0
+				has_government = democratic
+			}
+		}
+		every_state = {
+			limit = {
+				is_owned_by = FROM
+				OR = {
+					is_claimed_by = ROOT
+					is_core_of = ROOT
+				}
+			}
+			ROOT = {
+				transfer_state = PREV
+			}
+		}
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			country_event = { id = plus_cs.205 }
+		}
+		white_peace = FROM
+		add_political_power = 10
+	}
+}
+
+country_event = {
+	id = plus_cs.202
+	title = plus_cs.submission.2.t
+	desc = plus_cs.submission.2.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	immediate = {
+		add_timed_idea = {
+			idea = rapid_autonomy_recovery
+			days = 365
+		}
+	}
+
+	option = {
+		name = plus_cs.submission.2.a
+		add_stability = 0.10
+		if = {
+			limit = { has_idea = internal_crisis_high }
+			remove_ideas = internal_crisis_high
+		}
+		if = {
+			limit = { has_idea = internal_crisis_medium }
+			remove_ideas = internal_crisis_medium
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.203
+	title = plus_cs.submission.3.t
+	desc = plus_cs.submission.3.d
+	picture = GFX_news_event_generic_civil_war
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { save_event_target_as = cruel_aggressor }
+
+		add_ideas = fight_for_survival
+		add_war_support = 0.30
+		add_manpower = 50000
+		
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				NOT = { tag = event_target:cruel_aggressor }
+				NOT = { has_war_with = ROOT }
+				
+				OR = {
+					has_opinion = { target = ROOT value > 60 }
+					any_core_state = { is_owned_by = ROOT }
+				}
+			}
+			country_event = { id = plus_cs.204 }
+		}
+	}
+
+	option = {
+		name = plus_cs.submission.3.a
+	}
+}
+
+country_event = {
+	id = plus_cs.204
+	title = plus_cs.submission.4.t
+	desc = plus_cs.submission.4.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.submission.4.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0
+				is_puppet = yes
+			}
+		}
+
+		if = {
+			limit = { has_event_target = cruel_aggressor }
+			declare_war_on = {
+				target = event_target:cruel_aggressor
+				type = annex_everything
+			}
+		}
+
+		if = {
+			limit = {
+				is_in_faction = no
+				FROM = { is_in_faction = no }
+			}
+			create_faction = plus_cs_coalition_name
+			add_to_faction = FROM
+		}
+		
+		add_ideas = intervention_reward
+	}
+
+	option = {
+		name = plus_cs.submission.4.b
+		ai_chance = { base = 50 }
+		add_political_power = -20
+		add_stability = -0.05
+	}
+}
+
+country_event = {
+	id = plus_cs.205
+	title = plus_cs.submission.5.t
+	desc = plus_cs.submission.5.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.submission.5.a
+		add_stability = -0.10
+		add_war_support = -0.10
+		add_timed_idea = {
+			idea = revanchism_spirit
+			days = 730
+		}
+	}
+}
+
+country_event = {
+	id = plus_cs.210
+	title = plus_cs.puppet_fate.t
+	desc = plus_cs.puppet_fate.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.puppet_fate.a
+		ai_chance = {
+			base = 80
+			modifier = { factor = 0.5 has_government = fascism }
+			modifier = { factor = 0.5 has_government = communism }
+		}
+
+		white_peace = event_target:new_potential_master
+		
+		event_target:new_potential_master = {
+			puppet = ROOT
+		}
+		
+		add_timed_idea = {
+			idea = high_status_puppet_benefit
+			days = 730
+		}
+		
+		add_stability = 0.10
+	}
+
+	option = {
+		name = plus_cs.puppet_fate.b
+		ai_chance = {
+			base = 20
+			modifier = { factor = 2.0 has_government = fascism }
+			modifier = { factor = 1.5 strength_ratio = { tag = event_target:new_potential_master ratio > 0.4 } }
+		}
+
+		set_autonomy = {
+			target = FROM
+			autonomy_state = autonomy_free
+		}
+		
+		add_war_support = 0.15
+		add_stability = -0.05
+		add_timed_idea = { idea = revanchism_spirit days = 365 }
+	}
+}
+
+# --- ИСПРАВЛЕННЫЙ ИВЕНТ 300: Выбор покровителя ---
+country_event = {
+	id = plus_cs.300
+	title = plus_cs.300.t
+	desc = plus_cs.300.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	immediate = {
+		# 1. Находим, с кем воюют революционеры (Гражданская война)
+		if = {
+			limit = {
+				any_enemy_country = {
+					original_tag = ROOT
+				}
+			}
+			random_enemy_country = {
+				limit = {
+					original_tag = ROOT
+				}
+				save_event_target_as = cw_target
+			}
+		}
+		
+		# 2. Ищем лучшего кандидата среди врагов цели
+		if = {
+			limit = { has_event_target = cw_target }
+			
+			# Переменные для сравнения
+			set_temp_variable = { best_score = -1 }
+			
+			event_target:cw_target = {
+				every_enemy_country = {
+					limit = {
+						NOT = { tag = ROOT }          # Не революционеры
+						NOT = { is_puppet_of = ROOT } # Не марионетки революционеров
+						NOT = { is_puppet = yes }     # Ищем независимого покровителя
+					}
+					
+					# Считываем вклад этого врага в войну против cw_target
+					# (Используем твою переменную vp@TAG из on_state_control_changed)
+					set_temp_variable = { current_score = var:vp@event_target:cw_target }
+					
+					# Если переменной нет (начало войны), считаем за 0
+					if = {
+						limit = { NOT = { check_variable = { current_score > -1 } } }
+						set_temp_variable = { current_score = 0 }
+					}
+					
+					# СРАВНЕНИЕ: Если этот кандидат лучше предыдущего
+					if = {
+						limit = { check_variable = { current_score > best_score } }
+						set_temp_variable = { best_score = current_score }
+						save_event_target_as = strong_master # Сохраняем лидера гонки
+					}
+				}
+			}
+			
+			# 3. РЕЗЕРВНЫЙ ВАРИАНТ (Если война только началась и очков захвата ни у кого нет)
+			# Выбираем просто самого мощного по заводам
+			if = {
+				limit = { NOT = { has_event_target = strong_master } }
+				event_target:cw_target = {
+					random_enemy_country = {
+						limit = { NOT = { tag = ROOT } }
+						save_event_target_as = strong_master
+					}
+					# Пытаемся найти самого сильного, если рандом выбрал слабого
+					every_enemy_country = {
+						limit = {
+							NOT = { tag = ROOT }
+							num_of_factories > event_target:strong_master.num_of_factories
+						}
+						save_event_target_as = strong_master
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = plus_cs.300.a
+		trigger = { has_event_target = strong_master }
+		
+		ai_chance = {
+			base = 90
+			# Если покровитель совсем слабый по сравнению с целью, ИИ может побояться
+			modifier = {
+				factor = 0.1
+				strength_ratio = { tag = event_target:strong_master ratio > 1.5 } # Враг слабее покровителя
+			}
+		}
+
+		event_target:strong_master = {
+			country_event = { id = plus_cs.305 }
+		}
+		
+		add_stability = 0.10
+		add_war_support = 0.10
+	}
+
+	option = {
+		name = plus_cs.300.b
+		trigger = { has_event_target = strong_master }
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2.0
+				has_government = fascism
+			}
+			# Если мы сильнее врага, зачем нам хозяин?
+			modifier = {
+				factor = 5.0
+				strength_ratio = { tag = event_target:cw_target ratio < 0.5 }
+			}
+		}
+
+		declare_war_on = {
+			target = event_target:strong_master
+			type = annex_everything
+		}
+		
+		add_stability = 0.05
+		add_war_support = 0.15
+		add_timed_idea = { idea = revanchism_spirit days = 365 }
+	}
+}
+
+country_event = {
+	id = plus_cs.305
+	title = plus_cs.301.t
+	desc = plus_cs.301.d
+	picture = GFX_news_event_generic_victory
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.301.a
+		puppet = FROM
+		add_political_power = 25
+	}
+}

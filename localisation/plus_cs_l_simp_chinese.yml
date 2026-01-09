@@ -1,0 +1,239 @@
+﻿l_simp_chinese:
+ # --- 决策分类 (Categories) ---
+ peace_options:0 "和平选项"
+ peace_treaty:0 "和平条约"
+
+ # --- 决策 (Decisions) ---
+ conditional_surrender:0 "有条件投降"
+ white_peace:0 "白和平"
+ ceasefire:0 "停火"
+ propose_peace:0 "提议和平"
+ propose_peace_desc:0 "我们拥有 [?vp@FROM|Y0] £victory_points ([?p|Y2%])"
+ ceasefire_end:0 "停火结束"
+ peace_war_reparations:0 "战争赔款"
+ peace_war_reparations_limit:0 "目前向不超过2个国家支付战争赔款"
+ peace_war_reparations_cost:0 "[?pts|R0] £victory_points (当前 [?vp@FROM|Y0] £victory_points ) "
+ peace_pay_war_reparations:0 "向 [From.GetNameDef] 支付赔款"
+ peace_disarm:0 "解除国家武装"
+ peace_take_state:0 "夺取 [From.GetName]"
+ peace_take_state_cost:0 "[?From.state_strategic_value|R0] £victory_points (当前 [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_puppet:0 "建立傀儡 [From.GetName]"
+ peace_puppet_cost:0 "[?pts|R0] £victory_points (当前 [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_set_dmz:0 "设立非军事区 [From.GetName]"
+ peace_liberate:0 "解放 [From.GetName]"
+ peace_claim:0 "宣称 [From.GetName]"
+
+ # --- 事件 (Events) ---
+ plus_cs.1.t:0 "[From.GetnameDefCap] 提议和平"
+ plus_cs.1.d:0 "[From.GetAdjective] 领袖 [From.GetLeader] 提议我们要与 [From.GetName] 进行和平谈判。"
+ plus_cs.1.a:0 "我们别无选择"
+ plus_cs.1.b:0 "我们决不投降！"
+ plus_cs.2.t:0 "[From.GetNameDefCap] 请求进行有条件投降谈判"
+ plus_cs.2.d:0 "[From.GetAdjective] 领袖 [From.GetLeader] 已向 [This.GetNameDef]以此表达了关于 [From.GetNameDef] 有条件投降的谈判意愿。"
+ plus_cs.2.a:0 "我们必须恢复和平"
+ plus_cs.2.b:0 "我们只接受无条件投降！"
+ plus_cs.3.t:0 "简易投降模式"
+ plus_cs.3.d:0 "如果你激活此模式，敌国将更有可能与你进行和平谈判。\n§R切记§！\n和平选项位于“决策”一栏中。"
+ plus_cs.3.a:0 "激活"
+ plus_cs.3.b:0 "不激活"
+ plus_cs.4.t:0 "[From.GetNameDefCap] 提议白和平"
+ plus_cs.4.d:0 "[From.GetAdjective] 领袖 [From.GetLeader] 提议在两国之间实现白和平。"
+ plus_cs.4.a:0 "停止这场无意义的战争吧"
+ plus_cs.4.b:0 "我们不会轻易放弃"
+ plus_cs.5.t:0 "[From.GetNameDefCap] 拒绝投降"
+ plus_cs.5.d:0 "[From.GetAdjectiveCap] 领袖 [From.GetLeader] 拒绝向我们投降。"
+ plus_cs.5.a:0 "他们只是在拖延不可避免的结局"
+ plus_cs.6.t:0 "[From.GetNameDefCap] 拒绝和平谈判"
+ plus_cs.6.d:0 "[From.GetAdjectiveCap] 领袖 [From.GetLeader] 浪费了尽早结束战争的机会。"
+ plus_cs.6.a:0 "我们完蛋了！"
+ plus_cs.7.t:0 "[From.GetNameDefCap] 提议停火"
+ plus_cs.7.d:0 "今天，[From.GetLeader] 和 [From.GetRulingParty] 呼吁暂时停止敌对行动。"
+ plus_cs.7.a:0 "这可能是通往最终和平的道路"
+ plus_cs.8.t:0 "动荡加剧"
+ plus_cs.8.d:0 "由于危机，国内动荡正在加剧。反对派力量增强，国家正处于混乱的边缘。"
+ plus_cs.8.a:0 "镇压骚乱"
+ plus_cs.8.b:0 "任其升级"
+ plus_cs.1.b.tooltip_1:0 "考虑到我们的困境，人民对我们拒绝和平感到失望。"
+ plus_cs.1.b.tooltip_2:0 "我们在国家精疲力竭的情况下拒绝和平，引起了严重的不满！"
+ plus_cs.2.b.tooltip_1:0 "人民不明白为什么在敌人准备投降时我们还要继续战争。"
+ plus_cs.2.b.tooltip_2:0 "我们在国家精疲力竭的情况下拒绝接受投降，引起了严重的不满！"
+ plus_cs.4.b.tooltip_1:0 "在前线陷入僵局时拒绝“白和平”会削弱士气。"
+
+ # --- 新增翻译 ---
+ plus_cs.9.t:0 "[From.GetNameDefCap] 爆发大规模起义"
+ plus_cs.9.d:0 "我们的情报报告显示 [From.GetNameDef] 正遭受严重的内部危机。大规模的叛乱和罢工爆发，瘫痪了他们的军工产业并造成了大量人力损失。这对我们来说是千载难逢的机会。"
+ plus_cs.9.a:0 "好极了。"
+ plus_cs.1001.t:0 "一名将军阵亡"
+ plus_cs.1001.d:0 "前线残酷的战斗夺走了一位宝贵的指挥官。以激进战术闻名的 [?plus_cs_killed_leader_id.GetName] 将军在率领部队时阵亡。这一损失对我们的指挥体系是一个沉重打击。"
+ plus_cs.1001.a:0 "悲剧性的损失。"
+ plus_cs.1002.t:0 "一名元帅负伤"
+ plus_cs.1002.d:0 "我们收到了前线的可怕消息。陆军元帅 [?plus_cs_wounded_leader_id.GetName] 遭到炮击，身受重伤。[?plus_cs_wounded_leader_id.GetHisHer] 情况危急，目前尚不确定 [?plus_cs_wounded_leader_id.GetHeShe] 是否能重返指挥岗位。"
+ plus_cs.1002.a:0 "我们必须祈祷 [?plus_cs_wounded_leader_id.GetHisHer] 康复。"
+
+ # --- 民族精神 (Ideas) ---
+ war_reparations:0 "战争赔款"
+ war_reparations_desc:0 "该国目前正在向 [?war_reps_to.GetNameDef] 支付战争赔款"
+ peace_disarmed_nation:0 "被解除武装的国家"
+ peace_civilian_economy:0 "民用经济"
+ ceasefire_economic_tribute:0 "停火经济贡品"
+ 
+ # 修复：重命名以避免与决策键重复
+ idea_conditional_surrender:0 "有条件投降（国民精神）"
+ 
+ internal_crisis_low:0 "轻度内部危机"
+ internal_crisis_medium:0 "中度内部危机"
+ internal_crisis_high:0 "重度内部危机"
+ revanchism_spirit:0 "复仇主义精神"
+ revanchism_spirit_desc:0 "核心领土的丧失点燃了我们人民心中的复仇之火。我们将不惜一切代价夺回属于我们的东西。"
+ successful_negotiator:0 "成功的谈判者"
+ successful_negotiator_desc:0 "这位领袖确保了有利的和平条约，加强了他在精英和人民中的权威。"
+ humiliated_leader:0 "受辱的领袖"
+ humiliated_leader_desc:0 "接受可耻的和平条款（解除武装）玷污了这位领袖的名誉。人民认为他软弱无能。"
+
+ # --- 新机制：经济 5.0 (Simplified Chinese) ---
+ 
+ shadow_econ_civilian:0 "投资天堂"
+ shadow_econ_civilian_desc:0 "§G和平红利：§! 当枪炮停歇时，商业繁荣。提供大量的政治点数和§Y私人投资§!机会。\n\n§R战时效率低下。§!"
+ 
+ shadow_econ_early:0 "工程整备"
+ shadow_econ_early_desc:0 "§G后勤利基：§! 国家专注于基础设施和防御。是战前建造碉堡、雷达和道路的最佳选择。"
+ 
+ shadow_econ_partial:0 "优质生产"
+ shadow_econ_partial_desc:0 "§G平衡：§! 最佳平衡点。工厂以最高的效率和质量运作，而不强行追求产量。"
+ 
+ shadow_econ_war:0 "战时流水线"
+ shadow_econ_war_desc:0 "§G数量：§! 以牺牲质量（可靠性）为代价大规模生产武器。\n\n§R警告：§! 在和平时期长期使用会导致§Y经济过热§!。"
+ 
+ shadow_econ_total:0 "全面枯竭"
+ shadow_econ_total_desc:0 "§R绝望：§! 国家变成了一座巨大的军营。以摧毁§Y科研§!和§Y稳定度§!为代价最大化建设速度。"
+
+ # --- 其他机制 ---
+ 
+ manpower_strain_mild:0 "§Y劳动力短缺§!"
+ manpower_strain_mild_desc:0 "动员开始影响经济。机器闲置，熟练工程师被学徒取代。"
+ manpower_strain_high:0 "§O劳动力市场危机§!"
+ manpower_strain_high_desc:0 "太多的男人被征召入伍。工厂无法完成配额，后勤陷入困境。"
+ manpower_strain_collapse:0 "§R人口崩溃§!"
+ manpower_strain_collapse_desc:0 "经济瘫痪。几乎没有身体健康的男性留下来——他们都在战壕里或已经阵亡。军队濒临解散。"
+
+ desperate_defense_effort:0 "§G绝望防御§!"
+ desperate_defense_effort_desc:0 "敌人踏上了我们的土地！在这一刻，士兵和工人没有区别。"
+
+ shadow_law_service_penalty:0 "动员成本：按需服役"
+ shadow_law_adults_penalty:0 "动员成本：成人服役"
+ shadow_law_scraping_penalty:0 "动员成本：榨干以尽"
+
+ # --- 装饰性标签 ---
+ COUNTRY_subject:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
+
+# --- 新增：体面臣服 ---
+ offer_honorable_submission:0 "提议体面臣服"
+ offer_honorable_submission_desc:0 "我们的情况危急。我们提议成为敌人的附庸，以换取保护和生存。"
+ 
+ plus_cs_coalition_name:0 "救国同盟"
+
+ rapid_autonomy_recovery:0 "独立之路"
+ rapid_autonomy_recovery_desc:0 "我们被迫屈服，但我们的精神没有被击垮。我们正在悄悄重建力量。"
+ fight_for_survival:0 "为生存而战"
+ fight_for_survival_desc:0 "他们拒绝了我们的投降。他们想要将我们彻底消灭。我们必须战斗到底。"
+ intervention_reward:0 "干涉授权"
+ intervention_reward_desc:0 "我们介入以拯救一个国家免于毁灭。这加强了我们的内部稳定。"
+
+ plus_cs.submission.1.t:0 "[From.GetNameDefCap] 提议臣服"
+ plus_cs.submission.1.d:0 "[From.GetNameDef] 知道他们无法获胜。如果我们要饶恕他们的人民，他们提议成为我们的傀儡。"
+ plus_cs.submission.1.a:0 "接受臣服（建立傀儡）"
+ plus_cs.submission.1.b:0 "没有怜悯！全面征服！"
+
+ plus_cs.submission.2.t:0 "条款已接受"
+ plus_cs.submission.2.d:0 "敌人接受了我们的条款。我们幸存了下来。"
+ plus_cs.submission.2.a:0 "苦涩的和平胜过毁灭。"
+
+ plus_cs.submission.3.t:0 "臣服被拒绝！"
+ plus_cs.submission.3.d:0 "他们拒绝了！我们必须为生存而战！"
+ plus_cs.submission.3.a:0 "全面动员！保卫祖国！"
+
+ plus_cs.submission.4.t:0 "来自 [From.GetNameDef] 的恳求"
+ plus_cs.submission.4.d:0 "[From.GetNameDef] 面临彻底的毁灭。他们恳求我们的干涉。"
+ plus_cs.submission.4.a:0 "我们必须干涉！（加入战争）"
+ plus_cs.submission.4.b:0 "这不是我们的战斗。"
+
+# 军官混乱
+ officer_shortage_mild:0 "§Y指挥混乱§!"
+ officer_shortage_mild_desc:0 "军队的迅速扩张稀释了军官团的质量。命令被延误。"
+ officer_shortage_high:0 "§O军官团危机§!"
+ officer_shortage_high_desc:0 "我们缺乏胜任的营级和团级指挥官。协调正在崩溃。"
+ officer_shortage_collapse:0 "§R总参谋部崩溃§!"
+ officer_shortage_collapse_desc:0 "指挥链实际上已经解体。恐慌统治着司令部。"
+
+# --- 政治点数决策：危机管理 ---
+ decision_category_crisis_management:0 "危机管理"
+ decree_stop_panic:0 "法令：“一步也不许后退！”"
+ decree_stop_panic_desc:0 "关键城市失守后恐慌蔓延。我们必须颁布严厉的法令以立即恢复秩序，即使通过高昂的政治代价也在所不惜。"
+ decree_internal_stability:0 "国内宣传运动"
+ decree_internal_stability_desc:0 "战争正在引发动荡。我们需要大规模的宣传工作来安抚民众并降低内部危机等级。"
+
+ # --- 政治点数决策：经济刺激 ---
+ decision_category_economic_stimulus:0 "经济刺激"
+ stimulus_civilian_sector:0 "补贴民用部门"
+ stimulus_civilian_sector_desc:0 "向私营企业注入政治资本以加快民用建设速度。需要 §Y投资天堂§! 经济。"
+ stimulus_state_contract:0 "政府建设合同"
+ stimulus_state_contract_desc:0 "国家直接干预以平衡军事和民用需求。需要 §Y工程整备§! 或 §Y优质生产§! 经济。"
+ stimulus_mil_industrial_complex:0 "军工注资"
+ stimulus_mil_industrial_complex_desc:0 "人为地支撑军火工业。虽然昂贵，但对于全面战争生产是必要的。需要 §Y战时流水线§! 或 §Y全面枯竭§! 经济。"
+
+# --- 新增：工业惯性与通货膨胀 ---
+ war_inflation_crisis:0 "战时通胀危机"
+ war_inflation_crisis_desc:0 "战争持续太久了。货币贬值，民用建设放缓。"
+
+ economic_retooling_shock_minor:0 "轻微转产冲击"
+ economic_retooling_shock_minor_desc:0 "工厂正在适应新的配额。生产效率暂时下降。"
+ 
+ economic_retooling_shock_medium:0 "工业重组"
+ economic_retooling_shock_medium_desc:0 "物流和生产线的重大变化。工厂暂时无法满负荷运转。"
+ 
+ economic_retooling_shock_major:0 "工业瘫痪"
+ economic_retooling_shock_major_desc:0 "剧烈的经济转型引发了混乱。机器设备正在更换，车间正在重建。生产崩溃。"
+
+# --- 新增：傀儡国的命运 (Судьба марионеток) ---
+ plus_cs.puppet_fate.t:0 "宗主国的陨落"
+ plus_cs.puppet_fate.d:0 "我们的政府收到了令人震惊的消息：我们的宗主国已经投降并接受了 [event_target:new_potential_master.GetNameDef] 的条件。旧秩序已经崩溃。\n\n胜利者要求我们立即放下武器并承认他们的权威。另一种选择是完全独立，但要与他们强大的战争机器保持战争状态。"
+ plus_cs.puppet_fate.a:0 "我们承认新的主人（经济加成）"
+ plus_cs.puppet_fate.b:0 "我们将战斗！为了独立！"
+
+ # 新增：特权附庸 (Новая идея)
+ high_status_puppet_benefit:0 "特权附庸"
+ high_status_puppet_benefit_desc:0 "我们和平地接受了新秩序。作为对我们忠诚的交换，我们的新宗主国向我们的经济投资并保证稳定。"
+
+# В секцию идей (Ideas)
+ panic_retreat_shock:0 "撤退恐慌冲击"
+ panic_retreat_shock_desc:0 "关键城市的丧失在军队中引发了一波恐慌。组织度正在急剧下降，士兵们正在逃跑。我们需要采取严厉措施！"
+
+ # В секцию решений (Decisions)
+ offer_preventive_submission:0 "提议预防性屈服"
+ offer_preventive_submission_desc:0 "与大国开战无异于自杀。我们必须在我们的城市被摧毁之前提议成为他们的保护国。"
+
+# --- 修正与补充 (Fixes and Additions) ---
+ 
+ # 投降事件中缺失的选项
+ plus_cs.submission.1.c:0 "割让索取领土（和平）"
+
+ # 事件 205: 不经战争割让领土
+ plus_cs.submission.5.t:0 "领土让步"
+ plus_cs.submission.5.d:0 "为了避免全面战争，我们被迫向侵略者移交领土。这是国家的耻辱，但我们保全了士兵的生命。"
+ plus_cs.submission.5.a:0 "我们绝不会忘记这一切。"
+
+ # 事件 300: 革命者的抉择
+ plus_cs.300.t:0 "革命的命运"
+ plus_cs.300.d:0 "我们的内战已经升级。原政府正与一个大国交战。我们面临抉择：寻求我们敌人的敌人的庇护，还是利用混乱武力夺取政权。"
+ plus_cs.300.a:0 "寻求庇护（成为强权的傀儡）"
+ plus_cs.300.b:0 "没有主人！（向所有人宣战并夺取政权）"
+
+ # 事件 305 (代码使用 301 键值): 政变成功
+ plus_cs.301.t:0 "新秩序"
+ plus_cs.301.d:0 "感谢外部支持，旧政权已经倒台。现在我们控制了国家，但我们欠了赞助者的人情。"
+ plus_cs.301.a:0 "我们的新同盟万岁！"
+
+ # 国民精神描述 (对应代码 id=conditional_surrender)
+ conditional_surrender_desc:0 "该国已有条件地承认战败。在条约限制生效期间，它无法加入或创建阵营。"

@@ -1,0 +1,239 @@
+﻿l_spanish:
+ # --- Categorías de Decisión ---
+ peace_options:0 "Opciones de paz"
+ peace_treaty:0 "Tratado de paz"
+
+ # --- Decisiones ---
+ conditional_surrender:0 "Rendición condicional"
+ white_peace:0 "Paz blanca"
+ ceasefire:0 "Alto el fuego"
+ propose_peace:0 "Proponer paz"
+ propose_peace_desc:0 "Tenemos [?vp@FROM|Y0] £victory_points ([?p|Y2%])"
+ ceasefire_end:0 "Fin del alto el fuego"
+ peace_war_reparations:0 "Reparaciones de guerra"
+ peace_war_reparations_limit:0 "Actualmente paga reparaciones de guerra a no más de 2 países"
+ peace_war_reparations_cost:0 "[?pts|R0] £victory_points (actual [?vp@FROM|Y0] £victory_points ) "
+ peace_pay_war_reparations:0 "Pagando reparaciones de guerra a [From.GetNameDef]"
+ peace_disarm:0 "Desarmar nación"
+ peace_take_state:0 "Tomar [From.GetName]"
+ peace_take_state_cost:0 "[?From.state_strategic_value|R0] £victory_points (actual [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_puppet:0 "Convertir en marioneta a [From.GetName]"
+ peace_puppet_cost:0 "[?pts|R0] £victory_points (actual [?vp@FROM.owner|Y0] £victory_points ) "
+ peace_set_dmz:0 "Desmilitarizar [From.GetName]"
+ peace_liberate:0 "Liberar [From.GetName]"
+ peace_claim:0 "Reclamar [From.GetName]"
+
+ # --- Eventos ---
+ plus_cs.1.t:0 "[From.GetnameDefCap] propone la paz"
+ plus_cs.1.d:0 "El líder [From.GetAdjective], [From.GetLeader], nos ha propuesto entrar en negociaciones de paz con [From.GetName]."
+ plus_cs.1.a:0 "No tenemos otra opción"
+ plus_cs.1.b:0 "¡Nunca nos rendiremos!"
+ plus_cs.2.t:0 "[From.GetNameDefCap] pide conversaciones de rendición condicional"
+ plus_cs.2.d:0 "[From.GetLeader], el líder [From.GetAdjective], ha hecho saber a [This.GetNameDef] su voluntad de iniciar conversaciones para la rendición condicional de [From.GetNameDef]."
+ plus_cs.2.a:0 "Debemos restaurar la paz"
+ plus_cs.2.b:0 "¡Solo aceptaremos la rendición incondicional!"
+ plus_cs.3.t:0 "Modo de rendición fácil"
+ plus_cs.3.d:0 "Si activas este modo, será más probable que los países enemigos inicien conversaciones de paz contigo.\n§R¡Recuerda§!\nLas opciones de paz se encuentran en la sección «Decisiones»."
+ plus_cs.3.a:0 "Activar"
+ plus_cs.3.b:0 "No activar"
+ plus_cs.4.t:0 "[From.GetNameDefCap] propone una paz blanca"
+ plus_cs.4.d:0 "El líder [From.GetAdjective], [From.GetLeader], ha propuesto una paz blanca entre nuestros países."
+ plus_cs.4.a:0 "Detengamos esta guerra inútil"
+ plus_cs.4.b:0 "No nos rendiremos fácilmente"
+ plus_cs.5.t:0 "[From.GetNameDefCap] se niega a rendirse"
+ plus_cs.5.d:0 "El líder [From.GetAdjectiveCap], [From.GetLeader], se ha negado a rendirse ante nosotros."
+ plus_cs.5.a:0 "Solo están prolongando lo inevitable"
+ plus_cs.6.t:0 "[From.GetNameDefCap] rechaza las conversaciones de paz"
+ plus_cs.6.d:0 "El líder [From.GetAdjectiveCap], [From.GetLeader], ha desperdiciado la oportunidad de terminar la guerra antes."
+ plus_cs.6.a:0 "¡Estamos perdidos!"
+ plus_cs.7.t:0 "[From.GetNameDefCap] propone un alto el fuego"
+ plus_cs.7.d:0 "Hoy, [From.GetLeader] y el [From.GetRulingParty] han hecho un llamado a un cese temporal de hostilidades."
+ plus_cs.7.a:0 "Este puede ser el camino hacia la paz final"
+ plus_cs.8.t:0 "Inquietudes crecientes"
+ plus_cs.8.d:0 "Los disturbios internos se intensifican debido a la crisis. La oposición gana fuerza y el país está al borde del caos."
+ plus_cs.8.a:0 "Reprimir el descontento"
+ plus_cs.8.b:0 "Dejar que escale"
+ plus_cs.1.b.tooltip_1:0 "El pueblo está decepcionado por nuestra negativa a la paz, dadas nuestras dificultades."
+ plus_cs.1.b.tooltip_2:0 "¡Nuestra negativa a la paz en medio del agotamiento nacional ha causado un grave descontento!"
+ plus_cs.2.b.tooltip_1:0 "El pueblo no entiende por qué continuamos la guerra cuando el enemigo estaba dispuesto a rendirse."
+ plus_cs.2.b.tooltip_2:0 "¡Nuestra negativa a aceptar la rendición en medio del agotamiento nacional ha causado un grave descontento!"
+ plus_cs.4.b.tooltip_1:0 "Rechazar una 'Paz Blanca' durante un punto muerto en el frente socava la moral."
+
+ # --- TRADUCCIONES AÑADIDAS ---
+ plus_cs.9.t:0 "[From.GetNameDefCap] sufre un gran levantamiento"
+ plus_cs.9.d:0 "Nuestros informes de inteligencia indican que [From.GetNameDef] está sufriendo una grave crisis interna. Han estallado revueltas y huelgas generalizadas, paralizando su industria de guerra y causando pérdidas significativas de personal. Esta es una oportunidad de oro para nosotros."
+ plus_cs.9.a:0 "Excelente."
+ plus_cs.1001.t:0 "Un general ha sido asesinado"
+ plus_cs.1001.d:0 "La brutal lucha en el frente se ha cobrado la vida de un valioso líder. El general [?plus_cs_killed_leader_id.GetName], conocido por [?plus_cs_killed_leader_id.GetHisHer] táctica agresiva, murió en acción mientras dirigía [?plus_cs_killed_leader_id.GetHisHer] tropas. Esta pérdida es un duro golpe para nuestra estructura de mando."
+ plus_cs.1001.a:0 "Una trágica pérdida."
+ plus_cs.1002.t:0 "Un mariscal ha sido herido"
+ plus_cs.1002.d:0 "Hemos recibido noticias nefastas del frente. El Mariscal de Campo [?plus_cs_wounded_leader_id.GetName] fue alcanzado por un bombardeo de artillería y ha resultado gravemente herido. [?plus_cs_wounded_leader_id.GetHisHer] estado es crítico, y no se sabe si [?plus_cs_wounded_leader_id.GetHeShe] podrá volver al mando."
+ plus_cs.1002.a:0 "Debemos rezar por [?plus_cs_wounded_leader_id.GetHisHer] recuperación."
+
+ # --- Ideas ---
+ war_reparations:0 "Reparaciones de guerra"
+ war_reparations_desc:0 "Este país está pagando actualmente reparaciones de guerra a [?war_reps_to.GetNameDef]"
+ peace_disarmed_nation:0 "Nación desarmada"
+ peace_civilian_economy:0 "Economía civil"
+ ceasefire_economic_tribute:0 "Tributo económico por alto el fuego"
+ 
+ # FIX: Renombrado para evitar duplicados
+ idea_conditional_surrender:0 "Rendición condicional (Espíritu)"
+ 
+ internal_crisis_low:0 "Crisis interna baja"
+ internal_crisis_medium:0 "Crisis interna media"
+ internal_crisis_high:0 "Crisis interna alta"
+ revanchism_spirit:0 "Espíritu de revanchismo"
+ revanchism_spirit_desc:0 "La pérdida de nuestros territorios centrales ha encendido una sed de venganza en los corazones de nuestro pueblo. Reclamaremos lo que es nuestro a cualquier precio."
+ successful_negotiator:0 "Negociador exitoso"
+ successful_negotiator_desc:0 "Este líder ha asegurado una paz favorable, fortaleciendo su autoridad entre las élites y el pueblo."
+ humiliated_leader:0 "Líder humillado"
+ humiliated_leader_desc:0 "Aceptar términos de paz vergonzosos (desarme) ha manchado la reputación de este líder. El pueblo lo percibe como débil."
+ 
+ # --- NUEVAS MECÁNICAS: Economía 5.0 (Español) ---
+ 
+ shadow_econ_civilian:0 "Paraíso de Inversión"
+ shadow_econ_civilian_desc:0 "§GNicho de Paz:§! Los negocios prosperan mientras las armas callan. Proporciona un aumento masivo de Poder Político y la oportunidad de §YInversiones Privadas§!.\n\n§RIneficaz en guerra.§!"
+ 
+ shadow_econ_early:0 "Preparación Técnica"
+ shadow_econ_early_desc:0 "§GNicho Logístico:§! El estado se centra en la infraestructura y la defensa. La mejor opción para construir búnkeres, radares y carreteras antes de la guerra."
+ 
+ shadow_econ_partial:0 "Producción de Calidad"
+ shadow_econ_partial_desc:0 "§GBalance:§! El punto medio. Las fábricas operan con la máxima eficiencia y calidad, pero sin forzar el ritmo."
+ 
+ shadow_econ_war:0 "Línea de Montaje de Guerra"
+ shadow_econ_war_desc:0 "§GCantidad:§! Producción masiva de armas a costa de la calidad (fiabilidad). \n\n§RAdvertencia:§! El uso prolongado en tiempos de paz causará §YSobrecalentamiento Económico§!."
+ 
+ shadow_econ_total:0 "Agotamiento Total"
+ shadow_econ_total_desc:0 "§RDesesperación:§! El país es un único campamento militar. Velocidad máxima de construcción a costa de destruir la §YCiencia§! y la §YEstabilidad§!."
+
+ # --- Otras mecánicas ---
+ 
+ manpower_strain_mild:0 "§YEscasez de mano de obra§!"
+ manpower_strain_mild_desc:0 "La movilización comienza a afectar la economía. Las máquinas están inactivas y los ingenieros cualificados son reemplazados por aprendices."
+ manpower_strain_high:0 "§OCrisis del mercado laboral§!"
+ manpower_strain_high_desc:0 "Demasiados hombres han sido reclutados. Las fábricas no cumplen con las cuotas y la logística tiene problemas."
+ manpower_strain_collapse:0 "§RColapso demográfico§!"
+ manpower_strain_collapse_desc:0 "La economía está paralizada. Casi no quedan hombres capaces; todos están en las trincheras o muertos."
+
+ desperate_defense_effort:0 "§GDefensa desesperada§!"
+ desperate_defense_effort_desc:0 "¡El enemigo pisa nuestro suelo! En esta hora, no hay distinción entre soldado y obrero."
+
+ shadow_law_service_penalty:0 "Coste de movilización: Servicio obligatorio"
+ shadow_law_adults_penalty:0 "Coste de movilización: Todos los adultos sirven"
+ shadow_law_scraping_penalty:0 "Coste de movilización: Raspar el barril"
+
+ # --- Etiquetas Cosméticas ---
+ COUNTRY_subject:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
+ COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
+
+# --- NUEVO: Sumisión Honorable ---
+ offer_honorable_submission:0 "Ofrecer sumisión honorable"
+ offer_honorable_submission_desc:0 "Nuestra situación es crítica. Ofrecemos convertirnos en súbditos del enemigo a cambio de sobrevivir."
+ 
+ plus_cs_coalition_name:0 "Coalición de Salvación"
+
+ rapid_autonomy_recovery:0 "Camino a la independencia"
+ rapid_autonomy_recovery_desc:0 "Nos obligaron a someternos, pero estamos reconstruyendo nuestras fuerzas para recuperar la soberanía."
+ fight_for_survival:0 "Lucha por la supervivencia"
+ fight_for_survival_desc:0 "Rechazaron nuestra rendición. Quieren nuestro exterminio. Debemos luchar hasta el final."
+ intervention_reward:0 "Mandato de intervención"
+ intervention_reward_desc:0 "Hemos intervenido para salvar una nación. Esto refuerza nuestra estabilidad."
+
+ plus_cs.submission.1.t:0 "[From.GetNameDefCap] ofrece sumisión"
+ plus_cs.submission.1.d:0 "[From.GetNameDef] sabe que no puede ganar. Ofrecen ser nuestra marioneta si los perdonamos."
+ plus_cs.submission.1.a:0 "Aceptar sumisión (Hacer marioneta)"
+ plus_cs.submission.1.b:0 "¡Sin piedad! ¡Conquista total!"
+
+ plus_cs.submission.2.t:0 "Condiciones aceptadas"
+ plus_cs.submission.2.d:0 "El enemigo aceptó nuestras condiciones. Hemos sobrevivido."
+ plus_cs.submission.2.a:0 "Una paz amarga es mejor que la ruina."
+
+ plus_cs.submission.3.t:0 "¡Sumisión rechazada!"
+ plus_cs.submission.3.d:0 "¡Se negaron! ¡Debemos luchar por nuestra supervivencia!"
+ plus_cs.submission.3.a:0 "¡Movilización general! ¡Salvad la Patria!"
+
+ plus_cs.submission.4.t:0 "Súplica de [From.GetNameDef]"
+ plus_cs.submission.4.d:0 "[From.GetNameDef] se enfrenta a la aniquilación. Ruegan por nuestra ayuda."
+ plus_cs.submission.4.a:0 "¡Debemos intervenir!"
+ plus_cs.submission.4.b:0 "No es nuestra lucha."
+
+# Caos de oficiales
+ officer_shortage_mild:0 "§YConfusión en el mando§!"
+ officer_shortage_mild_desc:0 "La rápida expansión del ejército ha diluido la calidad de nuestro cuerpo de oficiales."
+ officer_shortage_high:0 "§OCrisis de oficiales§!"
+ officer_shortage_high_desc:0 "Carecemos de líderes competentes. La coordinación está fallando."
+ officer_shortage_collapse:0 "§RColapso del Estado Mayor§!"
+ officer_shortage_collapse_desc:0 "La cadena de mando se ha desintegrado. El pánico gobierna los cuarteles generales."
+
+# --- Decisiones PP: Gestión de Crisis ---
+ decision_category_crisis_management:0 "Gestión de Crisis"
+ decree_stop_panic:0 "Decreto: «¡Ni un paso atrás!»"
+ decree_stop_panic_desc:0 "El pánico se extiende tras la pérdida de ciudades clave. Debemos ejecutar un decreto severo para restaurar el orden inmediatamente, incluso a un alto coste político."
+ decree_internal_stability:0 "Campaña de propaganda interna"
+ decree_internal_stability_desc:0 "La guerra está causando disturbios. Necesitamos un esfuerzo de propaganda masivo para calmar a la población y reducir la crisis interna."
+
+ # --- Decisiones PP: Estímulo Económico ---
+ decision_category_economic_stimulus:0 "Estímulo Económico"
+ stimulus_civilian_sector:0 "Subsidiar el sector civil"
+ stimulus_civilian_sector_desc:0 "Inyectar capital político en empresas privadas para acelerar la construcción civil. Requiere economía de §YParaíso de Inversión§!."
+ stimulus_state_contract:0 "Contratos de construcción estatales"
+ stimulus_state_contract_desc:0 "Intervención estatal directa para equilibrar las necesidades militares y civiles. Requiere economía de §YPreparación Técnica§! o §YProducción de Calidad§!."
+ stimulus_mil_industrial_complex:0 "Inyección militar-industrial"
+ stimulus_mil_industrial_complex_desc:0 "Apoyar artificialmente la industria armamentística. Costoso, pero necesario para la producción de guerra total. Requiere economía de §YLínea de Montaje de Guerra§! o §YAgotamiento Total§!."
+
+# --- NUEVO: Inercia Industrial e Inflación ---
+ war_inflation_crisis:0 "Crisis de Inflación de Guerra"
+ war_inflation_crisis_desc:0 "La guerra se ha alargado demasiado. La moneda está devaluada y la construcción civil se ralentiza."
+
+ economic_retooling_shock_minor:0 "Choque Menor de Reequipamiento"
+ economic_retooling_shock_minor_desc:0 "Las fábricas se están adaptando a las nuevas cuotas. Caída temporal en la eficiencia."
+ 
+ economic_retooling_shock_medium:0 "Reequipamiento Industrial"
+ economic_retooling_shock_medium_desc:0 "Cambios significativos en la logística y las líneas de producción. Las fábricas rinden temporalmente por debajo de su capacidad."
+ 
+ economic_retooling_shock_major:0 "Parálisis Industrial"
+ economic_retooling_shock_major_desc:0 "Los cambios económicos drásticos han causado el caos. Se está sustituyendo la maquinaria. La producción se desploma."
+
+# --- NUEVO: El Destino de los Títeres (Судьба марионеток) ---
+ plus_cs.puppet_fate.t:0 "La Caída del Soberano"
+ plus_cs.puppet_fate.d:0 "Nuestro gobierno ha recibido noticias impactantes: nuestro soberano ha capitulado y aceptado los términos de [event_target:new_potential_master.GetNameDef]. El viejo orden se ha derrumbado.\n\nLos vencedores exigen que depongamos las armas inmediatamente y reconozcamos su autoridad. La alternativa es la independencia total, pero permaneciendo en guerra contra su poderosa maquinaria militar."
+ plus_cs.puppet_fate.a:0 "Reconocemos a nuestro nuevo amo (Bonificaciones Económicas)"
+ plus_cs.puppet_fate.b:0 "¡Lucharemos! ¡Por la independencia!"
+
+ # Nueva Idea (Новая идея)
+ high_status_puppet_benefit:0 "Súbdito Privilegiado"
+ high_status_puppet_benefit_desc:0 "Aceptamos pacíficamente el nuevo orden. A cambio de nuestra lealtad, nuestro nuevo soberano invierte en nuestra economía y garantiza la estabilidad."
+
+# В секцию идей (Ideas)
+ panic_retreat_shock:0 "Choque de Retirada de Pánico"
+ panic_retreat_shock_desc:0 "La pérdida de ciudades clave ha desencadenado una ola de pánico en el ejército. La organización se está desplomando, los soldados están desertando. ¡Necesitamos tomar medidas severas!"
+
+ # В секцию решений (Decisions)
+ offer_preventive_submission:0 "Ofrecer Sumisión Preventiva"
+ offer_preventive_submission_desc:0 "La guerra con una gran potencia es un suicidio. Debemos ofrecer convertirnos en su protectorado antes de que nuestras ciudades sean destruidas."
+
+# --- CORRECCIONES Y ADICIONES ---
+ 
+ # Opción faltante en el evento de sumisión
+ plus_cs.submission.1.c:0 "Ceder territorios reclamados (Paz)"
+
+ # Evento 205: Pérdida de territorios sin guerra
+ plus_cs.submission.5.t:0 "Concesiones territoriales"
+ plus_cs.submission.5.d:0 "Para evitar la guerra total, nos vimos obligados a transferir nuestros territorios al agresor. Es una vergüenza nacional, pero hemos salvado la vida de nuestros soldados."
+ plus_cs.submission.5.a:0 "Nunca olvidaremos esto."
+
+ # Evento 300: Dilema de los revolucionarios
+ plus_cs.300.t:0 "El destino de la revolución"
+ plus_cs.300.d:0 "Nuestra guerra civil ha escalado. El gobierno original está en guerra con una gran potencia. Tenemos una opción: buscar el patrocinio de los enemigos de nuestro enemigo o aprovechar el caos para tomar el poder por la fuerza."
+ plus_cs.300.a:0 "Buscar patrocinio (Convertirse en marioneta de una gran potencia)"
+ plus_cs.300.b:0 "¡Sin amos! (Declarar la guerra a todos y tomar el poder)"
+
+ # Evento 305 (Claves 301): Éxito del golpe
+ plus_cs.301.t:0 "Nuevo Orden"
+ plus_cs.301.d:0 "Gracias al apoyo extranjero, el viejo régimen ha caído. Ahora controlamos el país, pero estamos en deuda con nuestros benefactores."
+ plus_cs.301.a:0 "¡Larga vida a nuestra nueva alianza!"
+
+ # Descripción del Espíritu Nacional (Si el código usa id=conditional_surrender)
+ conditional_surrender_desc:0 "Este país ha admitido la derrota bajo condiciones. No puede unirse a facciones ni crear alianzas mientras las restricciones del tratado estén vigentes."
