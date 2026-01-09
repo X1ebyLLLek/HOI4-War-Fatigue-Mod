@@ -17,12 +17,12 @@ country_event = {
 		# 1. МЕХАНИКА САМОПОДДЕРЖАНИЯ ЦИКЛА
 		set_country_flag = plus_cs_loop_active
 		
-		# Планируем следующий тик. 
-		# Base 6 + Random 3 даст диапазон 6..8 дней (в среднем 7).
-		# Уменьшаем разброс, чтобы расчет потерь (Officer Chaos) был стабильнее.
-		country_event = { 
-			id = plus_cs.999 
-			days = { base = 6 random = 3 } 
+		# Планируем следующий тик (6-8 дней).
+		# Используем random_list, так как days = { ... } не поддерживается в эффектах.
+		random_list = {
+			33 = { country_event = { id = plus_cs.999 days = 6 } }
+			33 = { country_event = { id = plus_cs.999 days = 7 } }
+			33 = { country_event = { id = plus_cs.999 days = 8 } }
 		}
 
 		# =============================================================
