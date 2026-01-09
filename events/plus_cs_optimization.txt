@@ -18,11 +18,11 @@ country_event = {
 		set_country_flag = plus_cs_loop_active
 		
 		# Планируем следующий тик. 
-		# Base 4 + Random 7 даст диапазон 4..10 (в среднем 7). 
-		# Мат. ожидание совпадает с on_weekly.
+		# Base 6 + Random 3 даст диапазон 6..8 дней (в среднем 7).
+		# Уменьшаем разброс, чтобы расчет потерь (Officer Chaos) был стабильнее.
 		country_event = { 
 			id = plus_cs.999 
-			days = { base = 4 random = 7 } 
+			days = { base = 6 random = 3 } 
 		}
 
 		# =============================================================
