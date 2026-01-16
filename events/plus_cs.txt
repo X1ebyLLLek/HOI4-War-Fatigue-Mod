@@ -163,6 +163,14 @@ country_event = {
 			every_enemy_country = {
 				limit = {
 					is_in_faction_with = FROM
+					has_capitulated = yes
+				}
+				remove_from_faction = yes
+			}
+			every_enemy_country = {
+				limit = {
+					is_in_faction_with = FROM
+					has_capitulated = no
 				}
 				white_peace = ROOT
 				set_truce = {
@@ -375,6 +383,15 @@ country_event = {
 				limit = {
 					is_in_faction_with = ROOT
 					has_war_with = FROM
+					has_capitulated = yes
+				}
+				remove_from_faction = yes
+			}
+			every_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					has_capitulated = no
 				}
 				white_peace = FROM
 				set_truce = {
@@ -505,10 +522,20 @@ country_event = {
 				has_war_support > 0.8
 			}
 		}
-		white_peace = FROM
-		set_truce = {
-			target = FROM
-			days = 720
+		if = {
+			limit = {
+				FROM = { has_capitulated = yes }
+			}
+			# Do not sign white peace. War continues with this capitulated nation.
+			# Remove from faction to ensure they don't get peace from elsewhere.
+			FROM = { remove_from_faction = yes }
+		}
+		else = {
+			white_peace = FROM
+			set_truce = {
+				target = FROM
+				days = 720
+			}
 		}
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
