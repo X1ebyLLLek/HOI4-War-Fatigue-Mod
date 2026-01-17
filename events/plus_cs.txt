@@ -153,11 +153,17 @@ country_event = {
 			limit = {
 				is_faction_leader = no
 			}
+			# НОВОЕ: Сохраняем контроль третьих сторон перед белым миром
+			plus_cs_save_third_party_control = yes
+			
 			white_peace = FROM
 			set_truce = {
 				target = FROM
 				days = 720
 			}
+			
+			# НОВОЕ: Восстанавливаем контроль третьих сторон после белого мира
+			plus_cs_restore_third_party_control = yes
 		}
 		else = {
 			every_enemy_country = {
@@ -167,6 +173,9 @@ country_event = {
 				}
 				remove_from_faction = yes
 			}
+			# НОВОЕ: Сохраняем контроль третьих сторон
+			plus_cs_save_third_party_control = yes
+			
 			every_enemy_country = {
 				limit = {
 					is_in_faction_with = FROM
@@ -178,6 +187,9 @@ country_event = {
 					days = 720
 				}
 			}
+			
+			# НОВОЕ: Восстанавливаем контроль третьих сторон
+			plus_cs_restore_third_party_control = yes
 		}
 		if = {
 			limit = {
@@ -372,11 +384,17 @@ country_event = {
 			limit = {
 				is_faction_leader = no
 			}
+			# НОВОЕ: Сохраняем контроль третьих сторон
+			plus_cs_save_third_party_control = yes
+			
 			white_peace = FROM
 			set_truce = {
 				target = FROM
 				days = 720
 			}
+			
+			# НОВОЕ: Восстанавливаем контроль третьих сторон
+			plus_cs_restore_third_party_control = yes
 		}
 		else = {
 			every_country = {
@@ -387,6 +405,9 @@ country_event = {
 				}
 				remove_from_faction = yes
 			}
+			# НОВОЕ: Сохраняем контроль третьих сторон
+			plus_cs_save_third_party_control = yes
+			
 			every_country = {
 				limit = {
 					is_in_faction_with = ROOT
@@ -399,6 +420,9 @@ country_event = {
 					days = 720
 				}
 			}
+			
+			# НОВОЕ: Восстанавливаем контроль третьих сторон
+			plus_cs_restore_third_party_control = yes
 		}
 		if = {
 			limit = {
@@ -531,11 +555,17 @@ country_event = {
 			FROM = { remove_from_faction = yes }
 		}
 		else = {
+			# НОВОЕ: Сохраняем контроль третьих сторон
+			plus_cs_save_third_party_control = yes
+			
 			white_peace = FROM
 			set_truce = {
 				target = FROM
 				days = 720
 			}
+			
+			# НОВОЕ: Восстанавливаем контроль третьих сторон
+			plus_cs_restore_third_party_control = yes
 		}
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
@@ -944,6 +974,9 @@ country_event = {
 			}
 		}
 
+		# НОВОЕ: Сохраняем контроль третьих сторон
+		plus_cs_save_third_party_control = yes
+		
 		white_peace = FROM
 		if = {
 			limit = { is_in_faction = yes }
@@ -951,6 +984,9 @@ country_event = {
 		}
 		
 		puppet = FROM
+		
+		# НОВОЕ: Восстанавливаем контроль третьих сторон
+		plus_cs_restore_third_party_control = yes
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
@@ -1030,7 +1066,11 @@ country_event = {
 			clr_country_flag = plus_cs_waiting_response
 			country_event = { id = plus_cs.205 }
 		}
+		# НОВОЕ: Сохраняем контроль третьих сторон
+		plus_cs_save_third_party_control = yes
 		white_peace = FROM
+		# НОВОЕ: Восстанавливаем контроль третьих сторон
+		plus_cs_restore_third_party_control = yes
 		add_political_power = 10
 	}
 }

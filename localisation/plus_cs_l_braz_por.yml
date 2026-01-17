@@ -237,3 +237,46 @@
 
  # Descrição do Espírito Nacional (Se o código usa id=conditional_surrender)
  conditional_surrender_desc:0 "Este país admitiu a derrota sob condições. Não pode entrar em facções ou criar alianças enquanto as restrições do tratado estiverem em vigor."
+
+# ==============================================================================
+# NOVO: MECANICAS DE GUERRA MUNDIAL E ALIANCAS
+# ==============================================================================
+
+  plus_cs.410.t:0 "Paz separada na frente [From.GetAdjective]"
+  plus_cs.410.d:0 "[From.GetNameDef] concluiu uma paz separada com nosso inimigo. Gracas a nossa presenca militar, o controle sobre os territorios que ocupamos foi preservado."
+  plus_cs.410.a:0 "Nossas posicoes estao seguras."
+  plus_cs_territory_preserved_tt:0 "§GTerritorios sob nosso controle foram preservados!§!"
+  
+  plus_cs.420.t:0 "[From.GetNameDefCap] solicita sair da alianca"
+  plus_cs.420.d:0 "O governo de [From.GetNameDef] solicitou permissao para deixar nossa alianca para negociar uma paz separada."
+  plus_cs.420.a:0 "Nos os liberamos (Permitir saida)"
+  plus_cs.420.b:0 "Eles devem lutar! (Negar)"
+  
+  plus_cs.421.t:0 "Permissao para sair concedida"
+  plus_cs.421.d:0 "Nosso lider de alianca entendeu nossa situacao e nos permitiu deixar a alianca."
+  plus_cs.421.a:0 "Somos gratos pela compreensao."
+  plus_cs_can_now_peace_tt:0 "§GVoce agora pode negociar uma paz separada§!"
+  
+  plus_cs.422.t:0 "Saida negada!"
+  plus_cs.422.d:0 "Nosso lider de alianca rejeitou nosso pedido de saida. Eles exigem que continuemos lutando."
+  plus_cs.422.a:0 "Cumprir e continuar a guerra"
+  plus_cs.422.b:0 "Sair contra a vontade deles! (Consequencias)"
+  
+  plus_cs.430.t:0 "[From.GetNameDefCap] solicita rendição"
+  plus_cs.430.d:0 "[From.GetNameDef] capitulou e solicita nossa permissao para rendição completa ao inimigo."
+  plus_cs.430.a:0 "Permitir rendição separada"
+  plus_cs.430.b:0 "Eles devem esperar uma paz geral"
+  
+  plus_cs.431.t:0 "Permissao concedida"
+  plus_cs.431.d:0 "Nosso lider de alianca nos permitiu negociar uma paz separada. Estamos deixando a alianca."
+  plus_cs.431.a:0 "E a unica solucao..."
+  
+  plus_cs.432.t:0 "Rendição negada"
+  plus_cs.432.d:0 "Nos foi negado o direito a uma paz separada. Permanecemos como membro capitulado da alianca."
+  plus_cs.432.a:0 "Nao temos escolha..."
+
+  forced_continuation_war:0 "Continuacao forcada da guerra"
+  forced_continuation_war_desc:0 "Nossa alianca exige que continuemos lutando apesar de nosso esgotamento."
+  faction_betrayal:0 "Traicao da alianca"
+  faction_deserter:0 "Desercao da alianca"
+  peace_territory_preserved:0 "Controle territorial preservado"

@@ -92,4 +92,57 @@
  # Event 301: Coup Success
  plus_cs.301.t:0 "New Order"
  plus_cs.301.d:0 "Thanks to foreign support, the old regime has fallen. We now control the country, but we owe a debt to our benefactors."
- plus_cs.301.a:0 "Long live our new alliance!"
+  plus_cs.301.a:0 "Long live our new alliance!"
+
+# ==============================================================================
+# NEW: WORLD WAR AND ALLIANCE MECHANICS
+# ==============================================================================
+
+  # --- Notification about separate peace ---
+  plus_cs.410.t:0 "Separate Peace on [From.GetAdjective] Front"
+  plus_cs.410.d:0 "[From.GetNameDef] has concluded a separate peace with our enemy. However, thanks to our military presence, control over territories we occupy has been preserved."
+  plus_cs.410.a:0 "Our positions are secured."
+  plus_cs_territory_preserved_tt:0 "§GTerritories under our control have been preserved!§!"
+  
+  # --- Faction leader: member wants to leave ---
+  plus_cs.420.t:0 "[From.GetNameDefCap] Requests to Leave the Alliance"
+  plus_cs.420.d:0 "The government of [From.GetNameDef] has requested permission to leave our alliance in order to negotiate a separate peace. They claim their country can no longer bear the burdens of war."
+  plus_cs.420.a:0 "We release them (Allow exit)"
+  plus_cs.420.b:0 "They must fight! (Deny)"
+  
+  # --- Faction member: allowed to leave ---
+  plus_cs.421.t:0 "Permission to Leave Granted"
+  plus_cs.421.d:0 "Our alliance leader understood our situation and has allowed us to leave the alliance. We can now negotiate a separate peace."
+  plus_cs.421.a:0 "We are grateful for the understanding."
+  plus_cs_can_now_peace_tt:0 "§GYou can now negotiate a separate peace§!"
+  
+  # --- Faction member: denied exit ---
+  plus_cs.422.t:0 "Exit Denied!"
+  plus_cs.422.d:0 "Our alliance leader has rejected our request to leave. They demand we continue fighting despite our country's exhaustion.\n\nWe can comply with their decision or go against the alliance's will and leave unilaterally."
+  plus_cs.422.a:0 "Comply and continue the war"
+  plus_cs.422.b:0 "Leave against their will! (Consequences)"
+  
+  # --- Capitulated ally wants peace ---
+  plus_cs.430.t:0 "[From.GetNameDefCap] Requests Surrender"
+  plus_cs.430.d:0 "[From.GetNameDef] has capitulated and requests our permission for complete surrender to the enemy. If we allow it, they will leave our alliance."
+  plus_cs.430.a:0 "Allow separate surrender"
+  plus_cs.430.b:0 "They must wait for a general peace"
+  
+  # --- Separate surrender allowed ---
+  plus_cs.431.t:0 "Permission Granted"
+  plus_cs.431.d:0 "Our alliance leader has allowed us to negotiate separate peace. We are leaving the alliance."
+  plus_cs.431.a:0 "This is the only way..."
+  
+  # --- Surrender denied ---
+  plus_cs.432.t:0 "Surrender Denied"
+  plus_cs.432.d:0 "We have been denied the right to separate peace. We remain a capitulated member of the alliance and must await the general outcome of the war."
+  plus_cs.432.a:0 "We have no choice..."
+
+  # --- New ideas ---
+  forced_continuation_war:0 "Forced Continuation of War"
+  forced_continuation_war_desc:0 "Our alliance demands we continue fighting despite our exhaustion. The population is demoralized, the army is tired, but we are not allowed to surrender."
+
+  # --- Opinion Modifiers ---
+  faction_betrayal:0 "Alliance Betrayal"
+  faction_deserter:0 "Alliance Desertion"
+  peace_territory_preserved:0 "Territory Control Preserved"

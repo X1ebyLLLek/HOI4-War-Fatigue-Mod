@@ -237,3 +237,46 @@
 
  # Descripción del Espíritu Nacional (Si el código usa id=conditional_surrender)
  conditional_surrender_desc:0 "Este país ha admitido la derrota bajo condiciones. No puede unirse a facciones ni crear alianzas mientras las restricciones del tratado estén vigentes."
+
+# ==============================================================================
+# NUEVO: MECANICAS DE GUERRA MUNDIAL Y ALIANZAS
+# ==============================================================================
+
+  plus_cs.410.t:0 "Paz separada en el frente [From.GetAdjective]"
+  plus_cs.410.d:0 "[From.GetNameDef] ha concluido una paz separada con nuestro enemigo. Gracias a nuestra presencia militar, se ha preservado el control de los territorios que ocupamos."
+  plus_cs.410.a:0 "Nuestras posiciones estan aseguradas."
+  plus_cs_territory_preserved_tt:0 "§GLos territorios bajo nuestro control han sido preservados!§!"
+  
+  plus_cs.420.t:0 "[From.GetNameDefCap] solicita abandonar la alianza"
+  plus_cs.420.d:0 "El gobierno de [From.GetNameDef] ha solicitado permiso para abandonar nuestra alianza para negociar una paz separada."
+  plus_cs.420.a:0 "Los liberamos (Permitir salida)"
+  plus_cs.420.b:0 "Deben luchar! (Denegar)"
+  
+  plus_cs.421.t:0 "Permiso para salir concedido"
+  plus_cs.421.d:0 "Nuestro lider de alianza ha comprendido nuestra situacion y nos ha permitido abandonar la alianza."
+  plus_cs.421.a:0 "Agradecemos la comprension."
+  plus_cs_can_now_peace_tt:0 "§GAhora puedes negociar una paz separada§!"
+  
+  plus_cs.422.t:0 "Salida denegada!"
+  plus_cs.422.d:0 "Nuestro lider de alianza ha rechazado nuestra solicitud. Exigen que continuemos luchando a pesar del agotamiento de nuestro pais."
+  plus_cs.422.a:0 "Cumplir y continuar la guerra"
+  plus_cs.422.b:0 "Salir contra su voluntad! (Consecuencias)"
+  
+  plus_cs.430.t:0 "[From.GetNameDefCap] solicita rendicion"
+  plus_cs.430.d:0 "[From.GetNameDef] ha capitulado y solicita nuestro permiso para rendirse completamente al enemigo."
+  plus_cs.430.a:0 "Permitir rendicion separada"
+  plus_cs.430.b:0 "Deben esperar una paz general"
+  
+  plus_cs.431.t:0 "Permiso concedido"
+  plus_cs.431.d:0 "Nuestro lider de alianza nos ha permitido negociar una paz separada. Abandonamos la alianza."
+  plus_cs.431.a:0 "Es la unica solucion..."
+  
+  plus_cs.432.t:0 "Rendicion denegada"
+  plus_cs.432.d:0 "Se nos ha negado el derecho a una paz separada. Permanecemos como miembro capitulado de la alianza."
+  plus_cs.432.a:0 "No tenemos opcion..."
+
+  forced_continuation_war:0 "Continuacion forzada de la guerra"
+  forced_continuation_war_desc:0 "Nuestra alianza exige que continuemos luchando a pesar de nuestro agotamiento. La poblacion esta desmoralizada, el ejercito cansado, pero no se nos permite rendirnos."
+  faction_betrayal:0 "Traicion a la alianza"
+  faction_deserter:0 "Desercion de la alianza"
+  peace_territory_preserved:0 "Control territorial preservado"

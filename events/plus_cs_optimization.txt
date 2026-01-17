@@ -114,5 +114,146 @@ country_event = {
 				}
 			}
 		}
+
+		# =============================================================
+		# --- Г: АВТОМАТИЧЕСКОЕ ПРЕДЛОЖЕНИЕ СДАЧИ (AI) ---
+		# Проверяем, не пора ли AI предложить сдачу мажору
+		# =============================================================
+		if = {
+			limit = {
+				is_ai = yes
+				has_war = yes
+				is_puppet = no
+				NOT = { has_country_flag = plus_cs_waiting_response }
+				NOT = { has_country_flag = plus_cs_auto_submission_cooldown }
+				NOT = { has_idea = fight_for_survival }
+				
+				# Есть враг-мажор
+				any_enemy_country = {
+					is_major = yes
+					is_puppet = no
+				}
+			}
+			
+			# Выбираем врага-мажора для предложения
+			random_enemy_country = {
+				limit = {
+					is_major = yes
+					is_puppet = no
+				}
+				save_event_target_as = potential_master
+			}
+			
+			# Проверяем условия для автоматической сдачи
+			# Это random_list с разными шансами в зависимости от ситуации
+			
+			# --- ПРЕВЕНТИВНАЯ СДАЧА (до больших потерь) ---
+			if = {
+				limit = {
+					surrender_progress < 0.2
+					is_major = no
+					has_government = democratic
+					strength_ratio = { tag = event_target:potential_master ratio < 0.2 }
+					has_war_support < 0.4
+					NOT = { has_country_flag = plus_cs_offered_submission }
+				}
+				random_list = {
+					90 = { } # Ничего
+					10 = {   # 10% шанс предложить превентивную сдачу
+						set_country_flag = { flag = plus_cs_auto_submission_cooldown days = 30 }
+						set_country_flag = plus_cs_waiting_response
+						set_country_flag = plus_cs_offered_submission
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 12 }
+						}
+					}
+				}
+			}
+			
+			# --- КРИТИЧЕСКАЯ СИТУАЦИЯ: Столица потеряна ---
+			if = {
+				limit = {
+					capital_scope = { NOT = { is_controlled_by = ROOT } }
+					NOT = { has_country_flag = plus_cs_offered_after_capital_fall }
+				}
+				random_list = {
+					# Демократии сразу предлагают
+					1 = {
+						modifier = { factor = 0 NOT = { has_government = democratic } }
+						set_country_flag = plus_cs_offered_after_capital_fall
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 6 }
+						}
+					}
+					# Нейтралы с 60% шансом
+					60 = {
+						modifier = { factor = 0 NOT = { has_government = neutrality } }
+						set_country_flag = plus_cs_offered_after_capital_fall
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 6 }
+						}
+					}
+					# Фашисты с 20% шансом
+					20 = {
+						modifier = { factor = 0 NOT = { has_government = fascism } }
+						set_country_flag = plus_cs_offered_after_capital_fall
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 6 }
+						}
+					}
+					# Коммунисты с 10% шансом
+					10 = {
+						modifier = { factor = 0 NOT = { has_government = communism } }
+						set_country_flag = plus_cs_offered_after_capital_fall
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 6 }
+						}
+					}
+					# Остальные случаи - ничего
+					9 = { }
+				}
+			}
+			
+			# --- ИСТОЩЕНИЕ ---
+			if = {
+				limit = {
+					has_country_flag = plus_cs_exhausted
+					NOT = { has_government = fascism }
+					NOT = { has_government = communism }
+				}
+				random_list = {
+					70 = { } # Ничего
+					30 = {   # 30% шанс для неистовых идеологий
+						set_country_flag = { flag = plus_cs_auto_submission_cooldown days = 60 }
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 12 }
+						}
+					}
+				}
+			}
+			
+			# --- КОНЕЦ ВСЕМУ: surrender > 0.7 для любой идеологии ---
+			if = {
+				limit = {
+					surrender_progress > 0.7
+					NOT = { has_country_flag = plus_cs_offered_at_critical }
+				}
+				random_list = {
+					50 = { } # Борются до конца
+					50 = {   # 50% сдаются
+						set_country_flag = plus_cs_offered_at_critical
+						set_country_flag = plus_cs_waiting_response
+						event_target:potential_master = {
+							country_event = { id = plus_cs.201 hours = 6 }
+						}
+					}
+				}
+			}
+		}
 	}
 }

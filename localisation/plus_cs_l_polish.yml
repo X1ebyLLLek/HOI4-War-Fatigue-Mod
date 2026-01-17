@@ -237,3 +237,46 @@
 
  # Opis Ducha (Jeśli kod używa id=conditional_surrender)
  conditional_surrender_desc:0 "Ten kraj uznał swoją porażkę na warunkach. Nie może dołączać do frakcji ani tworzyć sojuszy, dopóki obowiązują ograniczenia traktatowe."
+
+# ==============================================================================
+# NOWE: MECHANIKI WOJNY SWIATOWEJ I SOJUSZY
+# ==============================================================================
+
+  plus_cs.410.t:0 "Odrebny pokoj na froncie [From.GetAdjective]"
+  plus_cs.410.d:0 "[From.GetNameDef] zawarla odrebny pokoj z naszym wrogiem. Dzieki naszej obecnosci militarnej kontrola nad terytoriami, ktore okupujemy, zostala zachowana."
+  plus_cs.410.a:0 "Nasze pozycje sa zabezpieczone."
+  plus_cs_territory_preserved_tt:0 "§GTerytoria pod nasza kontrola zostaly zachowane!§!"
+  
+  plus_cs.420.t:0 "[From.GetNameDefCap] prosi o opuszczenie sojuszu"
+  plus_cs.420.d:0 "Rzad [From.GetNameDef] poprosil o pozwolenie na opuszczenie naszego sojuszu w celu negocjacji odrebnego pokoju."
+  plus_cs.420.a:0 "Zwalniamy ich (Pozwol wyjsc)"
+  plus_cs.420.b:0 "Musza walczyc! (Odmow)"
+  
+  plus_cs.421.t:0 "Pozwolenie na wyjscie udzielone"
+  plus_cs.421.d:0 "Nasz przywodca sojuszu zrozumial nasza sytuacje i pozwolil nam opuscic sojusz."
+  plus_cs.421.a:0 "Jestesmy wdzieczni za zrozumienie."
+  plus_cs_can_now_peace_tt:0 "§GMozesz teraz negocjowac odrebny pokoj§!"
+  
+  plus_cs.422.t:0 "Wyjscie odmowione!"
+  plus_cs.422.d:0 "Nasz przywodca sojuszu odrzucil nasza prosbe o wyjscie. Wymagaja, abysmy kontynuowali walke pomimo wyczerpania naszego kraju."
+  plus_cs.422.a:0 "Podporzadkowac sie i kontynuowac wojne"
+  plus_cs.422.b:0 "Wyjsc wbrew ich woli! (Konsekwencje)"
+  
+  plus_cs.430.t:0 "[From.GetNameDefCap] prosi o kapitulacje"
+  plus_cs.430.d:0 "[From.GetNameDef] skapitulowala i prosi o nasza zgode na pelna kapitulacje przed wrogiem."
+  plus_cs.430.a:0 "Zezwolic na odrebna kapitulacje"
+  plus_cs.430.b:0 "Musza czekac na ogolny pokoj"
+  
+  plus_cs.431.t:0 "Pozwolenie udzielone"
+  plus_cs.431.d:0 "Nasz przywodca sojuszu pozwolil nam negocjowac odrebny pokoj. Opuszczamy sojusz."
+  plus_cs.431.a:0 "To jedyne wyjscie..."
+  
+  plus_cs.432.t:0 "Kapitulacja odmowiona"
+  plus_cs.432.d:0 "Odmowiono nam prawa do odrebnego pokoju. Pozostajemy skapitulowanym czlonkiem sojuszu."
+  plus_cs.432.a:0 "Nie mamy wyboru..."
+
+  forced_continuation_war:0 "Wymuszona kontynuacja wojny"
+  forced_continuation_war_desc:0 "Nasz sojusz wymaga, abysmy kontynuowali walke pomimo naszego wyczerpania."
+  faction_betrayal:0 "Zdrada sojuszu"
+  faction_deserter:0 "Dezercja z sojuszu"
+  peace_territory_preserved:0 "Kontrola terytorialna zachowana"

@@ -230,10 +230,78 @@
  plus_cs.300.a:0 "Schutz suchen (Marionette einer Großmacht werden)"
  plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
 
- # Event 305 (Schlüssel 301): Erfolgreicher Putsch
- plus_cs.301.t:0 "Neue Ordnung"
- plus_cs.301.d:0 "Dank ausländischer Unterstützung ist das alte Regime gefallen. Jetzt kontrollieren wir das Land, stehen aber in der Schuld unserer Gönner."
- plus_cs.301.a:0 "Lang lebe unser neues Bündnis!"
 
- # Beschreibung des Nationalgeistes (Wenn Code id=conditional_surrender verwendet)
- conditional_surrender_desc:0 "Dieses Land hat seine Niederlage unter Bedingungen eingestanden. Es kann keinen Bündnissen beitreten oder Allianzen schmieden, solange die Vertragsbeschränkungen gelten."
+# Fehlende Option im Kapitulations-Event
+plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
+
+# Event 205: Gebietsverlust ohne Krieg
+plus_cs.submission.5.t:0 "Gebietsabtretungen"
+plus_cs.submission.5.d:0 "Um einen umfassenden Krieg zu vermeiden, waren wir gezwungen, unsere Gebiete an den Aggressor zu übergeben. Es ist eine nationale Schande, aber wir haben das Leben unserer Soldaten gerettet."
+plus_cs.submission.5.a:0 "Wir werden das niemals vergessen."
+
+# Event 300: Das Dilemma der Revolutionäre
+plus_cs.300.t:0 "Das Schicksal der Revolution"
+plus_cs.300.d:0 "Unser Bürgerkrieg ist eskaliert. Die ursprüngliche Regierung befindet sich im Krieg mit einer Großmacht. Wir haben eine Wahl: Schutz bei den Feinden unseres Feindes suchen oder das Chaos nutzen, um die Macht mit Gewalt zu ergreifen."
+plus_cs.300.a:0 "Schutz suchen (Marionette einer Großmacht werden)"
+plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
+
+# Event 305 (Schlüssel 301): Erfolgreicher Putsch
+plus_cs.301.t:0 "Neue Ordnung"
+plus_cs.301.d:0 "Dank ausländischer Unterstützung ist das alte Regime gefallen. Jetzt kontrollieren wir das Land, stehen aber in der Schuld unserer Gönner."
+plus_cs.301.a:0 "Lang lebe unser neues Bündnis!"
+
+# Beschreibung des Nationalgeistes (Wenn Code id=conditional_surrender verwendet)
+conditional_surrender_desc:0 "Dieses Land hat seine Niederlage unter Bedingungen eingestanden. Es kann keinen Bündnissen beitreten oder Allianzen schmieden, solange die Vertragsbeschränkungen gelten."
+
+# ==============================================================================
+# NEU: WELTKRIEG- UND ALLIANZMECHANIKEN
+# ==============================================================================
+
+# --- Benachrichtigung über Separatfrieden ---
+plus_cs.410.t:0 "Separatfrieden an der [From.GetAdjective] Front"
+plus_cs.410.d:0 "[From.GetNameDef] hat einen Separatfrieden mit unserem Feind geschlossen. Dank unserer militärischen Präsenz wurde die Kontrolle über die von uns besetzten Gebiete jedoch aufrechterhalten."
+plus_cs.410.a:0 "Unsere Positionen sind gesichert."
+plus_cs_territory_preserved_tt:0 "§GGebiete unter unserer Kontrolle wurden erhalten!§!"
+
+# --- Fraktionsführer: Mitglied will austreten ---
+plus_cs.420.t:0 "[From.GetNameDefCap] beantragt Austritt aus der Allianz"
+plus_cs.420.d:0 "Die Regierung von [From.GetNameDef] hat um Erlaubnis gebeten, unsere Allianz zu verlassen, um einen Separatfrieden auszuhandeln. Sie behaupten, ihr Land könne die Lasten des Krieges nicht länger tragen."
+plus_cs.420.a:0 "Wir entlassen sie (Austritt erlauben)"
+plus_cs.420.b:0 "Sie müssen kämpfen! (Ablehnen)"
+
+# --- Fraktionsmitglied: Austritt erlaubt ---
+plus_cs.421.t:0 "Austrittserlaubnis erteilt"
+plus_cs.421.d:0 "Unser Allianzführer hat unsere Situation verstanden und uns erlaubt, die Allianz zu verlassen. Wir können jetzt einen Separatfrieden aushandeln."
+plus_cs.421.a:0 "Wir sind dankbar für das Verständnis."
+plus_cs_can_now_peace_tt:0 "§GSie können jetzt einen Separatfrieden aushandeln§!"
+
+# --- Fraktionsmitglied: Austritt verweigert ---
+plus_cs.422.t:0 "Austritt verweigert!"
+plus_cs.422.d:0 "Unser Allianzführer hat unseren Austrittsantrag abgelehnt. Sie verlangen, dass wir trotz der Erschöpfung unseres Landes weiterkämpfen.\n\nWir können ihrer Entscheidung folgen oder gegen den Willen der Allianz einseitig austreten."
+plus_cs.422.a:0 "Folgen und den Krieg fortsetzen"
+plus_cs.422.b:0 "Gegen ihren Willen austreten! (Konsequenzen)"
+
+# --- Kapitulierter Verbündeter will Frieden ---
+plus_cs.430.t:0 "[From.GetNameDefCap] beantragt Kapitulation"
+plus_cs.430.d:0 "[From.GetNameDef] hat kapituliert und bittet um unsere Erlaubnis zur vollständigen Kapitulation vor dem Feind. Wenn wir es erlauben, verlassen sie unsere Allianz."
+plus_cs.430.a:0 "Separate Kapitulation erlauben"
+plus_cs.430.b:0 "Sie müssen auf einen allgemeinen Frieden warten"
+
+# --- Separate Kapitulation erlaubt ---
+plus_cs.431.t:0 "Erlaubnis erteilt"
+plus_cs.431.d:0 "Unser Allianzführer hat uns erlaubt, einen separaten Frieden auszuhandeln. Wir verlassen die Allianz."
+plus_cs.431.a:0 "Dies ist der einzige Weg..."
+
+# --- Kapitulation verweigert ---
+plus_cs.432.t:0 "Kapitulation verweigert"
+plus_cs.432.d:0 "Uns wurde das Recht auf separaten Frieden verweigert. Wir bleiben ein kapituliertes Mitglied der Allianz und müssen den allgemeinen Ausgang des Krieges abwarten."
+plus_cs.432.a:0 "Wir haben keine Wahl..."
+
+# --- Neue Ideen ---
+forced_continuation_war:0 "Erzwungene Kriegsfortsetzung"
+forced_continuation_war_desc:0 "Unsere Allianz verlangt, dass wir trotz unserer Erschöpfung weiterkämpfen. Die Bevölkerung ist demoralisiert, die Armee ist müde, aber wir dürfen nicht kapitulieren."
+
+# --- Opinion Modifiers ---
+faction_betrayal:0 "Allianzverrat"
+faction_deserter:0 "Allianzdesertion"
+peace_territory_preserved:0 "Gebietskontrolle erhalten"

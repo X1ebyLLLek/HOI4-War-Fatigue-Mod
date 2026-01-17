@@ -237,3 +237,46 @@
 
  # 国民精神描述 (对应代码 id=conditional_surrender)
  conditional_surrender_desc:0 "该国已有条件地承认战败。在条约限制生效期间，它无法加入或创建阵营。"
+
+# ==============================================================================
+# 新增：世界大战和联盟机制
+# ==============================================================================
+
+  plus_cs.410.t:0 "[From.GetAdjective]战线上的单独和平"
+  plus_cs.410.d:0 "[From.GetNameDef]与我们的敌人缔结了单独和平。但由于我们的军事存在，我们占领的领土控制权得以保留。"
+  plus_cs.410.a:0 "我们的阵地是安全的。"
+  plus_cs_territory_preserved_tt:0 "§G我们控制下的领土已被保留！§!"
+  
+  plus_cs.420.t:0 "[From.GetNameDefCap]请求退出联盟"
+  plus_cs.420.d:0 "[From.GetNameDef]政府请求允许退出我们的联盟以谈判单独和平。"
+  plus_cs.420.a:0 "放行（允许退出）"
+  plus_cs.420.b:0 "必须继续战斗！（拒绝）"
+  
+  plus_cs.421.t:0 "退出请求获批"
+  plus_cs.421.d:0 "我们的联盟领袖理解了我们的处境，允许我们退出联盟。"
+  plus_cs.421.a:0 "感谢理解。"
+  plus_cs_can_now_peace_tt:0 "§G您现在可以谈判单独和平§!"
+  
+  plus_cs.422.t:0 "退出被拒绝！"
+  plus_cs.422.d:0 "我们的联盟领袖拒绝了我们的退出请求。尽管国家已经疲惫，他们仍要求我们继续战斗。"
+  plus_cs.422.a:0 "服从并继续战争"
+  plus_cs.422.b:0 "违背其意愿退出！（有后果）"
+  
+  plus_cs.430.t:0 "[From.GetNameDefCap]请求投降"
+  plus_cs.430.d:0 "[From.GetNameDef]已投降，请求允许向敌人完全投降。"
+  plus_cs.430.a:0 "允许单独投降"
+  plus_cs.430.b:0 "必须等待全面和平"
+  
+  plus_cs.431.t:0 "请求获批"
+  plus_cs.431.d:0 "我们的联盟领袖允许我们谈判单独和平。我们正在退出联盟。"
+  plus_cs.431.a:0 "这是唯一的出路..."
+  
+  plus_cs.432.t:0 "投降被拒绝"
+  plus_cs.432.d:0 "我们被剥夺了单独和平的权利。我们仍是联盟的投降成员。"
+  plus_cs.432.a:0 "我们别无选择..."
+
+  forced_continuation_war:0 "被迫继续战争"
+  forced_continuation_war_desc:0 "我们的联盟要求我们在疲惫时继续战斗。"
+  faction_betrayal:0 "背叛联盟"
+  faction_deserter:0 "脱离联盟"
+  peace_territory_preserved:0 "领土控制权保留"

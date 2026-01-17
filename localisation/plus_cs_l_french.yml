@@ -237,3 +237,56 @@
 
  # Description de l'Esprit National (Si le code utilise id=conditional_surrender)
  conditional_surrender_desc:0 "Ce pays a admis sa défaite sous conditions. Il ne peut rejoindre aucune faction ni créer d'alliances tant que les restrictions du traité sont en vigueur."
+
+# ==============================================================================
+# NOUVEAU : MÉCANIQUES DE GUERRE MONDIALE ET D'ALLIANCE
+# ==============================================================================
+
+  # --- Notification de paix séparée ---
+  plus_cs.410.t:0 "Paix séparée sur le front [From.GetAdjective]"
+  plus_cs.410.d:0 "[From.GetNameDef] a conclu une paix séparée avec notre ennemi. Cependant, grâce à notre présence militaire, le contrôle des territoires que nous occupons a été préservé."
+  plus_cs.410.a:0 "Nos positions sont sécurisées."
+  plus_cs_territory_preserved_tt:0 "§GLes territoires sous notre contrôle ont été préservés !§!"
+  
+  # --- Chef de faction : un membre veut partir ---
+  plus_cs.420.t:0 "[From.GetNameDefCap] demande à quitter l'alliance"
+  plus_cs.420.d:0 "Le gouvernement de [From.GetNameDef] a demandé la permission de quitter notre alliance afin de négocier une paix séparée. Ils affirment que leur pays ne peut plus supporter le fardeau de la guerre."
+  plus_cs.420.a:0 "Nous les libérons (Autoriser la sortie)"
+  plus_cs.420.b:0 "Ils doivent se battre ! (Refuser)"
+  
+  # --- Membre de faction : autorisé à partir ---
+  plus_cs.421.t:0 "Permission de partir accordée"
+  plus_cs.421.d:0 "Notre chef d'alliance a compris notre situation et nous a permis de quitter l'alliance. Nous pouvons maintenant négocier une paix séparée."
+  plus_cs.421.a:0 "Nous sommes reconnaissants pour la compréhension."
+  plus_cs_can_now_peace_tt:0 "§GVous pouvez maintenant négocier une paix séparée§!"
+  
+  # --- Membre de faction : sortie refusée ---
+  plus_cs.422.t:0 "Sortie refusée !"
+  plus_cs.422.d:0 "Notre chef d'alliance a rejeté notre demande de départ. Ils exigent que nous continuions à nous battre malgré l'épuisement de notre pays.\n\nNous pouvons nous conformer à leur décision ou aller contre la volonté de l'alliance et partir unilatéralement."
+  plus_cs.422.a:0 "Se conformer et continuer la guerre"
+  plus_cs.422.b:0 "Partir contre leur volonté ! (Conséquences)"
+  
+  # --- Allié capitulé veut la paix ---
+  plus_cs.430.t:0 "[From.GetNameDefCap] demande la reddition"
+  plus_cs.430.d:0 "[From.GetNameDef] a capitulé et demande notre permission pour une reddition complète à l'ennemi. Si nous l'autorisons, ils quitteront notre alliance."
+  plus_cs.430.a:0 "Autoriser la reddition séparée"
+  plus_cs.430.b:0 "Ils doivent attendre une paix générale"
+  
+  # --- Reddition séparée autorisée ---
+  plus_cs.431.t:0 "Permission accordée"
+  plus_cs.431.d:0 "Notre chef d'alliance nous a permis de négocier une paix séparée. Nous quittons l'alliance."
+  plus_cs.431.a:0 "C'est la seule solution..."
+  
+  # --- Reddition refusée ---
+  plus_cs.432.t:0 "Reddition refusée"
+  plus_cs.432.d:0 "Nous avons été privés du droit à une paix séparée. Nous restons un membre capitulé de l'alliance et devons attendre l'issue générale de la guerre."
+  plus_cs.432.a:0 "Nous n'avons pas le choix..."
+
+  # --- Nouvelles idées ---
+  forced_continuation_war:0 "Continuation forcée de la guerre"
+  forced_continuation_war_desc:0 "Notre alliance exige que nous continuions à nous battre malgré notre épuisement. La population est démoralisée, l'armée est fatiguée, mais nous ne sommes pas autorisés à nous rendre."
+
+  # --- Modificateurs d'opinion ---
+  faction_betrayal:0 "Trahison de l'alliance"
+  faction_deserter:0 "Désertion de l'alliance"
+  peace_territory_preserved:0 "Contrôle territorial préservé"

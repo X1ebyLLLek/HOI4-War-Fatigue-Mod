@@ -188,5 +188,27 @@ ideas = {
 				consumer_goods_factor = -0.05
 			}
 		}
+
+		# --- НОВОЕ: ДЛЯ МЕХАНИКИ АЛЬЯНСОВ ---
+		# 5. Принудительное продолжение войны (Когда лидер отказал в выходе)
+		forced_continuation_war = {
+			picture = GFX_idea_generic_morale_bonus
+			allowed = { always = no }
+			allowed_to_remove = { always = no }
+			removal_cost = -1
+			modifier = {
+				# Население деморализовано и недовольно
+				stability_factor = -0.20
+				war_support_factor = -0.25
+				political_power_gain = -0.30
+				
+				# Армия устала и не хочет воевать
+				army_morale_factor = -0.15
+				army_org_factor = -0.10
+				
+				# Но сдаться нельзя - альянс не позволяет
+				surrender_limit = 0.10
+			}
+		}
 	}
 }

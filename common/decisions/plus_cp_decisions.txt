@@ -190,39 +190,142 @@ peace_options = {
 			has_war_with = FROM
 			is_puppet = no
 			is_major = no
-			surrender_progress < 0.1
+			# Показываем до серьезных потерь территорий
+			surrender_progress < 0.25
 			FROM = { is_major = yes }
+			# Не показываем если уже предложили
+			NOT = { has_country_flag = plus_cs_offered_submission }
 		}
 
 		available = {
 			NOT = { has_country_flag = plus_cs_waiting_response }
-			casualties < 2000
-			strength_ratio = { tag = FROM ratio < 0.2 }
-			NOT = { has_government = fascism }
-			NOT = { has_government = communism }
+			# Ослаблены требования: до 50k потерь вместо 2k
+			casualties < 50000
+			# Или очень слабы относительно врага
+			OR = {
+				strength_ratio = { tag = FROM ratio < 0.25 }
+				AND = {
+					strength_ratio = { tag = FROM ratio < 0.4 }
+					has_war_support < 0.4
+				}
+			}
+			# Не имеем территориальных претензий к врагу (реваншизм)
+			NOT = {
+				any_owned_state = {
+					is_claimed_by = FROM
+					is_core_of = ROOT
+				}
+			}
 		}
 
 		complete_effect = {
 			add_political_power = -25
 			set_country_flag = plus_cs_waiting_response
+			set_country_flag = plus_cs_offered_submission
 			FROM = {
 				country_event = { id = plus_cs.201 }
 			}
 		}
 
 		ai_will_do = {
+			# Базовый шанс зависит от идеологии
 			base = 0
 			
+			# === ДЕМОКРАТИИ: Наиболее склонны к переговорам ===
 			modifier = {
-				add = 200
+				add = 30
 				has_government = democratic
-				strength_ratio = { tag = FROM ratio < 0.1 }
 			}
 			
+			# === НЕЙТРАЛЫ: Склонны к прагматизму ===
 			modifier = {
-				add = 150
+				add = 20
 				has_government = neutrality
+			}
+			
+			# === ФАШИСТЫ/КОММУНИСТЫ: Почти никогда не сдаются превентивно ===
+			modifier = {
+				factor = 0
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+			
+			# === СТРАТЕГИЧЕСКАЯ СИТУАЦИЯ ===
+			
+			# Очень слабы
+			modifier = {
+				add = 50
 				strength_ratio = { tag = FROM ratio < 0.15 }
+			}
+			
+			# Слабы
+			modifier = {
+				add = 25
+				strength_ratio = { tag = FROM ratio < 0.25 }
+			}
+			
+			# Низкая военная поддержка
+			modifier = {
+				add = 30
+				has_war_support < 0.3
+			}
+			
+			# Низкая стабильность
+			modifier = {
+				add = 20
+				has_stability < 0.4
+			}
+			
+			# Столица под угрозой (враг контролирует соседние провинции)
+			modifier = {
+				add = 40
+				capital_scope = {
+					any_neighbor_state = {
+						controller = { tag = FROM }
+					}
+				}
+			}
+			
+			# === ФАКТОРЫ ПРОТИВ СДАЧИ ===
+			
+			# У нас есть claims на территорию врага - мы хотим их назад!
+			modifier = {
+				factor = 0.1
+				FROM = {
+					any_owned_state = {
+						is_claimed_by = ROOT
+					}
+				}
+			}
+			
+			# В альянсе с сильным союзником
+			modifier = {
+				factor = 0.2
+				is_in_faction = yes
+				any_other_country = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					NOT = { has_capitulated = yes }
+					is_major = yes
+				}
+			}
+			
+			# Высокая военная поддержка - народ хочет воевать
+			modifier = {
+				factor = 0.3
+				has_war_support > 0.6
+			}
+			
+			# === РАЗМЕР И ТИП СТРАНЫ ===
+			
+			# Маленькие островные/изолированные страны сдаются охотнее
+			# (нет шансов на помощь)
+			modifier = {
+				add = 15
+				num_of_military_factories < 10
+				is_in_faction = no
 			}
 		}
 	}
@@ -241,13 +344,17 @@ peace_options = {
 			has_war_with = FROM
 			is_puppet = no
 			NOT = { has_civil_war = yes }
+			# Показываем когда ситуация ухудшается
 			OR = {
-				surrender_progress > 0.30
+				surrender_progress > 0.25
 				has_country_flag = plus_cs_exhausted
+				has_country_flag = plus_cs_war_strain
 				AND = {
 					has_country_flag = plus_cs_stalemate
 					has_war_support < 0.4
 				}
+				# Столица потеряна
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
 			}
 		}
 
@@ -256,8 +363,11 @@ peace_options = {
 			NOT = { has_idea = fight_for_survival }
 			
 			OR = {
-				surrender_progress > 0.40
+				surrender_progress > 0.35
 				has_country_flag = plus_cs_exhausted
+				
+				# Столица потеряна - критическая ситуация
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
 				
 				AND = {
 					has_country_flag = plus_cs_stalemate
@@ -277,23 +387,98 @@ peace_options = {
 		}
 
 		ai_will_do = {
+			# Базовый шанс - зависит от ситуации
 			base = 0
 			
+			# ===============================================
+			# === ИДЕОЛОГИЯ: Градиент готовности к сдаче ===
+			# ===============================================
+			
+			# Демократии - очень склонны к переговорам
+			modifier = {
+				add = 40
+				has_government = democratic
+			}
+			
+			# Нейтралы - прагматичны
+			modifier = {
+				add = 25
+				has_government = neutrality
+			}
+			
+			# Фашисты - упорны, но сдадутся при полном разгроме
+			modifier = {
+				add = 10
+				has_government = fascism
+				surrender_progress > 0.7
+			}
+			
+			# Коммунисты - очень упорны, сдадутся только при катастрофе
+			modifier = {
+				add = 5
+				has_government = communism
+				surrender_progress > 0.8
+			}
+			
+			# ===============================================
+			# === КРИТИЧЕСКИЕ СИТУАЦИИ ===
+			# ===============================================
+			
+			# Столица потеряна - огромный бонус к сдаче
 			modifier = {
 				add = 80
-				OR = {
-					has_government = democratic
-					has_government = neutrality
-				}
-				strength_ratio = { tag = FROM ratio < 0.2 }
-				surrender_progress > 0.4
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
 			}
-
+			
+			# Страна истощена
 			modifier = {
-				add = 100
+				add = 60
 				has_country_flag = plus_cs_exhausted
 			}
-
+			
+			# Высокий surrender progress
+			modifier = {
+				add = 50
+				surrender_progress > 0.5
+			}
+			
+			modifier = {
+				add = 30
+				surrender_progress > 0.35
+			}
+			
+			# ===============================================
+			# === ВНУТРЕННЯЯ СИТУАЦИЯ ===
+			# ===============================================
+			
+			# Низкая стабильность - народ не хочет войны
+			modifier = {
+				add = 25
+				has_stability < 0.3
+			}
+			
+			# Низкая военная поддержка
+			modifier = {
+				add = 35
+				has_war_support < 0.25
+			}
+			
+			# Высокие потери
+			modifier = {
+				add = 20
+				casualties > 100000
+			}
+			
+			modifier = {
+				add = 30
+				casualties > 500000
+			}
+			
+			# ===============================================
+			# === ФАКТОРЫ ПРОТИВ СДАЧИ ===
+			# ===============================================
+			
+			# Фашисты/коммунисты: фанатичное сопротивление до surrender > 0.6
 			modifier = {
 				factor = 0
 				OR = {
@@ -301,11 +486,14 @@ peace_options = {
 					has_government = communism
 				}
 				NOT = { has_country_flag = plus_cs_exhausted }
-				surrender_progress < 0.9
+				surrender_progress < 0.6
+				# Кроме случая потери столицы
+				capital_scope = { is_controlled_by = ROOT }
 			}
 			
+			# В альянсе с живыми союзниками - ждём их
 			modifier = {
-				factor = 0
+				factor = 0.3
 				is_in_faction = yes
 				any_other_country = {
 					is_in_faction_with = ROOT
@@ -313,6 +501,53 @@ peace_options = {
 					exists = yes
 					NOT = { has_capitulated = yes }
 				}
+			}
+			
+			# Ещё есть надежда - союзник мажор жив
+			modifier = {
+				factor = 0.1
+				is_in_faction = yes
+				any_other_country = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					NOT = { has_capitulated = yes }
+					is_major = yes
+				}
+			}
+			
+			# Высокая военная поддержка - народ хочет воевать
+			modifier = {
+				factor = 0.4
+				has_war_support > 0.55
+			}
+			
+			# У нас cores на территориях врага - реваншизм
+			modifier = {
+				factor = 0.5
+				FROM = {
+					any_owned_state = {
+						is_core_of = ROOT
+					}
+				}
+			}
+			
+			# ===============================================
+			# === СПЕЦИАЛЬНЫЕ СИТУАЦИИ ===
+			# ===============================================
+			
+			# Маленькая изолированная страна без союзников
+			modifier = {
+				add = 20
+				is_in_faction = no
+				is_major = no
+				num_of_military_factories < 15
+			}
+			
+			# Окруженные (потеряли доступ к морю и границы с союзниками)
+			modifier = {
+				add = 25
+				is_in_faction = no
+				NOT = { any_owned_state = { is_coastal = yes } }
 			}
 		}
 	}
@@ -950,6 +1185,15 @@ peace_treaty = {
 				value = var:pts
 				compare = greater_than_or_equals
 			}
+			# НОВОЕ: Нельзя забрать стейт, который контролирует третья сторона
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }						# Мы контролируем
+					controller = { tag = FROM.owner }				# Враг контролирует
+					controller = { is_in_faction_with = ROOT }		# Наш союзник контролирует
+					controller = { is_puppet_of = ROOT }			# Наша марионетка контролирует
+				}
+			}
 		}
 
 		complete_effect = {
@@ -1087,6 +1331,15 @@ peace_treaty = {
 				var = vp@FROM.owner
 				value = pts
 				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя создать марионетку на территории третьей стороны
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
 			}
 		}
 
@@ -1235,6 +1488,15 @@ peace_treaty = {
 				value = pts
 				compare = greater_than_or_equals
 			}
+			# НОВОЕ: Нельзя демилитаризовать территорию третьей стороны
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
+			}
 		}
 
 		complete_effect = {
@@ -1351,6 +1613,15 @@ peace_treaty = {
 				var = vp@FROM.owner
 				value = pts
 				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя освободить территорию, контролируемую третьей стороной
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
 			}
 		}
 

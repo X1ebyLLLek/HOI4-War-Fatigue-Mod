@@ -1,0 +1,165 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: PEACE CONTROL PRESERVATION
+# Сохранение и восстановление контроля территорий при заключении мира
+# ==============================================================================
+
+# =============================================
+# plus_cs_save_third_party_control
+# Вызывается ПЕРЕД white_peace
+# ROOT = страна, заключающая мир
+# FROM = враг, с которым заключается мир
+# =============================================
+plus_cs_save_third_party_control = {
+	# Очищаем предыдущие данные (используем массивы привязанные к ROOT для избежания конфликтов)
+	clear_array = ROOT.plus_cs_preserved_states
+	clear_array = ROOT.plus_cs_preserved_controllers
+	
+	# Сохраняем FROM для восстановления
+	set_variable = { ROOT.plus_cs_peace_target = FROM }
+	
+	# Проходим по всем стейтам врага
+	FROM = {
+		every_owned_state = {
+			# Проверяем: контролирует ли этот стейт третья сторона?
+			if = {
+				limit = {
+					controller = {
+						has_war_with = FROM					# В войне с врагом
+						NOT = { tag = ROOT }				# Но не тот, кто заключает мир
+						NOT = { is_in_faction_with = ROOT }	# И не в альянсе с ним
+						NOT = { is_puppet_of = ROOT }		# И не марионетка заключающего мир
+					}
+				}
+				# Сохраняем ID стейта и TAG контролера
+				add_to_array = { ROOT.plus_cs_preserved_states = THIS.id }
+				controller = {
+					add_to_array = { ROOT.plus_cs_preserved_controllers = THIS }
+				}
+			}
+		}
+	}
+}
+
+# =============================================
+# plus_cs_restore_third_party_control
+# Вызывается ПОСЛЕ white_peace
+# Восстанавливает контроль третьих сторон
+# =============================================
+plus_cs_restore_third_party_control = {
+	# Проходим по сохраненным стейтам
+	for_each_loop = {
+		array = ROOT.plus_cs_preserved_states
+		
+		# Получаем контролера для этого индекса
+		set_temp_variable = { controller_tag = ROOT.plus_cs_preserved_controllers^i }
+		
+		# v = state ID, восстанавливаем контроль
+		var:v = {
+			# Проверяем что стейт все еще принадлежит врагу/вернулся врагу
+			if = {
+				limit = { 
+					owner = { 
+						OR = {
+							tag = ROOT.plus_cs_peace_target 
+							was_tag = ROOT.plus_cs_peace_target 
+						}
+					}
+				}
+				# Восстанавливаем контроль третьей стороне
+				var:controller_tag = {
+					set_state_controller = var:v
+				}
+			}
+		}
+	}
+	
+	# Уведомляем третьи стороны о сепаратном мире
+	if = {
+		limit = {
+			check_variable = { ROOT.plus_cs_preserved_states^num > 0 }
+		}
+		# Добавляем opinion бонус за сохранение территорий
+		for_each_loop = {
+			array = ROOT.plus_cs_preserved_controllers
+			var:v = {
+				if = {
+					limit = { NOT = { has_opinion_modifier = { target = ROOT modifier = peace_territory_preserved } } }
+					add_opinion_modifier = { target = ROOT modifier = peace_territory_preserved }
+				}
+				country_event = { id = plus_cs.410 hours = 6 }
+			}
+		}
+	}
+	
+	# Очищаем массивы
+	clear_array = ROOT.plus_cs_preserved_states
+	clear_array = ROOT.plus_cs_preserved_controllers
+	clear_variable = ROOT.plus_cs_peace_target
+}
+
+# =============================================
+# plus_cs_notify_faction_of_peace
+# Проверяет, должен ли мир затронуть весь альянс
+# ROOT = страна-инициатор мира
+# FROM = враг
+# =============================================
+plus_cs_notify_faction_of_peace = {
+	if = {
+		limit = {
+			is_in_faction = yes
+			is_faction_leader = no
+		}
+		# Уведомляем лидера фракции
+		faction_leader = {
+			country_event = { id = plus_cs.420 hours = 1 }
+		}
+	}
+}
+
+# =============================================
+# plus_cs_calculate_war_contribution
+# Подсчитывает вклад страны в войну против врага
+# ROOT = страна для подсчета
+# FROM = враг
+# Результат в temp переменной: war_contribution
+# =============================================
+plus_cs_calculate_war_contribution = {
+	set_temp_variable = { war_contribution = 0 }
+	
+	# Добавляем очки за захваченные территории
+	if = {
+		limit = { check_variable = { vp@FROM > 0 } }
+		add_to_temp_variable = { war_contribution = vp@FROM }
+	}
+	
+	# Бонус за потери (показывает активное участие в войне)
+	set_temp_variable = { casualty_bonus = casualties }
+	divide_temp_variable = { casualty_bonus = 10000 }
+	clamp_temp_variable = { var = casualty_bonus max = 50 }
+	add_to_temp_variable = { war_contribution = casualty_bonus }
+}
+
+# =============================================
+# plus_cs_check_third_party_control
+# Проверяет, контролирует ли третья сторона стейт
+# ROOT = страна, заключающая мир
+# FROM = стейт для проверки
+# Возвращает: temp var third_party_controls = 0/1
+# =============================================
+plus_cs_check_third_party_control = {
+	set_temp_variable = { third_party_controls = 0 }
+	
+	FROM = {
+		if = {
+			limit = {
+				controller = {
+					has_war_with = FROM.owner
+					NOT = { tag = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { is_puppet_of = ROOT }
+				}
+			}
+			set_temp_variable = { third_party_controls = 1 }
+		}
+	}
+}
