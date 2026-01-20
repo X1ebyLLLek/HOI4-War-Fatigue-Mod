@@ -36,15 +36,13 @@ country_event = {
 				# У него есть повод напасть
 				OR = {
 					has_wargoal_against = ROOT
-					has_war_with_country_controlling_core_of = ROOT
+					any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
 				}
 				
 				# Соотношение сил ужасающее для нас (< 20%)
-				trigger = { 
-					ROOT = { 
+				ROOT = { 
 						strength_ratio = { tag = PREV ratio < 0.2 } 
-					} 
-				}
+					}
 			}
 			# Отправляем предложение
 			country_event = { id = plus_cs_diplomacy.2 hours = 6 }
@@ -68,7 +66,7 @@ country_event = {
 			modifier = {
 				factor = 0
 				has_government = fascism # Фашисты часто хотят просто аннексировать
-				STRENGTH_RATIO_CHECK = { tag = FROM ratio > 0.05 } # Если враг совсем ничтожен, можно и захватить
+				strength_ratio = { tag = FROM ratio > 0.05 }
 			}
 			# Но если мы заняты на другом фронте, берем вассала
 			modifier = {
@@ -80,7 +78,7 @@ country_event = {
 		FROM = {
 			puppet = ROOT
 			effect_tooltip = {
-				add_autonomy_ratio = -0.5 # Сразу низкий уровень автономии
+				add_autonomy_score = -500
 			}
 			add_opinion_modifier = { target = ROOT modifier = peaceful_vassalization }
 		}
@@ -186,9 +184,9 @@ country_event = {
 				has_war = no
 				OR = {
 					has_wargoal_against = ROOT
-					justify_wargoal_progress = { tag = ROOT progress > 0.5 }
+					is_justifying_wargoal_against = ROOT
 				}
-				trigger = { ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } } }
+				ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } }
 			}
 			country_event = { id = plus_cs_diplomacy.21 hours = 6 }
 		}
@@ -212,17 +210,17 @@ country_event = {
 				# Если мы готовы к войне и хотим всё - отказываем
 				factor = 0.1
 				has_manpower > 500000 
-				has_equipment_deficit_ratio < 0.1
+				NOT = { has_equipment_shortage = yes }
 			}
 		}
 		
 		# Если был клайм - забираем регион
 		if = {
 			limit = { 
-				any_claimed_state = { is_controlled_by = FROM }
+				any_owned_state = { is_claimed_by = ROOT is_controlled_by = FROM }
 			}
-			every_claimed_state = {
-				limit = { is_controlled_by = FROM }
+			every_owned_state = {
+				limit = { is_claimed_by = ROOT is_controlled_by = FROM }
 				set_state_owner = ROOT
 			}
 		}
@@ -232,7 +230,7 @@ country_event = {
 		}
 		
 		white_peace = FROM # Если вдруг война успела начаться (технически)
-		create_non_aggression_pact = FROM
+
 	}
 	
 	# Отказать (Хотим полной аннексии)

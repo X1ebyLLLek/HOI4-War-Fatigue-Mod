@@ -1,24 +1,3 @@
-peace_options = {
-    icon = GFX_decision_category_generic_political_actions
-    available = {
-        has_war = yes
-    }
-}
-
-peace_treaty = {
-    icon = GFX_decision_category_generic
-}
-
-# --- Новые категории для Полит. Власти ---
-
-decision_category_crisis_management = {
-	icon = GFX_decision_category_generic_form_nation
-	allowed = { always = yes }
-	visible = { has_war = yes } # Видно только во время войны
-}
-
-decision_category_economic_stimulus = {
-	icon = GFX_decision_category_generic_construction
-	allowed = { always = yes }
-	visible = { has_war = no } # Видно только в мирное время
+plus_cs_crisis_category = {
+	icon = GFX_decision_category_generic_political_actions
 }

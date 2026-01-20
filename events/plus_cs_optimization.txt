@@ -680,7 +680,8 @@ country_event = {
 		if = {
 			limit = {
 				has_war = yes
-				damaged_building_factor > 0.3
+				surrender_progress > 0.3
+				has_war_support < 0.4
 			}
 			# Усиливаем эффект инфляции (добавляем еще один модификатор)
 			add_dynamic_modifier = { modifier = war_inflation_crisis days = 35 } 

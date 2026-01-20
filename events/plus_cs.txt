@@ -71,8 +71,12 @@ country_event = {
 			}
 			# BOMBING TERROR: If industry is ruined
 			modifier = {
+			# BOMBING TERROR: Proxy using surrender progress or war support
+			modifier = {
 				add = 50
-				damaged_building_factor > 0.4
+				# damaged_building_factor > 0.4 (Invalid Trigger)
+				surrender_progress > 0.2
+				has_war_support < 0.4
 			}
 		}
 
@@ -602,7 +606,7 @@ country_event = {
 			}
 		}
 		
-		# PARTISAN LOGIC: If they fought to the end (>80% WS)
+		# PARTISAN LOGIC
 		if = {
 			limit = { FROM = { has_war_support > 0.8 } }
 			FROM = {
@@ -617,24 +621,19 @@ country_event = {
 			limit = {
 				FROM = { has_capitulated = yes }
 			}
-			# Do not sign white peace. War continues with this capitulated nation.
-			# Remove from faction to ensure they don't get peace from elsewhere.
 			FROM = { remove_from_faction = yes }
 		}
 		else = {
-			# НОВОЕ: Сохраняем контроль третьих сторон
+			# WHITE PEACE PATH
 			plus_cs_save_third_party_control = yes
 			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-			set_truce = {
-				target = FROM
-				days = 720
-			}
+			set_truce = { target = FROM days = 720 }
 			
-			# НОВОЕ: Восстанавливаем контроль третьих сторон
 			plus_cs_restore_third_party_control = yes
 		}
+
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
 		}
