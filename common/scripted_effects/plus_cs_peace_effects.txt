@@ -10,12 +10,13 @@
 # FROM = враг, с которым заключается мир
 # =============================================
 plus_cs_save_third_party_control = {
-	# Очищаем предыдущие данные (используем массивы привязанные к ROOT для избежания конфликтов)
-	clear_array = ROOT.plus_cs_preserved_states
-	clear_array = ROOT.plus_cs_preserved_controllers
+	# Очищаем предыдущие данные
+	clear_variable = plus_cs_preserved_states
+	clear_variable = plus_cs_preserved_controllers
+	clear_variable = plus_cs_peace_target
 	
-	# Сохраняем FROM для восстановления
-	set_variable = { ROOT.plus_cs_peace_target = FROM }
+	# Сохраняем TAG врага для восстановления
+	set_variable = { plus_cs_peace_target = FROM.id }
 	
 	# Проходим по всем стейтам врага
 	FROM = {
@@ -24,16 +25,20 @@ plus_cs_save_third_party_control = {
 			if = {
 				limit = {
 					controller = {
-						has_war_with = FROM					# В войне с врагом
-						NOT = { tag = ROOT }				# Но не тот, кто заключает мир
-						NOT = { is_in_faction_with = ROOT }	# И не в альянсе с ним
-						NOT = { is_puppet_of = ROOT }		# И не марионетка заключающего мир
+						has_war_with = PREV.owner
+						NOT = { tag = ROOT }
+						NOT = { is_in_faction_with = ROOT }
+						NOT = { is_puppet_of = ROOT }
 					}
 				}
-				# Сохраняем ID стейта и TAG контролера
-				add_to_array = { ROOT.plus_cs_preserved_states = THIS.id }
+				# Сохраняем ID стейта и контролера
+				ROOT = {
+					add_to_array = { plus_cs_preserved_states = PREV.id }
+				}
 				controller = {
-					add_to_array = { ROOT.plus_cs_preserved_controllers = THIS }
+					ROOT = {
+						add_to_array = { plus_cs_preserved_controllers = PREV.id }
+					}
 				}
 			}
 		}
@@ -48,53 +53,36 @@ plus_cs_save_third_party_control = {
 plus_cs_restore_third_party_control = {
 	# Проходим по сохраненным стейтам
 	for_each_loop = {
-		array = ROOT.plus_cs_preserved_states
+		array = plus_cs_preserved_states
 		
 		# Получаем контролера для этого индекса
-		set_temp_variable = { controller_tag = ROOT.plus_cs_preserved_controllers^i }
+		set_temp_variable = { temp_controller = plus_cs_preserved_controllers^i }
+		set_temp_variable = { temp_state = v }
 		
-		# v = state ID, восстанавливаем контроль
-		var:v = {
-			# Проверяем что стейт все еще принадлежит врагу/вернулся врагу
-			if = {
-				limit = { 
-					owner = { 
-						OR = {
-							tag = ROOT.plus_cs_peace_target 
-							was_tag = ROOT.plus_cs_peace_target 
-						}
-					}
-				}
-				# Восстанавливаем контроль третьей стороне
-				var:controller_tag = {
-					set_state_controller = var:v
-				}
-			}
+		# Восстанавливаем контроль третьей стороне
+		var:temp_controller = {
+			set_state_controller = var:temp_state
 		}
 	}
 	
-	# Уведомляем третьи стороны о сепаратном мире
+	# Уведомляем третьи стороны о сепаратном мире (опционально)
 	if = {
 		limit = {
-			check_variable = { ROOT.plus_cs_preserved_states^num > 0 }
+			check_variable = { plus_cs_preserved_states^num > 0 }
 		}
-		# Добавляем opinion бонус за сохранение территорий
 		for_each_loop = {
-			array = ROOT.plus_cs_preserved_controllers
+			array = plus_cs_preserved_controllers
 			var:v = {
-				if = {
-					limit = { NOT = { has_opinion_modifier = { target = ROOT modifier = peace_territory_preserved } } }
-					add_opinion_modifier = { target = ROOT modifier = peace_territory_preserved }
-				}
+				add_opinion_modifier = { target = ROOT modifier = peace_territory_preserved }
 				country_event = { id = plus_cs.410 hours = 6 }
 			}
 		}
 	}
 	
-	# Очищаем массивы
-	clear_array = ROOT.plus_cs_preserved_states
-	clear_array = ROOT.plus_cs_preserved_controllers
-	clear_variable = ROOT.plus_cs_peace_target
+	# Очищаем переменные
+	clear_variable = plus_cs_preserved_states
+	clear_variable = plus_cs_preserved_controllers
+	clear_variable = plus_cs_peace_target
 }
 
 # =============================================
@@ -153,7 +141,7 @@ plus_cs_check_third_party_control = {
 		if = {
 			limit = {
 				controller = {
-					has_war_with = FROM.owner
+					has_war_with = PREV.owner
 					NOT = { tag = ROOT }
 					NOT = { is_in_faction_with = ROOT }
 					NOT = { is_puppet_of = ROOT }

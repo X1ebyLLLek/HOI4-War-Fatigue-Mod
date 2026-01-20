@@ -151,363 +151,11 @@ on_actions = {
 			}
 
 			# ==========================================================
-			# НОВАЯ МЕХАНИКА ИНФЛЯЦИИ (SMART WAR INFLATION)
+			# MOVED TO TICK SPREADING (plus_cs_optimization.txt)
 			# ==========================================================
-			if = {
-				limit = {
-					has_war = yes
-					OR = {
-						# 1. ПОЛНЫЙ ПОЛИТИЧЕСКИЙ КОЛЛАПС (Hard Floor)
-						# Экономика рушится, так как власти больше нет (< 20%).
-						has_stability < 0.20
-						
-						# 2. ЭКОНОМИЧЕСКАЯ ПАНИКА (Conditional)
-						# Стабильность шаткая (20-45%), НО инфляция начнется только при РЕАЛЬНЫХ проблемах.
-						AND = {
-							has_stability < 0.45
-							OR = {
-								# Враг захватил >10% наших победных очков (мы проигрываем)
-								surrender_progress > 0.10
-								
-								# Мы потеряли слишком много людей (кризис рекрутов)
-								has_dynamic_modifier = manpower_strain_mild
-								has_dynamic_modifier = manpower_strain_high
-								
-								# Население категорически против войны (< 30%)
-								has_war_support < 0.30
-							}
-						}
+			# Logic for Inflation, Officer Chaos, Economy Inertia, and Manpower Crisis
+			# has been moved to the distributed loop to prevent 1st-of-month lag.
 
-						# 3. ИСТОЩЕНИЕ РЕСУРСОВ (Hard Trigger)
-						# Если работать некому (Heavy/Collapse), экономика падает независимо от стабильности.
-						has_dynamic_modifier = manpower_strain_high
-						has_dynamic_modifier = manpower_strain_collapse
-					}
-				}
-				# Если условия совпали - вешаем инфляцию на 30 дней (до след. проверки)
-				add_dynamic_modifier = { modifier = war_inflation_crisis days = 30 }
-				
-				# --- НАКОПИТЕЛЬНЫЙ УРОН ОТ ИНФЛЯЦИИ ---
-				# Отнимаем по 0.5% каждый месяц, пока висит кризис
-				add_stability = -0.005
-				add_war_support = -0.005
-			}
-			else = {
-				# Если война кончилась ИЛИ ситуация стабилизировалась - снимаем
-				remove_dynamic_modifier = { modifier = war_inflation_crisis }
-			}
-
-			# ==========================================================
-			# 1. МЕХАНИКА "ХАОС ОФИЦЕРОВ" 
-			# ==========================================================
-			
-			if = {
-				limit = { 
-					OR = {
-						NOT = { check_variable = { plus_cs_prev_battalions > 0 } }
-						check_variable = { plus_cs_prev_battalions < 10 }
-					}
-				}
-				# FIX: num_battalions -> num_divisions
-				set_variable = { plus_cs_prev_battalions = num_divisions }
-				set_variable = { plus_cs_prev_casualties = casualties }
-			}
-			else = {
-				set_temp_variable = { officer_cap_calc = num_research_slots }
-				multiply_temp_variable = { officer_cap_calc = 200 }
-				add_to_temp_variable = { officer_cap_calc = 400 }
-				
-				if = {
-					limit = { is_major = yes }
-					add_to_temp_variable = { officer_cap_calc = 500 }
-				}
-
-				# FIX: num_battalions -> num_divisions
-				set_temp_variable = { total_strain = num_divisions }
-				subtract_from_temp_variable = { total_strain = var:plus_cs_prev_battalions }
-				clamp_temp_variable = { var = total_strain min = 0 }
-				multiply_temp_variable = { total_strain = 0.5 } 
-
-				set_temp_variable = { casualty_load = casualties }
-				subtract_from_temp_variable = { casualty_load = var:plus_cs_prev_casualties }
-				clamp_temp_variable = { var = casualty_load min = 0 }
-				divide_temp_variable = { casualty_load = 3500 }
-
-				add_to_temp_variable = { total_strain = var:casualty_load }
-
-				if = {
-					limit = { num_divisions > 0 }
-					divide_temp_variable = { total_strain = num_divisions }
-				}
-
-				# Штраф за лимит
-				# FIX: num_battalions -> num_divisions
-				if = {
-					limit = { check_variable = { var = num_divisions value = var:officer_cap_calc compare = greater_than } }
-					multiply_temp_variable = { total_strain = 1.2 }
-					
-					set_temp_variable = { double_cap = var:officer_cap_calc }
-					multiply_temp_variable = { double_cap = 2 }
-					if = {
-						limit = { check_variable = { var = num_divisions value = var:double_cap compare = greater_than } }
-						multiply_temp_variable = { total_strain = 1.66 } 
-					}
-				}
-
-				# Применение модификаторов 
-				if = {
-					limit = { check_variable = { total_strain > 0.40 } }
-					add_dynamic_modifier = { modifier = officer_shortage_collapse days = 60 }
-					remove_dynamic_modifier = { modifier = officer_shortage_high }
-					remove_dynamic_modifier = { modifier = officer_shortage_mild }
-				}
-				else_if = {
-					limit = { check_variable = { total_strain > 0.20 } }
-					add_dynamic_modifier = { modifier = officer_shortage_high days = 60 }
-					remove_dynamic_modifier = { modifier = officer_shortage_collapse }
-					remove_dynamic_modifier = { modifier = officer_shortage_mild }
-				}
-				else_if = {
-					limit = { check_variable = { total_strain > 0.08 } }
-					add_dynamic_modifier = { modifier = officer_shortage_mild days = 60 }
-					remove_dynamic_modifier = { modifier = officer_shortage_collapse }
-					remove_dynamic_modifier = { modifier = officer_shortage_high }
-				}
-				else = {
-					remove_dynamic_modifier = { modifier = officer_shortage_collapse }
-					remove_dynamic_modifier = { modifier = officer_shortage_high }
-					remove_dynamic_modifier = { modifier = officer_shortage_mild }
-				}
-
-				set_variable = { plus_cs_prev_battalions = num_divisions }
-				set_variable = { plus_cs_prev_casualties = casualties }
-			} 
-
-			# ==========================================================
-			# 2. ИНЕРЦИЯ ЭКОНОМИКИ
-			# ==========================================================
-			set_temp_variable = { current_econ_law_idx = 0 }
-			if = { limit = { has_idea = civilian_economy } set_temp_variable = { current_econ_law_idx = 1 } }
-			else_if = { limit = { has_idea = low_economic_mobilisation } set_temp_variable = { current_econ_law_idx = 2 } }
-			else_if = { limit = { has_idea = partial_economic_mobilisation } set_temp_variable = { current_econ_law_idx = 3 } }
-			else_if = { limit = { has_idea = war_economy } set_temp_variable = { current_econ_law_idx = 4 } }
-			else_if = { limit = { has_idea = tot_economic_mobilisation } set_temp_variable = { current_econ_law_idx = 5 } }
-
-			if = {
-				limit = { NOT = { check_variable = { plus_cs_prev_econ_law > 0 } } }
-				set_variable = { plus_cs_prev_econ_law = current_econ_law_idx }
-			}
-			else_if = {
-				limit = { 
-					check_variable = { current_econ_law_idx > 0 }
-					NOT = { check_variable = { plus_cs_prev_econ_law = current_econ_law_idx } } 
-				}
-
-				set_temp_variable = { law_diff = current_econ_law_idx }
-				subtract_from_temp_variable = { law_diff = plus_cs_prev_econ_law }
-				
-				if = {
-					limit = { check_variable = { law_diff < 0 } }
-					multiply_temp_variable = { law_diff = -1 }
-				}
-
-				remove_dynamic_modifier = { modifier = economic_retooling_shock_minor }
-				remove_dynamic_modifier = { modifier = economic_retooling_shock_medium }
-				remove_dynamic_modifier = { modifier = economic_retooling_shock_major }
-
-				if = {
-					limit = { check_variable = { law_diff > 2 } }
-					add_dynamic_modifier = { modifier = economic_retooling_shock_major days = 120 }
-				}
-				else_if = {
-					limit = { check_variable = { law_diff = 2 } }
-					add_dynamic_modifier = { modifier = economic_retooling_shock_medium days = 90 }
-				}
-				else = {
-					add_dynamic_modifier = { modifier = economic_retooling_shock_minor days = 60 }
-				}
-				set_variable = { plus_cs_prev_econ_law = current_econ_law_idx }
-			}
-
-			# ==========================================================
-			# 3. ТЕНЕВАЯ ЭКОНОМИКА
-			# ==========================================================
-			
-			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
-			remove_dynamic_modifier = { modifier = shadow_econ_early }
-			remove_dynamic_modifier = { modifier = shadow_econ_partial }
-			remove_dynamic_modifier = { modifier = shadow_econ_war }
-			remove_dynamic_modifier = { modifier = shadow_econ_total }
-
-			if = {
-				limit = { has_idea = civilian_economy }
-				add_dynamic_modifier = { modifier = shadow_econ_civilian days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = low_economic_mobilisation } 
-				add_dynamic_modifier = { modifier = shadow_econ_early days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = partial_economic_mobilisation }
-				add_dynamic_modifier = { modifier = shadow_econ_partial days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = war_economy }
-				add_dynamic_modifier = { modifier = shadow_econ_war days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = tot_economic_mobilisation }
-				add_dynamic_modifier = { modifier = shadow_econ_total days = 30 }
-			}
-
-			if = {
-				limit = {
-					has_war = no
-					OR = {
-						has_idea = war_economy
-						has_idea = tot_economic_mobilisation
-					}
-				}
-				add_to_variable = { economy_overheat_counter = 1 }
-				
-				if = {
-					limit = { check_variable = { economy_overheat_counter > 6 } }
-					add_political_power = -10
-					add_stability = -0.01
-				}
-			}
-			else = {
-				set_variable = { economy_overheat_counter = 0 }
-			}
-
-			if = {
-				limit = { has_idea = service_by_requirement }
-				add_dynamic_modifier = { modifier = shadow_law_service_penalty days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = all_adults_serve }
-				add_dynamic_modifier = { modifier = shadow_law_adults_penalty days = 30 }
-			}
-			else_if = {
-				limit = { has_idea = scraping_the_barrel }
-				add_dynamic_modifier = { modifier = shadow_law_scraping_penalty days = 30 }
-			}
-
-			# ==========================================================
-			# 4. КРИЗИС ЖИВОЙ СИЛЫ
-			# ==========================================================
-			if = {
-				limit = { has_war = yes }
-
-				add_to_variable = { plus_cs_pop_check_timer = 1 }
-
-				if = {
-					limit = {
-						OR = {
-							check_variable = { plus_cs_pop_check_timer > 3 } 
-							check_variable = { plus_cs_need_recalc = 1 }
-							check_variable = { core_pop_calc = 0 }
-						}
-					}
-					set_variable = { plus_cs_pop_check_timer = 0 }
-					set_variable = { plus_cs_need_recalc = 0 }
-					set_variable = { core_pop_calc = 0 }
-					
-					every_owned_state = {
-						if = {
-							limit = { is_core_of = ROOT }
-							add_to_temp_variable = { core_pop_calc = state_population }
-						}
-						else = {
-							set_temp_variable = { local_pop = state_population }
-							multiply_temp_variable = { local_pop = 0.15 }
-							add_to_temp_variable = { core_pop_calc = local_pop }
-						}
-					}
-					every_subject_country = {
-						set_temp_variable = { subj_pop = core_population }
-						multiply_temp_variable = { subj_pop = 0.25 }
-						add_to_temp_variable = { ROOT.core_pop_calc = subj_pop }
-					}
-				}
-
-				# FIX: num_battalions -> num_divisions
-				set_temp_variable = { total_drain = num_divisions }
-				multiply_temp_variable = { total_drain = 1000 }
-				add_to_temp_variable = { total_drain = casualties }
-				
-				set_temp_variable = { limit_base = var:core_pop_calc }
-				
-				# Collapse
-				set_temp_variable = { limit_check = var:limit_base }
-				multiply_temp_variable = { limit_check = 0.10 }
-				add_to_temp_variable = { limit_check = 200000 }
-
-				if = {
-					limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
-					add_dynamic_modifier = { modifier = manpower_strain_collapse days = 30 }
-					remove_dynamic_modifier = { modifier = manpower_strain_high }
-					remove_dynamic_modifier = { modifier = manpower_strain_mild }
-					set_country_flag = { flag = plus_cs_exhausted days = 30 }
-					clr_country_flag = plus_cs_war_strain
-				}
-				else = {
-					# High
-					set_temp_variable = { limit_check = var:limit_base }
-					multiply_temp_variable = { limit_check = 0.05 }
-					add_to_temp_variable = { limit_check = 125000 }
-					
-					if = {
-						limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
-						add_dynamic_modifier = { modifier = manpower_strain_high days = 30 }
-						remove_dynamic_modifier = { modifier = manpower_strain_collapse }
-						remove_dynamic_modifier = { modifier = manpower_strain_mild }
-						set_country_flag = { flag = plus_cs_exhausted days = 30 }
-						clr_country_flag = plus_cs_war_strain
-					}
-					else = {
-						# Mild
-						set_temp_variable = { limit_check = var:limit_base }
-						multiply_temp_variable = { limit_check = 0.02 }
-						add_to_temp_variable = { limit_check = 75000 }
-						
-						if = {
-							limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
-							add_dynamic_modifier = { modifier = manpower_strain_mild days = 30 }
-							remove_dynamic_modifier = { modifier = manpower_strain_collapse }
-							remove_dynamic_modifier = { modifier = manpower_strain_high }
-							if = { limit = { NOT = { has_country_flag = plus_cs_exhausted } } set_country_flag = { flag = plus_cs_war_strain days = 30 } }
-						}
-						else = {
-							remove_dynamic_modifier = { modifier = manpower_strain_collapse }
-							remove_dynamic_modifier = { modifier = manpower_strain_high }
-							remove_dynamic_modifier = { modifier = manpower_strain_mild }
-						}
-					}
-				}
-
-				if = {
-					limit = { 
-						is_major = no
-						has_war_with_major = yes
-						any_owned_state = {
-							is_core_of = ROOT
-							is_controlled_by = ROOT
-							check_variable = { ROOT.surrender_progress > 0.05 }
-						}
-					}
-					add_timed_idea = { idea = desperate_defense_effort days = 30 }
-				}
-				else = {
-					remove_ideas = desperate_defense_effort
-				}
-			}
-			else = {
-				remove_dynamic_modifier = { modifier = manpower_strain_mild }
-				remove_dynamic_modifier = { modifier = manpower_strain_high }
-				remove_dynamic_modifier = { modifier = manpower_strain_collapse }
-				remove_ideas = desperate_defense_effort
-			}
 
 			# ==========================================================
 			# 5. ПОЛИТИКА (РАСЧЕТ СИТУАЦИИ)
@@ -656,11 +304,18 @@ on_actions = {
 	on_daily = {
 		effect = {
 			# Fail-safe: Если страна "выпала" из цикла или появилась только что
-			random_country = {
-				limit = {
-					NOT = { has_country_flag = plus_cs_loop_active }
+			# OPTIMIZATION: Check only 10% of the time to reduce overhead
+			random_list = {
+				10 = {
+					random_country = {
+						limit = {
+							NOT = { has_country_flag = plus_cs_loop_active }
+							exists = yes
+						}
+						country_event = { id = plus_cs.999 }
+					}
 				}
-				country_event = { id = plus_cs.999 }
+				90 = { }
 			}
 		}
 	}
@@ -705,22 +360,36 @@ on_actions = {
 				set_temp_variable = { state_vp = FROM.FROM.state_strategic_value }
 				set_temp_variable = { tot_pts = 0 }
 				
+				# OPTIMIZATION: Merged double every_country loop into one
+				# First pass: calculate total points
+				set_temp_variable = { tot_pts = 0 }
 				every_country = {
-					limit = { has_war_with = FROM }
+					limit = { 
+						has_war_with = FROM 
+						# OPTIMIZATION: Skip if no armies here
+						check_variable = { num_armies_in_state@FROM.FROM > 0 }
+					}
 					add_to_temp_variable = { tot_pts = num_armies_in_state@FROM.FROM }
+					
+					# Store this country's contribution for second pass
+					set_temp_variable = { my_pts@THIS = num_armies_in_state@FROM.FROM }
 				}
 				
-				every_country = {
-					limit = { has_war_with = FROM }
-					set_temp_variable = { pts = num_armies_in_state@FROM.FROM }
-					if = {
-						limit = { check_variable = { tot_pts > 0 } }
+				# Second pass: distribute VP proportionally (only if there were armies)
+				if = {
+					limit = { check_variable = { tot_pts > 0 } }
+					every_country = {
+						limit = { 
+							has_war_with = FROM 
+							check_variable = { my_pts@THIS > 0 }
+						}
+						set_temp_variable = { pts = my_pts@THIS }
 						divide_temp_variable = { pts = tot_pts }
+						multiply_temp_variable = { pts = state_vp }
+						add_to_variable = { vp@FROM = pts }
+						subtract_from_variable = { FROM.vp@THIS = pts }
+						clamp_variable = { var = FROM.vp@THIS min = 0 }
 					}
-					multiply_temp_variable = { pts = state_vp }
-					add_to_variable = { vp@FROM = pts }
-					subtract_from_variable = { FROM.vp@THIS = pts }
-					clamp_variable = { var = FROM.vp@THIS min = 0 }
 				}
 			}
 		}

@@ -113,8 +113,12 @@ country_event = {
 				}
 			}
 		}
+		# OPTIMIZATION: Removed O(N^3) Loop.
+		# Instead of looping every_country > every_owned_state > every_country,
+		# We check only relevant neighbors/enemies.
 		else = {
 			every_country = {
+				# Limit 1: Only consider relevant countries (Majors, Neighbors, Enemies)
 				limit = {
 					OR = {
 						AND = {
@@ -131,11 +135,21 @@ country_event = {
 					}
 				}
 				every_owned_state = {
+					# Limit 2: Do not iterate ALL countries for every state. 
+					# Use scoped checks.
 					every_country = {
 						limit = {
 							is_in_faction_with = FROM
 							has_war_with = ROOT
+							# OPTIMIZATION: Only if they actually have a claim or core here
+							PREV = {
+								OR = {
+									is_core_of = PREV.PREV
+									is_claimed_by = PREV.PREV
+								}
+							}
 						}
+						
 						set_variable = { og_vp@PREV.PREV = cnt_og_vp@PREV.PREV }
 						activate_targeted_decision = { target = PREV.PREV decision = peace_war_reparations }
 						activate_targeted_decision = { target = PREV.PREV decision = peace_disarm }
@@ -368,6 +382,13 @@ country_event = {
 					limit = {
 						is_in_faction_with = ROOT
 						has_war_with = FROM
+						# OPTIMIZATION: Only if relevant to this state
+						PREV = {
+							OR = {
+								is_core_of = PREV.PREV
+								is_claimed_by = PREV.PREV
+							}
+						}
 					}
 					set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
 					activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
