@@ -175,16 +175,6 @@ country_event = {
 			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-			every_other_country = {
-				limit = { is_in_faction_with = ROOT }
-				add_ai_strategy = {
-					type = call_ally
-					id = "dont_call_peaceful_ally"
-					target = ROOT
-					value = -1000
-					days = 360
-				}
-			}
 			set_truce = {
 				target = FROM
 				days = 720
