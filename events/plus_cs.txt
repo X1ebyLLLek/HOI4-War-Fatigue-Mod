@@ -70,11 +70,9 @@ country_event = {
 				NOT = { has_country_flag = plus_cs_exhausted }
 			}
 			# BOMBING TERROR: If industry is ruined
-			modifier = {
 			# BOMBING TERROR: Proxy using surrender progress or war support
 			modifier = {
 				add = 50
-				# damaged_building_factor > 0.4 (Invalid Trigger)
 				surrender_progress > 0.2
 				has_war_support < 0.4
 			}

@@ -1,3 +1,56 @@
 plus_cs_crisis_category = {
 	icon = GFX_decision_category_generic_political_actions
 }
+
+# --- Peace Options (CP Decisions) ---
+peace_options = {
+	icon = GFX_decision_category_generic_form_nation
+}
+
+peace_treaty = {
+	icon = GFX_decision_category_generic_form_nation
+}
+white_peace = {
+	icon = GFX_decision_category_generic_form_nation
+}
+ceasefire = {
+	icon = GFX_decision_category_generic_form_nation
+}
+propose_peace = {
+	icon = GFX_decision_category_generic_form_nation
+}
+ceasefire_end = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_war_reparations = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_pay_war_reparations = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_disarm = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_take_state = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_puppet = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_set_dmz = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_liberate = {
+	icon = GFX_decision_category_generic_form_nation
+}
+peace_claim = {
+	icon = GFX_decision_category_generic_form_nation
+}
+
+# --- Political Power Decisions (PP Decisions) ---
+decision_category_crisis_management = {
+	icon = GFX_decision_category_generic_form_nation
+}
+decision_category_economic_stimulus = {
+	icon = GFX_decision_category_generic_form_nation
+}

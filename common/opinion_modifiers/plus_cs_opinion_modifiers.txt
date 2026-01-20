@@ -1,20 +1,24 @@
-peaceful_vassalization = {
-	value = 50
-	decay = 0.5
-	months = 24
-}
+opinion_modifiers = {
 
-diplo_insult = {
-	value = -50
-	decay = 0.5
-	months = 24
-}
+	peaceful_vassalization = {
+		value = 50
+		decay = 0.5
+		months = 24
+	}
 
-faction_betrayal = {
-	value = -100
-	decay = 0.5
-}
-faction_deserter = {
-	value = -50
-	decay = 0.5
+	diplo_insult = {
+		value = -50
+		decay = 0.5
+		months = 24
+	}
+
+	faction_betrayal = {
+		value = -100
+		decay = 0.5
+	}
+	faction_deserter = {
+		value = -50
+		decay = 0.5
+	}
+
 }
