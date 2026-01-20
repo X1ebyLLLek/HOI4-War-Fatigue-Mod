@@ -602,6 +602,10 @@ country_event = {
 				factor = 0.1
 				has_war_support > 0.8
 			}
+			modifier = {
+				factor = 0.1
+				has_war_support > 0.8
+			}
 		}
 		
 		# PARTISAN LOGIC
@@ -623,13 +627,15 @@ country_event = {
 		}
 		else = {
 			# WHITE PEACE PATH
-			plus_cs_save_third_party_control = yes
+			# Removed custom effect that might be causing issues
+			# plus_cs_save_third_party_control = yes
 			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
 			set_truce = { target = FROM days = 720 }
 			
-			plus_cs_restore_third_party_control = yes
+			# Removed custom effect
+			# plus_cs_restore_third_party_control = yes
 		}
 
 		FROM = {
