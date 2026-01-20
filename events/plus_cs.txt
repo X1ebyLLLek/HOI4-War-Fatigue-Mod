@@ -437,10 +437,9 @@ country_event = {
 			limit = {
 				is_faction_leader = no
 			}
-			# НОВОЕ: Сохраняем контроль третьих сторон
-			plus_cs_save_third_party_control = yes
+			# Removed potentially undefined custom effects
+			# plus_cs_save_third_party_control = yes
 			
-			white_peace = FROM
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
 			set_truce = {
@@ -448,8 +447,7 @@ country_event = {
 				days = 720
 			}
 			
-			# НОВОЕ: Восстанавливаем контроль третьих сторон
-			plus_cs_restore_third_party_control = yes
+			# plus_cs_restore_third_party_control = yes
 		}
 		else = {
 			every_country = {
@@ -460,8 +458,7 @@ country_event = {
 				}
 				remove_from_faction = yes
 			}
-			# НОВОЕ: Сохраняем контроль третьих сторон
-			plus_cs_save_third_party_control = yes
+			# plus_cs_save_third_party_control = yes
 			
 			every_country = {
 				limit = {
@@ -477,8 +474,7 @@ country_event = {
 				}
 			}
 			
-			# НОВОЕ: Восстанавливаем контроль третьих сторон
-			plus_cs_restore_third_party_control = yes
+			# plus_cs_restore_third_party_control = yes
 		}
 		if = {
 			limit = {
