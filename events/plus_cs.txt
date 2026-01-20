@@ -567,45 +567,6 @@ country_event = {
 				add = 500
 				has_country_flag = plus_cs_stalemate
 			}
-			modifier = {
-				add = 50
-				has_dynamic_modifier = war_inflation_crisis
-			}
-			modifier = {
-				add = 150
-				has_country_flag = plus_cs_exhausted
-			}
-			modifier = {
-				add = 50
-				has_country_flag = plus_cs_war_strain
-			}
-			modifier = {
-				factor = 3.0
-				has_government = democratic
-			}
-			modifier = {
-				factor = 0.01
-				OR = {
-					has_government = fascism
-					has_government = communism
-				}
-				NOT = { has_country_flag = plus_cs_stalemate }
-				NOT = { has_country_flag = plus_cs_exhausted }
-				FROM = { surrender_progress < 0.5 }
-			}
-			modifier = {
-				factor = 0
-				FROM = { surrender_progress > 0.1 }
-				NOT = { has_country_flag = plus_cs_exhausted }
-			}
-			modifier = {
-				factor = 0.1
-				has_war_support > 0.8
-			}
-			modifier = {
-				factor = 0.1
-				has_war_support > 0.8
-			}
 		}
 		
 		# PARTISAN LOGIC
@@ -619,6 +580,7 @@ country_event = {
 			}
 		}
 		
+		# WHITE PEACE OR REMOVAL
 		if = {
 			limit = {
 				FROM = { has_capitulated = yes }
@@ -626,16 +588,9 @@ country_event = {
 			FROM = { remove_from_faction = yes }
 		}
 		else = {
-			# WHITE PEACE PATH
-			# Removed custom effect that might be causing issues
-			# plus_cs_save_third_party_control = yes
-			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
 			set_truce = { target = FROM days = 720 }
-			
-			# Removed custom effect
-			# plus_cs_restore_third_party_control = yes
 		}
 
 		FROM = {
@@ -648,22 +603,6 @@ country_event = {
 		ai_chance = {
 			base = 20
 			modifier = {
-				factor = 2.0
-				has_war_support > 0.8
-			}
-			modifier = {
-				factor = 0.5
-				has_war_support < 0.4
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = plus_cs_stalemate
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = plus_cs_exhausted
-			}
-			modifier = {
 				add = 100
 				FROM = { surrender_progress > 0.15 }
 			}
@@ -671,26 +610,6 @@ country_event = {
 		
 		add_war_support = 0.05
 		add_stability = 0.02
-
-		if = {
-			limit = {
-				has_country_flag = plus_cs_stalemate
-			}
-			add_war_support = -0.10
-			add_stability = -0.05
-			custom_effect_tooltip = plus_cs.4.b.tooltip_1
-		}
-		if = {
-			limit = {
-				OR = {
-					has_country_flag = plus_cs_exhausted
-					has_country_flag = plus_cs_urgent_peace
-				}
-			}
-			add_war_support = -0.12
-			add_stability = -0.08
-			custom_effect_tooltip = plus_cs.1.b.tooltip_2
-		}
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
