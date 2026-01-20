@@ -280,3 +280,50 @@
   faction_betrayal:0 "Zdrada sojuszu"
   faction_deserter:0 "Dezercja z sojuszu"
   peace_territory_preserved:0 "Kontrola terytorialna zachowana"
+
+ # --- Smart Diplomacy & Crises (English Fallback) ---
+ 
+ plus_cs_diplomacy.1.t:0 "Sovereignty Question"
+ plus_cs_diplomacy.1.d:0 "Facing the overwhelming superiority of our neighbor, our command considers war suicide. We have a chance to save the nation by offering to become a protectorate."
+ plus_cs_diplomacy.1.a:0 "Send Vassalization Offer"
+ 
+ plus_cs_diplomacy.2.t:0 "Submission Offer"
+ plus_cs_diplomacy.2.d:0 "[From.GetNameDef] understands the inevitable and offers to become our protectorate in exchange for protection. This allows us to expand our influence without firing a shot."
+ plus_cs_diplomacy.2.a:0 "Accept their oath of allegiance"
+ plus_cs_diplomacy.2.b:0 "We want their land, not oaths! (Annexation)"
+ peaceful_vassalization:0 "Peaceful Vassalization"
+ diplo_insult:0 "Diplomatic Insult"
+ 
+ plus_cs_diplomacy.10.t:0 "Overlord Collapse"
+ plus_cs_diplomacy.10.d:0 "Our master [Overlord.GetName] is losing the war. Chaos in the metropole gives us a unique chance to regain independence."
+ plus_cs_diplomacy.10.a:0 "Declare Independence!"
+ plus_cs_diplomacy.10.b:0 "We will remain loyal to the end"
+ 
+ plus_cs_diplomacy.20.t:0 "Invasion Threat"
+ plus_cs_diplomacy.20.d:0 "The enemy is preparing an invasion, and our chances in war are zero. We must offer any concessions to prevent a catastrophe."
+ plus_cs_diplomacy.20.a:0 "Offer Territorial Concessions"
+ 
+ plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
+ plus_cs_diplomacy.21.d:0 "[From.GetNameDef], seeing the might of our army on the border, offers to meet our territorial demands without a fight if we guarantee non-aggression in the future."
+ plus_cs_diplomacy.21.a:0 "Agree (Receive Territories)"
+ plus_cs_diplomacy.21.b:0 "We will take everything by force!"
+ 
+ # --- Internal Crisis ---
+ plus_cs_internal.1.t:0 "Generals' Ultimatum"
+ plus_cs_internal.1.d:0 "The army is bled dry. Casualties have exceeded the critical mark. The General Staff demands either immediate peace or a change of government."
+ plus_cs_internal.1.a:0 "Conduct Purges (Refuse)"
+ plus_cs_internal.1.b:0 "Government Resigns (Coup)"
+ army_purge_aftershock:0 "Aftermath of Army Purges"
+ 
+ # --- Partisans ---
+ broken_nation_resistance:0 "Broken but Unconquered Nation"
+ plus_cs_partisan_activity:0 "Partisan Activity (Guerrilla)"
+ 
+ # --- Crisis Decisions ---
+ plus_cs_marshall_law:0 "Declare Martial Law"
+ plus_cs_marshall_law_desc:0 "Harsh measures to restore order. Reduces productivity but keeps the country from collapsing."
+ plus_cs_patriotic_propaganda:0 "Propaganda 'Motherland in Danger'"
+ plus_cs_patriotic_propaganda_desc:0 "Mobilization of all media resources to boost morale."
+ plus_cs_faction_bailout:0 "Economic Aid to Ally"
+ plus_cs_faction_bailout_desc:0 "Direct resources to stabilize our ally's currency."
+ plus_cs_bailout_tt:0 "Removes §RInflation§! from target country."

@@ -69,7 +69,7 @@ shadow_econ_war = {
 	production_factory_efficiency_gain_factor = -0.10
 	army_attack_factor = -0.05                        # Оружие массовое, но низкого качества
 	local_resources_factor = -0.05
-	political_power_gain = -0.15
+	political_power_gain = -0.10
 	stability_factor = -0.10
 }
 
@@ -89,8 +89,8 @@ shadow_econ_total = {
 	training_time_army_factor = 0.25
 	experience_gain_army_factor = -0.10
 	
-	stability_factor = -0.30
-	war_support_factor = -0.10
+	stability_factor = -0.15
+	war_support_factor = -0.05
 	compliance_gain = -0.10
 }
 
@@ -248,7 +248,7 @@ manpower_strain_high = {
     research_speed_factor = -0.10           
      
     compliance_gain = -0.001
-    resistance_target = 0.05
+    resistance_target = 0.10
     supply_consumption_factor = 0.15
     
     training_time_army_factor = 0.25
@@ -270,7 +270,7 @@ manpower_strain_collapse = {
     consumer_goods_factor = 0.05              
     
     compliance_gain = -0.002
-    resistance_target = 0.15     
+    resistance_target = 0.25     
                 
     required_garrison_factor = 0.25  
     supply_consumption_factor = 0.50

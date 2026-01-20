@@ -1,0 +1,109 @@
+add_namespace = plus_cs_internal
+
+# ==============================================================================
+# ВНУТРЕННИЕ КРИЗИСЫ (INTERNAL CRISES)
+# 1. Defeatist Coup (Ультиматум генералов)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. MILITARY ULTIMATUM (Генералы требуют мира)
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.1
+	title = plus_cs_internal.1.t
+	desc = plus_cs_internal.1.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes # Из цикла optimization
+
+	trigger = {
+		has_war = yes
+		has_civil_war = no
+		surrender_progress > 0.3
+		has_stability < 0.4
+		
+		# Проверка относительных потерь (> 5% от total population)
+		# Сложная формула, используем упрощение через переменные, посчитанные в цикле
+		# var:casualties_ratio > 0.05
+	}
+
+	# Вариант А: "Ни шагу назад!" (Провести чистки)
+	option = {
+		name = plus_cs_internal.1.a
+		ai_chance = {
+			base = 80
+			modifier = {
+				factor = 0.1
+				has_government = democratic # Демократы вряд ли станут расстреливать генералов
+			}
+			modifier = {
+				add = 50
+				has_government = fascism
+			}
+			modifier = {
+				add = 50
+				has_government = communism
+			}
+		}
+		
+		add_political_power = -100
+		add_stability = -0.15 # Шок
+		add_war_support = 0.10 # Пропаганда "Враг у ворот"
+		
+		# Убиваем рандомных генералов/фельдмаршалов (через скрипт эффекта, если возможно, или абстрактно)
+		# Абстрактный штраф к армии
+		add_timed_idea = {
+			idea = army_purge_aftershock
+			days = 90
+		}
+		
+		custom_effect_tooltip = plus_cs_purge_tt
+	}
+
+	# Вариант Б: "Мы должны спасти нацию" (Смена курса)
+	option = {
+		name = plus_cs_internal.1.b
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 5.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0
+				has_government = fascism # Гитлер не уйдет сам
+				surrender_progress < 0.8
+			}
+		}
+		
+		# Смена правительства
+		# Если фашисты/коммунисты -> становятся Нейтралами (Хунта)
+		if = {
+			limit = { OR = { has_government = fascism has_government = communism } }
+			set_politics = {
+				ruling_party = neutrality
+				elections_allowed = no
+			}
+		}
+		
+		add_stability = 0.20 # "Наконец-то этот безумец ушел"
+		add_war_support = -0.20
+		
+		# Попытка белого мира
+		country_event = { id = plus_cs_internal.3 days = 2 }
+	}
+}
+
+# Попытка договориться после переворота
+country_event = {
+	id = plus_cs_internal.3
+	title = plus_cs_internal.3.t
+	desc = plus_cs_internal.3.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	option = {
+		name = plus_cs_internal.3.a
+		white_peace = ALL_ENEMIES
+		# Если враги согласятся... (тут нужна сложная логика запроса, пока упростим до одностороннего выхода если AI)
+	}
+}

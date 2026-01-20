@@ -323,6 +323,9 @@ country_event = {
 				limit = { 
 					OR = {
 						NOT = { check_variable = { plus_cs_prev_battalions > 0 } }
+						# MINOR PROTECTION: Only track changes if army is significant (> 24 divs)
+						NOT = { num_divisions > 24 }
+						
 						check_variable = { plus_cs_prev_battalions < 10 }
 					}
 				}
@@ -424,9 +427,9 @@ country_event = {
 				set_temp_variable = { limit_base = var:core_pop_calc }
 				
 				# Collapse
+				# Collapse (> 5% of core pop)
 				set_temp_variable = { limit_check = var:limit_base }
-				multiply_temp_variable = { limit_check = 0.10 }
-				add_to_temp_variable = { limit_check = 200000 }
+				multiply_temp_variable = { limit_check = 0.05 }
 
 				if = {
 					limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
@@ -438,9 +441,9 @@ country_event = {
 				}
 				else = {
 					# High
+					# High (> 3% of core pop)
 					set_temp_variable = { limit_check = var:limit_base }
-					multiply_temp_variable = { limit_check = 0.05 }
-					add_to_temp_variable = { limit_check = 125000 }
+					multiply_temp_variable = { limit_check = 0.03 }
 					if = {
 						limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
 						add_dynamic_modifier = { modifier = manpower_strain_high days = 35 }
@@ -451,9 +454,9 @@ country_event = {
 					}
 					else = {
 						# Mild
+						# Mild (> 1.5% of core pop)
 						set_temp_variable = { limit_check = var:limit_base }
-						multiply_temp_variable = { limit_check = 0.02 }
-						add_to_temp_variable = { limit_check = 75000 }
+						multiply_temp_variable = { limit_check = 0.015 }
 						if = {
 							limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
 							add_dynamic_modifier = { modifier = manpower_strain_mild days = 35 }
@@ -618,6 +621,131 @@ country_event = {
 		} # Close hibernation if
 
 		# =============================================================
+		# 4. LATE WAR FATIGUE (THE "VIETNAM" EFFECT)
+		# Усталость от затяжной войны. Бьет по мажорам в лейте.
+		# =============================================================
+		if = {
+			limit = {
+				has_war = yes
+				date > 1942.1.1
+				# Не работает для тех, кто и так в кризисе (чтобы не убить совсем)
+				NOT = { has_country_flag = plus_cs_exhausted }
+			}
+			
+			# Базовый множитель усталости (1x)
+			set_temp_variable = { fatigue_mult = 1 }
+			
+			# После 1944 года усталость удваивается
+			if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
+			
+			# 1. Базовая усталость общества (-0.2% в неделю * mult)
+			set_temp_variable = { stab_hit = -0.002 }
+			multiply_temp_variable = { stab_hit = var:fatigue_mult }
+			add_stability = var:stab_hit
+			
+			# 2. Усталость от жертв (>500k потерь)
+			if = {
+				limit = { casualties > 500000 }
+				add_stability = var:stab_hit # Еще одна доза штрафа
+			}
+			
+			# 3. Демократическая чувствительность ("Вьетнамский синдром")
+			# Демократии теряют поддержку партии и стабильность быстрее
+			if = {
+				limit = { has_government = democratic }
+				
+				# Доп. удар по стабильности
+				add_stability = var:stab_hit 
+				
+				# Падение популярности правящей партии (политический кризис)
+				# -0.5% в неделю (или -1.0% после 1944)
+				set_temp_variable = { pop_hit = -0.005 }
+				multiply_temp_variable = { pop_hit = var:fatigue_mult }
+				add_popularity = { ideology = democratic popularity = var:pop_hit }
+				
+				# Рост оппозиции (для баланса)
+				set_temp_variable = { opposition_growth = var:pop_hit }
+				multiply_temp_variable = { opposition_growth = -0.5 } # Половина уходит в фашизм/коммунизм
+				add_popularity = { ideology = communism popularity = var:opposition_growth }
+				add_popularity = { ideology = fascism popularity = var:opposition_growth }
+			}
+		}
+
+		# =============================================================
+		# 5. NEW SMART MECHANICS (INTEGRATION)
+		# =============================================================
+		
+		# A. Strategic Collapse (Разбомбленный тыл)
+		# Если > 30% промки повреждено -> Инфляция усиливается
+		if = {
+			limit = {
+				has_war = yes
+				damaged_building_factor > 0.3
+			}
+			# Усиливаем эффект инфляции (добавляем еще один модификатор)
+			add_dynamic_modifier = { modifier = war_inflation_crisis days = 35 } 
+		}
+
+		# B. Puppet Chain Reaction Check
+		# Проверяем вассалов на бунт
+		if = {
+			limit = {
+				is_puppet = yes
+				overlord = { surrender_progress > 0.5 }
+			}
+			# Шанс на бунт (раз в неделю)
+			random_list = {
+				10 = { country_event = { id = plus_cs_diplomacy.10 } }
+				90 = { }
+			}
+		}
+		
+		# C. Negotiated Vassalization Check
+		# Миноры ищут защиты
+		if = {
+			limit = {
+				is_major = no
+				is_in_faction = no
+				is_subject = no
+				has_war = no
+			}
+			# Шанс проверить соседей (чтобы не грузить CPU каждый тик)
+			random_list = {
+				5 = { country_event = { id = plus_cs_diplomacy.1 } }
+				95 = { }
+			}
+		}
+
+		# D. Defeatist Coup / Military Ultimatum Check
+		# Проверка относительных потерь населения
+		if = {
+			limit = {
+				has_war = yes
+				num_of_available_civilian_factories > 0 # Живая страна
+				surrender_progress > 0.3 # Дела идут плохо
+			}
+			
+			# Считаем Ratio: Casualties / Total Pop
+			set_temp_variable = { current_casualties = casualties }
+			set_temp_variable = { current_pop = total_population } # Total pop включая коры/некоры
+			# Лучше использовать core population для точности, но total проще
+			
+			divide_temp_variable = { current_casualties = var:current_pop }
+			
+			# Если потери > 5% (0.05)
+			if = {
+				limit = { check_variable = { current_casualties > 0.05 } }
+				
+				# Запускаем ивент (раз в некоторое время, флаг needed)
+				if = {
+					limit = { NOT = { has_country_flag = plus_cs_internal_crisis_active } }
+					set_country_flag = { flag = plus_cs_internal_crisis_active days = 180 }
+					country_event = { id = plus_cs_internal.1 }
+				}
+			}
+		}
+
+		# =============================================================
 		# --- Г: АВТОМАТИЧЕСКОЕ ПРЕДЛОЖЕНИЕ СДАЧИ (AI) ---
 		# Проверяем, не пора ли AI предложить сдачу мажору
 		# =============================================================
@@ -697,8 +825,8 @@ country_event = {
 							country_event = { id = plus_cs.201 hours = 6 }
 						}
 					}
-					# Фашисты с 20% шансом
-					20 = {
+					# Фашисты с 10% шансом (было 20%, затем 5%)
+					10 = {
 						modifier = { factor = 0 NOT = { has_government = fascism } }
 						set_country_flag = plus_cs_offered_after_capital_fall
 						set_country_flag = plus_cs_waiting_response
@@ -706,8 +834,8 @@ country_event = {
 							country_event = { id = plus_cs.201 hours = 6 }
 						}
 					}
-					# Коммунисты с 10% шансом
-					10 = {
+					# Коммунисты с 5% шансом (было 10%, затем 2%)
+					5 = {
 						modifier = { factor = 0 NOT = { has_government = communism } }
 						set_country_flag = plus_cs_offered_after_capital_fall
 						set_country_flag = plus_cs_waiting_response
@@ -715,8 +843,8 @@ country_event = {
 							country_event = { id = plus_cs.201 hours = 6 }
 						}
 					}
-					# Остальные случаи - ничего
-					9 = { }
+					# Остальные случаи - ничего (увеличено)
+					24 = { }
 				}
 			}
 			
@@ -739,15 +867,32 @@ country_event = {
 				}
 			}
 			
-			# --- КОНЕЦ ВСЕМУ: surrender > 0.7 для любой идеологии ---
+			# --- КОНЕЦ ВСЕМУ: surrender > 0.6 для любой идеологии ---
 			if = {
 				limit = {
-					surrender_progress > 0.7
+					surrender_progress > 0.6
 					NOT = { has_country_flag = plus_cs_offered_at_critical }
 				}
 				random_list = {
-					50 = { } # Борются до конца
-					50 = {   # 50% сдаются
+					# Модифицированная логика: Фашисты/Коммунисты бьются до конца (65/35)
+					50 = {
+						modifier = {
+							add = 15
+							OR = {
+								has_government = fascism
+								has_government = communism
+							}
+						}
+					} # Борются до конца
+					
+					50 = {   # Сдаются
+						modifier = {
+							factor = 0.4
+							OR = {
+								has_government = fascism
+								has_government = communism
+							}
+						}
 						set_country_flag = plus_cs_offered_at_critical
 						set_country_flag = plus_cs_waiting_response
 						event_target:potential_master = {

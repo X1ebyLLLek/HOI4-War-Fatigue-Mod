@@ -42,5 +42,14 @@
  stimulus_mil_industrial_complex:0 "Military-Industrial Injection"
  stimulus_mil_industrial_complex_desc:0 "Artificially prop up the arms industry. Expensive, but necessary for total war production. Requires §YWar Assembly Line§! or §YTotal Exhaustion§! economy."
 
-offer_preventive_submission:0 "Offer Preventive Submission"
+ offer_preventive_submission:0 "Offer Preventive Submission"
  offer_preventive_submission_desc:0 "War with a great power is suicide. We must offer to become their protectorate before our cities are destroyed."
+
+ # --- Crisis Decisions ---
+ plus_cs_marshall_law:0 "Declare Martial Law"
+ plus_cs_marshall_law_desc:0 "Harsh measures to restore order. Reduces productivity but keeps the country from collapsing."
+ plus_cs_patriotic_propaganda:0 "Propaganda 'Motherland in Danger'"
+ plus_cs_patriotic_propaganda_desc:0 "Mobilization of all media resources to boost morale."
+ plus_cs_faction_bailout:0 "Economic Aid to Ally"
+ plus_cs_faction_bailout_desc:0 "Direct resources to stabilize our ally's currency."
+ plus_cs_bailout_tt:0 "Removes §RInflation§! from target country."

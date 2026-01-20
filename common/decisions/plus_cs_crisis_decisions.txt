@@ -1,0 +1,145 @@
+plus_cs_crisis_category = {
+	icon = GFX_decision_category_generic_political_actions
+}
+
+plus_cs_crisis_management = {
+
+	# 1. ВОЕННОЕ ПОЛОЖЕНИЕ (MARSHALL LAW)
+	# Спасение стабильности любой ценой.
+	plus_cs_marshall_law = {
+		icon = GFX_decision_generic_suppress_resistance
+		
+		available = {
+			has_war = yes
+			has_stability < 0.5
+			NOT = { has_idea = plus_cs_marshall_law_spirit }
+		}
+		
+		cost = 50
+		
+		fire_only_once = no
+		days_remove = 180
+		
+		modifier = {
+			stability_factor = 0.15
+			industrial_capacity_factory = -0.10
+			political_power_gain = -0.10
+		}
+		
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 0
+				has_stability > 0.4
+			}
+		}
+	}
+
+	# 2. ПРОПАГАНДА "РОДИНА В ОПАСНОСТИ"
+	# Поднятие War Support.
+	plus_cs_patriotic_propaganda = {
+		icon = GFX_decision_generic_war_propaganda
+		
+		available = {
+			has_war = yes
+			has_war_support < 0.6
+			NOT = { has_idea = plus_cs_patriotic_fervor }
+		}
+		
+		cost = 25
+		
+		fire_only_once = no
+		days_remove = 180
+		
+		modifier = {
+			war_support_factor = 0.15
+			consumer_goods_factor = 0.05
+			training_time_army_factor = -0.10
+		}
+		
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				has_war_support > 0.5
+			}
+		}
+	}
+
+	# 3. ЭКОНОМИЧЕСКАЯ ИНТЕРВЕНЦИЯ (FACTION AID)
+	# Лидер альянса спасает союзника от инфляции.
+	plus_cs_faction_bailout = {
+		icon = GFX_decision_generic_prepare_civil_war
+		
+		allowed = {
+			is_faction_leader = yes
+		}
+		
+		available = {
+			is_faction_leader = yes
+			num_of_civilian_factories > 50
+			has_political_power > 50
+			
+			any_ally = {
+				has_dynamic_modifier = war_inflation_crisis
+				NOT = { tag = ROOT }
+			}
+		}
+		
+		target_array = allies
+		
+		target_trigger = {
+			has_dynamic_modifier = war_inflation_crisis
+			NOT = { tag = ROOT }
+		}
+		
+		cost = 50
+		
+		days_remove = 90
+		
+		modifier = {
+			# Лидер теряет фабрики (симулируем отправку помощи)
+			industrial_capacity_factory = -0.05 
+		}
+		
+		complete_effect = {
+			# Ничего, эффект работает пока активно решение, 
+			# но нам нужно СНЯТЬ инфляцию у цели.
+			# Решения с days_remove работают как 'Mission'.
+			# Лучше сделать instant effect.
+		}
+		
+		# Переделаем в instant decision
+		days_re_enable = 30
+		
+		fire_only_once = no
+		
+		effect = {
+			add_political_power = -50
+			custom_effect_tooltip = plus_cs_bailout_tt
+			
+			# Снимаем инфляцию у цели на полгода
+			FROM = {
+				remove_dynamic_modifier = { modifier = war_inflation_crisis }
+				# Блокируем появление инфляции на 180 дней
+				set_country_flag = { flag = plus_cs_inflation_immunity days = 180 }
+				add_stability = 0.10
+			}
+			# Штраф лидеру (абстрактный, через PP и стабу, т.к. фабрики забрать на время сложно в instant)
+			add_stability = -0.05
+			add_resource = {
+				type = oil
+				amount = -100 # Симуляция поставок
+				days = 90
+			}
+		}
+		
+		ai_will_do = {
+			factor = 50
+			modifier = {
+				factor = 0
+				has_stability < 0.5
+			}
+		}
+	}
+}
