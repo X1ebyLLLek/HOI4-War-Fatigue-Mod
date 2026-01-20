@@ -583,7 +583,12 @@ country_event = {
 			}
 			FROM = { remove_from_faction = yes }
 		}
-		else = {
+		
+		# Linear fallback instead of else
+		if = {
+			limit = {
+				FROM = { has_capitulated = no }
+			}
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
 			set_truce = { target = FROM days = 720 }
