@@ -1,0 +1,19 @@
+plus_cs_prevent_spam_self = {
+	allowed = { always = yes }
+	enable = {
+		has_country_flag = plus_cs_signed_separate_peace
+	}
+	abort = { always = no }
+	
+	# I will not call allies (I am peaceful)
+	ai_strategy = {
+		type = call_ally
+		value = -1000
+	}
+	
+	# I will not join wars (I am peaceful)
+	ai_strategy = {
+		type = join_ally_in_war
+		value = -1000
+	}
+}
