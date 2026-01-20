@@ -70,7 +70,7 @@ plus_cs_crisis_management = {
 		icon = GFX_decision_generic_prepare_civil_war
 		
 		allowed = {
-			is_faction_leader = yes
+			always = yes
 		}
 		
 		available = {
@@ -78,7 +78,8 @@ plus_cs_crisis_management = {
 			num_of_civilian_factories > 50
 			has_political_power > 50
 			
-			any_faction_member = {
+			any_other_country = {
+				is_in_faction_with = ROOT
 				has_dynamic_modifier = war_inflation_crisis
 				NOT = { tag = ROOT }
 			}
@@ -93,26 +94,9 @@ plus_cs_crisis_management = {
 		
 		cost = 50
 		
-		days_remove = 90
-		
-		modifier = {
-			# Лидер теряет фабрики (симулируем отправку помощи)
-			industrial_capacity_factory = -0.05 
-		}
+
 		
 		complete_effect = {
-			# Ничего, эффект работает пока активно решение, 
-			# но нам нужно СНЯТЬ инфляцию у цели.
-			# Решения с days_remove работают как 'Mission'.
-			# Лучше сделать instant effect.
-		}
-		
-		# Переделаем в instant decision
-		days_re_enable = 30
-		
-		fire_only_once = no
-		
-		effect = {
 			add_political_power = -50
 			custom_effect_tooltip = plus_cs_bailout_tt
 			
