@@ -7,15 +7,15 @@ plus_cs_prevent_spam_self = {
 	
 	# Reduce desire to join wars
 	ai_strategy = {
-		type = diplomatic_action_desire
-		id = "join_ally_in_war"
+		type = diplomatic_action
+		id = join_ally_in_war
 		value = -1000
 	}
     
     # Reduce desire to call allies
     ai_strategy = {
-		type = diplomatic_action_desire
-		id = "call_ally"
+		type = diplomatic_action
+		id = call_ally
 		value = -1000
 	}
 }
