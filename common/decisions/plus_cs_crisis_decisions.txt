@@ -78,7 +78,7 @@ plus_cs_crisis_management = {
 			num_of_civilian_factories > 50
 			has_political_power > 50
 			
-			any_ally = {
+			any_faction_member = {
 				has_dynamic_modifier = war_inflation_crisis
 				NOT = { tag = ROOT }
 			}

@@ -1,4 +1,4 @@
-plus_cs_crisis_category = {
+plus_cs_crisis_management = {
 	icon = GFX_decision_category_generic_political_actions
 }
 

@@ -78,7 +78,7 @@ country_event = {
 		FROM = {
 			puppet = ROOT
 			effect_tooltip = {
-				add_autonomy_score = -500
+				add_autonomy_score = { value = -500 }
 			}
 			add_opinion_modifier = { target = ROOT modifier = peaceful_vassalization }
 		}
@@ -210,7 +210,7 @@ country_event = {
 				# Если мы готовы к войне и хотим всё - отказываем
 				factor = 0.1
 				has_manpower > 500000 
-				NOT = { has_equipment_shortage = yes }
+
 			}
 		}
 		
@@ -221,7 +221,7 @@ country_event = {
 			}
 			every_owned_state = {
 				limit = { is_claimed_by = ROOT is_controlled_by = FROM }
-				set_state_owner = ROOT
+				transfer_state_to = ROOT
 			}
 		}
 		# Если не было клайма - вассалим
