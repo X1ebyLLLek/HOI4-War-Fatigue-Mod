@@ -92,6 +92,30 @@ country_event = {
 			}
 		}
 
+		# --- Economic Overheat (Burnout) ---
+		# Накопление усталости от Тотальной мобилизации
+		if = {
+			limit = { has_idea = tot_economic_mobilisation }
+			add_to_variable = { economy_overheat_counter = 1 }
+			
+			if = {
+				limit = { check_variable = { economy_overheat_counter > 50 } } # ~1 год (50 тиков по ~7 дней)
+				add_dynamic_modifier = { modifier = economic_retooling_shock_minor days = 35 }
+			}
+		}
+		else_if = {
+			limit = { has_idea = war_economy }
+			# Медленное остывание на Военной экономике
+			if = {
+				limit = { check_variable = { economy_overheat_counter > 0 } }
+				subtract_from_variable = { economy_overheat_counter = 0.5 }
+			}
+		}
+		else = {
+			# Быстрое остывание на гражданских рельсах
+			set_variable = { economy_overheat_counter = 0 }
+		}
+
 		# --- В: Риск гражданской войны ---
 		if = {
 			limit = {
