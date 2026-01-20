@@ -48,8 +48,35 @@ country_event = {
 			country_event = { id = plus_cs.300 }
 		}
 
-		# --- Б: Гражданская экономика (Инвестиции) ---
-		# Теперь проверяем только СЕБЯ (ROOT), так как ивент запускается для каждой страны.
+		# --- Б: Гражданская экономика (Инвестиции) & Инерция (Шок) ---
+		
+		# 1. Определяем текущий закон экономики
+		set_temp_variable = { current_econ_law = 0 }
+		if = { limit = { has_idea = civilian_economy } set_temp_variable = { current_econ_law = 1 } }
+		else_if = { limit = { has_idea = low_economic_mobilisation } set_temp_variable = { current_econ_law = 2 } }
+		else_if = { limit = { has_idea = partial_economic_mobilisation } set_temp_variable = { current_econ_law = 3 } }
+		else_if = { limit = { has_idea = war_economy } set_temp_variable = { current_econ_law = 4 } }
+		else_if = { limit = { has_idea = tot_economic_mobilisation } set_temp_variable = { current_econ_law = 5 } }
+
+		# 2. Проверяем изменение (только если прошлое значение было установлено > 0)
+		if = {
+			limit = {
+				check_variable = { plus_cs_prev_econ_law > 0 }
+				NOT = { check_variable = { var = current_econ_law value = var:plus_cs_prev_econ_law } }
+				check_variable = { var = current_econ_law value = var:plus_cs_prev_econ_law compare = greater_than } # Только при мобилизации (повышении)
+			}
+			# Применяем шок переоснащения
+			add_dynamic_modifier = { modifier = economic_retooling_shock_medium days = 60 }
+			set_variable = { economy_overheat_counter = 0 } # Сброс счетчика перегрева при смене закона
+		}
+		
+		# 3. Сохраняем текущее
+		if = {
+			limit = { check_variable = { current_econ_law > 0 } }
+			set_variable = { plus_cs_prev_econ_law = current_econ_law }
+		}
+
+		# Логика инвестиций для мирной гражданской экономики
 		if = {
 			limit = { has_idea = civilian_economy has_war = no }
 			random_list = {
