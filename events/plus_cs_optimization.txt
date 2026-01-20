@@ -332,7 +332,162 @@ country_event = {
 				remove_dynamic_modifier = { modifier = manpower_strain_collapse }
 				remove_ideas = desperate_defense_effort
 			}
-			} # Close tick-spreading if
+
+			# ==========================================================
+			# MOVED FROM ON_MONTHLY: POLITICAL & STALEMATE LOGIC
+			# ==========================================================
+			
+			if = {
+				# GATEWAY: Only process if at war OR unstable
+				# OPTIMIZATION: Even Majors can hibernate if they are at peace and stable.
+				limit = {
+					OR = {
+						has_war = yes
+						has_stability < 0.6
+						has_war_support < 0.6
+						# Removed is_major = yes. 
+						# If a Major is at Peace AND Stable ( > 60%), they don't need this loop.
+						
+						has_idea = internal_crisis_high
+						has_idea = internal_crisis_medium
+						has_idea = internal_crisis_low
+					}
+				}
+
+				if = {
+					limit = { has_war = yes }
+					
+					# --- URGENT PEACE (PANIC) ---
+					if = {
+						limit = {
+							OR = {
+								has_stability < 0.2
+								has_war_support < 0.2
+							}
+							surrender_progress > 0.10
+							NOT = { has_country_flag = plus_cs_urgent_peace }
+						}
+						set_country_flag = { flag = plus_cs_urgent_peace days = 180 }
+					}
+					
+					# --- STALEMATE LOGIC v2.0 ---
+					set_temp_variable = { current_vp_sum = 0 }
+					every_enemy_country = {
+						add_to_temp_variable = { current_vp_sum = vp@THIS }
+					}
+					
+					if = {
+						limit = { check_variable = { plus_cs_last_month_vp > 0 } }
+						
+						set_temp_variable = { vp_change = current_vp_sum }
+						subtract_from_temp_variable = { vp_change = plus_cs_last_month_vp }
+						
+						if = {
+							limit = { check_variable = { vp_change < 0 } }
+							multiply_temp_variable = { vp_change = -1 }
+						}
+						
+						# Threshold: 15 (approx 1-2 cities)
+						if = {
+							limit = {
+								check_variable = { vp_change < 15 } 
+							}
+							add_to_variable = { plus_cs_stalemate_timer = 1 }
+						}
+						else = {
+							set_variable = { plus_cs_stalemate_timer = 0 }
+							clr_country_flag = plus_cs_stalemate
+						}
+						
+						if = {
+							limit = { check_variable = { plus_cs_stalemate_timer > 5 } }
+							set_country_flag = { flag = plus_cs_stalemate days = 65 }
+						}
+					}
+					set_variable = { plus_cs_last_month_vp = current_vp_sum }
+
+					# --- CASUALTIES EVENTS ---
+					if = {
+						limit = { casualties > 50000 }
+						random_list = {
+							2 = { country_event = { id = plus_cs.1001 } }
+							98 = { }
+						}
+					}
+					if = {
+						limit = { casualties > 100000 }
+						random_list = {
+							1 = { country_event = { id = plus_cs.1002 } }
+							99 = { }
+						}
+					}
+				}
+
+				# --- INTERNAL CRISIS LOGIC ---
+				if = {
+					limit = { OR = { has_war_support < 0.2 has_stability < 0.2 } }
+					add_timed_idea = { idea = internal_crisis_high days = 60 }
+					remove_ideas = internal_crisis_medium
+					remove_ideas = internal_crisis_low
+				}
+				else_if = {
+					limit = { OR = { has_war_support < 0.4 has_stability < 0.4 } }
+					add_timed_idea = { idea = internal_crisis_medium days = 60 }
+					remove_ideas = internal_crisis_high
+					remove_ideas = internal_crisis_low
+				}
+				else_if = {
+					limit = { OR = { has_war_support < 0.6 has_stability < 0.6 } }
+					add_timed_idea = { idea = internal_crisis_low days = 60 }
+					remove_ideas = internal_crisis_high
+					remove_ideas = internal_crisis_medium
+				}
+				else = {
+					remove_ideas = internal_crisis_high
+					remove_ideas = internal_crisis_medium
+					remove_ideas = internal_crisis_low
+				}
+
+				# --- IDEOLOGY DRIFT ---
+				if = {
+					limit = { 
+						has_idea = internal_crisis_high 
+						NOT = { AND = { date < 1938.1.1 has_civil_war = yes } }
+					}
+					if = {
+						limit = { has_government = democratic }
+						random_list = {
+							40 = { add_popularity = { ideology = fascism popularity = 0.1 } }
+							40 = { add_popularity = { ideology = communism popularity = 0.1 } }
+							20 = { add_popularity = { ideology = neutrality popularity = 0.1 } }
+						}
+					}
+					else_if = {
+						limit = { has_government = neutrality }
+						random_list = {
+							35 = { add_popularity = { ideology = fascism popularity = 0.1 } } 
+							35 = { add_popularity = { ideology = communism popularity = 0.1 } } 
+							30 = { add_popularity = { ideology = democratic popularity = 0.1 } }
+						}
+					}
+					else_if = {
+						limit = { has_government = fascism }
+						random_list = {
+							50 = { add_popularity = { ideology = communism popularity = 0.1 } }
+							25 = { add_popularity = { ideology = democratic popularity = 0.05 } add_popularity = { ideology = neutrality popularity = 0.05 } }
+							25 = { add_popularity = { ideology = neutrality popularity = 0.1 } }
+						}
+					}
+					else_if = {
+						limit = { has_government = communism }
+						random_list = {
+							50 = { add_popularity = { ideology = fascism popularity = 0.1 } }
+							25 = { add_popularity = { ideology = democratic popularity = 0.05 } add_popularity = { ideology = neutrality popularity = 0.05 } }
+							25 = { add_popularity = { ideology = neutrality popularity = 0.1 } }
+					  }
+					}
+				}
+			}
 		} # Close hibernation if
 
 		# =============================================================
