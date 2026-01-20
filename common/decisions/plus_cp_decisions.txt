@@ -63,8 +63,29 @@ peace_options = {
 
 		complete_effect = {
 			set_country_flag = plus_cs_waiting_response
-			FROM = {
-				country_event = { id = plus_cs.2 hours = 12 }
+			
+			# VETO LOGIC PREP
+			FROM = { save_event_target_as = peace_recipient }
+			save_event_target_as = peace_sender
+			set_country_flag = plus_cs_peace_type_preferences
+			
+			if = {
+				limit = {
+					FROM = {
+						is_faction_leader = no
+						is_in_faction = yes
+					}
+				}
+				# Send Veto Request to Leader
+				FROM.faction_leader = {
+					country_event = { id = plus_cs.20 hours = 6 }
+				}
+			}
+			else = {
+				# Standard Flow
+				FROM = {
+					country_event = { id = plus_cs.2 hours = 12 }
+				}
 			}
 			effect_tooltip = {
 				random_list = {
@@ -592,8 +613,29 @@ peace_options = {
 
 		complete_effect = {
 			set_country_flag = plus_cs_waiting_response
-			FROM = {
-				country_event = { id = plus_cs.4 hours = 12 }
+			
+			# VETO LOGIC PREP
+			FROM = { save_event_target_as = peace_recipient }
+			save_event_target_as = peace_sender
+			clr_country_flag = plus_cs_peace_type_preferences
+			
+			if = {
+				limit = {
+					FROM = {
+						is_faction_leader = no
+						is_in_faction = yes
+					}
+				}
+				# Send Veto Request to Leader
+				FROM.faction_leader = {
+					country_event = { id = plus_cs.20 hours = 6 }
+				}
+			}
+			else = {
+				# Standard Flow
+				FROM = {
+					country_event = { id = plus_cs.4 hours = 12 }
+				}
 			}
 			effect_tooltip = {
 				random_list = {
@@ -822,8 +864,29 @@ peace_options = {
 
 		complete_effect = {
 			set_country_flag = plus_cs_waiting_response
-			FROM = {
-				country_event = { id = plus_cs.1 hours = 12 }
+			
+			# VETO LOGIC PREP
+			FROM = { save_event_target_as = peace_recipient }
+			save_event_target_as = peace_sender
+			set_country_flag = plus_cs_peace_type_negotiation
+			
+			if = {
+				limit = {
+					FROM = {
+						is_faction_leader = no
+						is_in_faction = yes
+					}
+				}
+				# Send Veto Request to Leader
+				FROM.faction_leader = {
+					country_event = { id = plus_cs.20 hours = 6 }
+				}
+			}
+			else = {
+				# Standard Flow
+				FROM = {
+					country_event = { id = plus_cs.1 hours = 12 }
+				}
 			}
 			effect_tooltip = {
 				random_list = {
