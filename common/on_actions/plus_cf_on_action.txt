@@ -189,6 +189,11 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			# EVENT-DRIVEN STALEMATE RESET:
+			# If control changes, the front is moving. Reset stalemate timers.
+			ROOT = { set_variable = { plus_cs_stalemate_timer = 0 } }
+			FROM = { set_variable = { plus_cs_stalemate_timer = 0 } }
+			
 			if = {
 				limit = {
 					FROM.FROM = { state_strategic_value > 15 is_core_of = ROOT }

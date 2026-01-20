@@ -243,7 +243,10 @@ country_event = {
 				if = {
 					limit = {
 						OR = {
-							check_variable = { plus_cs_pop_check_timer > 3 } 
+							# OPTIMIZATION: Cache Population.
+							# Only mandatory recalc every ~350 days (50 ticks * 7 days).
+							# Otherwise, rely on 'plus_cs_need_recalc' event flag from conquests.
+							check_variable = { plus_cs_pop_check_timer > 50 } 
 							check_variable = { plus_cs_need_recalc = 1 }
 							check_variable = { core_pop_calc = 0 }
 						}
@@ -370,41 +373,16 @@ country_event = {
 						set_country_flag = { flag = plus_cs_urgent_peace days = 180 }
 					}
 					
-					# --- STALEMATE LOGIC v2.0 ---
-					set_temp_variable = { current_vp_sum = 0 }
-					every_enemy_country = {
-						add_to_temp_variable = { current_vp_sum = vp@THIS }
-					}
+					# --- STALEMATE LOGIC v3.0 (Event-Driven) ---
+					# Reset happens in on_state_control_changed.
+					# Here we just tick.
+					
+					add_to_variable = { plus_cs_stalemate_timer = 1 }
 					
 					if = {
-						limit = { check_variable = { plus_cs_last_month_vp > 0 } }
-						
-						set_temp_variable = { vp_change = current_vp_sum }
-						subtract_from_temp_variable = { vp_change = plus_cs_last_month_vp }
-						
-						if = {
-							limit = { check_variable = { vp_change < 0 } }
-							multiply_temp_variable = { vp_change = -1 }
-						}
-						
-						# Threshold: 15 (approx 1-2 cities)
-						if = {
-							limit = {
-								check_variable = { vp_change < 15 } 
-							}
-							add_to_variable = { plus_cs_stalemate_timer = 1 }
-						}
-						else = {
-							set_variable = { plus_cs_stalemate_timer = 0 }
-							clr_country_flag = plus_cs_stalemate
-						}
-						
-						if = {
-							limit = { check_variable = { plus_cs_stalemate_timer > 5 } }
-							set_country_flag = { flag = plus_cs_stalemate days = 65 }
-						}
+						limit = { check_variable = { plus_cs_stalemate_timer > 5 } }
+						set_country_flag = { flag = plus_cs_stalemate days = 65 }
 					}
-					set_variable = { plus_cs_last_month_vp = current_vp_sum }
 
 					# --- CASUALTIES EVENTS ---
 					if = {
