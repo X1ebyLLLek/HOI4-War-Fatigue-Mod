@@ -1,0 +1,358 @@
+peace_treaty = {
+
+	# ==============================================================================
+	# SUBJECT & SOVEREIGNTY DECISIONS
+	# ==============================================================================
+
+	peace_puppet = {
+		icon = GFX_decision_generic_civil_support
+		cost = 0
+		state_target = yes
+		on_map_mode = map_only
+		target_trigger = {
+			always = no
+			check_variable = { FROM.state_taken = 0 }
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+		fire_only_once = yes
+
+		visible = {
+			check_variable = { FROM.state_taken = 0 }
+			FROM = {
+				is_core_of = FROM.owner
+			}
+		}
+
+		available = {
+			has_rule = can_puppet
+			is_puppet = no
+			check_variable = { FROM.state_taken = 0 }
+			FROM = {
+				is_core_of = FROM.owner
+			}
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 2 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM.owner
+				value = pts
+				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя создать марионетку на территории третьей стороны
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_character = {
+							is_country_leader = yes
+							has_trait = successful_negotiator
+						}
+					}
+				}
+				add_country_leader_trait = successful_negotiator
+			}
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 2 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			custom_effect_tooltip = peace_puppet_cost
+			subtract_from_variable = { vp@FROM.owner = pts }
+			if = {
+				limit = {
+					any_country = {
+						original_tag = FROM.owner
+						is_puppet_of = ROOT
+					}
+				}
+				random_country = {
+					limit = {
+						original_tag = FROM.owner
+						is_puppet_of = ROOT
+					}
+					transfer_state = FROM
+				}
+			}
+			else = {
+				create_dynamic_country = {
+					original_tag = FROM.owner
+					if = {
+						limit = {
+							ROOT = {
+								has_elections = yes
+							}
+						}
+						set_politics = {
+							ruling_party = var:ROOT.current_party_ideology_group
+							elections_allowed = yes
+						}
+					}
+					else = {
+						set_politics = {
+							ruling_party = var:ROOT.current_party_ideology_group
+							elections_allowed = no
+						}
+					}
+					set_political_party = {
+						ideology = var:ROOT.current_party_ideology_group
+						popularity = 60
+					}
+					set_cosmetic_tag = FROM.owner
+					reserve_dynamic_country = yes
+					ROOT = {
+						puppet = PREV
+						PREV = {
+							transfer_state = FROM
+						}
+					}
+				}
+			}
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_puppet
+			}
+		}
+
+		timeout_effect = {
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_puppet
+			}
+		}
+
+		ai_will_do = {
+			base = 5
+			
+			modifier = {
+				add = 20
+				FROM = {
+					NOT = { any_neighbor_state = { is_owned_by = ROOT } }
+				}
+			}
+			
+			modifier = {
+				add = 100
+				any_country = {
+					is_puppet_of = ROOT
+					original_tag = FROM.owner
+				}
+			}
+
+			modifier = {
+				factor = 3.0
+				OR = {
+					has_government = democratic
+					has_government = communism
+				}
+			}
+			
+			modifier = {
+				factor = 0.2
+				has_government = fascism
+				FROM = { any_neighbor_state = { is_owned_by = ROOT } }
+			}
+		}
+	}
+
+	peace_liberate = {
+		icon = GFX_decision_generic_nationalism
+		cost = 0
+		state_target = yes
+		on_map_mode = map_only
+		target_trigger = {
+			always = no
+			check_variable = { FROM.state_taken = 0 }
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+		fire_only_once = yes
+
+		visible = {
+			is_puppet = no
+			check_variable = { FROM.state_taken = 0 }
+			any_of_scopes = {
+				array = var:global.countries
+				OR = {
+					exists = no
+					AND = {
+						is_puppet_of = ROOT
+						NOT = {
+							original_tag = FROM.owner
+						}
+					}
+				}
+				FROM = {
+					is_core_of = PREV
+				}
+			}
+		}
+
+		available = {
+			is_puppet = no
+			check_variable = { FROM.state_taken = 0 }
+			any_of_scopes = {
+				array = var:global.countries
+				OR = {
+					exists = no
+					AND = {
+						is_puppet_of = ROOT
+						NOT = {
+							original_tag = FROM.owner
+						}
+					}
+				}
+				FROM = {
+					is_core_of = PREV
+				}
+			}
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 4 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM.owner
+				value = pts
+				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя освободить территорию, контролируемую третьей стороной
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
+			}
+		}
+
+		complete_effect = {
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 2 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			custom_effect_tooltip = peace_puppet_cost
+			subtract_from_variable = { vp@FROM.owner = pts }
+			if = {
+				limit = {
+					any_country = {
+						is_puppet_of = ROOT
+						NOT = {
+							original_tag = FROM.owner
+						}
+						FROM = {
+							is_core_of = PREV
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						is_puppet_of = ROOT
+						FROM = {
+							is_core_of = PREV
+						}
+					}
+					transfer_state = FROM
+				}
+			}
+			else = {
+				random_scope_in_array = {
+					array = var:global.countries
+					limit = {
+						exists = no
+						FROM = {
+							is_core_of = PREV
+						}
+					}
+					transfer_state = FROM
+					if = {
+						limit = {
+							ROOT = {
+								has_rule = can_puppet
+							}
+						}
+						ROOT = {
+							puppet = PREV
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								has_elections = yes
+							}
+						}
+						set_politics = {
+							ruling_party = var:ROOT.current_party_ideology_group
+							elections_allowed = yes
+						}
+					}
+					else = {
+						set_politics = {
+							ruling_party = var:ROOT.current_party_ideology_group
+							elections_allowed = no
+						}
+					}
+				}
+			}
+			set_variable = { FROM.state_taken = 1 }
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_liberate
+			}
+		}
+
+		timeout_effect = {
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_liberate
+			}
+		}
+
+		ai_will_do = {
+			base = 5
+
+			modifier = {
+				add = 20
+				FROM = { is_core_of = FROM.owner }
+				any_of_scopes = {
+					array = var:global.countries
+					exists = no
+					FROM = { is_core_of = PREV }
+				}
+			}
+			
+			modifier = {
+				factor = 4.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0.1
+				has_government = communism
+			}
+		}
+	}
+}

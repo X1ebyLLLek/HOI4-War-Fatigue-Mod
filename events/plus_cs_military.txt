@@ -1,0 +1,106 @@
+add_namespace = plus_cs
+
+# ==========================================
+# MILITARY EVENTS (GENERALS)
+# ==========================================
+
+# Event 1001: General Killed / Negotiation Opportunity
+country_event = {
+	id = plus_cs.1001
+	title = plus_cs.1001.t
+	desc = plus_cs.1001.d
+	picture = GFX_news_event_generic_division_destroyed
+	is_triggered_only = yes
+
+	immediate = {
+		random_character = {
+			limit = {
+				is_army_leader = yes
+				is_field_marshal = no
+				NOT = { has_trait = ruler_trait }
+			}
+			save_event_target_as = plus_cs_killed_general
+		}
+	}
+	
+	# Option A: Send Negotiation Offer
+	option = {
+		name = plus_cs.1001.a
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = { has_event_target = plus_cs_killed_general }
+			retire_character = event_target:plus_cs_killed_general
+		}
+		
+		# --- FACTION PERMISSION CHECK ---
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = no
+				# Only ask if leader is actually relevant (in war, major)
+				faction_leader = {
+					is_major = yes
+					has_war = yes
+				}
+			}
+			# Ask My Leader
+			faction_leader = {
+				country_event = { id = plus_cs.20 hours = 6 } # Permission event
+			}
+			set_country_flag = plus_cs_waiting_leader_permission
+		}
+		else = {
+			# Direct Offer Logic
+			event_target:peace_recipient = {
+				country_event = { id = plus_cs.1 }
+			}
+		}
+
+		add_political_power = -0.05
+		add_stability = -0.02
+	}
+}
+
+# Event 1002: Field Marshal Wounded
+country_event = {
+	id = plus_cs.1002
+	title = plus_cs.1002.t
+	desc = plus_cs.1002.d
+	picture = GFX_news_event_generic_division_destroyed
+	is_triggered_only = yes
+
+	immediate = {
+		random_character = {
+			limit = {
+				is_field_marshal = yes
+				NOT = { has_trait = ruler_trait }
+			}
+			save_event_target_as = plus_cs_wounded_general
+		}
+	}
+	
+	option = {
+		name = plus_cs.1002.a
+		ai_chance = { factor = 100 }
+		random_list = {
+			20 = {
+				if = {
+					limit = { has_event_target = plus_cs_wounded_general }
+					retire_character = event_target:plus_cs_wounded_general
+				}
+				add_political_power = -0.03
+			}
+			80 = {
+				if = {
+					limit = { has_event_target = plus_cs_wounded_general }
+					add_trait = {
+						character = event_target:plus_cs_wounded_general
+						trait = wounded
+					}
+				}
+				add_war_support = -0.01
+			}
+		}
+	}
+}

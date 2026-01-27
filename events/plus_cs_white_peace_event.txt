@@ -1,0 +1,94 @@
+add_namespace = plus_cs
+
+# ==========================================
+# WHITE PEACE EVENTS
+# ==========================================
+
+# Event 4: White Peace Offer (Received)
+country_event = {
+	id = plus_cs.4
+	title = plus_cs.4.t
+	desc = plus_cs.4.d
+	picture = GFX_report_event_generic_sign_treaty2
+	is_triggered_only = yes
+
+	immediate = {
+		plus_cs_calc_white_peace_chance = yes
+		log = "[PEACE_LOG] EVENT: [ROOT.GetName] considering WHITE PEACE from [FROM.GetName]. Score: [?plus_cs_final_calc_score]."
+	}
+
+	# Option A: Accept White Peace
+	option = {
+		name = plus_cs.4.a
+		ai_chance = {
+			base = 5 # Always a small chance (Chaos Factor)
+			
+			# === WEIGHTED PROBABILITY ===
+			# Score > 0: Increasing chance
+			modifier = { add = 10 check_variable = { plus_cs_final_calc_score > 0 } }
+			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 40 } }
+			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
+			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 80 } }
+			
+			# Score < 0: Decreasing chance
+			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
+			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -50 } } # Relaxed from 0.1 (Never zero chance)
+			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -80 } }
+		}
+
+		# Execute White Peace
+		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED White Peace from [FROM.GetName]."
+		white_peace = FROM
+		
+		# Set Truce & Flags
+		set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+		add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
+		set_truce = {
+			target = FROM
+			days = 365
+		}
+		FROM = {
+			set_truce = {
+				target = ROOT
+				days = 365
+			}
+			clr_country_flag = plus_cs_waiting_response
+			# Notify sender
+			country_event = { id = plus_cs.5 }
+		}
+		
+		add_political_power = 25
+		add_stability = 0.05
+	}
+
+	# Option B: Refuse
+	option = {
+		name = plus_cs.4.b
+		ai_chance = {
+			base = 50
+			
+			# If we are WINNING
+			modifier = {
+				add = 100
+				FROM = { surrender_progress > 0.1 }
+				surrender_progress < 0.1
+			}
+			
+			# If we are LOSING
+			modifier = {
+				factor = 0
+				surrender_progress > 0.25
+			}
+		}
+		
+		add_political_power = -10
+		
+		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] REFUSED White Peace from [FROM.GetName]."
+
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			set_country_flag = { flag = plus_cs_peace_cooldown days = 30 }
+		}
+	}
+}

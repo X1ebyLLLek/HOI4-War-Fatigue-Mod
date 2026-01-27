@@ -128,7 +128,7 @@
  COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
  COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
 
-# --- NOWE: Honorowa Kapitulacja ---
+ # --- NOWE: Honorowa Kapitulacja ---
  offer_honorable_submission:0 "Zaoferuj honorową kapitulację"
  offer_honorable_submission_desc:0 "Nasza sytuacja jest krytyczna. Zaproponujemy stanie się poddanym wroga w zamian za ochronę."
  
@@ -159,7 +159,7 @@
  plus_cs.submission.4.a:0 "Musimy interweniować!"
  plus_cs.submission.4.b:0 "To nie nasza walka."
 
-# Chaos oficerski
+ # Chaos oficerski
  officer_shortage_mild:0 "§YChaos w dowództwie§!"
  officer_shortage_mild_desc:0 "Szybka rozbudowa armii obniżyła jakość kadry oficerskiej. Rozkazy są opóźniane."
  officer_shortage_high:0 "§OKryzys dowodzenia§!"
@@ -167,7 +167,7 @@
  officer_shortage_collapse:0 "§RZapaść Sztabu Generalnego§!"
  officer_shortage_collapse_desc:0 "Łańcuch dowodzenia faktycznie się rozpadł. W sztabach panuje panika."
 
-# --- Decyzje PP: Zarządzanie kryzysowe ---
+ # --- Decyzje PP: Zarządzanie kryzysowe ---
  decision_category_crisis_management:0 "Zarządzanie kryzysowe"
  decree_stop_panic:0 "Dekret: „Ani kroku wstecz!”"
  decree_stop_panic_desc:0 "Panika szerzy się po utracie kluczowych miast. Musimy wydać surowy dekret, aby natychmiast przywrócić porządek."
@@ -183,7 +183,7 @@
  stimulus_mil_industrial_complex:0 "Zastrzyk militarno-przemysłowy"
  stimulus_mil_industrial_complex_desc:0 "Sztuczne wspieranie przemysłu zbrojeniowego. Kosztowne, ale konieczne dla produkcji wojennej."
 
-# --- NOWE: Bezwładność przemysłowa i inflacja ---
+ # --- NOWE: Bezwładność przemysłowa i inflacja ---
  war_inflation_crisis:0 "Kryzys inflacji wojennej"
  war_inflation_crisis_desc:0 "Wojna trwa zbyt długo. Waluta traci na wartości, a budownictwo cywilne zwalnia."
 
@@ -196,7 +196,7 @@
  economic_retooling_shock_major:0 "Paraliż przemysłowy"
  economic_retooling_shock_major_desc:0 "Drastyczne zmiany gospodarcze wywołały chaos. Maszyny są wymieniane. Produkcja się załamuje."
 
-# --- NOWE: Los Marionetek ---
+ # --- NOWE: Los Marionetek ---
  plus_cs.puppet_fate.t:0 "Upadek Seniora"
  plus_cs.puppet_fate.d:0 "Nasz rząd otrzymał szokujące wieści: nasz senior skapitulował i przyjął warunki [event_target:new_potential_master.GetNameDef]. Stary porządek upadł.\n\nZwycięzcy żądają, abyśmy natychmiast złożyli broń i uznali ich władzę. Alternatywą jest całkowita niepodległość, ale w stanie wojny z ich potężną machiną wojenną."
  plus_cs.puppet_fate.a:0 "Uznajemy nowego pana (Premie gospodarcze)"
@@ -206,7 +206,7 @@
  high_status_puppet_benefit:0 "Uprzywilejowany Poddany"
  high_status_puppet_benefit_desc:0 "Pokojowo przyjęliśmy nowy porządek. W zamian za naszą lojalność, nasz nowy senior inwestuje w naszą gospodarkę i gwarantuje stabilność."
 
-# В секцию "Idee"
+ # В секцию "Idee"
  panic_retreat_shock:0 "Szok panicznego odwrotu"
  panic_retreat_shock_desc:0 "Utrata kluczowych miast wywołała falę paniki w armii. Organizacja spada, żołnierze dezerterują. Musimy podjąć surowe środki!"
 
@@ -214,7 +214,7 @@
  offer_preventive_submission:0 "Zaoferuj prewencyjne poddanie się"
  offer_preventive_submission_desc:0 "Wojna z wielkim mocarstwem to samobójstwo. Musimy zaoferować zostanie ich protektoratem, zanim nasze miasta zostaną zniszczone."
 
-# --- POPRAWKI I UZUPEŁNIENIA (Fixes and Additions) ---
+ # --- POPRAWKI I UZUPEŁNIENIA (Fixes and Additions) ---
  
  # Brakująca opcja w wydarzeniu o kapitulacji
  plus_cs.submission.1.c:0 "Oddaj żądane terytoria (Pokój)"
@@ -238,92 +238,137 @@
  # Opis Ducha (Jeśli kod używa id=conditional_surrender)
  conditional_surrender_desc:0 "Ten kraj uznał swoją porażkę na warunkach. Nie może dołączać do frakcji ani tworzyć sojuszy, dopóki obowiązują ograniczenia traktatowe."
 
-# ==============================================================================
-# NOWE: MECHANIKI WOJNY SWIATOWEJ I SOJUSZY
-# ==============================================================================
+ # ==============================================================================
+ # NOWE: MECHANIKI WOJNY SWIATOWEJ I SOJUSZY
+ # ==============================================================================
 
-  plus_cs.410.t:0 "Odrebny pokoj na froncie [From.GetAdjective]"
-  plus_cs.410.d:0 "[From.GetNameDef] zawarla odrebny pokoj z naszym wrogiem. Dzieki naszej obecnosci militarnej kontrola nad terytoriami, ktore okupujemy, zostala zachowana."
-  plus_cs.410.a:0 "Nasze pozycje sa zabezpieczone."
-  plus_cs_territory_preserved_tt:0 "§GTerytoria pod nasza kontrola zostaly zachowane!§!"
-  
-  plus_cs.420.t:0 "[From.GetNameDefCap] prosi o opuszczenie sojuszu"
-  plus_cs.420.d:0 "Rzad [From.GetNameDef] poprosil o pozwolenie na opuszczenie naszego sojuszu w celu negocjacji odrebnego pokoju."
-  plus_cs.420.a:0 "Zwalniamy ich (Pozwol wyjsc)"
-  plus_cs.420.b:0 "Musza walczyc! (Odmow)"
-  
-  plus_cs.421.t:0 "Pozwolenie na wyjscie udzielone"
-  plus_cs.421.d:0 "Nasz przywodca sojuszu zrozumial nasza sytuacje i pozwolil nam opuscic sojusz."
-  plus_cs.421.a:0 "Jestesmy wdzieczni za zrozumienie."
-  plus_cs_can_now_peace_tt:0 "§GMozesz teraz negocjowac odrebny pokoj§!"
-  
-  plus_cs.422.t:0 "Wyjscie odmowione!"
-  plus_cs.422.d:0 "Nasz przywodca sojuszu odrzucil nasza prosbe o wyjscie. Wymagaja, abysmy kontynuowali walke pomimo wyczerpania naszego kraju."
-  plus_cs.422.a:0 "Podporzadkowac sie i kontynuowac wojne"
-  plus_cs.422.b:0 "Wyjsc wbrew ich woli! (Konsekwencje)"
-  
-  plus_cs.430.t:0 "[From.GetNameDefCap] prosi o kapitulacje"
-  plus_cs.430.d:0 "[From.GetNameDef] skapitulowala i prosi o nasza zgode na pelna kapitulacje przed wrogiem."
-  plus_cs.430.a:0 "Zezwolic na odrebna kapitulacje"
-  plus_cs.430.b:0 "Musza czekac na ogolny pokoj"
-  
-  plus_cs.431.t:0 "Pozwolenie udzielone"
-  plus_cs.431.d:0 "Nasz przywodca sojuszu pozwolil nam negocjowac odrebny pokoj. Opuszczamy sojusz."
-  plus_cs.431.a:0 "To jedyne wyjscie..."
-  
-  plus_cs.432.t:0 "Kapitulacja odmowiona"
-  plus_cs.432.d:0 "Odmowiono nam prawa do odrebnego pokoju. Pozostajemy skapitulowanym czlonkiem sojuszu."
-  plus_cs.432.a:0 "Nie mamy wyboru..."
+ # --- Benachrichtigung über Separatfrieden ---
+ plus_cs.410.t:0 "Odrebny pokoj na froncie [From.GetAdjective]"
+ plus_cs.410.d:0 "[From.GetNameDef] zawarla odrebny pokoj z naszym wrogiem. Dzieki naszej obecnosci militarnej kontrola nad terytoriami, ktore okupujemy, zostala zachowana."
+ plus_cs.410.a:0 "Nasze pozycje sa zabezpieczone."
+ plus_cs_territory_preserved_tt:0 "§GTerytoria pod nasza kontrola zostaly zachowane!§!"
 
-  forced_continuation_war:0 "Wymuszona kontynuacja wojny"
-  forced_continuation_war_desc:0 "Nasz sojusz wymaga, abysmy kontynuowali walke pomimo naszego wyczerpania."
-  faction_betrayal:0 "Zdrada sojuszu"
-  faction_deserter:0 "Dezercja z sojuszu"
-  peace_territory_preserved:0 "Kontrola terytorialna zachowana"
+ # --- Fraktionsführer: Mitglied will austreten ---
+ plus_cs.420.t:0 "[From.GetNameDefCap] prosi o opuszczenie sojuszu"
+ plus_cs.420.d:0 "Rzad [From.GetNameDef] poprosil o pozwolenie na opuszczenie naszego sojuszu w celu negocjacji odrebnego pokoju."
+ plus_cs.420.a:0 "Zwalniamy ich (Pozwol wyjsc)"
+ plus_cs.420.b:0 "Musza walczyc! (Odmow)"
 
- # --- Smart Diplomacy & Crises (English Fallback) ---
+ # --- Fraktionsmitglied: Austritt erlaubt ---
+ plus_cs.421.t:0 "Pozwolenie na wyjscie udzielone"
+ plus_cs.421.d:0 "Nasz przywodca sojuszu zrozumial nasza sytuacje i pozwolil nam opuscic sojusz. Mozemy negocjowac."
+ plus_cs.421.a:0 "Jestesmy wdzieczni za zrozumienie."
+ plus_cs_can_now_peace_tt:0 "§GMozesz teraz negocjowac odrebny pokoj§!"
+
+ # --- Fraktionsmitglied: Austritt verweigert ---
+ plus_cs.422.t:0 "Wyjscie odmowione!"
+ plus_cs.422.d:0 "Nasz przywodca sojuszu odrzucil nasza prosbe o wyjscie. Wymagaja, abysmy kontynuowali walke."
+ plus_cs.422.a:0 "Podporzadkowac sie i kontynuowac wojne"
+ plus_cs.422.b:0 "Wyjsc wbrew ich woli! (Konsekwencje)"
+
+ # --- Kapitulierter Verbündeter will Frieden ---
+ plus_cs.430.t:0 "[From.GetNameDefCap] prosi o kapitulacje"
+ plus_cs.430.d:0 "[From.GetNameDef] skapitulowala i prosi o nasza zgode na pelna kapitulacje przed wrogiem."
+ plus_cs.430.a:0 "Zezwolic na odrebna kapitulacje"
+ plus_cs.430.b:0 "Musza czekac na ogolny pokoj"
+
+ # --- Separate Kapitulation erlaubt ---
+ plus_cs.431.t:0 "Pozwolenie udzielone"
+ plus_cs.431.d:0 "Nasz przywodca sojuszu pozwolil nam negocjowac odrebny pokoj. Opuszczamy sojusz."
+ plus_cs.431.a:0 "To jedyne wyjscie..."
+
+ # --- Kapitulation verweigert ---
+ plus_cs.432.t:0 "Kapitulacja odmowiona"
+ plus_cs.432.d:0 "Odmowiono nam prawa do odrebnego pokoju. Pozostajemy skapitulowanym czlonkiem sojuszu."
+ plus_cs.432.a:0 "Nie mamy wyboru..."
+
+ forced_continuation_war:0 "Wymuszona kontynuacja wojny"
+ forced_continuation_war_desc:0 "Nasz sojusz wymaga, abysmy kontynuowali walke pomimo naszego wyczerpania."
+ faction_betrayal:0 "Zdrada sojuszu"
+ faction_deserter:0 "Dezercja z sojuszu"
+ peace_territory_preserved:0 "Kontrola terytorialna zachowana"
+
+ # --- Smart Diplomacy & Crises (Inteligentna Dyplomacja i Kryzysy) ---
  
- plus_cs_diplomacy.1.t:0 "Sovereignty Question"
- plus_cs_diplomacy.1.d:0 "Facing the overwhelming superiority of our neighbor, our command considers war suicide. We have a chance to save the nation by offering to become a protectorate."
- plus_cs_diplomacy.1.a:0 "Send Vassalization Offer"
+ plus_cs_diplomacy.1.t:0 "Kwestia Suwerenności"
+ plus_cs_diplomacy.1.d:0 "W obliczu miażdżącej przewagi naszego sąsiada, nasze dowództwo uważa wojnę za samobójstwo. Mamy szansę ocalić naród, oferując zostanie protektoratem."
+ plus_cs_diplomacy.1.a:0 "Wyślij ofertę wasalizacji"
  
- plus_cs_diplomacy.2.t:0 "Submission Offer"
- plus_cs_diplomacy.2.d:0 "[From.GetNameDef] understands the inevitable and offers to become our protectorate in exchange for protection. This allows us to expand our influence without firing a shot."
- plus_cs_diplomacy.2.a:0 "Accept their oath of allegiance"
- plus_cs_diplomacy.2.b:0 "We want their land, not oaths! (Annexation)"
- peaceful_vassalization:0 "Peaceful Vassalization"
- diplo_insult:0 "Diplomatic Insult"
+ plus_cs_diplomacy.2.t:0 "Oferta Poddania się"
+ plus_cs_diplomacy.2.d:0 "[From.GetNameDef] rozumie nieuchronność i oferuje, że stanie się naszym protektoratem w zamian za ochronę. Pozwala to nam rozszerzyć wpływy bez jednego wystrzału."
+ plus_cs_diplomacy.2.a:0 "Przyjmij ich przysięgę wierności"
+ plus_cs_diplomacy.2.b:0 "Chcemy ich ziemi, nie przysiąg! (Aneksja)"
+ peaceful_vassalization:0 "Pokojowa wasalizacja"
+ diplo_insult:0 "Dyplomatyczna zniewaga"
  
- plus_cs_diplomacy.10.t:0 "Overlord Collapse"
- plus_cs_diplomacy.10.d:0 "Our master [Overlord.GetName] is losing the war. Chaos in the metropole gives us a unique chance to regain independence."
- plus_cs_diplomacy.10.a:0 "Declare Independence!"
- plus_cs_diplomacy.10.b:0 "We will remain loyal to the end"
+ plus_cs_diplomacy.10.t:0 "Upadek Seniora"
+ plus_cs_diplomacy.10.d:0 "Nasz pan [Overlord.GetName] przegrywa wojnę. Chaos w metropolii daje nam unikalną szansę na odzyskanie niepodległości."
+ plus_cs_diplomacy.10.a:0 "Ogłoś niepodległość!"
+ plus_cs_diplomacy.10.b:0 "Pozostaniemy lojalni do końca"
  
- plus_cs_diplomacy.20.t:0 "Invasion Threat"
- plus_cs_diplomacy.20.d:0 "The enemy is preparing an invasion, and our chances in war are zero. We must offer any concessions to prevent a catastrophe."
- plus_cs_diplomacy.20.a:0 "Offer Territorial Concessions"
+ plus_cs_diplomacy.20.t:0 "Groźba Inwazji"
+ plus_cs_diplomacy.20.d:0 "Wróg przygotowuje inwazję, a nasze szanse w wojnie są zerowe. Musimy zaoferować wszelkie ustępstwa, aby zapobiec katastrofie."
+ plus_cs_diplomacy.20.a:0 "Zaoferuj ustępstwa terytorialne"
  
- plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
- plus_cs_diplomacy.21.d:0 "[From.GetNameDef], seeing the might of our army on the border, offers to meet our territorial demands without a fight if we guarantee non-aggression in the future."
- plus_cs_diplomacy.21.a:0 "Agree (Receive Territories)"
- plus_cs_diplomacy.21.b:0 "We will take everything by force!"
+ plus_cs_diplomacy.21.t:0 "Dyplomatyczna Zapłata"
+ plus_cs_diplomacy.21.d:0 "[From.GetNameDef], widząc potęgę naszej armii na granicy, oferuje spełnienie naszych żądań terytorialnych bez walki, jeśli zagwarantujemy nieagresję w przyszłości."
+ plus_cs_diplomacy.21.a:0 "Zgódź się (Otrzymasz terytoria)"
+ plus_cs_diplomacy.21.b:0 "Weźmiemy wszystko siłą!"
  
  # --- Internal Crisis ---
- plus_cs_internal.1.t:0 "Generals' Ultimatum"
- plus_cs_internal.1.d:0 "The army is bled dry. Casualties have exceeded the critical mark. The General Staff demands either immediate peace or a change of government."
- plus_cs_internal.1.a:0 "Conduct Purges (Refuse)"
- plus_cs_internal.1.b:0 "Government Resigns (Coup)"
- army_purge_aftershock:0 "Aftermath of Army Purges"
+ plus_cs_internal.1.t:0 "Ultimatum Generałów"
+ plus_cs_internal.1.d:0 "Armia jest wykrwawiona. Straty przekroczyły punkt krytyczny. Sztab Generalny żąda natychmiastowego pokoju lub zmiany rządu."
+ plus_cs_internal.1.a:0 "Przeprowadź czystki (Odmów)"
+ plus_cs_internal.1.b:0 "Rząd podaje się do dymisji (Pucz)"
+ army_purge_aftershock:0 "Następstwa czystek w armii"
  
  # --- Partisans ---
- broken_nation_resistance:0 "Broken but Unconquered Nation"
- plus_cs_partisan_activity:0 "Partisan Activity (Guerrilla)"
+ broken_nation_resistance:0 "Złamany, ale niepokonany naród"
+ plus_cs_partisan_activity:0 "Działalność partyzancka (Guerilla)"
  
  # --- Crisis Decisions ---
- plus_cs_marshall_law:0 "Declare Martial Law"
- plus_cs_marshall_law_desc:0 "Harsh measures to restore order. Reduces productivity but keeps the country from collapsing."
- plus_cs_patriotic_propaganda:0 "Propaganda 'Motherland in Danger'"
- plus_cs_patriotic_propaganda_desc:0 "Mobilization of all media resources to boost morale."
- plus_cs_faction_bailout:0 "Economic Aid to Ally"
- plus_cs_faction_bailout_desc:0 "Direct resources to stabilize our ally's currency."
- plus_cs_bailout_tt:0 "Removes §RInflation§! from target country."
+ plus_cs_marshall_law:0 "Wprowadź stan wojenny"
+ plus_cs_marshall_law_desc:0 "Surowe środki w celu przywrócenia porządku. Zmniejsza produktywność, ale powstrzymuje kraj przed upadkiem."
+ plus_cs_patriotic_propaganda:0 "Propaganda „Ojczyzna w niebezpieczeństwie”"
+ plus_cs_patriotic_propaganda_desc:0 "Mobilizacja wszystkich mediów w celu podniesienia morale."
+ plus_cs_faction_bailout:0 "Pomoc gospodarcza dla sojusznika"
+ plus_cs_faction_bailout_desc:0 "Skieruj zasoby na stabilizację waluty sojusznika."
+ plus_cs_bailout_tt:0 "Usuwa §RInflację§! z kraju docelowego."
+
+ # Peace Acceptance Chance Tooltips
+ plus_cs_chance_high_tt:0 "§GWysoka szansa na akceptację§!"
+ plus_cs_chance_medium_tt:0 "§YŚrednia szansa na akceptację§!"
+ plus_cs_chance_low_tt:0 "§RNiska szansa na akceptację§!"
+
+ # Missing Keys (Brakujące klucze)
+ plus_cs.20.t:0 "[From.GetNameDefCap] Prosi o zgodę na pokój"
+ plus_cs.20.d:0 "[From.GetNameDef] prosi nas o zgodę na negocjacje pokojowe z wrogiem. Twierdzą, że nie są w stanie kontynuować wojny."
+ plus_cs.20.a:0 "Zezwól na negocjacje"
+ plus_cs.20.b:0 "Zabroń! (Weto)"
+ plus_cs.21.t:0 "Zgoda udzielona"
+ plus_cs.21.d:0 "Lider naszej frakcji zgodził się, abyśmy negocjowali pokój."
+ plus_cs.22.t:0 "Zgoda odmówiona"
+ plus_cs.22.d:0 "Lider naszej frakcji zabronił nam negocjować pokój. Żądają, abyśmy walczyli dalej."
+ plus_cs.22.a:0 "Musimy być posłuszni."
+ plus_cs.22.b:0 "I tak będziemy negocjować! (Opuść frakcję)"
+ plus_cs.23.t:0 "[From.GetNameDefCap] Proponuje odrębny pokój"
+ plus_cs.23.d:0 "[From.GetNameDef] oferuje odrębną umowę pokojową, sprzeciwiając się liderowi frakcji. Jeśli zostanie zaakceptowana, opuszczą frakcję."
+ plus_cs.23.a:0 "Odmów"
+ plus_cs.23.b:0 "Zaakceptuj odrębny pokój"
+ plus_cs_internal.3.t:0 "Negocjacje Białego Pokoju"
+ plus_cs_internal.3.d:0 "Nowy rząd dąży do natychmiastowego zakończenia wojny."
+ plus_cs_internal.3.a:0 "Wyślij ofertę"
+ plus_cs_purge_tt:0 "§RCzystka w Naczelnym Dowództwie zmniejsza organizację armii na 90 dni§!"
+ peace_treaty_desc:0 ""
+ 
+ # --- LOGIC EVENTS (Debata o Kapitullacji) ---
+ plus_cs_logic.1.t:0 "Rada Gabinetowa: Kapitulacja"
+ plus_cs_logic.1.d:0 "W rządzie panuje chaos. Wrogowie są u bram, a niektórzy ministrowie błagają o pokój. Jednak 'jastrzębie' twierdzą, że poddanie się to zdrada."
+ plus_cs_logic.1.a:0 "Walczymy dalej! (Odmowa)"
+ plus_cs_logic.1.b:0 "Musimy prosić o pokój (Kapitulacja)"
+ plus_cs_surrender_proceed_tt:0 "§GPrzejdź do oficjalnych negocjacji§!"
+ 
+ # --- Leader Traits Debug ---
+ plus_cs_spirit_fanatic_desc:0 "Ten przywódca nigdy się nie podda, dopóki kraj nie zostanie zniszczony.\n\n§RAcceptacja Pokoju AI: -100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_desc:0 "Ten przywódca jest pesimista i będzie szukał pokoju przy pierwszych problemach.\n\n§GAcceptacja Pokoju AI: +100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_desc:0 "Ten przywódca jest uparty i stawia silny opór kapitulacji.\n\n§YAcceptacja Pokoju AI: Normalna§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"

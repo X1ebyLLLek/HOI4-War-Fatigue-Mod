@@ -1,31 +1,9 @@
 add_namespace = plus_cs
 
 # ==============================================================================
-# СОБЫТИЯ МИРОВЫХ ВОЙН И АЛЬЯНСОВ
-# Обработка сложных сценариев с несколькими воюющими сторонами
+# FACTION PEACE EVENTS
+# Handling members asking faction leaders to leave/surrender
 # ==============================================================================
-
-# =============================================
-# plus_cs.410 - Уведомление о сепаратном мире
-# FROM = страна, заключившая мир
-# Получатель = третья сторона, чьи территории сохранены
-# =============================================
-country_event = {
-	id = plus_cs.410
-	title = plus_cs.410.t
-	desc = plus_cs.410.d
-	picture = GFX_report_event_generic_sign_treaty2
-	is_triggered_only = yes
-
-	option = {
-		name = plus_cs.410.a
-		ai_chance = { base = 100 }
-		
-		# Информационное событие - просто подтверждение
-		add_political_power = 10
-		custom_effect_tooltip = plus_cs_territory_preserved_tt
-	}
-}
 
 # =============================================
 # plus_cs.420 - Лидер альянса: член хочет выйти
@@ -203,94 +181,5 @@ country_event = {
 		add_political_power = -100
 		
 		custom_effect_tooltip = plus_cs_can_now_peace_tt
-	}
-}
-
-# =============================================
-# plus_cs.430 - Капитулировавший союзник хочет мира
-# Когда страна капитулировала и просит у лидера разрешения сдаться
-# =============================================
-country_event = {
-	id = plus_cs.430
-	title = plus_cs.430.t
-	desc = plus_cs.430.d
-	picture = GFX_report_event_generic_surrender
-	is_triggered_only = yes
-
-	immediate = {
-		FROM = { save_event_target_as = capitulated_ally }
-	}
-
-	# Разрешить сдачу
-	option = {
-		name = plus_cs.430.a
-		ai_chance = {
-			base = 50
-			modifier = {
-				add = 50
-				has_government = democratic
-			}
-		}
-		
-		event_target:capitulated_ally = {
-			remove_from_faction = yes
-			# Страна теперь может заключить мир отдельно
-			country_event = { id = plus_cs.431 }
-		}
-	}
-
-	# Отказать - пусть сражаются
-	option = {
-		name = plus_cs.430.b
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 2.0
-				is_major = yes
-			}
-		}
-		
-		# Ничего не делаем - страна остается капитулировавшей в альянсе
-		event_target:capitulated_ally = {
-			country_event = { id = plus_cs.432 }
-		}
-	}
-}
-
-# =============================================
-# plus_cs.431 - Разрешена отдельная капитуляция
-# =============================================
-country_event = {
-	id = plus_cs.431
-	title = plus_cs.431.t
-	desc = plus_cs.431.d
-	picture = GFX_report_event_generic_sign_treaty1
-	is_triggered_only = yes
-
-	option = {
-		name = plus_cs.431.a
-		
-		add_stability = 0.10
-		
-		# Теперь AI будет активно искать мир
-		set_country_flag = { flag = plus_cs_seeking_peace days = 60 }
-	}
-}
-
-# =============================================
-# plus_cs.432 - Отказано в капитуляции
-# =============================================
-country_event = {
-	id = plus_cs.432
-	title = plus_cs.432.t
-	desc = plus_cs.432.d
-	picture = GFX_report_event_generic_parliament
-	is_triggered_only = yes
-
-	option = {
-		name = plus_cs.432.a
-		
-		add_stability = -0.10
-		add_war_support = -0.10
 	}
 }

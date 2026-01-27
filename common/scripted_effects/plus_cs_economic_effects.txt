@@ -1,0 +1,163 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: ECONOMIC LOGIC
+# Extracted from plus_cs_optimization.txt to reduce monolithic event size.
+# Includes: Shadow Economy, Economic Overheat, Investment Logic.
+# ==============================================================================
+
+# =============================================
+# plus_cs_economy_step
+# Main entry point for economic calculations
+# =============================================
+plus_cs_economy_step = {
+	
+	# 1. Determine Current Economy Law & Apply Shadow Economy
+	set_temp_variable = { current_econ_law = 0 }
+	
+	if = { 
+		limit = { has_idea = civilian_economy } 
+		set_temp_variable = { current_econ_law = 1 } 
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_econ_civilian } }
+			remove_dynamic_modifier = { modifier = shadow_econ_early }
+			remove_dynamic_modifier = { modifier = shadow_econ_partial }
+			remove_dynamic_modifier = { modifier = shadow_econ_war }
+			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			add_dynamic_modifier = { modifier = shadow_econ_civilian }
+		}
+	}
+	else_if = { 
+		limit = { has_idea = low_economic_mobilisation } 
+		set_temp_variable = { current_econ_law = 2 } 
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_econ_early } }
+			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
+			remove_dynamic_modifier = { modifier = shadow_econ_partial }
+			remove_dynamic_modifier = { modifier = shadow_econ_war }
+			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			add_dynamic_modifier = { modifier = shadow_econ_early }
+		}
+	}
+	else_if = { 
+		limit = { has_idea = partial_economic_mobilisation } 
+		set_temp_variable = { current_econ_law = 3 } 
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_econ_partial } }
+			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
+			remove_dynamic_modifier = { modifier = shadow_econ_early }
+			remove_dynamic_modifier = { modifier = shadow_econ_war }
+			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			add_dynamic_modifier = { modifier = shadow_econ_partial }
+		}
+	}
+	else_if = { 
+		limit = { has_idea = war_economy } 
+		set_temp_variable = { current_econ_law = 4 } 
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_econ_war } }
+			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
+			remove_dynamic_modifier = { modifier = shadow_econ_early }
+			remove_dynamic_modifier = { modifier = shadow_econ_partial }
+			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			add_dynamic_modifier = { modifier = shadow_econ_war }
+		}
+	}
+	else_if = { 
+		limit = { has_idea = tot_economic_mobilisation } 
+		set_temp_variable = { current_econ_law = 5 } 
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_econ_total } }
+			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
+			remove_dynamic_modifier = { modifier = shadow_econ_early }
+			remove_dynamic_modifier = { modifier = shadow_econ_partial }
+			remove_dynamic_modifier = { modifier = shadow_econ_war }
+			add_dynamic_modifier = { modifier = shadow_econ_total }
+		}
+	}
+	
+	# 2. Shadow Conscription Logic
+	if = {
+		limit = { has_idea = service_by_requirement }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_law_service_penalty } }
+			add_dynamic_modifier = { modifier = shadow_law_service_penalty }
+		}
+		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
+		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+	}
+	else_if = {
+		limit = { has_idea = all_adults_serve }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_law_adults_penalty } }
+			add_dynamic_modifier = { modifier = shadow_law_adults_penalty }
+		}
+		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
+		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+	}
+	else_if = {
+		limit = { has_idea = scraping_the_barrel }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = shadow_law_scraping_penalty } }
+			add_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+		}
+		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
+		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
+	}
+	else = {
+		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
+		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
+		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+	}
+
+	# 3. Retooling Shock (Change Detector)
+	if = {
+		limit = {
+			check_variable = { plus_cs_prev_econ_law > 0 }
+			NOT = { check_variable = { var = current_econ_law value = var:plus_cs_prev_econ_law } }
+			check_variable = { var = current_econ_law value = var:plus_cs_prev_econ_law compare = greater_than }
+		}
+		add_dynamic_modifier = { modifier = economic_retooling_shock_medium days = 60 }
+		set_variable = { economy_overheat_counter = 0 }
+	}
+	
+	if = {
+		limit = { check_variable = { current_econ_law > 0 } }
+		set_variable = { plus_cs_prev_econ_law = current_econ_law }
+	}
+
+	# 4. Civilian Investment Logic
+	if = {
+		limit = { has_idea = civilian_economy has_war = no }
+		random_list = {
+			96 = { } 
+			4 = {
+				random_owned_state = {
+					limit = { is_core_of = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+				add_political_power = 5
+			}
+		}
+	}
+
+	# 5. Economic Overheat (Burnout)
+	if = {
+		limit = { has_idea = tot_economic_mobilisation }
+		add_to_variable = { economy_overheat_counter = 1 }
+		
+		if = {
+			limit = { check_variable = { economy_overheat_counter > 50 } }
+			add_dynamic_modifier = { modifier = economic_retooling_shock_minor days = 35 }
+		}
+	}
+	else_if = {
+		limit = { has_idea = war_economy }
+		if = {
+			limit = { check_variable = { economy_overheat_counter > 0 } }
+			subtract_from_variable = { economy_overheat_counter = 0.5 }
+		}
+	}
+	else = {
+		set_variable = { economy_overheat_counter = 0 }
+	}
+}

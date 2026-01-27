@@ -1,15 +1,38 @@
 leader_traits = {
-	successful_negotiator = {
-		name = successful_negotiator
+	plus_cs_spirit_fanatic = {
 		random = no
-		political_power_gain = 0.05
-		ai_will_do = { factor = 1 }
-	}
+		sprite = 0
+		# Fanatics fight harder
+		# Fanatics fight harder
+		army_core_defence_factor = 0.1
+		army_org_factor = 0.1 # +10% Org
+		ai_will_do = {
+			factor = 1
+		}
 
-	humiliated_leader = {
-		name = humiliated_leader
+	}
+	
+	plus_cs_spirit_resilient = {
 		random = no
-		stability_factor = -0.10
-		ai_will_do = { factor = 1 }
+		sprite = 0
+		# Standard
+		stability_weekly = 0.001
+		ai_will_do = {
+			factor = 1
+		}
+
+	}
+	
+	plus_cs_spirit_defeatist = {
+		random = no
+		sprite = 0
+		# Defeatists weaken the army morale
+		# Defeatists weaken the army morale
+		army_morale_factor = -0.1 # Recovery rate
+		surrender_limit = 0.1 # +10% Surrender Limit (easier to surrender)
+		ai_will_do = {
+			factor = 1
+		}
+
 	}
 }

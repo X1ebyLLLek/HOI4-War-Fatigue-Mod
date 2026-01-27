@@ -1,0 +1,17 @@
+# ==========================================
+# PLUS CS ON ACTIONS
+# ==========================================
+
+on_actions = {
+	on_monthly = {
+		effect = {
+			every_country = {
+				limit = {
+					has_war = yes
+					is_ai = yes # Only AI runs this roulette
+				}
+				country_event = { id = plus_cs_pulse.1 }
+			}
+		}
+	}
+}

@@ -10,7 +10,6 @@ plus_cs_crisis_management = {
 		available = {
 			has_war = yes
 			has_stability < 0.5
-			NOT = { has_idea = plus_cs_marshall_law_spirit }
 		}
 		
 		cost = 50

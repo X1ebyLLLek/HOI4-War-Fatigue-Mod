@@ -1,0 +1,95 @@
+add_namespace = plus_cs
+
+# ==============================================================================
+# CAPITULATION PEACE EVENTS
+# Handling capitulated allies asking to seek separate peace
+# ==============================================================================
+
+# =============================================
+# plus_cs.430 - Капитулировавший союзник хочет мира
+# Когда страна капитулировала и просит у лидера разрешения сдаться
+# =============================================
+country_event = {
+	id = plus_cs.430
+	title = plus_cs.430.t
+	desc = plus_cs.430.d
+	picture = GFX_report_event_generic_surrender
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { save_event_target_as = capitulated_ally }
+	}
+
+	# Разрешить сдачу
+	option = {
+		name = plus_cs.430.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 50
+				has_government = democratic
+			}
+		}
+		
+		event_target:capitulated_ally = {
+			remove_from_faction = yes
+			# Страна теперь может заключить мир отдельно
+			country_event = { id = plus_cs.431 }
+		}
+	}
+
+	# Отказать - пусть сражаются
+	option = {
+		name = plus_cs.430.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2.0
+				is_major = yes
+			}
+		}
+		
+		# Ничего не делаем - страна остается капитулировавшей в альянсе
+		event_target:capitulated_ally = {
+			country_event = { id = plus_cs.432 }
+		}
+	}
+}
+
+# =============================================
+# plus_cs.431 - Разрешена отдельная капитуляция
+# =============================================
+country_event = {
+	id = plus_cs.431
+	title = plus_cs.431.t
+	desc = plus_cs.431.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.431.a
+		
+		add_stability = 0.10
+		
+		# Теперь AI будет активно искать мир
+		set_country_flag = { flag = plus_cs_seeking_peace days = 60 }
+	}
+}
+
+# =============================================
+# plus_cs.432 - Отказано в капитуляции
+# =============================================
+country_event = {
+	id = plus_cs.432
+	title = plus_cs.432.t
+	desc = plus_cs.432.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.432.a
+		
+		add_stability = -0.10
+		add_war_support = -0.10
+	}
+}

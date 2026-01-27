@@ -128,7 +128,7 @@
  COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
  COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
 
-# --- NEU: Ehrenhafte Unterwerfung ---
+ # --- NEU: Ehrenhafte Unterwerfung ---
  offer_honorable_submission:0 "Ehrenhafte Unterwerfung anbieten"
  offer_honorable_submission_desc:0 "Unsere Lage ist kritisch. Wir bieten an, ein Untertan des Feindes zu werden, im Austausch für Schutz."
  
@@ -159,7 +159,7 @@
  plus_cs.submission.4.a:0 "Wir müssen eingreifen!"
  plus_cs.submission.4.b:0 "Das ist nicht unser Kampf."
 
-# Offizierschaos
+ # Offizierschaos
  officer_shortage_mild:0 "§YFührungsverwirrung§!"
  officer_shortage_mild_desc:0 "Die rasche Expansion der Armee hat die Qualität unseres Offizierskorps verwässert. Befehle werden verzögert."
  officer_shortage_high:0 "§OFührungskrise§!"
@@ -167,7 +167,7 @@
  officer_shortage_collapse:0 "§RZusammenbruch des Generalstabs§!"
  officer_shortage_collapse_desc:0 "Die Befehlskette hat sich faktisch aufgelöst. Panik regiert."
 
-# --- PP-Entscheidungen: Krisenmanagement ---
+ # --- PP-Entscheidungen: Krisenmanagement ---
  decision_category_crisis_management:0 "Krisenmanagement"
  decree_stop_panic:0 "Dekret: 'Keinen Schritt zurück!'"
  decree_stop_panic_desc:0 "Panik breitet sich nach dem Verlust wichtiger Städte aus. Wir müssen ein hartes Dekret erlassen, um die Ordnung sofort wiederherzustellen."
@@ -183,7 +183,7 @@
  stimulus_mil_industrial_complex:0 "Militär-Industrielle Injektion"
  stimulus_mil_industrial_complex_desc:0 "Künstliche Stützung der Rüstungsindustrie. Teuer, aber notwendig für die totale Kriegsproduktion."
 
-# --- NEU: Industrielle Trägheit & Inflation ---
+ # --- NEU: Industrielle Trägheit & Inflation ---
  war_inflation_crisis:0 "Kriegsinflationskrise"
  war_inflation_crisis_desc:0 "Der Krieg dauert zu lange. Die Währung ist entwertet und der zivile Bau verlangsamt sich."
 
@@ -196,7 +196,7 @@
  economic_retooling_shock_major:0 "Industrielle Lähmung"
  economic_retooling_shock_major_desc:0 "Drastische wirtschaftliche Veränderungen haben Chaos verursacht. Maschinen werden ausgetauscht. Die Produktion bricht ein."
 
-# --- NEU: Schicksal der Marionetten ---
+ # --- NEU: Schicksal der Marionetten ---
  plus_cs.puppet_fate.t:0 "Der Fall des Lehnsherrn"
  plus_cs.puppet_fate.d:0 "Unsere Regierung hat schockierende Nachrichten erhalten: Unser Lehnsherr hat kapituliert und die Bedingungen von [event_target:new_potential_master.GetNameDef] akzeptiert. Die alte Ordnung ist zusammengebrochen.\n\nDie Sieger fordern, dass wir sofort die Waffen niederlegen und ihre Autorität anerkennen. Die Alternative ist die totale Unabhängigkeit, aber wir bleiben im Krieg mit ihrer mächtigen Kriegsmaschinerie."
  plus_cs.puppet_fate.a:0 "Wir erkennen unseren neuen Meister an (Wirtschaftsboni)"
@@ -206,7 +206,7 @@
  high_status_puppet_benefit:0 "Privilegiertes Subjekt"
  high_status_puppet_benefit_desc:0 "Wir haben die neue Ordnung friedlich akzeptiert. Im Austausch für unsere Loyalität investiert unser neuer Lehnsherr in unsere Wirtschaft und garantiert Stabilität."
 
-# В секцию "Ideen" (или в конец файла)
+ # В секцию "Ideen" (или в конец файла)
  panic_retreat_shock:0 "Panikartiger Rückzugsschock"
  panic_retreat_shock_desc:0 "Der Verlust wichtiger Städte hat eine Panikwelle in der Armee ausgelöst. Die Organisation bricht zusammen, Soldaten desertieren. Wir müssen harte Maßnahmen ergreifen!"
 
@@ -214,7 +214,7 @@
  offer_preventive_submission:0 "Präventive Unterwerfung anbieten"
  offer_preventive_submission_desc:0 "Ein Krieg mit einer Großmacht ist Selbstmord. Wir müssen anbieten, ihr Protektorat zu werden, bevor unsere Städte zerstört werden."
 
-# --- KORREKTUREN UND ERGÄNZUNGEN (Fixes and Additions) ---
+ # --- KORREKTUREN UND ERGÄNZUNGEN (Fixes and Additions) ---
  
  # Fehlende Option im Kapitulations-Event
  plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
@@ -231,124 +231,162 @@
  plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
 
 
-# Fehlende Option im Kapitulations-Event
-plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
+ # Fehlende Option im Kapitulations-Event
+ plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
 
-# Event 205: Gebietsverlust ohne Krieg
-plus_cs.submission.5.t:0 "Gebietsabtretungen"
-plus_cs.submission.5.d:0 "Um einen umfassenden Krieg zu vermeiden, waren wir gezwungen, unsere Gebiete an den Aggressor zu übergeben. Es ist eine nationale Schande, aber wir haben das Leben unserer Soldaten gerettet."
-plus_cs.submission.5.a:0 "Wir werden das niemals vergessen."
+ # Event 205: Gebietsverlust ohne Krieg
+ plus_cs.submission.5.t:0 "Gebietsabtretungen"
+ plus_cs.submission.5.d:0 "Um einen umfassenden Krieg zu vermeiden, waren wir gezwungen, unsere Gebiete an den Aggressor zu übergeben. Es ist eine nationale Schande, aber wir haben das Leben unserer Soldaten gerettet."
+ plus_cs.submission.5.a:0 "Wir werden das niemals vergessen."
 
-# Event 300: Das Dilemma der Revolutionäre
-plus_cs.300.t:0 "Das Schicksal der Revolution"
-plus_cs.300.d:0 "Unser Bürgerkrieg ist eskaliert. Die ursprüngliche Regierung befindet sich im Krieg mit einer Großmacht. Wir haben eine Wahl: Schutz bei den Feinden unseres Feindes suchen oder das Chaos nutzen, um die Macht mit Gewalt zu ergreifen."
-plus_cs.300.a:0 "Schutz suchen (Marionette einer Großmacht werden)"
-plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
+ # Event 300: Das Dilemma der Revolutionäre
+ plus_cs.300.t:0 "Das Schicksal der Revolution"
+ plus_cs.300.d:0 "Unser Bürgerkrieg ist eskaliert. Die ursprüngliche Regierung befindet sich im Krieg mit einer Großmacht. Wir haben eine Wahl: Schutz bei den Feinden unseres Feindes suchen oder das Chaos nutzen, um die Macht mit Gewalt zu ergreifen."
+ plus_cs.300.a:0 "Schutz suchen (Marionette einer Großmacht werden)"
+ plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
 
-# Event 305 (Schlüssel 301): Erfolgreicher Putsch
-plus_cs.301.t:0 "Neue Ordnung"
-plus_cs.301.d:0 "Dank ausländischer Unterstützung ist das alte Regime gefallen. Jetzt kontrollieren wir das Land, stehen aber in der Schuld unserer Gönner."
-plus_cs.301.a:0 "Lang lebe unser neues Bündnis!"
+ # Event 305 (Schlüssel 301): Erfolgreicher Putsch
+ plus_cs.301.t:0 "Neue Ordnung"
+ plus_cs.301.d:0 "Dank ausländischer Unterstützung ist das alte Regime gefallen. Jetzt kontrollieren wir das Land, stehen aber in der Schuld unserer Gönner."
+ plus_cs.301.a:0 "Lang lebe unser neues Bündnis!"
 
-# Beschreibung des Nationalgeistes (Wenn Code id=conditional_surrender verwendet)
-conditional_surrender_desc:0 "Dieses Land hat seine Niederlage unter Bedingungen eingestanden. Es kann keinen Bündnissen beitreten oder Allianzen schmieden, solange die Vertragsbeschränkungen gelten."
+ # Beschreibung des Nationalgeistes (Wenn Code id=conditional_surrender verwendet)
+ conditional_surrender_desc:0 "Dieses Land hat seine Niederlage unter Bedingungen eingestanden. Es kann keinen Bündnissen beitreten oder Allianzen schmieden, solange die Vertragsbeschränkungen gelten."
 
-# ==============================================================================
-# NEU: WELTKRIEG- UND ALLIANZMECHANIKEN
-# ==============================================================================
+ # ==============================================================================
+ # NEU: WELTKRIEG- UND ALLIANZMECHANIKEN
+ # ==============================================================================
 
-# --- Benachrichtigung über Separatfrieden ---
-plus_cs.410.t:0 "Separatfrieden an der [From.GetAdjective] Front"
-plus_cs.410.d:0 "[From.GetNameDef] hat einen Separatfrieden mit unserem Feind geschlossen. Dank unserer militärischen Präsenz wurde die Kontrolle über die von uns besetzten Gebiete jedoch aufrechterhalten."
-plus_cs.410.a:0 "Unsere Positionen sind gesichert."
-plus_cs_territory_preserved_tt:0 "§GGebiete unter unserer Kontrolle wurden erhalten!§!"
+ # --- Benachrichtigung über Separatfrieden ---
+ plus_cs.410.t:0 "Separatfrieden an der [From.GetAdjective] Front"
+ plus_cs.410.d:0 "[From.GetNameDef] hat einen Separatfrieden mit unserem Feind geschlossen. Dank unserer militärischen Präsenz wurde die Kontrolle über die von uns besetzten Gebiete jedoch aufrechterhalten."
+ plus_cs.410.a:0 "Unsere Positionen sind gesichert."
+ plus_cs_territory_preserved_tt:0 "§GGebiete unter unserer Kontrolle wurden erhalten!§!"
 
-# --- Fraktionsführer: Mitglied will austreten ---
-plus_cs.420.t:0 "[From.GetNameDefCap] beantragt Austritt aus der Allianz"
-plus_cs.420.d:0 "Die Regierung von [From.GetNameDef] hat um Erlaubnis gebeten, unsere Allianz zu verlassen, um einen Separatfrieden auszuhandeln. Sie behaupten, ihr Land könne die Lasten des Krieges nicht länger tragen."
-plus_cs.420.a:0 "Wir entlassen sie (Austritt erlauben)"
-plus_cs.420.b:0 "Sie müssen kämpfen! (Ablehnen)"
+ # --- Fraktionsführer: Mitglied will austreten ---
+ plus_cs.420.t:0 "[From.GetNameDefCap] beantragt Austritt aus der Allianz"
+ plus_cs.420.d:0 "Die Regierung von [From.GetNameDef] hat um Erlaubnis gebeten, unsere Allianz zu verlassen, um einen Separatfrieden auszuhandeln. Sie behaupten, ihr Land könne die Lasten des Krieges nicht länger tragen."
+ plus_cs.420.a:0 "Wir entlassen sie (Austritt erlauben)"
+ plus_cs.420.b:0 "Sie müssen kämpfen! (Ablehnen)"
 
-# --- Fraktionsmitglied: Austritt erlaubt ---
-plus_cs.421.t:0 "Austrittserlaubnis erteilt"
-plus_cs.421.d:0 "Unser Allianzführer hat unsere Situation verstanden und uns erlaubt, die Allianz zu verlassen. Wir können jetzt einen Separatfrieden aushandeln."
-plus_cs.421.a:0 "Wir sind dankbar für das Verständnis."
-plus_cs_can_now_peace_tt:0 "§GSie können jetzt einen Separatfrieden aushandeln§!"
+ # --- Fraktionsmitglied: Austritt erlaubt ---
+ plus_cs.421.t:0 "Austrittserlaubnis erteilt"
+ plus_cs.421.d:0 "Unser Allianzführer hat unsere Situation verstanden und uns erlaubt, die Allianz zu verlassen. Wir können jetzt einen Separatfrieden aushandeln."
+ plus_cs.421.a:0 "Wir sind dankbar für das Verständnis."
+ plus_cs_can_now_peace_tt:0 "§GSie können jetzt einen Separatfrieden aushandeln§!"
 
-# --- Fraktionsmitglied: Austritt verweigert ---
-plus_cs.422.t:0 "Austritt verweigert!"
-plus_cs.422.d:0 "Unser Allianzführer hat unseren Austrittsantrag abgelehnt. Sie verlangen, dass wir trotz der Erschöpfung unseres Landes weiterkämpfen.\n\nWir können ihrer Entscheidung folgen oder gegen den Willen der Allianz einseitig austreten."
-plus_cs.422.a:0 "Folgen und den Krieg fortsetzen"
-plus_cs.422.b:0 "Gegen ihren Willen austreten! (Konsequenzen)"
+ # --- Fraktionsmitglied: Austritt verweigert ---
+ plus_cs.422.t:0 "Austritt verweigert!"
+ plus_cs.422.d:0 "Unser Allianzführer hat unseren Austrittsantrag abgelehnt. Sie verlangen, dass wir trotz der Erschöpfung unseres Landes weiterkämpfen.\n\nWir können ihrer Entscheidung folgen oder gegen den Willen der Allianz einseitig austreten."
+ plus_cs.422.a:0 "Folgen und den Krieg fortsetzen"
+ plus_cs.422.b:0 "Gegen ihren Willen austreten! (Konsequenzen)"
 
-# --- Kapitulierter Verbündeter will Frieden ---
-plus_cs.430.t:0 "[From.GetNameDefCap] beantragt Kapitulation"
-plus_cs.430.d:0 "[From.GetNameDef] hat kapituliert und bittet um unsere Erlaubnis zur vollständigen Kapitulation vor dem Feind. Wenn wir es erlauben, verlassen sie unsere Allianz."
-plus_cs.430.a:0 "Separate Kapitulation erlauben"
-plus_cs.430.b:0 "Sie müssen auf einen allgemeinen Frieden warten"
+ # --- Kapitulierter Verbündeter will Frieden ---
+ plus_cs.430.t:0 "[From.GetNameDefCap] beantragt Kapitulation"
+ plus_cs.430.d:0 "[From.GetNameDef] hat kapituliert und bittet um unsere Erlaubnis zur vollständigen Kapitulation vor dem Feind. Wenn wir es erlauben, verlassen sie unsere Allianz."
+ plus_cs.430.a:0 "Separate Kapitulation erlauben"
+ plus_cs.430.b:0 "Sie müssen auf einen allgemeinen Frieden warten"
 
-# --- Separate Kapitulation erlaubt ---
-plus_cs.431.t:0 "Erlaubnis erteilt"
-plus_cs.431.d:0 "Unser Allianzführer hat uns erlaubt, einen separaten Frieden auszuhandeln. Wir verlassen die Allianz."
-plus_cs.431.a:0 "Dies ist der einzige Weg..."
+ # --- Separate Kapitulation erlaubt ---
+ plus_cs.431.t:0 "Erlaubnis erteilt"
+ plus_cs.431.d:0 "Unser Allianzführer hat uns erlaubt, einen separaten Frieden auszuhandeln. Wir verlassen die Allianz."
+ plus_cs.431.a:0 "Dies ist der einzige Weg..."
 
-# --- Kapitulation verweigert ---
-plus_cs.432.t:0 "Kapitulation verweigert"
-plus_cs.432.d:0 "Uns wurde das Recht auf separaten Frieden verweigert. Wir bleiben ein kapituliertes Mitglied der Allianz und müssen den allgemeinen Ausgang des Krieges abwarten."
-plus_cs.432.a:0 "Wir haben keine Wahl..."
+ # --- Kapitulation verweigert ---
+ plus_cs.432.t:0 "Kapitulation verweigert"
+ plus_cs.432.d:0 "Uns wurde das Recht auf separaten Frieden verweigert. Wir bleiben ein kapituliertes Mitglied der Allianz und müssen den allgemeinen Ausgang des Krieges abwarten."
+ plus_cs.432.a:0 "Wir haben keine Wahl..."
 
-# --- Neue Ideen ---
-forced_continuation_war:0 "Erzwungene Kriegsfortsetzung"
-forced_continuation_war_desc:0 "Unsere Allianz verlangt, dass wir trotz unserer Erschöpfung weiterkämpfen. Die Bevölkerung ist demoralisiert, die Armee ist müde, aber wir dürfen nicht kapitulieren."
+ # --- Neue Ideen ---
+ forced_continuation_war:0 "Erzwungene Kriegsfortsetzung"
+ forced_continuation_war_desc:0 "Unsere Allianz verlangt, dass wir trotz unserer Erschöpfung weiterkämpfen. Die Bevölkerung ist demoralisiert, die Armee ist müde, aber wir dürfen nicht kapitulieren."
 
-# --- Opinion Modifiers ---
-faction_betrayal:0 "Allianzverrat"
-faction_deserter:0 "Allianzdesertion"
-peace_territory_preserved:0 "Gebietskontrolle erhalten"
+ # --- Opinion Modifiers ---
+ faction_betrayal:0 "Allianzverrat"
+ faction_deserter:0 "Allianzdesertion"
+ peace_territory_preserved:0 "Gebietskontrolle erhalten"
 
- # --- Smart Diplomacy & Crises (English Fallback) ---
+ # --- Smart Diplomacy & Crises (Kluge Diplomatie & Krisen) ---
  
- plus_cs_diplomacy.1.t:0 "Sovereignty Question"
- plus_cs_diplomacy.1.d:0 "Facing the overwhelming superiority of our neighbor, our command considers war suicide. We have a chance to save the nation by offering to become a protectorate."
- plus_cs_diplomacy.1.a:0 "Send Vassalization Offer"
+ plus_cs_diplomacy.1.t:0 "Souveränitätsfrage"
+ plus_cs_diplomacy.1.d:0 "Angesichts der überwältigenden Überlegenheit unseres Nachbarn hält unser Kommando einen Krieg für Selbstmord. Wir haben die Chance, die Nation zu retten, indem wir anbieten, ein Protektorat zu werden."
+ plus_cs_diplomacy.1.a:0 "Vasallisierung anbieten"
+  
+ plus_cs_diplomacy.2.t:0 "Unterwerfungsangebot"
+ plus_cs_diplomacy.2.d:0 "[From.GetNameDef] versteht das Unvermeidliche und bietet an, im Austausch für Schutz unser Protektorat zu werden. Dies erlaubt uns, unseren Einfluss ohne einen einzigen Schuss zu erweitern."
+ plus_cs_diplomacy.2.a:0 "Ihren Treueeid annehmen"
+ plus_cs_diplomacy.2.b:0 "Wir wollen ihr Land, keine Eide! (Annektierung)"
+ peaceful_vassalization:0 "Friedliche Vasallisierung"
+ diplo_insult:0 "Diplomatische Beleidigung"
+  
+ plus_cs_diplomacy.10.t:0 "Zusammenbruch des Lehnsherrn"
+ plus_cs_diplomacy.10.d:0 "Unser Herr [Overlord.GetName] verliert den Krieg. Das Chaos im Mutterland gibt uns die einmalige Chance, die Unabhängigkeit wiederzuerlangen."
+ plus_cs_diplomacy.10.a:0 "Unabhängigkeit erklären!"
+ plus_cs_diplomacy.10.b:0 "Wir bleiben bis zum Ende loyal"
+  
+ plus_cs_diplomacy.20.t:0 "Invasionsbedrohung"
+ plus_cs_diplomacy.20.d:0 "Der Feind bereitet eine Invasion vor, und unsere Chancen im Krieg sind gleich null. Wir müssen Zugeständnisse anbieten, um eine Katastrophe zu verhindern."
+ plus_cs_diplomacy.20.a:0 "Gebietsabtretungen anbieten"
+  
+ plus_cs_diplomacy.21.t:0 "Diplomatische Auszahlung"
+ plus_cs_diplomacy.21.d:0 "[From.GetNameDef], angesichts der Macht unserer Armee an der Grenze, bietet an, unsere territorialen Forderungen kampflos zu erfüllen, wenn wir zukünftige Nichtangriffe garantieren."
+ plus_cs_diplomacy.21.a:0 "Zustimmen (Gebiete erhalten)"
+ plus_cs_diplomacy.21.b:0 "Wir nehmen uns alles mit Gewalt!"
+  
+ # --- Internal Crisis (Interne Krise) ---
+ plus_cs_internal.1.t:0 "Ultimatum der Generäle"
+ plus_cs_internal.1.d:0 "Die Armee ist ausgeblutet. Die Verluste haben die kritische Marke überschritten. Der Generalstab fordert entweder sofortigen Frieden oder einen Regierungswechsel."
+ plus_cs_internal.1.a:0 "Säuberungen durchführen (Ablehnen)"
+ plus_cs_internal.1.b:0 "Regierung tritt zurück (Putsch)"
+ army_purge_aftershock:0 "Nachwirkungen der Armeesäuberung"
+  
+ # --- Partisans (Partisanen) ---
+ broken_nation_resistance:0 "Gebrochene aber unbesiegte Nation"
+ plus_cs_partisan_activity:0 "Partisanenaktivität (Guerilla)"
+  
+ # --- Crisis Decisions (Krisenentscheidungen) ---
+ plus_cs_marshall_law:0 "Kriegsrecht ausrufen"
+ plus_cs_marshall_law_desc:0 "Harte Maßnahmen zur Wiederherstellung der Ordnung. Reduziert die Produktivität, verhindert aber den Zusammenbruch des Landes."
+ plus_cs_patriotic_propaganda:0 "Propaganda 'Vaterland in Gefahr'"
+ plus_cs_patriotic_propaganda_desc:0 "Mobilisierung aller Medienressourcen zur Stärkung der Moral."
+ plus_cs_faction_bailout:0 "Wirtschaftshilfe für Verbündete"
+ plus_cs_faction_bailout_desc:0 "Ressourcen zur Stabilisierung der Währung unseres Verbündeten bereitstellen."
+ plus_cs_bailout_tt:0 "Entfernt §RInflation§! vom Zielland."
+
+ # Peace Acceptance Chance Tooltips
+ plus_cs_chance_high_tt:0 "§GHohe Wahrscheinlichkeit der Annahme§!"
+ plus_cs_chance_medium_tt:0 "§YMittlere Wahrscheinlichkeit der Annahme§!"
+ plus_cs_chance_low_tt:0 "§RGeringe Wahrscheinlichkeit der Annahme§!"
+
+ # Missing Keys (Fehlende Schlüssel)
+ plus_cs.20.t:0 "[From.GetNameDefCap] bittet um Friedenserlaubnis"
+ plus_cs.20.d:0 "[From.GetNameDef] bittet um unsere Erlaubnis, mit dem Feind über Frieden zu verhandeln. Sie geben an, den Krieg nicht fortsetzen zu können."
+ plus_cs.20.a:0 "Verhandlungen erlauben"
+ plus_cs.20.b:0 "Verbieten! (Veto)"
+ plus_cs.21.t:0 "Erlaubnis erteilt"
+ plus_cs.21.d:0 "Unser Fraktionsführer hat zugestimmt, dass wir Frieden verhandeln."
+ plus_cs.22.t:0 "Erlaubnis verweigert"
+ plus_cs.22.d:0 "Unser Fraktionsführer hat uns verboten, Frieden zu verhandeln. Sie fordern, dass wir weiterkämpfen."
+ plus_cs.22.a:0 "Wir müssen gehorchen."
+ plus_cs.22.b:0 "Wir verhandeln trotzdem! (Fraktion verlassen)"
+ plus_cs.23.t:0 "[From.GetNameDefCap] schlägt Separatfrieden vor"
+ plus_cs.23.d:0 "[From.GetNameDef] bietet einen separaten Friedensvertrag an und widersetzt sich seinem Fraktionsführer. Wenn angenommen, verlassen sie die Fraktion."
+ plus_cs.23.a:0 "Ablehnen"
+ plus_cs.23.b:0 "Separatfrieden annehmen"
+ plus_cs_internal.3.t:0 "Weißer Frieden Verhandlung"
+ plus_cs_internal.3.d:0 "Die neue Regierung versucht, den Krieg sofort zu beenden."
+ plus_cs_internal.3.a:0 "Angebot senden"
+ plus_cs_purge_tt:0 "§RDie Säuberung des Oberkommandos reduziert die Armeeorganisation für 90 Tage§!"
+ peace_treaty_desc:0 ""
  
- plus_cs_diplomacy.2.t:0 "Submission Offer"
- plus_cs_diplomacy.2.d:0 "[From.GetNameDef] understands the inevitable and offers to become our protectorate in exchange for protection. This allows us to expand our influence without firing a shot."
- plus_cs_diplomacy.2.a:0 "Accept their oath of allegiance"
- plus_cs_diplomacy.2.b:0 "We want their land, not oaths! (Annexation)"
- peaceful_vassalization:0 "Peaceful Vassalization"
- diplo_insult:0 "Diplomatic Insult"
+ # --- LOGIC EVENTS (Kapitulationsdebatte) ---
+ plus_cs_logic.1.t:0 "Kabinettsdebatte über Kapitulation"
+ plus_cs_logic.1.d:0 "Das Kabinett ist in Aufruhr. Der Feind steht an unseren Grenzen, und Stimmen in der Regierung fordern ein Ende des Blutvergießens. Die Hardliner bestehen jedoch darauf, dass Kapitulation Verrat ist."
+ plus_cs_logic.1.a:0 "Wir kämpfen weiter! (Ablehnen)"
+ plus_cs_logic.1.b:0 "Wir müssen verhandeln (Kapitulation)"
+ plus_cs_surrender_proceed_tt:0 "§GZu formellen Kapitulationsverhandlungen übergehen§!"
  
- plus_cs_diplomacy.10.t:0 "Overlord Collapse"
- plus_cs_diplomacy.10.d:0 "Our master [Overlord.GetName] is losing the war. Chaos in the metropole gives us a unique chance to regain independence."
- plus_cs_diplomacy.10.a:0 "Declare Independence!"
- plus_cs_diplomacy.10.b:0 "We will remain loyal to the end"
- 
- plus_cs_diplomacy.20.t:0 "Invasion Threat"
- plus_cs_diplomacy.20.d:0 "The enemy is preparing an invasion, and our chances in war are zero. We must offer any concessions to prevent a catastrophe."
- plus_cs_diplomacy.20.a:0 "Offer Territorial Concessions"
- 
- plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
- plus_cs_diplomacy.21.d:0 "[From.GetNameDef], seeing the might of our army on the border, offers to meet our territorial demands without a fight if we guarantee non-aggression in the future."
- plus_cs_diplomacy.21.a:0 "Agree (Receive Territories)"
- plus_cs_diplomacy.21.b:0 "We will take everything by force!"
- 
- # --- Internal Crisis ---
- plus_cs_internal.1.t:0 "Generals' Ultimatum"
- plus_cs_internal.1.d:0 "The army is bled dry. Casualties have exceeded the critical mark. The General Staff demands either immediate peace or a change of government."
- plus_cs_internal.1.a:0 "Conduct Purges (Refuse)"
- plus_cs_internal.1.b:0 "Government Resigns (Coup)"
- army_purge_aftershock:0 "Aftermath of Army Purges"
- 
- # --- Partisans ---
- broken_nation_resistance:0 "Broken but Unconquered Nation"
- plus_cs_partisan_activity:0 "Partisan Activity (Guerrilla)"
- 
- # --- Crisis Decisions ---
- plus_cs_marshall_law:0 "Declare Martial Law"
- plus_cs_marshall_law_desc:0 "Harsh measures to restore order. Reduces productivity but keeps the country from collapsing."
- plus_cs_patriotic_propaganda:0 "Propaganda 'Motherland in Danger'"
- plus_cs_patriotic_propaganda_desc:0 "Mobilization of all media resources to boost morale."
- plus_cs_faction_bailout:0 "Economic Aid to Ally"
- plus_cs_faction_bailout_desc:0 "Direct resources to stabilize our ally's currency."
- plus_cs_bailout_tt:0 "Removes §RInflation§! from target country."
+ # --- Leader Traits Debug ---
+ plus_cs_spirit_fanatic_desc:0 "Dieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\n\n§RKI-Friedensakzeptanz: -100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_desc:0 "Dieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\n\n§GKI-Friedensakzeptanz: +100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_desc:0 "Dieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\n\n§YKI-Friedensakzeptanz: Normal§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"

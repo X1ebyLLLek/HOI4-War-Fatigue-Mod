@@ -1,2 +1,2 @@
-# Strategy temporarily removed due to syntax errors (Invalid Token: diplomatic_action)
-# Will investigate alternative implementation via defines or diplomatic_actions.
+# Logic moved to dynamic events (plus_cs.txt) using add_ai_strategy to target specific enemies.
+# This file is kept empty to prevent load errors.

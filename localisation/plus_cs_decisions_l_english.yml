@@ -53,3 +53,8 @@
  plus_cs_faction_bailout:0 "Economic Aid to Ally"
  plus_cs_faction_bailout_desc:0 "Direct resources to stabilize our ally's currency."
  plus_cs_bailout_tt:0 "Removes §RInflation§! from target country."
+
+ # Peace Acceptance Chance Tooltips
+ plus_cs_chance_high_tt:0 "§GHigh chance of acceptance§!"
+ plus_cs_chance_medium_tt:0 "§YMedium chance of acceptance§!"
+ plus_cs_chance_low_tt:0 "§RLow chance of acceptance§!"

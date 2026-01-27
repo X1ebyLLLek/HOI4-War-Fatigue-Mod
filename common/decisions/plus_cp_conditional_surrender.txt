@@ -1,0 +1,148 @@
+peace_options = {
+
+	# ==============================================================================
+	# SURRENDER OPTIONS (MAIN)
+	# ==============================================================================
+
+	conditional_surrender = {
+		icon = GFX_decision_generic_form_nation
+		cost = 0
+		target_trigger = {
+			has_war_with = FROM
+			NOT = {
+				has_civil_war = yes
+			}
+			FROM = {
+				OR = {
+					AND = {
+						is_in_faction = yes
+						is_major = yes
+					}
+					is_in_faction = no
+				}
+				is_puppet = no
+			}
+		}
+
+		days_re_enable = 30
+
+		visible = {
+			has_war_with = FROM
+			NOT = {
+				has_civil_war = yes
+			}
+			FROM = {
+				OR = {
+					AND = {
+						is_in_faction = yes
+						is_major = yes
+					}
+					is_in_faction = no
+				}
+				is_puppet = no
+			}
+		}
+		
+		available = {
+			NOT = { has_country_flag = plus_cs_waiting_response }
+			has_war_with = FROM
+			has_capitulated = no
+			is_puppet = no
+			NOT = { has_civil_war = yes }
+		}
+
+		complete_effect = {
+			set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+			
+			# EVENT-DRIVEN LOGIC:
+			# Pre-save targets so the event knows who is who
+			FROM = { save_event_target_as = peace_recipient }
+			save_event_target_as = peace_sender
+			set_country_flag = plus_cs_peace_type_preferences
+
+			# Instead of sending the offer immediately, we trigger the "Internal Debate" (plus_cs_surrender_logic.txt).
+			# The AI will roll against its Score Ratio to decide if it proceeds.
+			# Players: This event fires immediately for you too, or we can bypass for players depending on preference.
+			
+			if = {
+				limit = { is_ai = yes }
+				country_event = { id = plus_cs.surrender_debate }
+			}
+			else = {
+				# Player bypass: Directly send offer (Old Logic)
+				# Targets already saved above
+				
+				if = {
+					limit = {
+						FROM = {
+							is_faction_leader = no
+							is_in_faction = yes
+						}
+					}
+					FROM.faction_leader = {
+						country_event = { id = plus_cs.20 hours = 6 }
+					}
+				}
+				else = {
+					FROM = {
+						country_event = { id = plus_cs.2 hours = 12 }
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0 # Default: No surrender
+			
+			# === PRESSURE RATIO (The Main Driver) ===
+			# Determines how bad the situation is relative to our national resilience
+			
+			modifier = {
+				add = 10
+				check_variable = { plus_cs_pressure_ratio > 0.8 }
+			}
+			modifier = {
+				add = 30
+				check_variable = { plus_cs_pressure_ratio > 1.0 } # Standard Threshold
+			}
+			modifier = {
+				add = 100
+				check_variable = { plus_cs_pressure_ratio > 1.2 } # Critical
+			}
+			modifier = {
+				add = 200
+				check_variable = { plus_cs_pressure_ratio > 1.5 } # Collapse
+			}
+			
+			# === PERSONALITY MODIFIERS (Accelerators/Brakes) ===
+			
+			# Cowards panic earlier
+			modifier = {
+				factor = 2.0
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
+			}
+			
+			# Fanatics hold out longer (require much higher pressure to actually click)
+			modifier = {
+				factor = 0.2
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
+			}
+			
+			# Fascists/Communists are stubborn
+			modifier = {
+				factor = 0.5
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+			
+			# === SITUATION ===
+			# Tiny vs Giant Panic
+			modifier = {
+				factor = 2.0
+				strength_ratio = { tag = FROM ratio < 0.1 }
+			}
+		}
+	}
+}

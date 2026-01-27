@@ -1,0 +1,28 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: FIGHTING SPIRIT SYSTEM
+# Assigns a "Will to Fight" at the start of a war to create organic variability.
+# ==============================================================================
+
+plus_cs_assign_fighting_spirit = {
+	# Check if leader already has a spirit trait
+	if = {
+		limit = {
+			NOT = { has_country_leader_with_trait = plus_cs_spirit_fanatic }
+			NOT = { has_country_leader_with_trait = plus_cs_spirit_resilient }
+			NOT = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
+		}
+		
+		# Assign new trait (Universal Distribution)
+		# User Request: "Not based on ideology... variability."
+		# 15% Fanatic / 70% Resilient / 15% Defeatist for EVERYONE.
+		random_list = {
+			15 = { add_country_leader_trait = plus_cs_spirit_fanatic }   # 15% Fanatic
+			70 = { add_country_leader_trait = plus_cs_spirit_resilient } # 70% Normal
+			15 = { add_country_leader_trait = plus_cs_spirit_defeatist } # 15% Defeatist
+		}
+		
+		# Log
+		if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } log = "[Root.GetName]: Leader gets FANATIC Spirit" }
+		if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } log = "[Root.GetName]: Leader gets DEFEATIST Spirit" }
+	}
+}

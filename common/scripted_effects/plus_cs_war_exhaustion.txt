@@ -1,0 +1,204 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: WAR EXHAUSTION & HEAVY LOGIC
+# Extracted from plus_cs_optimization.txt
+# Includes: Manpower Crisis, Officer Shortage, War Inflation.
+# ==============================================================================
+
+# =============================================
+# plus_cs_heavy_calc_step
+# Executes heavy calculations every ~28 days (tick-spread)
+# =============================================
+plus_cs_heavy_calc_step = {
+
+	# --- INFLATION LOGIC ---
+	if = {
+		limit = {
+			has_war = yes
+			OR = {
+				has_stability < 0.20
+				AND = {
+					has_stability < 0.45
+					OR = {
+						surrender_progress > 0.10
+						has_dynamic_modifier = manpower_strain_mild
+						has_dynamic_modifier = manpower_strain_high
+						has_war_support < 0.30
+						# Strategic Collapse Trigger
+						surrender_progress > 0.3 # Already checked above, but adding clarity
+					}
+				}
+				has_dynamic_modifier = manpower_strain_high
+				has_dynamic_modifier = manpower_strain_collapse
+			}
+		}
+		add_dynamic_modifier = { modifier = war_inflation_crisis days = 35 }
+		add_stability = -0.005
+		add_war_support = -0.005
+	}
+	else = {
+		remove_dynamic_modifier = { modifier = war_inflation_crisis }
+	}
+
+	# --- OFFICER CHAOS LOGIC ---
+	if = {
+		limit = { 
+			OR = {
+				NOT = { check_variable = { plus_cs_prev_battalions > 0 } }
+				NOT = { num_divisions > 24 }
+				check_variable = { plus_cs_prev_battalions < 10 }
+			}
+		}
+		set_variable = { plus_cs_prev_battalions = num_divisions }
+		set_variable = { plus_cs_prev_casualties = casualties }
+	}
+	else = {
+		set_temp_variable = { officer_cap_calc = num_research_slots }
+		multiply_temp_variable = { officer_cap_calc = 200 }
+		add_to_temp_variable = { officer_cap_calc = 400 }
+		
+		if = { limit = { is_major = yes } add_to_temp_variable = { officer_cap_calc = 500 } }
+
+		set_temp_variable = { total_strain = num_divisions }
+		subtract_from_temp_variable = { total_strain = var:plus_cs_prev_battalions }
+		clamp_temp_variable = { var = total_strain min = 0 }
+		multiply_temp_variable = { total_strain = 0.5 } 
+
+		set_temp_variable = { casualty_load = casualties }
+		subtract_from_temp_variable = { casualty_load = var:plus_cs_prev_casualties }
+		clamp_temp_variable = { var = casualty_load min = 0 }
+		divide_temp_variable = { casualty_load = 3500 }
+
+		add_to_temp_variable = { total_strain = var:casualty_load }
+
+		if = { limit = { num_divisions > 0 } divide_temp_variable = { total_strain = num_divisions } }
+
+		if = {
+			limit = { check_variable = { var = num_divisions value = var:officer_cap_calc compare = greater_than } }
+			multiply_temp_variable = { total_strain = 1.2 }
+			set_temp_variable = { double_cap = var:officer_cap_calc }
+			multiply_temp_variable = { double_cap = 2 }
+			if = { limit = { check_variable = { var = num_divisions value = var:double_cap compare = greater_than } } multiply_temp_variable = { total_strain = 1.66 } }
+		}
+
+		if = {
+			limit = { check_variable = { total_strain > 0.40 } }
+			add_dynamic_modifier = { modifier = officer_shortage_collapse days = 60 }
+			remove_dynamic_modifier = { modifier = officer_shortage_high }
+			remove_dynamic_modifier = { modifier = officer_shortage_mild }
+		}
+		else_if = {
+			limit = { check_variable = { total_strain > 0.20 } }
+			add_dynamic_modifier = { modifier = officer_shortage_high days = 60 }
+			remove_dynamic_modifier = { modifier = officer_shortage_collapse }
+			remove_dynamic_modifier = { modifier = officer_shortage_mild }
+		}
+		else_if = {
+			limit = { check_variable = { total_strain > 0.08 } }
+			add_dynamic_modifier = { modifier = officer_shortage_mild days = 60 }
+			remove_dynamic_modifier = { modifier = officer_shortage_collapse }
+			remove_dynamic_modifier = { modifier = officer_shortage_high }
+		}
+		else = {
+			remove_dynamic_modifier = { modifier = officer_shortage_collapse }
+			remove_dynamic_modifier = { modifier = officer_shortage_high }
+			remove_dynamic_modifier = { modifier = officer_shortage_mild }
+		}
+		set_variable = { plus_cs_prev_battalions = num_divisions }
+		set_variable = { plus_cs_prev_casualties = casualties }
+	}
+	
+	# --- MANPOWER CRISIS LOGIC ---
+	if = {
+		limit = { has_war = yes }
+		add_to_variable = { plus_cs_pop_check_timer = 1 }
+		if = {
+			limit = {
+				OR = {
+					# Cache Population every ~350 days
+					check_variable = { plus_cs_pop_check_timer > 50 } 
+					check_variable = { plus_cs_need_recalc = 1 }
+					check_variable = { core_pop_calc = 0 }
+				}
+			}
+			set_variable = { plus_cs_pop_check_timer = 0 }
+			set_variable = { plus_cs_need_recalc = 0 }
+			set_variable = { core_pop_calc = 0 }
+			every_owned_state = {
+				if = { limit = { is_core_of = ROOT } add_to_temp_variable = { core_pop_calc = state_population } }
+				else = {
+					set_temp_variable = { local_pop = state_population }
+					multiply_temp_variable = { local_pop = 0.15 }
+					add_to_temp_variable = { core_pop_calc = local_pop }
+				}
+			}
+			every_subject_country = {
+				set_temp_variable = { subj_pop = core_population }
+				multiply_temp_variable = { subj_pop = 0.25 }
+				add_to_temp_variable = { ROOT.core_pop_calc = subj_pop }
+			}
+		}
+
+		set_temp_variable = { total_drain = num_divisions }
+		multiply_temp_variable = { total_drain = 1000 }
+		add_to_temp_variable = { total_drain = casualties }
+		set_temp_variable = { limit_base = var:core_pop_calc }
+		
+		# Collapse (> 5% of core pop)
+		set_temp_variable = { limit_check = var:limit_base }
+		multiply_temp_variable = { limit_check = 0.05 }
+
+		if = {
+			limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
+			add_dynamic_modifier = { modifier = manpower_strain_collapse days = 35 }
+			remove_dynamic_modifier = { modifier = manpower_strain_high }
+			remove_dynamic_modifier = { modifier = manpower_strain_mild }
+			set_country_flag = { flag = plus_cs_exhausted days = 35 }
+			clr_country_flag = plus_cs_war_strain
+		}
+		else = {
+			# High (> 3% of core pop)
+			set_temp_variable = { limit_check = var:limit_base }
+			multiply_temp_variable = { limit_check = 0.03 }
+			if = {
+				limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
+				add_dynamic_modifier = { modifier = manpower_strain_high days = 35 }
+				remove_dynamic_modifier = { modifier = manpower_strain_collapse }
+				remove_dynamic_modifier = { modifier = manpower_strain_mild }
+				set_country_flag = { flag = plus_cs_exhausted days = 35 }
+				clr_country_flag = plus_cs_war_strain
+			}
+			else = {
+				# Mild (> 1.5% of core pop)
+				set_temp_variable = { limit_check = var:limit_base }
+				multiply_temp_variable = { limit_check = 0.015 }
+				if = {
+					limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
+					add_dynamic_modifier = { modifier = manpower_strain_mild days = 35 }
+					remove_dynamic_modifier = { modifier = manpower_strain_collapse }
+					remove_dynamic_modifier = { modifier = manpower_strain_high }
+					if = { limit = { NOT = { has_country_flag = plus_cs_exhausted } } set_country_flag = { flag = plus_cs_war_strain days = 35 } }
+				}
+				else = {
+					remove_dynamic_modifier = { modifier = manpower_strain_collapse }
+					remove_dynamic_modifier = { modifier = manpower_strain_high }
+					remove_dynamic_modifier = { modifier = manpower_strain_mild }
+				}
+			}
+		}
+		if = {
+			limit = { 
+				is_major = no
+				has_war_with_major = yes
+				any_owned_state = { is_core_of = ROOT is_controlled_by = ROOT check_variable = { ROOT.surrender_progress > 0.05 } }
+			}
+			add_timed_idea = { idea = desperate_defense_effort days = 35 }
+		}
+		else = { remove_ideas = desperate_defense_effort }
+	}
+	else = {
+		remove_dynamic_modifier = { modifier = manpower_strain_mild }
+		remove_dynamic_modifier = { modifier = manpower_strain_high }
+		remove_dynamic_modifier = { modifier = manpower_strain_collapse }
+		remove_ideas = desperate_defense_effort
+	}
+}

@@ -40,6 +40,29 @@
   plus_cs.9.d:0 "Our intelligence reports indicate that [From.GetNameDef] is suffering from a major internal crisis. Widespread revolts and strikes have erupted, crippling their war industry and causing significant losses in manpower. This is a golden opportunity for us."
   plus_cs.9.a:0 "Excellent."
 
+ plus_cs.20.t:0 "[From.GetNameDefCap] Requests Peace Permission"
+ plus_cs.20.d:0 "[From.GetNameDef] asks for our permission to negotiate peace with the enemy. They claim inability to continue the war."
+ plus_cs.20.a:0 "Allow Negotiations"
+ plus_cs.20.b:0 "Forbid! (Veto)"
+ 
+ plus_cs.21.t:0 "Permission Granted"
+ plus_cs.21.d:0 "Our faction leader has agreed to let us negotiate peace."
+ 
+ plus_cs.22.t:0 "Permission Denied"
+ plus_cs.22.d:0 "Our faction leader has forbidden us from negotiating peace. They demand we fight on."
+ plus_cs.22.a:0 "We must obey."
+ plus_cs.22.b:0 "We will negotiate anyway! (Leave Faction)"
+ 
+ plus_cs.23.t:0 "[From.GetNameDefCap] Proposes Separate Peace"
+ plus_cs.23.d:0 "[From.GetNameDef] offers a separate peace deal, defying their faction leader. If accepted, they will leave the faction."
+ plus_cs.23.a:0 "Refuse"
+ plus_cs.23.b:0 "Accept Separate Peace"
+
+ plus_cs_internal.3.t:0 "White Peace Negotiation"
+ plus_cs_internal.3.d:0 "The new government seeks to end the war immediately."
+ plus_cs_internal.3.a:0 "Send Offer"
+ plus_cs_purge_tt:0 "§RHigh Command purge reduces Army Organization for 90 days§!"
+
   plus_cs.1001.t:0 "A General Has Been Killed"
   plus_cs.1001.d:0 "The brutal fighting on the front lines has claimed a valuable leader. General [?plus_cs_killed_leader_id.GetName], known for [?plus_cs_killed_leader_id.GetHisHer] aggressive tactics, was killed in action while leading [?plus_cs_killed_leader_id.GetHisHer] troops. This loss is a heavy blow to our command structure."
   plus_cs.1001.a:0 "A tragic loss."
@@ -184,3 +207,10 @@
  # --- Partisans ---
  broken_nation_resistance:0 "Broken but Unconquered Nation"
  plus_cs_partisan_activity:0 "Partisan Activity (Guerrilla)"
+ 
+ # --- LOGIC EVENTS (Surrender Debate) ---
+ plus_cs_logic.1.t:0 "Council Debate on Surrender"
+ plus_cs_logic.1.d:0 "The cabinet is in turmoil. The enemy presses on our borders, and voices within the government are calling for an end to the bloodshed. However, the hardliners insist that surrender is treason."
+ plus_cs_logic.1.a:0 "We shall fight on! (Refuse)"
+ plus_cs_logic.1.b:0 "We must seek terms (Surrender)"
+ plus_cs_surrender_proceed_tt:0 "§GProceed to formal surrender negotiations§!"

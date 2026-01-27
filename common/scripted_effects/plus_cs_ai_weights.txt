@@ -1,0 +1,129 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: AI WEIGHTS & PERSONALITY
+# Calculates nuanced "Acceptance Scores" for peace logic.
+# Eliminates binary "Yes/No" logic in favor of a weighted sum.
+# ==============================================================================
+
+# =============================================
+# plus_cs_calc_ai_personality
+# Calculates the "Static" bias of the country.
+# Result: 'plus_cs_ai_score' (Add/Subtract from this variable)
+# =============================================
+plus_cs_calc_ai_personality = {
+	# Reset or Initialize Score
+	set_temp_variable = { plus_cs_ai_score = 0 }
+
+	# --- IDEOLOGY BIAS ---
+	# Democracies are generally more open to peace (accountable to voters).
+	if = { limit = { has_government = democratic } add_to_temp_variable = { plus_cs_ai_score = 15 } }
+	
+	# Neutral countries just want to be left alone.
+	if = { limit = { has_government = neutrality } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	
+	# Fascists/Communists are dogmatic (-15).
+	if = { 
+		limit = { OR = { has_government = fascism has_government = communism } } 
+		subtract_from_temp_variable = { plus_cs_ai_score = 15 } 
+	}
+	
+	# --- LEADER PERSONALITY ---
+	# Traits are significant modifiers.
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 30 } }
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 25 } }
+	
+	# --- CULTURAL/NATIONAL SPIRITS ---
+	# Revanchism (If we lost cores, we are angry -> Less likely to accept peace unless it returns them)
+	if = {
+		limit = { 
+			has_idea = revanchism_spirit 
+			NOT = { has_country_flag = plus_cs_exhausted }
+		}
+		subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+	}
+	
+	# --- INTERNAL RESOLVE (Dynamic Nation Status) ---
+	# Patriotic Fervor (High War Support + Propaganda)
+	if = { 
+		limit = { has_idea = plus_cs_patriotic_fervor }
+		subtract_from_temp_variable = { plus_cs_ai_score = 15 } 
+	}
+	
+
+	
+	# Major Power Arrogance
+	# Majors are prouder and harder to break diplomatically.
+	if = {
+		limit = { is_major = yes }
+		subtract_from_temp_variable = { plus_cs_ai_score = 10 }
+	}
+	
+
+	
+	# --- HIDDEN RANDOM FACTOR ---
+	# Adds an inherent bias (-16 to +16) set at game start/loading
+    # Uses 'plus_cs_hidden_resolve' which is -50 to +50.
+    set_temp_variable = { temp_resolve = plus_cs_hidden_resolve }
+    divide_temp_variable = { temp_resolve = 3 } # Div 3 -> Range is ~[-16, +16]. Noticeable variety.
+    subtract_from_temp_variable = { plus_cs_ai_score = temp_resolve } # High Resolve = Low Peace Score
+}
+
+# =============================================
+# plus_cs_calc_ai_situation
+# Calculates the "Dynamic" pressure from the war.
+# Result: Modifies 'plus_cs_ai_score'
+# =============================================
+plus_cs_calc_ai_situation = {
+	
+	# 1. PRESSURE RATIO (The main fatigue metric)
+	# Ratio < 0.5: Confident (-Score)
+	# Ratio > 1.0: Desperate (+Score)
+	
+	set_temp_variable = { pressure_factor = plus_cs_pressure_ratio }
+	
+	# Normalize: 1.0 ratio = +20 score. 0.0 ratio = -20 score.
+	multiply_temp_variable = { pressure_factor = 40 } # 0.0->0, 1.0->40, 2.0->80
+	subtract_from_temp_variable = { pressure_factor = 20 } # 0.0->-20, 1.0->+20
+	
+	add_to_temp_variable = { plus_cs_ai_score = pressure_factor }
+	
+	# 2. MANPOWER PANIC
+	if = { limit = { has_dynamic_modifier = manpower_strain_high } add_to_temp_variable = { plus_cs_ai_score = 15 } }
+	if = { limit = { has_dynamic_modifier = manpower_strain_collapse } add_to_temp_variable = { plus_cs_ai_score = 30 } }
+	
+	# 3. STABILITY ISSUES
+	if = { limit = { has_stability < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 15 } }
+	if = { limit = { has_war_support < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	
+	# 4. CAPITAL THREAT
+	if = { 
+		limit = { 
+			capital_scope = { 
+				is_controlled_by = ROOT # We still have it
+				any_neighbor_state = { NOT = { controller = { tag = ROOT } } } # But enemy is next door
+			}
+		} 
+		add_to_temp_variable = { plus_cs_ai_score = 10 } 
+	}
+    
+    # 5. GREED FACTOR (Winning)
+    # If we are winning hard, we don't want peace.
+    if = {
+        limit = {
+            surrender_progress < 0.1
+            FROM = { surrender_progress > 0.3 } # Enemy is losing
+        }
+        subtract_from_temp_variable = { plus_cs_ai_score = 30 } # "I can take it all!"
+        
+        # Greed intensifies for aggressors
+        if = { 
+            limit = { OR = { has_government = fascism has_government = communism } }
+            subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+        }
+    }
+    
+    # 6. STALEMATE (Boredom/Futility)
+    if = {
+        limit = { has_country_flag = plus_cs_stalemate }
+        add_to_temp_variable = { plus_cs_ai_score = 25 } # Let's just end this.
+    }
+}

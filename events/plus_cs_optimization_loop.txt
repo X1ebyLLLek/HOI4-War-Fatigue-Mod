@@ -1,0 +1,208 @@
+add_namespace = plus_cs_opt
+
+# ==============================================================================
+# SMART EVENT LOOP (TICK-SPREADING)
+# Replaces on_weekly for performance distribution.
+# Fires on average every 7 days (4-10 range).
+# Calls modular scripted effects for actual logic.
+# ==============================================================================
+
+country_event = {
+	id = plus_cs.999
+	title = "Technical Loop Event"
+	desc = "Optimization Loop"
+	is_triggered_only = yes
+	hidden = yes
+
+	immediate = {
+		# 1. LOOP MAINTENANCE
+		set_country_flag = plus_cs_loop_active
+		
+		# Plan next tick (6-8 days)
+		random_list = {
+			33 = { country_event = { id = plus_cs.999 days = 6 } }
+			33 = { country_event = { id = plus_cs.999 days = 7 } }
+			33 = { country_event = { id = plus_cs.999 days = 8 } }
+		}
+
+		# =============================================================
+		# 2. LOGIC MODULES
+		# =============================================================
+
+		# --- SCORE CALCULATION ---
+		if = {
+			limit = { has_war = yes }
+			plus_cs_calc_scores = yes
+		}
+
+		# --- REVOLTER CHECK ---
+		if = {
+			limit = {
+				is_dynamic_country = yes
+				is_puppet = no
+				NOT = { has_country_flag = plus_cs_revolter_processed }
+				any_enemy_country = {
+					original_tag = PREV.original_tag
+					has_civil_war = yes
+				}
+			}
+			set_country_flag = plus_cs_revolter_processed
+			country_event = { id = plus_cs.300 }
+		}
+
+		# --- ECONOMIC LOGIC ---
+		plus_cs_economy_step = yes
+		
+		# --- CRISIS LOGIC ---
+		plus_cs_crisis_step = yes
+
+		# =============================================================
+		# 3. HEAVY LOGIC (MONTHLY-ISH)
+		# =============================================================
+		if = {
+			limit = {
+				# HIBERNATION: Only check if high activity or at war
+				OR = {
+					has_war = yes
+					has_dynamic_modifier = war_inflation_crisis
+					has_country_flag = plus_cs_exhausted
+				}
+			}
+			
+			# TICK SPREADING: Check if 28+ days since last heavy calc
+			set_temp_variable = { days_since_check = global.date_days }
+			subtract_from_temp_variable = { days_since_check = plus_cs_last_heavy_check }
+			
+			if = {
+				limit = {
+					OR = {
+						NOT = { check_variable = { plus_cs_last_heavy_check > 0 } }
+						check_variable = { days_since_check > 27 }
+					}
+				}
+				
+				set_variable = { plus_cs_last_heavy_check = global.date_days }
+				
+				# EXECUTE HEAVY EFFECTS
+				plus_cs_heavy_calc_step = yes
+				plus_cs_internal_crisis_check_step = yes
+
+				# --- STALEMATE & PANIC LOGIC ---
+				if = {
+					limit = { has_war = yes }
+					
+					# Urgent Peace (Panic)
+					if = {
+						limit = {
+							OR = { has_stability < 0.2 has_war_support < 0.2 }
+							surrender_progress > 0.10
+							NOT = { has_country_flag = plus_cs_urgent_peace }
+						}
+						set_country_flag = { flag = plus_cs_urgent_peace days = 180 }
+					}
+					
+				# --- STALEMATE LOGIC (Map Stagnation) ---
+				# Check if map control has changed since last check (Smart Logic)
+				# FIX: "num_controlled_states" is a trigger, using it in set_variable causes CRASH.
+				# We must count states manually.
+				
+				set_temp_variable = { current_states = 0 }
+				every_controlled_state = {
+					# This loop is safe but heavier. Only runs for warring nations monthly.
+					add_to_temp_variable = { current_states = 1 }
+				}
+				
+				if = {
+					limit = { 
+						check_variable = { plus_cs_last_controlled_states_count = current_states } 
+					}
+					# No change in borders -> Stagnation tick
+					add_to_variable = { plus_cs_stalemate_timer = 1 }
+				}
+				else = {
+					# Map changed (Gain or Loss) -> Reset timer
+					set_variable = { plus_cs_stalemate_timer = 0 }
+				}
+				
+				# Update memory
+				set_variable = { plus_cs_last_controlled_states_count = current_states }
+
+				# Trigger Flag if Stagnant for > 6 checks (approx 6 months)
+				if = {
+					limit = { check_variable = { plus_cs_stalemate_timer > 6 } }
+					set_country_flag = { flag = plus_cs_stalemate days = 90 }
+				}
+
+					# Casualties Events
+					if = {
+						limit = { casualties > 50000 }
+						random_list = {
+							2 = { country_event = { id = plus_cs.1001 } }
+							98 = { }
+						}
+					}
+					if = {
+						limit = { casualties > 100000 }
+						random_list = {
+							1 = { country_event = { id = plus_cs.1002 } }
+							99 = { }
+						}
+					}
+				}
+			}
+		} 
+		
+		# =============================================================
+		# 4. RANDOM LOGIC INTEGRATION
+		# =============================================================
+
+		# Strategic Collapse Check (Inflation Boost)
+		if = {
+			limit = {
+				has_war = yes
+				surrender_progress > 0.3
+				has_war_support < 0.4
+			}
+			add_dynamic_modifier = { modifier = war_inflation_crisis days = 35 } 
+		}
+
+		# Puppet Chain Reaction Check
+		if = {
+			limit = {
+				is_puppet = yes
+				overlord = { surrender_progress > 0.5 }
+			}
+			random_list = {
+				10 = { country_event = { id = plus_cs_diplomacy.10 } }
+				90 = { }
+			}
+		}
+		
+		# Negotiated Vassalization Check
+		if = {
+			limit = {
+				is_major = no
+				is_in_faction = no
+				is_subject = no
+				has_war = no
+			}
+			random_list = {
+				5 = { country_event = { id = plus_cs_diplomacy.1 } }
+				95 = { }
+			}
+		}
+		
+		# Pre-War Deal Check
+		if = {
+			limit = {
+				has_war = no
+				is_subject = no
+				any_neighbor_country = { has_wargoal_against = ROOT }
+			}
+			random_list = {
+				5 = { country_event = { id = plus_cs_diplomacy.20 } }
+				95 = { }
+			}
+		}
+	}
+}

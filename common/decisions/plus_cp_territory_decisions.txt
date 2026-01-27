@@ -1,0 +1,327 @@
+peace_treaty = {
+
+	# ==============================================================================
+	# TERRITORIAL ACQUISITION DECISIONS
+	# ==============================================================================
+
+	peace_take_state = {
+		icon = GFX_decision_hol_draw_up_staff_plans
+		cost = 0
+		state_target = yes
+		on_map_mode = map_only
+		target_trigger = {
+			always = no
+			check_variable = { FROM.state_taken = 0 }
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+		fire_only_once = yes
+
+		visible = {
+			check_variable = { FROM.state_taken = 0 }
+		}
+
+		available = {
+			check_variable = { FROM.state_taken = 0 }
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM.owner
+				value = var:pts
+				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя забрать стейт, который контролирует третья сторона
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }						# Мы контролируем
+					controller = { tag = FROM.owner }				# Враг контролирует
+					controller = { is_in_faction_with = ROOT }		# Наш союзник контролирует
+					controller = { is_puppet_of = ROOT }			# Наша марионетка контролирует
+				}
+			}
+		}
+
+		complete_effect = {
+			custom_effect_tooltip = peace_take_state_cost
+
+			if = {
+				limit = {
+					FROM = { is_core_of = FROM.owner }
+					FROM.owner = { NOT = { has_idea = revanchism_spirit } }
+				}
+				FROM.owner = {
+					add_timed_idea = { idea = revanchism_spirit days = 1095 }
+				}
+			}
+
+			if = {
+				limit = {
+					NOT = {
+						any_character = {
+							is_country_leader = yes
+							has_trait = successful_negotiator
+						}
+					}
+				}
+				add_country_leader_trait = successful_negotiator
+			}
+
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			subtract_from_variable = { vp@FROM.owner = pts }
+			transfer_state = FROM
+			set_variable = { FROM.state_taken = 1 }
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_take_state
+			}
+		}
+
+		timeout_effect = {
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_take_state
+			}
+		}
+
+		ai_will_do = {
+			base = 10
+
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = { any_neighbor_state = { is_owned_by = ROOT } }
+					NOT = { is_coastal = yes }
+				}
+			}
+			
+			modifier = {
+				add = 50
+				FROM = { any_neighbor_state = { is_owned_by = ROOT } }
+			}
+
+			modifier = {
+				add = 20
+				FROM.owner = { num_of_factories > 2 }
+			}
+			
+			modifier = {
+				add = 100
+				FROM = {
+					OR = {
+						has_resources_amount = { resource = oil amount > 5 }
+						has_resources_amount = { resource = rubber amount > 5 }
+					}
+				}
+			}
+
+			modifier = {
+				factor = 100
+				FROM = { is_core_of = ROOT }
+			}
+			
+			modifier = {
+				factor = 0.1
+				has_government = democratic
+				FROM = { NOT = { is_core_of = ROOT } }
+			}
+			
+			modifier = {
+				factor = 2.0
+				has_government = fascism
+			}
+		}
+	}
+
+	peace_claim = {
+		icon = GFX_decision_infiltrate_state
+		cost = 0
+		state_target = yes
+		on_map_mode = map_only
+		target_trigger = {
+			always = no
+			check_variable = { FROM.state_taken = 0 }
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+		fire_only_once = yes
+
+		visible = {
+			check_variable = { FROM.state_taken = 0 }
+		}
+
+		available = {
+			check_variable = { FROM.state_taken = 0 }
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 4 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM.owner
+				value = pts
+				compare = greater_than_or_equals
+			}
+			FROM = {
+				NOT = {
+					OR = {
+						is_claimed_by = ROOT
+						is_core_of = ROOT
+					}
+				}
+			}
+		}
+
+		complete_effect = {
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 4 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			custom_effect_tooltip = peace_puppet_cost
+			subtract_from_variable = { vp@FROM.owner = pts }
+			ROOT = {
+				add_state_claim = FROM
+			}
+			
+			set_variable = { FROM.state_taken = 1 }
+			
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_claim
+			}
+		}
+
+		timeout_effect = {
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_claim
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = vp@FROM.owner value = 20 compare = less_than }
+			}
+			
+			modifier = {
+				add = 20
+				FROM = {
+					any_neighbor_state = {
+						is_owned_by = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	peace_set_dmz = {
+		icon = GFX_decision_border_war
+		cost = 0
+		state_target = yes
+		on_map_mode = map_only
+		target_trigger = {
+			always = no
+			check_variable = { FROM.state_taken = 0 }
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+		fire_only_once = yes
+
+		visible = {
+			check_variable = { FROM.state_taken = 0 }
+		}
+
+		available = {
+			check_variable = { FROM.state_taken = 0 }
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 4 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM.owner
+				value = pts
+				compare = greater_than_or_equals
+			}
+			# НОВОЕ: Нельзя демилитаризовать территорию третьей стороны
+			FROM = {
+				OR = {
+					controller = { tag = ROOT }
+					controller = { tag = FROM.owner }
+					controller = { is_in_faction_with = ROOT }
+					controller = { is_puppet_of = ROOT }
+				}
+			}
+		}
+
+		complete_effect = {
+			set_temp_variable = { pts = FROM.state_strategic_value }
+			divide_temp_variable = { pts = 4 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			custom_effect_tooltip = peace_puppet_cost
+			subtract_from_variable = { vp@FROM.owner = pts }
+			FROM = {
+				set_demilitarized_zone = yes
+			}
+			set_variable = { FROM.state_taken = 1 }
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_set_dmz
+			}
+		}
+
+		timeout_effect = {
+			remove_targeted_decision = {
+				target = FROM
+				decision = peace_set_dmz
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				FROM = {
+					any_neighbor_state = {
+						is_owned_by = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 5.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+		}
+	}
+}

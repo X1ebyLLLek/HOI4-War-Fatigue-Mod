@@ -1,0 +1,146 @@
+add_namespace = plus_cs
+
+# ==========================================
+# VETO LOGIC (FACTION LEADER INTERVENTION)
+# ==========================================
+
+# 1. Запрос лидеру (Отправляет СТРАНА А, получатель ЛИДЕР СТРАНЫ Б)
+# FROM = Страна А (Агрессор/Инициатор)
+# event_target:peace_recipient = Страна Б (Член альянса)
+country_event = {
+	id = plus_cs.20
+	title = plus_cs.20.t
+	desc = plus_cs.20.d
+	picture = GFX_report_event_generic_conference
+	is_triggered_only = yes
+	
+	# Option A: Разрешить (Approve)
+	option = {
+		name = plus_cs.20.a
+		ai_chance = { base = 90 }
+		
+		# Сообщаем Стране А, что мы согласны
+		FROM = { country_event = { id = plus_cs.21 } }
+	}
+	
+	# Option B: Запретить (Veto)
+	option = {
+		name = plus_cs.20.b
+		ai_chance = { 
+			base = 10 
+			modifier = {
+				factor = 0
+				has_war_with = FROM 
+				surrender_progress < 0.1
+				has_war_support > 0.6
+			}
+		}
+		
+		# Сообщаем Стране А, что мы отказали
+		FROM = { country_event = { id = plus_cs.22 } }
+	}
+}
+
+# 2. Лидер разрешил (Приходит СТРАНЕ А)
+# FROM = Лидер Страны Б
+country_event = {
+	id = plus_cs.21
+	title = plus_cs.21.t
+	desc = plus_cs.21.d
+	is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		# Теперь А (ROOT) может официально предложить мир Б.
+		# Мы запускаем оригинальный ивент на Б.
+		event_target:peace_recipient = {
+			if = {
+				limit = { FROM = { has_country_flag = plus_cs_peace_type_negotiation } }
+				country_event = { id = plus_cs.1 } # Negotiation
+			}
+			else_if = {
+				limit = { FROM = { has_country_flag = plus_cs_peace_type_preferences } }
+				country_event = { id = plus_cs.2 } # Preferences
+			}
+			else = {
+				country_event = { id = plus_cs.4 } # White Peace
+			}
+		}
+	}
+}
+
+# 3. Лидер запретил (Приходит СТРАНЕ А)
+country_event = {
+	id = plus_cs.22
+	title = plus_cs.22.t
+	desc = plus_cs.22.d
+	picture = GFX_report_event_generic_read_write
+	is_triggered_only = yes
+	
+	# Option A: Ну ладно (Отмена)
+	option = {
+		name = plus_cs.22.a
+		clr_country_flag = plus_cs_waiting_response
+	}
+	
+	# Option B: Предложить сепаратный мир (В обход лидера)
+	option = {
+		name = plus_cs.22.b
+		
+		event_target:peace_recipient = {
+			country_event = { id = plus_cs.23 }
+		}
+	}
+}
+
+# 4. Предложение сепаратного мира (Приходит СТРАНЕ Б)
+# FROM = Страна А
+country_event = {
+	id = plus_cs.23
+	title = plus_cs.23.t
+	desc = plus_cs.23.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	# Option A: Я верен альянсу (Отказ)
+	option = {
+		name = plus_cs.23.a
+		ai_chance = { base = 90 }
+		add_stability = 0.05
+		add_war_support = 0.05
+		FROM = { clr_country_flag = plus_cs_waiting_response }
+	}
+	
+	# Option B: К черту лидера, я выхожу! (Согласие)
+	option = {
+		name = plus_cs.23.b
+		ai_chance = { 
+			base = 10 
+			modifier = {
+				add = 100
+				has_country_flag = plus_cs_urgent_peace
+			}
+			modifier = {
+				add = 50
+				surrender_progress > 0.3
+			}
+		}
+		
+		leave_faction = yes
+		add_stability = -0.1
+		add_political_power = -50
+		
+		# Теперь мы можем принять мир.
+		if = {
+			limit = { FROM = { has_country_flag = plus_cs_peace_type_negotiation } }
+			country_event = { id = plus_cs.1 }
+		}
+		else_if = {
+			limit = { FROM = { has_country_flag = plus_cs_peace_type_preferences } }
+			country_event = { id = plus_cs.2 }
+		}
+		else = {
+			country_event = { id = plus_cs.4 }
+		}
+	}
+}

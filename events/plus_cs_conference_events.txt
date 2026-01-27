@@ -1,0 +1,261 @@
+add_namespace = plus_cs
+
+# ==========================================
+# CONFERENCE & TREATY EVENTS
+# ==========================================
+
+# Event 2: Political Preferences / Imperial Conference
+country_event = {
+	id = plus_cs.2
+	title = plus_cs.2.t
+	desc = plus_cs.2.d
+	picture = GFX_report_event_imperial_conference
+	is_triggered_only = yes
+	
+	trigger = { is_puppet = no }
+
+	immediate = {
+		set_temp_variable = { cnt_og_vp = 0 }
+		plus_cs_calculate_total_strategic_value = yes
+		# Calculate acceptance chance
+		plus_cs_calc_conditional_surrender_chance = yes
+		log = "[PEACE_LOG] EVENT: [ROOT.GetName] considering CONDITIONAL SURRENDER from [FROM.GetName]. Score: [?plus_cs_final_calc_score]."
+	}
+
+	# Option A: Discuss Terms (Accept)
+	option = {
+		name = plus_cs.2.a
+		ai_chance = {
+			base = 5 # Chaos Factor
+			
+			# === WEIGHTED PROBABILITY ===
+			# Score > 0: Increasing chance
+			modifier = { add = 10 check_variable = { plus_cs_final_calc_score > 0 } }
+			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 40 } }
+			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
+			
+			# Score < 0: Decreasing chance
+			# Score < 0: Decreasing chance
+			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
+			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -50 } } # Relaxed from 0.1
+			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -80 } } # Relaxed from 0.0
+		}
+
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Minor Flow)."
+			every_country = {
+				limit = {
+					OR = {
+						tag = ROOT
+						is_puppet_of = ROOT
+					}
+				}
+				every_state = {
+					limit = {
+						owner = {
+							OR = {
+								AND = {
+									FROM = { is_faction_leader = no }
+									OR = {
+										tag = FROM
+										is_puppet_of = FROM
+									}
+								}
+								AND = {
+									FROM = { is_faction_leader = yes }
+									is_in_faction_with = FROM
+								}
+							}
+						}
+					}
+					PREV = {
+						set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+						activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_puppet }
+						activate_targeted_decision = { target = PREV decision = peace_liberate }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+				}
+			}
+		}
+		else = {
+			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Major Flow)."
+			every_state = {
+				limit = {
+					owner = {
+						OR = {
+							AND = {
+								FROM = { is_faction_leader = no }
+								OR = {
+									tag = FROM
+									is_puppet_of = FROM
+								}
+							}
+							AND = {
+								FROM = { is_faction_leader = yes }
+								is_in_faction_with = FROM
+							}
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						is_in_faction_with = ROOT
+						has_war_with = FROM
+						# OPTIMIZATION: Only if relevant to this state
+						PREV = {
+							OR = {
+								is_core_of = PREV.PREV
+								is_claimed_by = PREV.PREV
+							}
+						}
+					}
+					set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+					activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+					activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+					activate_targeted_decision = { target = PREV decision = peace_take_state }
+					activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+					activate_targeted_decision = { target = PREV decision = peace_puppet }
+					activate_targeted_decision = { target = PREV decision = peace_liberate }
+					activate_targeted_decision = { target = PREV decision = peace_claim }
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				is_faction_leader = no
+			}
+			# Removed potentially undefined custom effects
+			# plus_cs_save_third_party_control = yes
+			
+			white_peace = FROM
+			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+			set_truce = {
+				target = FROM
+				days = 720
+			}
+			
+			# plus_cs_restore_third_party_control = yes
+		}
+		else = {
+			every_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					has_capitulated = yes
+				}
+				remove_from_faction = yes
+			}
+			# plus_cs_save_third_party_control = yes
+			
+			every_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					has_capitulated = no
+				}
+				white_peace = FROM
+				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+				set_truce = {
+					target = FROM
+					days = 720
+				}
+			}
+			
+			# plus_cs_restore_third_party_control = yes
+		}
+
+		if = {
+			limit = {
+				FROM = { is_faction_leader = no }
+			}
+			FROM = {
+				leave_faction = yes
+				add_timed_idea = {
+					idea = conditional_surrender
+					days = 720
+				}
+			}
+		}
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+		}
+	}
+
+	# Option B: Refuse
+	option = {
+		name = plus_cs.2.b
+		ai_chance = { 
+			base = 50
+			
+			# Win Harder: If Winning, almost definitely Refuse
+			# Win Harder: If Winning, almost definitely Refuse
+			modifier = {
+				add = 50 # Reduced from 100 (Allow ~7% chance to accept)
+				surrender_progress < 0.1
+				FROM = { surrender_progress > 0.1 }
+			}
+		}
+		
+		
+		add_war_support = 0.05
+		add_stability = 0.02
+		
+		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] REFUSED Conditional Surrender from [FROM.GetName]."
+
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_war_strain
+					has_country_flag = plus_cs_stalemate
+				}
+			}
+			add_war_support = -0.10
+			add_stability = -0.10
+			custom_effect_tooltip = plus_cs.2.b.tooltip_1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			add_war_support = -0.15
+			add_stability = -0.15
+			custom_effect_tooltip = plus_cs.2.b.tooltip_2
+		}
+		
+		FROM = {
+			clr_country_flag = plus_cs_waiting_response
+			news_event = { id = plus_cs.6 }
+		}
+	}
+}
+
+# Event 3: Treaty Signature (Mode Toggle)
+country_event = {
+	id = plus_cs.3
+	title = plus_cs.3.t
+	desc = plus_cs.3.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.3.a
+		set_global_flag = plus_cs_easy_surrender_mode
+	}
+
+	option = {
+		name = plus_cs.3.b
+		clr_global_flag = plus_cs_easy_surrender_mode
+	}
+}

@@ -1,0 +1,41 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: TOOLTIP DISPLAY
+# Logic for enforcing which tooltips are shown based on calculation flags.
+# ==============================================================================
+
+# =============================================
+# plus_cs_show_chance_tooltip
+# Displays the appropriate chance tooltip (High/Medium/Low)
+# based on flags set by plus_cs_chance_calculator.txt
+# =============================================
+plus_cs_show_chance_tooltip = {
+	if = {
+		limit = { has_country_flag = plus_cs_chance_high }
+		custom_effect_tooltip = plus_cs_chance_high_tt
+	}
+	else_if = {
+		limit = { has_country_flag = plus_cs_chance_medium }
+		custom_effect_tooltip = plus_cs_chance_medium_tt
+	}
+	else = {
+		custom_effect_tooltip = plus_cs_chance_low_tt
+	}
+}
+
+# =============================================
+# plus_cs_show_negotiation_tooltip_dynamic
+# Calculates and displays negotiation chance tooltip
+# =============================================
+plus_cs_show_negotiation_tooltip_dynamic = {
+	plus_cs_calc_negotiation_chance = yes
+	plus_cs_show_chance_tooltip = yes
+}
+
+# =============================================
+# plus_cs_show_white_peace_tooltip_dynamic
+# Calculates and displays white peace chance tooltip
+# =============================================
+plus_cs_show_white_peace_tooltip_dynamic = {
+	plus_cs_calc_white_peace_chance = yes
+	plus_cs_show_chance_tooltip = yes
+}

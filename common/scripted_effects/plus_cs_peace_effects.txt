@@ -151,3 +151,46 @@ plus_cs_check_third_party_control = {
 		}
 	}
 }
+
+# =============================================
+# plus_cs_calculate_total_strategic_value
+# Calculates strategic value (cnt_og_vp) for all involved parties
+# Used in Negotiation logic
+# =============================================
+plus_cs_calculate_total_strategic_value = {
+	# 1. Reset Variables
+	every_country = {
+		set_variable = { cnt_og_vp = 0 }
+	}
+
+	# 2. Calculate
+	every_country = {
+		limit = {
+			OR = {
+				AND = {
+					ROOT = { is_faction_leader = no }
+					OR = {
+						tag = ROOT
+						is_puppet_of = ROOT
+					}
+				}
+				AND = {
+					ROOT = { is_faction_leader = yes }
+					is_in_faction_with = ROOT
+				}
+				has_war_with = ROOT
+			}
+		}
+		every_owned_state = {
+			if = {
+				limit = {
+					controller = {
+						has_war_with = PREV.owner
+					}
+				}
+				# FIX: Use persistent variable, not temp
+				add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+			}
+		}
+	}
+}

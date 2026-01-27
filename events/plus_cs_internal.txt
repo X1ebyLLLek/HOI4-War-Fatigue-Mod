@@ -1,39 +1,42 @@
 add_namespace = plus_cs_internal
 
 # ==============================================================================
-# ВНУТРЕННИЕ КРИЗИСЫ (INTERNAL CRISES)
-# 1. Defeatist Coup (Ультиматум генералов)
+# INTERNAL CRISES EVENTS
+# 1. Military Ultimatum (Generals demand peace or purge)
+# 2. Regime Collapse / Changes
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# 1. MILITARY ULTIMATUM (Генералы требуют мира)
+# 1. MILITARY ULTIMATUM
+# Triggered when pressure ratio is high (> 0.8) and stability is low (< 0.4).
 # ------------------------------------------------------------------------------
 country_event = {
 	id = plus_cs_internal.1
 	title = plus_cs_internal.1.t
 	desc = plus_cs_internal.1.d
 	picture = GFX_report_event_generic_parliament
-	is_triggered_only = yes # Из цикла optimization
+	is_triggered_only = yes # Triggered from optimization loop
 
 	trigger = {
 		has_war = yes
 		has_civil_war = no
-		surrender_progress > 0.3
+		# Updated to use Score System: Crisis Mode
+		check_variable = { plus_cs_pressure_ratio > 0.8 }
 		has_stability < 0.4
 		
-		# Проверка относительных потерь (> 5% от total population)
-		# Сложная формула, используем упрощение через переменные, посчитанные в цикле
+		# Relative casualties check (> 5% of total population)
+		# Handled via variables in calculation loop
 		# var:casualties_ratio > 0.05
 	}
 
-	# Вариант А: "Ни шагу назад!" (Провести чистки)
+	# Option A: "Not one step back!" (Purge Generals)
 	option = {
 		name = plus_cs_internal.1.a
 		ai_chance = {
 			base = 80
 			modifier = {
 				factor = 0.1
-				has_government = democratic # Демократы вряд ли станут расстреливать генералов
+				has_government = democratic # Democrats unlikely to purge
 			}
 			modifier = {
 				add = 50
@@ -46,11 +49,10 @@ country_event = {
 		}
 		
 		add_political_power = -100
-		add_stability = -0.15 # Шок
-		add_war_support = 0.10 # Пропаганда "Враг у ворот"
+		add_stability = -0.15 # Shock
+		add_war_support = 0.10 # "Enemy at the gates" propaganda
 		
-		# Убиваем рандомных генералов/фельдмаршалов (через скрипт эффекта, если возможно, или абстрактно)
-		# Абстрактный штраф к армии
+		# Abstract penalty for purging army command
 		add_timed_idea = {
 			idea = army_purge_aftershock
 			days = 90
@@ -59,7 +61,7 @@ country_event = {
 		custom_effect_tooltip = plus_cs_purge_tt
 	}
 
-	# Вариант Б: "Мы должны спасти нацию" (Смена курса)
+	# Option B: "We must save the nation" (Change Course)
 	option = {
 		name = plus_cs_internal.1.b
 		ai_chance = {
@@ -69,31 +71,68 @@ country_event = {
 				has_government = democratic
 			}
 			modifier = {
-				factor = 0
-				has_government = fascism # Гитлер не уйдет сам
-				surrender_progress < 0.8
+				factor = 0.1
+				has_government = fascism
+				check_variable = { plus_cs_pressure_ratio < 1.5 }
 			}
 		}
 		
-		# Смена правительства
-		# Если фашисты/коммунисты -> становятся Нейтралами (Хунта)
+		# === GRANULAR OUTCOMES ===
+		
+		# 1. MILD CRISIS (Ratio < 1.1) -> Cabinet Reshuffle
 		if = {
-			limit = { OR = { has_government = fascism has_government = communism } }
-			set_politics = {
-				ruling_party = neutrality
-				elections_allowed = no
+			limit = { check_variable = { plus_cs_pressure_ratio < 1.1 } }
+			add_political_power = -50
+			add_stability = -0.05
+			# Abstract "Reshuffle" effect: Dummy change
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1 
 			}
 		}
 		
-		add_stability = 0.20 # "Наконец-то этот безумец ушел"
-		add_war_support = -0.20
+		# 2. SEVERE CRISIS (Ratio 1.1 - 1.5) -> Junta / Technocracy
+		else_if = {
+			limit = { check_variable = { plus_cs_pressure_ratio < 1.5 } }
+			if = {
+				limit = { OR = { has_government = fascism has_government = communism } }
+				set_politics = {
+					ruling_party = neutrality
+					elections_allowed = no
+				}
+			}
+			add_stability = 0.10
+			add_war_support = 0.05
+		}
 		
-		# Попытка белого мира
+		# 3. COLLAPSE (Ratio > 1.5) -> Regime Change
+		else = {
+			# If fighting Democracies -> Become Democratic
+			if = {
+				limit = { any_enemy_country = { has_government = democratic } }
+				set_politics = {
+					ruling_party = democratic
+					elections_allowed = yes
+				}
+			}
+			# Otherwise -> Neutrality (Order)
+			else = {
+				set_politics = {
+					ruling_party = neutrality
+					elections_allowed = no
+				}
+			}
+			add_stability = -0.20
+			add_war_support = -0.50
+		}
+		
+		# Attempt White Peace
 		country_event = { id = plus_cs_internal.3 days = 2 }
 	}
 }
 
-# Попытка договориться после переворота
+# ------------------------------------------------------------------------------
+# 2. POST-COUP PEACE ATTEMPT
+# ------------------------------------------------------------------------------
 country_event = {
 	id = plus_cs_internal.3
 	title = plus_cs_internal.3.t
@@ -103,7 +142,12 @@ country_event = {
 	
 	option = {
 		name = plus_cs_internal.3.a
-		white_peace = ALL_ENEMIES
-		# Если враги согласятся... (тут нужна сложная логика запроса, пока упростим до одностороннего выхода если AI)
+		
+		# FIX: 'white_peace = ALL_ENEMIES' is invalid. Iterating over enemies.
+		every_enemy_country = {
+			white_peace = ROOT
+		}
+		# TODO: Ideally this should send an offer, but for crisis collapse we force it for now
+		# or consider it a unilateral withdrawal.
 	}
 }

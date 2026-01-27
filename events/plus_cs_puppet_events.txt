@@ -1,0 +1,196 @@
+add_namespace = plus_cs
+
+# ==========================================
+# PUPPET & PATRON EVENTS (210, 300, 305)
+# ==========================================
+
+# Event 210: Puppet Fate (Subject Transfer)
+country_event = {
+	id = plus_cs.210
+	title = plus_cs.puppet_fate.t
+	desc = plus_cs.puppet_fate.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.puppet_fate.a
+		ai_chance = {
+			base = 80
+			modifier = { factor = 0.5 has_government = fascism }
+			modifier = { factor = 0.5 has_government = communism }
+		}
+
+		white_peace = event_target:new_potential_master
+		
+		event_target:new_potential_master = {
+			puppet = ROOT
+		}
+		
+		add_timed_idea = {
+			idea = high_status_puppet_benefit
+			days = 730
+		}
+		
+		add_stability = 0.10
+	}
+
+	option = {
+		name = plus_cs.puppet_fate.b
+		ai_chance = {
+			base = 20
+			modifier = { factor = 2.0 has_government = fascism }
+			modifier = { factor = 1.5 strength_ratio = { tag = event_target:new_potential_master ratio > 0.4 } }
+		}
+
+		set_autonomy = {
+			target = FROM
+			autonomy_state = autonomy_free
+		}
+		
+		add_war_support = 0.15
+		add_stability = -0.05
+		add_timed_idea = { idea = revanchism_spirit days = 365 }
+	}
+}
+
+# --- ИСПРАВЛЕННЫЙ ИВЕНТ 300: Выбор покровителя ---
+country_event = {
+	id = plus_cs.300
+	title = plus_cs.300.t
+	desc = plus_cs.300.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	immediate = {
+		# 1. Находим, с кем воюют революционеры (Гражданская война)
+		if = {
+			limit = {
+				any_enemy_country = {
+					original_tag = ROOT
+				}
+			}
+			random_enemy_country = {
+				limit = {
+					original_tag = ROOT
+				}
+				save_event_target_as = cw_target
+			}
+		}
+		
+		# 2. Ищем лучшего кандидата среди врагов цели
+		if = {
+			limit = { has_event_target = cw_target }
+			
+			# Переменные для сравнения
+			set_temp_variable = { best_score = -1 }
+			
+			event_target:cw_target = {
+				every_enemy_country = {
+					limit = {
+						NOT = { tag = ROOT }          # Не революционеры
+						NOT = { is_puppet_of = ROOT } # Не марионетки революционеров
+						NOT = { is_puppet = yes }     # Ищем независимого покровителя
+					}
+					
+					# Считываем вклад этого врага в войну против cw_target
+					# (Используем твою переменную vp@TAG из on_state_control_changed)
+					set_temp_variable = { current_score = var:vp@event_target:cw_target }
+					
+					# Если переменной нет (начало войны), считаем за 0
+					if = {
+						limit = { NOT = { check_variable = { current_score > -1 } } }
+						set_temp_variable = { current_score = 0 }
+					}
+					
+					# СРАВНЕНИЕ: Если этот кандидат лучше предыдущего
+					if = {
+						limit = { check_variable = { current_score > best_score } }
+						set_temp_variable = { best_score = current_score }
+						save_event_target_as = strong_master # Сохраняем лидера гонки
+					}
+				}
+			}
+			
+			# 3. РЕЗЕРВНЫЙ ВАРИАНТ (Если война только началась и очков захвата ни у кого нет)
+			# Выбираем просто самого мощного по заводам
+			if = {
+				limit = { NOT = { has_event_target = strong_master } }
+				event_target:cw_target = {
+					random_enemy_country = {
+						limit = { NOT = { tag = ROOT } }
+						save_event_target_as = strong_master
+					}
+					# Пытаемся найти самого сильного, если рандом выбрал слабого
+					every_enemy_country = {
+						limit = {
+							NOT = { tag = ROOT }
+							num_of_factories > event_target:strong_master.num_of_factories
+						}
+						save_event_target_as = strong_master
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = plus_cs.300.a
+		trigger = { has_event_target = strong_master }
+		
+		ai_chance = {
+			base = 90
+			# Если покровитель совсем слабый по сравнению с целью, ИИ может побояться
+			modifier = {
+				factor = 0.1
+				strength_ratio = { tag = event_target:strong_master ratio > 1.5 } # Враг слабее покровителя
+			}
+		}
+
+		event_target:strong_master = {
+			country_event = { id = plus_cs.305 }
+		}
+		
+		add_stability = 0.10
+		add_war_support = 0.10
+	}
+
+	option = {
+		name = plus_cs.300.b
+		trigger = { has_event_target = strong_master }
+		ai_chance = {
+			base = 10
+			modifier = {
+				factor = 2.0
+				has_government = fascism
+			}
+			# Если мы сильнее врага, зачем нам хозяин?
+			modifier = {
+				factor = 5.0
+				strength_ratio = { tag = event_target:cw_target ratio < 0.5 }
+			}
+		}
+
+		declare_war_on = {
+			target = event_target:strong_master
+			type = annex_everything
+		}
+		
+		add_stability = 0.05
+		add_war_support = 0.15
+		add_timed_idea = { idea = revanchism_spirit days = 365 }
+	}
+}
+
+country_event = {
+	id = plus_cs.305
+	title = plus_cs.301.t
+	desc = plus_cs.301.d
+	picture = GFX_news_event_generic_victory
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.301.a
+		puppet = FROM
+		add_political_power = 25
+	}
+}

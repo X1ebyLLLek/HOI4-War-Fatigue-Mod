@@ -1,0 +1,234 @@
+add_namespace = plus_cs_pulse
+
+# ==============================================================================
+# MONTHLY PEACE PULSE
+# Triggers once/month for every country at war.
+# Handles the PROBABILITY of offering peace.
+# ==============================================================================
+
+country_event = {
+	id = plus_cs_pulse.1
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_war = yes
+		has_capitulated = no
+		is_puppet = no
+		NOT = { has_country_flag = plus_cs_waiting_response }
+		NOT = { has_country_flag = plus_cs_peace_cooldown }
+		
+		# 1. Civil War Block
+		# Countries in civil war cannot use normal diplomacy
+		NOT = { has_civil_war = yes }
+		
+		# 2. Faction Hierarchy
+		# Only Faction Leaders or Independents can propose general peace.
+		OR = {
+			is_faction_leader = yes
+			is_in_faction = no
+		}
+	}
+
+	immediate = {
+		# Find a relevant enemy to propose to (Simplified: Random Enemy Leader)
+		random_enemy_country = {
+			limit = { is_major = yes }
+			save_event_target_as = peace_target
+		}
+		
+		# If no Major enemy, pick any enemy
+		if = {
+			limit = { NOT = { has_event_target = peace_target } }
+			random_enemy_country = {
+				save_event_target_as = peace_target
+			}
+		}
+
+		# Only proceed if we have a target
+		if = {
+			limit = { has_event_target = peace_target }
+			
+			# === THE ROULETTE ===
+			random_list = {
+				# ----------------------------------------------------------
+				# OPTION 1: DO NOTHING (Default)
+				# ----------------------------------------------------------
+				100 = {
+					# Base inertia: 100.
+					# Winning Bonus: If we are winning, this weight is HUGE.
+					modifier = {
+						add = 500
+						surrender_progress < 0.1
+						event_target:peace_target = { surrender_progress > 0.05 }
+					}
+				}
+
+				# ----------------------------------------------------------
+				# OPTION 2: WHITE PEACE / NEGOTIATION
+				# ----------------------------------------------------------
+				0 = {
+					# Modifiers ADD probability weight here.
+					
+					# Stalemate Logic (Split by Stress/Pressure)
+					# Case A: Low Pressure (Boredom) -> Negligible (~0.3%)
+					modifier = {
+						add = 2
+						has_country_flag = plus_cs_stalemate
+						check_variable = { plus_cs_pressure_ratio < 0.5 }
+					}
+					# Case B: High Pressure (Futility) -> Minor Nudge (~1.5%)
+					# The main weight comes from Pressure modifiers below (+20/40/80)
+					modifier = {
+						add = 10
+						has_country_flag = plus_cs_stalemate
+						check_variable = { plus_cs_pressure_ratio > 0.5 }
+					}
+					
+					# Crisis: +10 / +30 / +100
+					modifier = { add = 10 has_idea = internal_crisis_low }
+					modifier = { add = 30 has_idea = internal_crisis_medium }
+					modifier = { add = 100 has_idea = internal_crisis_high } # 50/50 chance if Crisis High
+					
+					# === ORGANIC PRESSURE LOGIC ===
+					# "Pressure Ratio" is the aggregate calculation of stress (Casualties, Bombing, Stability).
+					# 1.0 = High Stress. 2.0 = Breaking Point.
+					
+					# Moderate Pressure (Time to talk?)
+					modifier = {
+						add = 20
+						check_variable = { plus_cs_pressure_ratio > 0.8 }
+					}
+					
+					# High Pressure (We need out)
+					modifier = {
+						add = 40
+						check_variable = { plus_cs_pressure_ratio > 1.2 }
+					}
+					
+					# Extreme Pressure (Any peace is good)
+					modifier = {
+						add = 80
+						check_variable = { plus_cs_pressure_ratio > 1.6 }
+					}
+					
+					# Winning/Comfortable (Don't propose unless Stalemate)
+					# If Ratio is low (< 0.5), we are mostly fine.
+					modifier = {
+						factor = 0.1 # Strong reduction (Restored from 0.5)
+						check_variable = { plus_cs_pressure_ratio < 0.5 }
+						NOT = { has_country_flag = plus_cs_stalemate }
+					}
+					
+					# "Paper Tiger" Protection (Ultra Low Pressure)
+					# If we have effectively ZERO pressure (start of war, no casualties), 
+					# mere internal grumbling (Low/Medium Crisis) is ignored for peace deals.
+					modifier = {
+						factor = 0.1 # Stacks with above: 0.1 * 0.1 = 0.01 (1% of base weight) -> Effectively 0.
+						check_variable = { plus_cs_pressure_ratio < 0.1 }
+						NOT = { has_idea = internal_crisis_high } # Serious crisis still matters
+						NOT = { has_country_flag = plus_cs_stalemate }
+					}
+					
+					# Democratic Preference for Peace
+					modifier = {
+						add = 20
+						has_government = democratic
+						check_variable = { plus_cs_pressure_ratio > 0.2 } # Not totally safe, but winning normally
+					}
+
+					# === PROPOSAL SELECTION (GRADIENT LOGIC) ===
+					# Instead of hard Priority (White Peace > Conditional), we use weights.
+					# Low Pressure -> Prefers White Peace (Optimism)
+					# High Pressure -> Prefers Conditional (Realism)
+					
+					random_list = {
+						# 1. WHITE PEACE (The "Hopeful" Option)
+						# Base: 100
+						# Pressure > 1.0: Factor 0.2 (20) -> Very unlikely if losing hard
+						100 = {
+							modifier = {
+								factor = 0.2
+								check_variable = { plus_cs_pressure_ratio > 1.0 }
+							}
+							log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Pressure: [?plus_cs_pressure_ratio]) decided to propose WHITE PEACE to [peace_target.GetName]."
+							
+							# Execute Effect directly (Simulate decision)
+							set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+							event_target:peace_target = { save_event_target_as = peace_recipient }
+							save_event_target_as = peace_sender
+							clr_country_flag = plus_cs_peace_type_preferences
+							
+							# Send directly
+							event_target:peace_target = { country_event = { id = plus_cs.4 } }
+						}
+						
+						# 2. CONDITIONAL SURRENDER (The "Realistic" Option)
+						# Base: 10.
+						10 = {
+							modifier = {
+								add = 40
+								check_variable = { plus_cs_pressure_ratio > 0.8 }
+							}
+							modifier = {
+								add = 160 
+								check_variable = { plus_cs_pressure_ratio > 1.0 }
+							}
+							log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Pressure: [?plus_cs_pressure_ratio]) decided to propose CONDITIONAL SURRENDER to [peace_target.GetName]."
+							
+							# Execute Effect directly
+							set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+							event_target:peace_target = { save_event_target_as = peace_recipient }
+							save_event_target_as = peace_sender
+							set_country_flag = plus_cs_peace_type_negotiation
+							
+							event_target:peace_target = { country_event = { id = plus_cs.1 } }
+						}
+						
+						# Fallback
+						0 = {
+							modifier = {
+								factor = 0 # Dummy valid syntax
+								always = no
+							}
+						}
+					}
+				}
+
+				# ----------------------------------------------------------
+				# OPTION 3: OFFER SUBMISSION (Desperation)
+				# ----------------------------------------------------------
+				0 = {
+					# Only possible if losing badly
+					
+					# Losing Capital + Crisis = High Chance
+					modifier = {
+						add = 100
+						surrender_progress > 0.4
+						has_idea = internal_crisis_high
+					}
+					
+					# Total Collapse
+					modifier = {
+						add = 200
+						surrender_progress > 0.7
+					}
+					
+					modifier = {
+						factor = 0
+						surrender_progress < 0.1
+					}
+					
+					log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Surrender: [?surrender_progress]) decided to propose SUBMISSION to [peace_target.GetName]."
+                    
+					# Execute Effect directly
+					set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+					event_target:peace_target = { save_event_target_as = peace_recipient }
+					save_event_target_as = peace_sender
+					
+					event_target:peace_target = { country_event = { id = plus_cs.201 } }
+				}
+			}
+		}
+	}
+}

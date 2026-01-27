@@ -1,0 +1,97 @@
+add_namespace = plus_cs
+
+# ==========================================
+# PEACE OUTCOME & NEWS EVENTS
+# ==========================================
+
+# Event 5: Peace Accepted News
+news_event = {
+	id = plus_cs.5
+	title = plus_cs.5.t
+	desc = plus_cs.5.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty2
+
+	option = {
+		name = plus_cs.5.a
+	}
+}
+
+# Event 6: Peace Rejected News
+news_event = {
+	id = plus_cs.6
+	title = plus_cs.6.t
+	desc = plus_cs.6.d
+	is_triggered_only = yes
+	picture = GFX_report_event_generic_sign_treaty2
+
+	option = {
+		name = plus_cs.6.a
+	}
+}
+
+# Event 7: Cleanup / Ceasefire logic?
+country_event = {
+	id = plus_cs.7
+	title = plus_cs.7.t
+	desc = plus_cs.7.d
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.7.a
+		set_temp_variable = { cont = global.province_controllers }
+		white_peace = FROM
+		set_truce = {
+			target = FROM
+			days = 14
+		}
+		for_each_loop = {
+			array = var:cont
+			var:v = {
+				add_political_power = 1
+				set_province_controller = var:i
+			}
+		}
+
+	}
+}
+
+# =============================================
+# plus_cs.410 - Уведомление о сепаратном мире
+# FROM = страна, заключившая мир
+# Получатель = третья сторона, чьи территории сохранены
+# =============================================
+country_event = {
+	id = plus_cs.410
+	title = plus_cs.410.t
+	desc = plus_cs.410.d
+	picture = GFX_report_event_generic_sign_treaty2
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.410.a
+		ai_chance = { base = 100 }
+		
+		# Информационное событие - просто подтверждение
+		add_political_power = 10
+		custom_effect_tooltip = plus_cs_territory_preserved_tt
+	}
+}
+
+# Event 8: Internal Crisis / Civil War
+country_event = {
+	id = plus_cs.8
+	title = plus_cs.8.t
+	desc = plus_cs.8.d
+	is_triggered_only = yes
+	picture = GFX_news_event_generic_revolters
+
+	# Option A: Handle Crisis
+	option = {
+		name = plus_cs.8.a
+		add_stability = 0.10
+		remove_ideas = internal_crisis_high
+		add_timed_idea = { idea = internal_crisis_medium days = 30 }
+		clr_country_flag = civil_war_risk_active
+	}
+}

@@ -3,6 +3,7 @@
  war_reparations_desc:0 "This country is currently paying war reparations to [?war_reps_to.GetNameDef]"
  peace_disarmed_nation:0 "Disarmed Nation"
  peace_civilian_economy:0 "Civilian Economy"
+ peace_economic_tribute:0 "Economic Tribute for Ceasefire"
  ceasefire_economic_tribute:0 "Economic Tribute for Ceasefire"
  
  # FIX: Renamed to avoid duplicate with decision
@@ -90,3 +91,23 @@
 
  # National Spirit Description
  conditional_surrender_desc:0 "This country has admitted defeat on conditions. It cannot join factions or create alliances while treaty restrictions are active."
+ 
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "Fanatic"
+ plus_cs_spirit_fanatic_desc:0 "This leader will never accept surrender unless the nation is completely destroyed.\n\n§RAI Peace Acceptance: -100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist:0 "Defeatist"
+ plus_cs_spirit_defeatist_desc:0 "This leader is pessimistic about the war and will seek peace at the first sign of trouble.\n\n§GAI Peace Acceptance: +100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient:0 "Resilient"
+ plus_cs_spirit_resilient_desc:0 "This leader is stubborn and provides strong resistance against surrender.\n\n§YAI Peace Acceptance: Normal§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: Check Hidden Resolve"
+ plus_cs_debug_vars_desc:0 "§OCurrent Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!\n\nUse this decision to log the value."
+
+ # --- CUSTOM TOOLTIPS (Manual Modifiers + Debug) ---
+ plus_cs_spirit_fanatic_tt:0 "Army Core Defense: §G+10.0%§!\nDivision Organization: §G+10.0%§!\n\nThis leader will never accept surrender unless the nation is completely destroyed.\n\n§RAI Peace Acceptance: -100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "Division Recovery Rate: §R-10.0%§!\nSurrender Limit: §R+10.0%§!\n\nThis leader is pessimistic about the war and will seek peace at the first sign of trouble.\n\n§GAI Peace Acceptance: +100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "Weekly Stability: §G+0.10%§!\n\nThis leader is stubborn and provides strong resistance against surrender.\n\n§YAI Peace Acceptance: Normal§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
+
+ plus_cs_debug_dump_all:0 "DEBUG: Dump ALL Nations Resolve to Log"
+ plus_cs_debug_dump_all_desc:0 "Writes the Hidden Resolve value for EVERY country effectively into error.log (game.log)."

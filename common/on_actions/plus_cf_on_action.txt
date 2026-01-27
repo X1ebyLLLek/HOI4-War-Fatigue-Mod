@@ -9,6 +9,8 @@ on_actions = {
 				country_event = { id = plus_cs.3 }
 			}
 			every_country = {
+				plus_cs_assign_fighting_spirit = yes # Assign initial personality
+				plus_cs_init_hidden_resolve = yes    # Assign hidden random variance (-50..+50)
 				set_variable = { plus_cs_pop_check_timer = 10 }
 				set_variable = { plus_cs_need_recalc = 1 }
 				set_variable = { core_pop_calc = 0 }
@@ -34,6 +36,12 @@ on_actions = {
 			set_variable = { plus_cs_war_count = 0 }
 			every_enemy_country = {
 				add_to_variable = { plus_cs_war_count = 1 }
+			}
+			
+			# Assign Fighting Spirit (Organic Variability)
+			plus_cs_assign_fighting_spirit = yes
+			every_enemy_country = {
+				plus_cs_assign_fighting_spirit = yes
 			}
 			
 			# Инициализация переменных для новых войн

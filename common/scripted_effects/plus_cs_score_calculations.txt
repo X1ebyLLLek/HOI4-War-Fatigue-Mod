@@ -1,0 +1,79 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: WILL TO FIGHT (SCORE SYSTEM)
+# Calculates Resistance Target and Current Pressure to determine surrender logic.
+# ==============================================================================
+
+# =============================================
+# plus_cs_init_hidden_resolve
+# Generates a random character modifier (-50 to +50)
+# =============================================
+plus_cs_init_hidden_resolve = {
+	if = {
+		limit = { NOT = { has_country_flag = plus_cs_resolve_initialized } }
+		
+		# Base value: 0
+		set_variable = { plus_cs_hidden_resolve = 0 }
+		
+		# Random variance: 5 equal tiers
+		random_list = {
+			20 = { set_variable = { plus_cs_hidden_resolve = -50 } } # Weak-willed
+			20 = { set_variable = { plus_cs_hidden_resolve = -25 } }
+			20 = { set_variable = { plus_cs_hidden_resolve = 0 } }   # Average
+			20 = { set_variable = { plus_cs_hidden_resolve = 25 } }
+			20 = { set_variable = { plus_cs_hidden_resolve = 50 } }  # Iron-willed
+		}
+		
+		set_country_flag = plus_cs_resolve_initialized
+	}
+}
+
+# =============================================
+# plus_cs_calc_scores
+# Main Calculation Loop. Run monthly or before decisions.
+# =============================================
+plus_cs_calc_scores = {
+	
+	# --- 1. CALCULATE RESISTANCE TARGET (CAPACITY) ---
+	set_variable = { plus_cs_resistance_target = 100 } # Base
+	
+	# Ideology
+	if = {
+		limit = { OR = { has_government = fascism has_government = communism } }
+		add_to_variable = { plus_cs_resistance_target = 50 }
+	}
+	
+	# War Stance (Assigned per war)
+	if = { limit = { has_country_flag = plus_cs_stance_fanatic } add_to_variable = { plus_cs_resistance_target = 100 } }
+	if = { limit = { has_country_flag = plus_cs_stance_coward } subtract_from_variable = { plus_cs_resistance_target = 50 } }
+	
+	# Leader Traits
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } add_to_variable = { plus_cs_resistance_target = 100 } }
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } subtract_from_variable = { plus_cs_resistance_target = 50 } }
+	
+	# Hidden Resolve (Character)
+	add_to_variable = { plus_cs_resistance_target = plus_cs_hidden_resolve }
+	
+	# Clamp Min to 10 (To avoid divide by zero or instant surrender bugs)
+	clamp_variable = { var = plus_cs_resistance_target min = 10 }
+	
+	
+	# --- 2. CALCULATE CURRENT PRESSURE (LOAD) ---
+	set_variable = { plus_cs_current_pressure = 0 }
+	
+	# Surrender Progress (0.0 to 1.0 -> 0 to 200 Pressure)
+	set_temp_variable = { surr_score = surrender_progress }
+	multiply_temp_variable = { surr_score = 200 }
+	add_to_variable = { plus_cs_current_pressure = surr_score }
+	
+	# Casualties Factor (If manpower is drained)
+	if = { limit = { has_dynamic_modifier = manpower_strain_high } add_to_variable = { plus_cs_current_pressure = 30 } }
+	if = { limit = { has_dynamic_modifier = manpower_strain_collapse } add_to_variable = { plus_cs_current_pressure = 60 } }
+	
+	# Bombing / Stability hits
+	if = { limit = { has_stability < 0.3 } add_to_variable = { plus_cs_current_pressure = 40 } }
+	
+	
+	# --- 3. CALCULATE RATIO ---
+	set_variable = { plus_cs_pressure_ratio = plus_cs_current_pressure }
+	divide_variable = { plus_cs_pressure_ratio = plus_cs_resistance_target }
+}

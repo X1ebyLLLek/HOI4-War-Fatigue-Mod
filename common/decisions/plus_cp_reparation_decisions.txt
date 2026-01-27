@@ -1,0 +1,262 @@
+peace_treaty = {
+
+	# ==============================================================================
+	# REPARATION & ADMINISTRATIVE DECISIONS
+	# ==============================================================================
+
+	ceasefire_end = {
+		icon = GFX_decision_hol_exchange_intelligence_data
+		target_trigger = {
+			FROM = {
+				check_variable = { truce@ROOT = 1 }
+			}
+		}
+		visible = {
+			FROM = {
+				check_variable = { truce@ROOT = 1 }
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		selectable_mission = no
+		days_mission_timeout = 14
+		war_with_target_on_timeout = yes
+
+		targeted_modifier = {
+			political_power_gain = 0.25
+		}
+
+		activation = {
+			always = yes
+		}
+
+		available = {
+			always = no
+		}
+
+		timeout_effect = {
+			every_other_country = {
+				limit = {
+					check_variable = { ROOT.t_prov_scopes@THIS^num > 0 }
+				}
+				log = "FROM IS [?FROM.GetName]"
+				for_each_loop = {
+					array = var:ROOT.t_prov_scopes@THIS
+					log = "DAILY"
+					log = "[?ROOT.t_prov_indexes@THIS^i]"
+					log = "[?v.GetName]"
+					var:v = {
+						set_province_controller = var:ROOT.t_prov_indexes@THIS^var:i
+					}
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { original_tag = FROM.original_tag }
+				}
+				declare_war_on = {
+					target = FROM
+					type = civil_war
+				}
+				add_civil_war_target = FROM
+			}
+			else = {
+				declare_war_on = {
+					target = FROM
+					type = annex_everything
+				}
+			}
+			set_variable = { truce@FROM = 0 }
+			set_variable = { FROM.truce@ROOT = 0 }
+		}
+	}
+
+	peace_war_reparations = {
+		icon = GFX_decision_hol_attract_foreign_investors
+		cost = 0
+		fire_only_once = yes
+		target_trigger = {
+			always = no
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+
+		available = {
+			check_variable = { FROM.wr_payments < 2 }
+			set_temp_variable = { pts = og_vp@FROM }
+			multiply_temp_variable = { pts = 0.17 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM
+				value = pts
+				compare = greater_than_or_equals
+			}
+			FROM = {
+				exists = yes
+				num_of_civilian_factories > 5
+				num_of_military_factories > 7
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_character = {
+							is_country_leader = yes
+							has_trait = successful_negotiator
+						}
+					}
+				}
+				add_country_leader_trait = successful_negotiator
+			}
+			
+			set_temp_variable = { pts = og_vp@FROM }
+			multiply_temp_variable = { pts = 0.17 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			subtract_from_variable = { vp@FROM = pts }
+			add_to_variable = { FROM.wr_payments = 1 }
+			custom_effect_tooltip = peace_war_reparations_cost
+			FROM = {
+				activate_targeted_decision = {
+					target = ROOT
+					decision = peace_pay_war_reparations
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 50
+			modifier = {
+				add = 20
+				check_variable = { num_of_civilian_factories < FROM.num_of_civilian_factories }
+			}
+			modifier = {
+				factor = 2
+				FROM = { is_major = yes }
+			}
+			modifier = {
+				factor = 1.5
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0.5
+				OR = {
+					has_government = fascism
+					has_government = communism
+				}
+			}
+		}
+	}
+
+	peace_pay_war_reparations = {
+		icon = GFX_decision_hol_attract_foreign_investors
+		fire_only_once = yes
+		days_remove = 720
+		activation = { always = yes }
+
+		is_good = no
+		selectable_mission = no
+
+		target_trigger = {
+			always = no
+		}
+
+		days_mission_timeout = 100
+		targeted_modifier = {
+			tag = FROM
+			cic_to_target_factor = 0.14
+			mic_to_target_factor = 0.2
+		}
+
+		remove_effect = {
+			subtract_from_variable = { wr_payments = 1 }
+		}
+	}
+
+	peace_disarm = {
+		icon = GFX_decision_generic_prepare_civil_war
+		cost = 0
+		fire_only_once = yes
+		target_trigger = {
+			always = no
+		}
+		is_good = yes
+		selectable_mission = yes
+		days_mission_timeout = 30
+
+		available = {
+			set_temp_variable = { pts = og_vp@FROM }
+			divide_temp_variable = { pts = 5 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			check_variable = {
+				var = vp@FROM
+				value = pts
+				compare = greater_than_or_equals
+			}
+			FROM = {
+				exists = yes
+				NOT = {
+					has_idea = peace_disarmed_nation
+					has_idea = peace_civilian_economy
+				}
+			}
+		}
+
+		complete_effect = {
+			set_temp_variable = { pts = og_vp@FROM }
+			divide_temp_variable = { pts = 5 }
+			round_temp_variable = pts
+			clamp_temp_variable = {
+				var = pts
+				min = 1
+			}
+			subtract_from_variable = { vp@FROM = pts }
+			custom_effect_tooltip = peace_war_reparations_cost
+			FROM = {
+				add_timed_idea = {
+					idea = peace_disarmed_nation
+					days = 720
+				}
+				add_timed_idea = {
+					idea = peace_civilian_economy
+					days = 720
+				}
+				add_country_leader_trait = humiliated_leader
+			}
+		}
+
+		ai_will_do = {
+			base = 30
+			modifier = {
+				add = 50
+				FROM = { is_major = yes }
+			}
+			modifier = {
+				factor = 2
+				strength_ratio = { tag = FROM ratio > 0.8 }
+			}
+			modifier = {
+				factor = 2.0
+				has_government = democratic
+			}
+			modifier = {
+				factor = 0.2
+				has_government = fascism
+			}
+		}
+	}
+}

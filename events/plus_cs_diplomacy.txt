@@ -1,56 +1,56 @@
 add_namespace = plus_cs_diplomacy
 
 # ==============================================================================
-# УМНАЯ ДИПЛОМАТИЯ (SMART DIPLOMACY)
-# 1. Negotiated Vassalization (Торг за суверенитет)
-# 2. Puppet Chain Reaction (Бунт марионеток)
+# SMART DIPLOMACY EVENTS
+# 1. Negotiated Vassalization (Minor seeking protection)
+# 2. Puppet Chain Reaction (Subjects breaking free)
+# 3. Pre-War Deal (Buying peace)
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# 1. NEGOTIATED VASSALIZATION (Торг за суверенитет)
-# Минор понимает, что сопротивление бесполезно, и предлагает стать марионеткой.
+# 1. NEGOTIATED VASSALIZATION
+# Minor country realizes resistance is futile and offers to become a puppet.
 # ------------------------------------------------------------------------------
 
-# Триггер (проверяется в фоновом цикле или on_daily для оптимизации)
-# Здесь мы сделаем событие, которое может быть вызвано вручную или через mtth
+# Trigger event (Called from optimization loop or on_daily)
 country_event = {
 	id = plus_cs_diplomacy.1
 	title = plus_cs_diplomacy.1.t
 	desc = plus_cs_diplomacy.1.d
 	picture = GFX_report_event_generic_conference
-	is_triggered_only = yes # Вызывается из optimization loop
+	is_triggered_only = yes
 
 	option = {
-		name = plus_cs_diplomacy.1.a # Предложить подчинение
+		name = plus_cs_diplomacy.1.a # Make Offer
 		ai_chance = { base = 100 }
 		
-		# Выбираем страшного соседа-мажора
+		# Find a scary Major neighbor
 		random_neighbor_country = {
 			limit = {
 				is_major = yes
-				has_war = yes # Он уже воюет, ему некогда возиться с нами
+				has_war = yes # They are busy
 				has_offensive_war = yes
 				NOT = { is_in_faction_with = ROOT }
-				NOT = { has_war_with = ROOT } # Пока еще не напал, но собирается
+				NOT = { has_war_with = ROOT } # Not yet at war
 				
-				# У него есть повод напасть
+				# They have a reason to attack us
 				OR = {
 					has_wargoal_against = ROOT
 					any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
 				}
 				
-				# Соотношение сил ужасающее для нас (< 20%)
+				# Force Ratio is terrifying (< 20%)
 				ROOT = { 
-						strength_ratio = { tag = PREV ratio < 0.2 } 
-					}
+					strength_ratio = { tag = PREV ratio < 0.2 } 
+				}
 			}
-			# Отправляем предложение
+			# Send Offer
 			country_event = { id = plus_cs_diplomacy.2 hours = 6 }
 		}
 	}
 }
 
-# Реакция Мажора
+# Major's Response
 country_event = {
 	id = plus_cs_diplomacy.2
 	title = plus_cs_diplomacy.2.t
@@ -58,34 +58,49 @@ country_event = {
 	picture = GFX_report_event_generic_sign_treaty1
 	is_triggered_only = yes
 	
-	# Принять предложение (Стать сюзереном)
+	# Option A: Accept (Become Overlord)
 	option = {
 		name = plus_cs_diplomacy.2.a
 		ai_chance = {
-			base = 90
+			# --- SCORE LOGIC ---
+			base = 100 # Default: YES! Free Puppet!
+			
+			# WARMONGER LOGIC (Fascists/Communists/Fanatics)
+			# They might prefer to CONQUER (Annex) rather than Puppet.
 			modifier = {
-				factor = 0
-				has_government = fascism # Фашисты часто хотят просто аннексировать
-				strength_ratio = { tag = FROM ratio > 0.05 }
+				factor = 0.1
+				OR = {
+					has_government = fascism
+					has_government = communism
+					has_country_leader_with_trait = plus_cs_spirit_fanatic
+				}
+				# BUT: If the target is tiny, just take it.
+				# If we are 5x stronger, just accept the easy win.
+				strength_ratio = { tag = FROM ratio < 5.0 }
 			}
-			# Но если мы заняты на другом фронте, берем вассала
+			
+			# DEFEATIST LOGIC
 			modifier = {
-				add = 100
-				surrender_progress > 0.1 # Нам тяжело, лишние враги не нужны
+				factor = 2.0
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
 			}
 		}
 		
+		# We (ROOT) become master of FROM
+		puppet = FROM
+		
+		# Reduce their autonomy immediately (simulating tight control)
+		FROM = { 
+			add_autonomy_score = { value = -500 } 
+		}
+		
 		FROM = {
-			puppet = ROOT
-			effect_tooltip = {
-				add_autonomy_score = { value = -500 }
-			}
 			add_opinion_modifier = { target = ROOT modifier = peaceful_vassalization }
 		}
 		add_political_power = 25
 	}
 	
-	# Отказать (Хотим все)
+	# Option B: Refuse (Want it all)
 	option = {
 		name = plus_cs_diplomacy.2.b
 		ai_chance = { base = 10 }
@@ -93,13 +108,13 @@ country_event = {
 		FROM = {
 			add_opinion_modifier = { target = ROOT modifier = diplo_insult }
 		}
-		# Обычно после этого следует объявление войны вручную ИИ
+		# Usually followed by manual war declaration by AI
 	}
 }
 
 # ------------------------------------------------------------------------------
-# 2. PUPPET CHAIN REACTION (Бунт вассалов)
-# Если сюзерен падает, вассалы убегают.
+# 2. PUPPET CHAIN REACTION
+# If overlord collapses, puppets break free.
 # ------------------------------------------------------------------------------
 
 country_event = {
@@ -107,64 +122,61 @@ country_event = {
 	title = plus_cs_diplomacy.10.t
 	desc = plus_cs_diplomacy.10.d
 	picture = GFX_news_event_generic_revolters
-	is_triggered_only = yes # Вызывается при >50% капитуляции сюзерена
+	is_triggered_only = yes # Triggered when overlord is >50% surrender
 
 	trigger = {
 		is_puppet = yes
-		is_major = no # Топовые вассалы (как Британские доминионы) мб лояльнее
+		is_major = no # Top tier puppets (Dominions) might be more loyal
 		
 		overlord = {
 			surrender_progress > 0.5
-			# Или столица потеряна
-			# capital_scope = { NOT = { is_controlled_by = PREV } } 
 		}
 		
-		# На нашей земле нет дивизий хозяина (или их мало)
-		# Это сложная проверка, упростим: если мы не капитулировали сами
+		# We are not capitulated ourselves
 		has_capitulated = no
 		surrender_progress < 0.1
 	}
 
-	# Объявить независимость
+	# Option A: Declare Independence
 	option = {
 		name = plus_cs_diplomacy.10.a
 		ai_chance = {
 			base = 50
 			modifier = {
 				add = 50
-				overlord = { surrender_progress > 0.8 } # Хозяин почти труп
+				overlord = { surrender_progress > 0.8 } # Master is almost dead
 			}
 			modifier = {
 				factor = 0
-				has_government = fascism # Фашистские марионетки часто фанатичны или боятся
+				has_government = fascism # Fascist puppets fear or are fanatic
 				has_war_support > 0.6
 			}
 		}
 		
-		# Становимся свободными
+		# Become Free
 		set_autonomy = {
 			target = OVERLORD
 			autonomy_state = autonomy_free
 		}
 		
 		leave_faction = yes
-		white_peace = ALL_ENEMIES # Пытаемся выйти из войны "под шумок"
+		white_peace = ALL_ENEMIES
 		
 		add_stability = 0.10
-		add_war_support = -0.10 # "Мы устали от чужой войны"
+		add_war_support = -0.10
 	}
 
-	# Остаться верным
+	# Option B: Remain Loyal
 	option = {
 		name = plus_cs_diplomacy.10.b
 		ai_chance = { base = 50 }
-		add_stability = -0.10 # Народ недоволен, что мы умираем за лузера
+		add_stability = -0.10
 	}
 }
 
 # ------------------------------------------------------------------------------
-# 3. PRE-WAR DEAL (Сделка перед войной)
-# Жертва пытается откупиться до начала вторжения.
+# 3. PRE-WAR DEAL
+# Victim tries to buy peace before invasion.
 # ------------------------------------------------------------------------------
 
 country_event = {
@@ -172,13 +184,13 @@ country_event = {
 	title = plus_cs_diplomacy.20.t
 	desc = plus_cs_diplomacy.20.d
 	picture = GFX_report_event_generic_conference
-	is_triggered_only = yes # Из цикла optimization
+	is_triggered_only = yes
 
 	option = {
-		name = plus_cs_diplomacy.20.a # Предложить уступки
+		name = plus_cs_diplomacy.20.a # Offer Concessions
 		ai_chance = { base = 100 }
 		
-		# Ищем агрессора
+		# Find Aggressor
 		random_neighbor_country = {
 			limit = {
 				has_war = no
@@ -193,7 +205,7 @@ country_event = {
 	}
 }
 
-# Реакция Агрессора
+# Aggressor Reaction
 country_event = {
 	id = plus_cs_diplomacy.21
 	title = plus_cs_diplomacy.21.t
@@ -201,39 +213,49 @@ country_event = {
 	picture = GFX_report_event_generic_sign_treaty1
 	is_triggered_only = yes
 	
-	# Согласиться (Взять куш без крови)
+	# Option A: Accept (Bloodless Gain)
 	option = {
 		name = plus_cs_diplomacy.21.a
 		ai_chance = {
 			base = 80
 			modifier = {
-				# Если мы готовы к войне и хотим всё - отказываем
+				# If we are ready for war and want it all - refuse
 				factor = 0.1
 				has_manpower > 500000 
-
+			}
+			
+			# === FIGHTING SPIRIT ===
+			# Fanatic: Wants BLOOD
+			modifier = {
+				factor = 0.1
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
+			}
+			# Defeatist: Happy to avoid war actions
+			modifier = {
+				add = 50
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
 			}
 		}
 		
-		# Если был клайм - забираем регион
+		# If we have claims - take them
 		if = {
 			limit = { 
 				any_owned_state = { is_claimed_by = ROOT is_controlled_by = FROM }
 			}
 			every_owned_state = {
 				limit = { is_claimed_by = ROOT is_controlled_by = FROM }
-				transfer_state_to = ROOT
+				ROOT = { transfer_state = PREV }
 			}
 		}
-		# Если не было клайма - вассалим
+		# If no claims - puppet them
 		else = {
-			FROM = { puppet = ROOT }
+			puppet = FROM
 		}
 		
-		white_peace = FROM # Если вдруг война успела начаться (технически)
-
+		white_peace = FROM # Logic safety if war technically started
 	}
 	
-	# Отказать (Хотим полной аннексии)
+	# Option B: Refuse (Full Annexation Goal)
 	option = {
 		name = plus_cs_diplomacy.21.b
 		ai_chance = { base = 20 }

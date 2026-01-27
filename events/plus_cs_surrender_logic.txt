@@ -1,0 +1,131 @@
+add_namespace = plus_cs_logic
+
+# ==============================================================================
+# SURRENDER LOGIC EVENTS
+# The "Council Debate" that determines if a country actually surrenders.
+# ==============================================================================
+
+# =============================================
+# plus_cs_surrender_debate
+# Triggered by 'conditional_surrender' decision calculate effect.
+# Uses 'plus_cs_pressure_ratio' to weight the AI choice.
+# =============================================
+country_event = {
+	id = plus_cs.surrender_debate
+	title = plus_cs_logic.1.t
+	desc = plus_cs_logic.1.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	
+	# Option A: Fight On! (Refuse Surrender)
+	option = {
+		name = plus_cs_logic.1.a
+		ai_chance = {
+			base = 50
+			
+			# --- PRESSURE MODIFIERS (Ratio) ---
+			
+			# Low Pressure (<0.8 Ratio): High chance to fight on
+			modifier = {
+				factor = 10.0
+				check_variable = { plus_cs_pressure_ratio < 0.8 }
+			}
+			# High Pressure (>1.2 Ratio): Low chance to fight on
+			modifier = {
+				factor = 0.1
+				check_variable = { plus_cs_pressure_ratio > 1.2 }
+			}
+			
+			# --- STANCE MODIFIERS ---
+			
+			modifier = {
+				factor = 2.0
+				has_country_flag = plus_cs_stance_fanatic
+			}
+			modifier = {
+				factor = 0.2
+				has_country_flag = plus_cs_stance_coward
+			}
+			
+			# --- CONTEXT MODIFIERS ---
+			
+			# Victory Factor (Are we actually winning despite pressure?)
+			modifier = {
+				factor = 5.0
+				surrender_progress < 0.1
+			}
+		}
+		
+		# Effect: Rally
+		add_war_support = 0.05
+		set_country_flag = { flag = plus_cs_refused_surrender days = 60 }
+		clr_country_flag = plus_cs_waiting_response
+	}
+	
+	# Option B: Sue for Peace (Trigger Surrender)
+	option = {
+		name = plus_cs_logic.1.b
+		ai_chance = {
+			base = 50
+			
+			# --- PRESSURE MODIFIERS (Ratio) ---
+			
+			# Low Pressure: Low chance to fold
+			modifier = {
+				factor = 0.1
+				check_variable = { plus_cs_pressure_ratio < 0.8 }
+			}
+			# High Pressure: High chance to fold
+			modifier = {
+				factor = 10.0
+				check_variable = { plus_cs_pressure_ratio > 1.2 }
+			}
+			# Extreme Pressure: Almost certain
+			modifier = {
+				factor = 100.0
+				check_variable = { plus_cs_pressure_ratio > 1.5 }
+			}
+			
+			# --- STANCE MODIFIERS ---
+			
+			modifier = {
+				factor = 2.0
+				has_country_flag = plus_cs_stance_coward
+			}
+			modifier = {
+				factor = 0.1
+				has_country_flag = plus_cs_stance_fanatic
+			}
+			
+			# --- CONTEXT MODIFIERS ---
+			
+			# Panic Trigger (Tiny vs Giant)
+			modifier = {
+				add = 100
+				strength_ratio = { tag = event_target:peace_recipient ratio < 0.1 }
+			}
+		}
+		
+		# Effect: Proceed to Surrender Logic
+		custom_effect_tooltip = plus_cs_surrender_proceed_tt
+		
+		# TARGETING LOGIC
+		# Determine who receives the peace offer
+		# Targets are passed from the decision (peace_recipient)
+		
+		if = {
+			limit = {
+				event_target:peace_recipient = {
+					is_faction_leader = no
+					is_in_faction = yes
+				}
+			}
+			# Ask their boss
+			event_target:peace_recipient.faction_leader = { country_event = { id = plus_cs.20 hours = 6 } }
+		}
+		else = {
+			# Ask them directly
+			event_target:peace_recipient = { country_event = { id = plus_cs.2 hours = 12 } }
+		}
+	}
+}

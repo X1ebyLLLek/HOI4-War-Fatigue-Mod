@@ -1,0 +1,245 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: CRISIS & INTERNAL STABILITY LOGIC
+# Extracted from plus_cs_optimization.txt
+# Includes: Civil War Risk, Ideology Drift, Late War Fatigue.
+# ==============================================================================
+
+# =============================================
+# plus_cs_crisis_step
+# Main entry point for crisis calculations
+# =============================================
+plus_cs_crisis_step = {
+
+	# 1. Civil War Risk Logic
+	if = {
+		limit = {
+			has_idea = internal_crisis_high
+			NOT = { has_country_flag = civil_war_risk_active }
+			
+			# Historical Protection (Germany AI)
+			NOT = {
+				AND = {
+					tag = GER
+					is_ai = yes
+					date < 1944.1.1
+					surrender_progress < 0.2
+				}
+			}
+
+			OR = {
+				AND = { has_government = democratic democratic < 0.5 }
+				AND = { has_government = fascism fascism < 0.5 }
+				AND = { has_government = communism communism < 0.5 }
+				AND = { has_government = neutrality neutrality < 0.5 }
+			}
+		}
+		random_list = {
+			95 = {}
+			5 = { 
+				# Launch Civil War Logic
+				if = {
+					limit = { has_civil_war = no }
+					random_list = {
+						50 = {
+							if = { limit = { has_government = democratic } start_civil_war = { ideology = fascism size = 0.3 } }
+							if = { limit = { has_government = neutrality } start_civil_war = { ideology = fascism size = 0.3 } }
+							if = { limit = { has_government = fascism } start_civil_war = { ideology = democratic size = 0.3 } }
+							if = { limit = { has_government = communism } start_civil_war = { ideology = democratic size = 0.3 } }
+						}
+						50 = {
+							if = { limit = { has_government = democratic } start_civil_war = { ideology = communism size = 0.3 } }
+							if = { limit = { has_government = neutrality } start_civil_war = { ideology = communism size = 0.3 } }
+							if = { limit = { has_government = fascism } start_civil_war = { ideology = communism size = 0.3 } }
+							if = { limit = { has_government = communism } start_civil_war = { ideology = fascism size = 0.3 } }
+						}
+					}
+				}
+				set_country_flag = { flag = civil_war_risk_active days = 30 }
+			}
+		}
+	}
+	
+	# 2. Ideology Drift (Shift towards extremes)
+	if = {
+		limit = { NOT = { AND = { date < 1938.1.1 has_civil_war = yes } } }
+		
+		# HIGH CRISIS (10% target shift)
+		if = {
+			limit = { has_idea = internal_crisis_high }
+			if = {
+				limit = { has_government = democratic }
+				random_list = {
+					40 = { add_popularity = { ideology = fascism popularity = 0.005 } }
+					40 = { add_popularity = { ideology = communism popularity = 0.005 } }
+					20 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = neutrality }
+				random_list = {
+					35 = { add_popularity = { ideology = fascism popularity = 0.005 } } 
+					35 = { add_popularity = { ideology = communism popularity = 0.005 } } 
+					30 = { add_popularity = { ideology = democratic popularity = 0.005 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = fascism }
+				random_list = {
+					50 = { add_popularity = { ideology = communism popularity = 0.005 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.0025 } add_popularity = { ideology = neutrality popularity = 0.0025 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = communism }
+				random_list = {
+					50 = { add_popularity = { ideology = fascism popularity = 0.005 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.0025 } add_popularity = { ideology = neutrality popularity = 0.0025 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
+				}
+			}
+		}
+		
+		# MEDIUM CRISIS (5% target shift)
+		else_if = {
+			limit = { has_idea = internal_crisis_medium }
+			if = {
+				limit = { has_government = democratic }
+				random_list = {
+					40 = { add_popularity = { ideology = fascism popularity = 0.002 } }
+					40 = { add_popularity = { ideology = communism popularity = 0.002 } }
+					20 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
+				}
+			}
+			# ... (Simplification: Applied similar drift reduction logic) ...
+			else_if = {
+				limit = { has_government = neutrality }
+				random_list = {
+					35 = { add_popularity = { ideology = fascism popularity = 0.002 } } 
+					35 = { add_popularity = { ideology = communism popularity = 0.002 } } 
+					30 = { add_popularity = { ideology = democratic popularity = 0.002 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = fascism }
+				random_list = {
+					50 = { add_popularity = { ideology = communism popularity = 0.002 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.001 } add_popularity = { ideology = neutrality popularity = 0.001 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = communism }
+				random_list = {
+					50 = { add_popularity = { ideology = fascism popularity = 0.002 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.001 } add_popularity = { ideology = neutrality popularity = 0.001 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
+				}
+			}
+		}
+
+		# LOW CRISIS (2% target shift)
+		else_if = {
+			limit = { has_idea = internal_crisis_low }
+			if = {
+				limit = { has_government = democratic }
+				random_list = {
+					40 = { add_popularity = { ideology = fascism popularity = 0.001 } }
+					40 = { add_popularity = { ideology = communism popularity = 0.001 } }
+					20 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = neutrality }
+				random_list = {
+					35 = { add_popularity = { ideology = fascism popularity = 0.001 } } 
+					35 = { add_popularity = { ideology = communism popularity = 0.001 } } 
+					30 = { add_popularity = { ideology = democratic popularity = 0.001 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = fascism }
+				random_list = {
+					50 = { add_popularity = { ideology = communism popularity = 0.001 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.0005 } add_popularity = { ideology = neutrality popularity = 0.0005 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
+				}
+			}
+			else_if = {
+				limit = { has_government = communism }
+				random_list = {
+					50 = { add_popularity = { ideology = fascism popularity = 0.001 } }
+					25 = { add_popularity = { ideology = democratic popularity = 0.0005 } add_popularity = { ideology = neutrality popularity = 0.0005 } }
+					25 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
+				}
+			}
+		}
+	}
+
+	# 3. Late War Fatigue (Vietnam Effect)
+	if = {
+		limit = {
+			has_war = yes
+			date > 1942.1.1
+			NOT = { has_country_flag = plus_cs_exhausted }
+		}
+		
+		set_temp_variable = { fatigue_mult = 1 }
+		if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
+		
+		# Base Stab Hit
+		set_temp_variable = { stab_hit = -0.002 }
+		multiply_temp_variable = { stab_hit = var:fatigue_mult }
+		add_stability = var:stab_hit
+		
+		# Casualty Fatigue
+		if = {
+			limit = { casualties > 500000 }
+			add_stability = var:stab_hit
+		}
+		
+		# Democratic Sensitivity
+		if = {
+			limit = { has_government = democratic }
+			add_stability = var:stab_hit 
+			set_temp_variable = { pop_hit = -0.005 }
+			multiply_temp_variable = { pop_hit = var:fatigue_mult }
+			add_popularity = { ideology = democratic popularity = var:pop_hit }
+			
+			set_temp_variable = { opposition_growth = var:pop_hit }
+			multiply_temp_variable = { opposition_growth = -0.5 }
+			add_popularity = { ideology = communism popularity = var:opposition_growth }
+			add_popularity = { ideology = fascism popularity = var:opposition_growth }
+		}
+	}
+}
+
+# =============================================
+# plus_cs_internal_crisis_check_step
+# Handles Ideology Crisis level management
+# =============================================
+plus_cs_internal_crisis_check_step = {
+	if = {
+		limit = { OR = { has_war_support < 0.2 has_stability < 0.2 } }
+		add_timed_idea = { idea = internal_crisis_high days = 60 }
+		remove_ideas = internal_crisis_medium
+		remove_ideas = internal_crisis_low
+	}
+	else_if = {
+		limit = { OR = { has_war_support < 0.4 has_stability < 0.4 } }
+		add_timed_idea = { idea = internal_crisis_medium days = 60 }
+		remove_ideas = internal_crisis_high
+		remove_ideas = internal_crisis_low
+	}
+	else_if = {
+		limit = { OR = { has_war_support < 0.6 has_stability < 0.6 } }
+		add_timed_idea = { idea = internal_crisis_low days = 60 }
+		remove_ideas = internal_crisis_high
+		remove_ideas = internal_crisis_medium
+	}
+	else = {
+		remove_ideas = internal_crisis_high
+		remove_ideas = internal_crisis_medium
+		remove_ideas = internal_crisis_low
+	}
+}

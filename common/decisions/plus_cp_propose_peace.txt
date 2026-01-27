@@ -1,0 +1,107 @@
+peace_options = {
+
+	# ==============================================================================
+	# PROPOSE PEACE (NEGOTIATED)
+	# ==============================================================================
+
+	propose_peace = {
+		icon = GFX_decision_eng_trade_unions_support
+		cost = 0
+		target_trigger = {
+			has_war_with = FROM
+			FROM = {
+				is_puppet = no
+			}
+		}
+
+		days_re_enable = 90
+
+		visible = {
+			has_war_with = FROM
+			NOT = {
+				has_civil_war = yes
+			}
+			is_puppet = no
+			has_capitulated = no
+			FROM = {
+				has_capitulated = no
+				is_puppet = no
+			}
+		}
+
+		available = {
+			NOT = {
+				has_country_flag = plus_cs_waiting_response
+			}
+			has_war_with = FROM
+			check_variable = {
+				var = vp@FROM
+				value = 0
+				compare = greater_than_or_equals
+			}
+			FROM = {
+				has_capitulated = no
+				# Removed surrender_progress check to allow losers to propose peace
+				is_puppet = no
+			}
+			set_temp_variable = { pct = 0 }
+			FROM = {
+				all_owned_state = {
+					add_to_temp_variable = { pct = THIS.state_strategic_value }
+				}
+			}
+			set_temp_variable = { p = vp@FROM }
+			divide_temp_variable = { p = pct }
+		}
+
+		complete_effect = {
+			set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+			
+			# VETO LOGIC PREP
+			FROM = { save_event_target_as = peace_recipient }
+			save_event_target_as = peace_sender
+			set_country_flag = plus_cs_peace_type_negotiation
+			
+			if = {
+				limit = {
+					# SELF-PERMISSION (New): If I am a minor, I must ask MY leader
+					is_faction_leader = no
+					is_in_faction = yes
+					faction_leader = { is_major = yes } # Only ask if leader is major
+				}
+				# Send Veto Request to MY Leader
+				faction_leader = {
+					country_event = { id = plus_cs.20 hours = 6 }
+				}
+			}
+			else_if = {
+				limit = {
+					# ENEMY-PERMISSION (Existing): If Enemy is a minor, ask THEIR leader
+					FROM = {
+						is_faction_leader = no
+						is_in_faction = yes
+					}
+				}
+				# Send Veto Request to THEIR Leader
+				FROM.faction_leader = {
+					country_event = { id = plus_cs.20 hours = 6 }
+				}
+			}
+			else = {
+				# Standard Flow (Direct)
+				FROM = {
+					country_event = { id = plus_cs.1 hours = 12 }
+				}
+			}
+			# Calculate and show acceptance chance
+			FROM = { plus_cs_show_negotiation_tooltip_dynamic = yes }
+			effect_tooltip = {
+				unlock_decision_category_tooltip = peace_treaty
+			}
+		}
+		
+		ai_will_do = {
+			base = 0
+		}
+	}
+}
