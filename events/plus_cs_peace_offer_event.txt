@@ -257,7 +257,7 @@ country_event = {
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
-			news_event = { id = plus_cs.5 }
+			news_event = { id = plus_cs.6 }
 		}
 	}
 }

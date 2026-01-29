@@ -24,28 +24,35 @@ country_event = {
 		name = plus_cs_diplomacy.1.a # Make Offer
 		ai_chance = { base = 100 }
 		
-		# Find a scary Major neighbor
-		random_neighbor_country = {
-			limit = {
-				is_major = yes
-				has_war = yes # They are busy
-				has_offensive_war = yes
-				NOT = { is_in_faction_with = ROOT }
-				NOT = { has_war_with = ROOT } # Not yet at war
-				
-				# They have a reason to attack us
-				OR = {
-					has_wargoal_against = ROOT
-					any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
-				}
-				
-				# Force Ratio is terrifying (< 20%)
-				ROOT = { 
-					strength_ratio = { tag = PREV ratio < 0.2 } 
-				}
+		# Locate the aggressor to send the offer to
+		if = {
+			limit = { has_event_target = plus_cs_threatening_neighbor }
+			event_target:plus_cs_threatening_neighbor = {
+				country_event = { id = plus_cs_diplomacy.2 hours = 6 }
 			}
-			# Send Offer
-			country_event = { id = plus_cs_diplomacy.2 hours = 6 }
+		}
+		else = {
+			# Fallback search if event target was lost or event fired manually
+			random_neighbor_country = {
+				limit = {
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { has_war_with = ROOT }
+					
+					# They have a reason to attack us (or are justifying)
+					OR = {
+						has_wargoal_against = ROOT
+						is_justifying_wargoal_against = ROOT
+						any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
+					}
+					
+					# Strength Ratio is terrifying (< 40%)
+					ROOT = { 
+						strength_ratio = { tag = PREV ratio < 0.4 } 
+					}
+				}
+				# Send Offer
+				country_event = { id = plus_cs_diplomacy.2 hours = 6 }
+			}
 		}
 	}
 }
@@ -182,28 +189,98 @@ country_event = {
 country_event = {
 	id = plus_cs_diplomacy.20
 	title = plus_cs_diplomacy.20.t
-	desc = plus_cs_diplomacy.20.d
+	desc = plus_cs.20.d # Fixed desc key
 	picture = GFX_report_event_generic_conference
 	is_triggered_only = yes
 
+	# Option A: Offer Concessions (Submission)
 	option = {
-		name = plus_cs_diplomacy.20.a # Offer Concessions
-		ai_chance = { base = 100 }
+		name = plus_cs_diplomacy.20.a 
 		
-		# Find Aggressor
-		random_neighbor_country = {
-			limit = {
-				has_war = no
-				OR = {
-					has_wargoal_against = ROOT
-					is_justifying_wargoal_against = ROOT
+		# AI Weighted Logic (The "Victim Calculus")
+		ai_chance = { 
+			base = 1 # Chaos Factor
+			
+			# --- 1. STRENGTH (The "Terror") ---
+			modifier = {
+				add = 20
+				event_target:plus_cs_scary_aggressor = {
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.25 } }
 				}
-				ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } }
 			}
+			modifier = {
+				add = 30 # Cumulative +50
+				event_target:plus_cs_scary_aggressor = {
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.1 } }
+				}
+			}
+			
+			# --- 2. ISOLATION (The "Friends") ---
+			# Alone -> Scared
+			modifier = {
+				add = 30
+				is_in_faction = no
+			}
+			# Protected -> Brave
+			modifier = {
+				factor = 0.1
+				is_in_faction = yes
+				# Verify Faction Leader is actually strong/alive? 
+				# Simplified: If in faction, assume help exists.
+			}
+			
+			# --- 3. INTERNAL ROT (The "Will") ---
+			modifier = {
+				add = 20
+				has_stability < 0.5
+			}
+			modifier = {
+				add = 20
+				has_war_support < 0.5
+			}
+			
+			# --- 4. THE PRICE (Claims vs Cores) ---
+			# If they want our HOMELAND (Cores) -> Fight!
+			modifier = {
+				factor = 0.1
+				any_owned_state = {
+					is_core_of = ROOT
+					is_claimed_by = event_target:plus_cs_scary_aggressor
+				}
+			}
+			# If they want just CLAIMS (Sudetenland) -> Fold
+			modifier = {
+				add = 20
+				any_owned_state = {
+					NOT = { is_core_of = ROOT }
+					is_claimed_by = event_target:plus_cs_scary_aggressor
+				}
+			}
+			
+			# --- 5. PERSONALITY ---
+			modifier = { factor = 2.0 has_country_leader_with_trait = plus_cs_spirit_defeatist }
+			modifier = { factor = 0.1 has_country_leader_with_trait = plus_cs_spirit_fanatic }
+			
+			# Ideological Stubbornness
+			modifier = {
+				factor = 0.1
+				OR = { has_government = fascism has_government = communism }
+			}
+		}
+		
+		# Send Offer Directly to the Scary Aggressor
+		event_target:plus_cs_scary_aggressor = {
 			country_event = { id = plus_cs_diplomacy.21 hours = 6 }
 		}
 	}
+	
+	option = {
+		name = plus_cs_diplomacy.20.b # Refuse to bow
+		ai_chance = { base = 100 } # Default action
+		# do nothing
+	}
 }
+
 
 # Aggressor Reaction
 country_event = {
@@ -213,27 +290,37 @@ country_event = {
 	picture = GFX_report_event_generic_sign_treaty1
 	is_triggered_only = yes
 	
-	# Option A: Accept (Bloodless Gain)
+	# Option A: Accept (Pragmatism / Bloodless Gain)
 	option = {
 		name = plus_cs_diplomacy.21.a
 		ai_chance = {
-			base = 80
+			base = 100
+			
+			# --- 1. PRAGMATISM ---
+			# Save manpower if low
 			modifier = {
-				# If we are ready for war and want it all - refuse
-				factor = 0.1
-				has_manpower > 500000 
+				add = 50
+				has_manpower < 100000
 			}
 			
-			# === FIGHTING SPIRIT ===
-			# Fanatic: Wants BLOOD
+			# Democracies prefer peace
+			modifier = {
+				add = 50
+				has_government = democratic
+			}
+			
+			# --- 2. AMBITION (Reasons to Refuse) ---
+			
+			# Fanatic wants War XP and Total Conquest
 			modifier = {
 				factor = 0.1
 				has_country_leader_with_trait = plus_cs_spirit_fanatic
 			}
-			# Defeatist: Happy to avoid war actions
+			
+			# "We are Giant" -> Only full annexation satisfies us
 			modifier = {
-				add = 50
-				has_country_leader_with_trait = plus_cs_spirit_defeatist
+				factor = 0.5
+				num_divisions > 100 # Arbitrary "Big Army" check
 			}
 		}
 		
@@ -255,10 +342,23 @@ country_event = {
 		white_peace = FROM # Logic safety if war technically started
 	}
 	
-	# Option B: Refuse (Full Annexation Goal)
+	# Option B: Refuse (Full Annexation Goal / War)
 	option = {
 		name = plus_cs_diplomacy.21.b
-		ai_chance = { base = 20 }
+		ai_chance = { 
+			base = 10 
+			
+			# Fanatics love war
+			modifier = {
+				add = 100
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
+			}
+			
+			modifier = {
+				add = 20
+				has_government = fascism
+			}
+		}
 		FROM = { add_opinion_modifier = { target = ROOT modifier = diplo_insult } }
 	}
 }

@@ -390,3 +390,4 @@
  plus_cs_spirit_fanatic_desc:0 "Dieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\n\n§RKI-Friedensakzeptanz: -100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Dieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\n\n§GKI-Friedensakzeptanz: +100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Dieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\n\n§YKI-Friedensakzeptanz: Normal§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 "We will not bow!"

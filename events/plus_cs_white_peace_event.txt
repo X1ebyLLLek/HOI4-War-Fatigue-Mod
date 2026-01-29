@@ -38,24 +38,36 @@ country_event = {
 		}
 
 		# Execute White Peace
+		# Execute White Peace
 		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED White Peace from [FROM.GetName]."
-		white_peace = FROM
 		
-		# Set Truce & Flags
-		set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-		add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
-		set_truce = {
-			target = FROM
-			days = 365
+		# ALLIANCE PEACE FIX
+		# If ROOT is Faction Leader, we peace out OUR ENTIRE FACTION against FROM
+		if = {
+			limit = { is_faction_leader = yes }
+			every_country = {
+				limit = { is_in_faction_with = ROOT }
+				white_peace = FROM
+				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+				add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
+				set_truce = { target = FROM days = 365 }
+			}
 		}
+		else = {
+			white_peace = FROM
+			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
+			set_truce = { target = FROM days = 365 }
+		}
+		
 		FROM = {
 			set_truce = {
 				target = ROOT
 				days = 365
 			}
 			clr_country_flag = plus_cs_waiting_response
-			# Notify sender
-			country_event = { id = plus_cs.5 }
+			# Notify sender (NEWS EVENT FIX)
+			news_event = { id = plus_cs.5 }
 		}
 		
 		add_political_power = 25

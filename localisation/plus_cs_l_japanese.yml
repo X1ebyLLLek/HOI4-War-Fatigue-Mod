@@ -362,3 +362,4 @@
  plus_cs_spirit_fanatic_desc:0 "この指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\n\n§RAI講和受諾: -100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "この指導者は悲観的で、問題の最初の兆候で講和を模索します。\n\n§GAI講和受諾: +100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "この指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 \We will not bow!\

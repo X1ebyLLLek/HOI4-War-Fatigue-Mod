@@ -4,5 +4,5 @@ tags={
 	"Fixes"
 }
 name="HOI4+War Fatigue Surrender"
-supported_version="1.15.*"
+supported_version="1.*"
 remote_file_id="3598193745"

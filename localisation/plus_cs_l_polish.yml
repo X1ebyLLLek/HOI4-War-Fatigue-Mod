@@ -372,3 +372,4 @@
  plus_cs_spirit_fanatic_desc:0 "Ten przywódca nigdy się nie podda, dopóki kraj nie zostanie zniszczony.\n\n§RAcceptacja Pokoju AI: -100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Ten przywódca jest pesimista i będzie szukał pokoju przy pierwszych problemach.\n\n§GAcceptacja Pokoju AI: +100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Ten przywódca jest uparty i stawia silny opór kapitulacji.\n\n§YAcceptacja Pokoju AI: Normalna§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 \We will not bow!\

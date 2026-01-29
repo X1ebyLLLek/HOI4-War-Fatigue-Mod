@@ -4,25 +4,31 @@
 # ==============================================================================
 
 plus_cs_assign_fighting_spirit = {
-	# Check if leader already has a spirit trait
+	# Check if we already did this (Optimization & Spam Prevention)
 	if = {
-		limit = {
-			NOT = { has_country_leader_with_trait = plus_cs_spirit_fanatic }
-			NOT = { has_country_leader_with_trait = plus_cs_spirit_resilient }
-			NOT = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
-		}
+		limit = { NOT = { has_country_flag = plus_cs_spirit_assigned } }
 		
-		# Assign new trait (Universal Distribution)
-		# User Request: "Not based on ideology... variability."
-		# 15% Fanatic / 70% Resilient / 15% Defeatist for EVERYONE.
-		random_list = {
-			15 = { add_country_leader_trait = plus_cs_spirit_fanatic }   # 15% Fanatic
-			70 = { add_country_leader_trait = plus_cs_spirit_resilient } # 70% Normal
-			15 = { add_country_leader_trait = plus_cs_spirit_defeatist } # 15% Defeatist
+		# Check if leader already has a spirit trait (Safety)
+		if = {
+			limit = {
+				NOT = { has_country_leader_with_trait = plus_cs_spirit_fanatic }
+				NOT = { has_country_leader_with_trait = plus_cs_spirit_resilient }
+				NOT = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
+			}
+			
+			# Assign new trait (Universal Distribution)
+			random_list = {
+				15 = { add_country_leader_trait = plus_cs_spirit_fanatic }   # 15% Fanatic
+				70 = { add_country_leader_trait = plus_cs_spirit_resilient } # 70% Normal
+				15 = { add_country_leader_trait = plus_cs_spirit_defeatist } # 15% Defeatist
+			}
+			
+			# Mark as done
+			set_country_flag = plus_cs_spirit_assigned
+			
+			# Log
+			if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } log = "[Root.GetName]: Leader gets FANATIC Spirit" }
+			if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } log = "[Root.GetName]: Leader gets DEFEATIST Spirit" }
 		}
-		
-		# Log
-		if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } log = "[Root.GetName]: Leader gets FANATIC Spirit" }
-		if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } log = "[Root.GetName]: Leader gets DEFEATIST Spirit" }
 	}
 }

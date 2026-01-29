@@ -49,6 +49,7 @@ peace_options = {
 			FROM = { save_event_target_as = peace_recipient }
 			save_event_target_as = peace_sender
 			clr_country_flag = plus_cs_peace_type_preferences
+			clr_country_flag = plus_cs_peace_type_negotiation
 			
 			if = {
 				limit = {

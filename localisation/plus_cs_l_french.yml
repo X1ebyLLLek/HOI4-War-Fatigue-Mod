@@ -377,3 +377,4 @@
  plus_cs_spirit_fanatic_desc:0 "Ce dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Ce dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Ce dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 "We will not bow!"

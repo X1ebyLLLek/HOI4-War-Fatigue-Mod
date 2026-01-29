@@ -170,23 +170,21 @@ country_event = {
 				}
 			}
 			
-			# plus_cs_restore_third_party_control = yes
-		}
-
-		if = {
-			limit = {
-				FROM = { is_faction_leader = no }
-			}
-			FROM = {
-				leave_faction = yes
-				add_timed_idea = {
-					idea = conditional_surrender
-					days = 720
+			if = {
+				limit = {
+					FROM = { is_faction_leader = no }
+				}
+				FROM = {
+					leave_faction = yes
+					add_timed_idea = {
+						idea = conditional_surrender
+						days = 720
+					}
 				}
 			}
-		}
-		FROM = {
-			clr_country_flag = plus_cs_waiting_response
+			FROM = {
+				clr_country_flag = plus_cs_waiting_response
+			}
 		}
 	}
 

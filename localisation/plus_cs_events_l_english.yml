@@ -191,6 +191,7 @@
  plus_cs_diplomacy.20.t:0 "Invasion Threat"
  plus_cs_diplomacy.20.d:0 "The enemy is preparing an invasion, and our chances in war are zero. We must offer any concessions to prevent a catastrophe."
  plus_cs_diplomacy.20.a:0 "Offer Territorial Concessions"
+ plus_cs_diplomacy.20.b:0 "We will not bow!"
  
  plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
  plus_cs_diplomacy.21.d:0 "[From.GetNameDef], seeing the might of our army on the border, offers to meet our territorial demands without a fight if we guarantee non-aggression in the future."

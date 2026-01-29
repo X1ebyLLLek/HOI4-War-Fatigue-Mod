@@ -70,7 +70,11 @@ plus_cs_heavy_calc_step = {
 
 		add_to_temp_variable = { total_strain = var:casualty_load }
 
-		if = { limit = { num_divisions > 0 } divide_temp_variable = { total_strain = num_divisions } }
+		if = { 
+			limit = { num_divisions > 0 } 
+			set_temp_variable = { div_count = num_divisions }
+			divide_temp_variable = { total_strain = div_count } 
+		}
 
 		if = {
 			limit = { check_variable = { var = num_divisions value = var:officer_cap_calc compare = greater_than } }

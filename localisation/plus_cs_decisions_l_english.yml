@@ -3,7 +3,7 @@
   white_peace:0 "White Peace"
   ceasefire:0 "Ceasefire"
   propose_peace:0 "Propose Peace"
-  propose_peace_desc:0 "We have [?vp@FROM|Y0] £victory_points ([?p|Y2%])"
+  propose_peace_desc:0 "We have [?vp@FROM|Y0] £victory_points"
   peace_treaty:0 "Peace Treaty"
   peace_treaty_desc:0 ""
   ceasefire_end:0 "End of Ceasefire"

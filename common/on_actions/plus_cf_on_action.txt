@@ -8,6 +8,16 @@ on_actions = {
 				}
 				country_event = { id = plus_cs.3 }
 			}
+			
+			# INITIALIZE GLOBALS (Fix for Ceasefire/Liberation Logic)
+			# FIX: 'set_global_array' is invalid. Using 'clear_array' to init/reset.
+			clear_array = global.countries
+			clear_array = global.province_controllers
+			
+			every_country = {
+				add_to_array = { global.countries = THIS }
+			}
+			
 			every_country = {
 				plus_cs_assign_fighting_spirit = yes # Assign initial personality
 				plus_cs_init_hidden_resolve = yes    # Assign hidden random variance (-50..+50)

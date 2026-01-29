@@ -18,7 +18,7 @@ country_event = {
 
 	# Option A: Accept Submission (Puppet)
 	option = {
-		name = plus_cs.201.a
+		name = plus_cs.submission.1.a
 		ai_chance = {
 			base = 5 # Chaos Factor
 			

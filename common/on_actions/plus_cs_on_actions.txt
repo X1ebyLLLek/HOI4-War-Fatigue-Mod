@@ -5,10 +5,12 @@
 on_actions = {
 	on_monthly = {
 		effect = {
-			every_country = {
+			# FIX: on_monthly runs FOR EACH country. 
+			# We do not need 'every_country' here, or we multiply events by 100x.
+			if = {
 				limit = {
 					has_war = yes
-					is_ai = yes # Only AI runs this roulette
+					is_ai = yes
 				}
 				country_event = { id = plus_cs_pulse.1 }
 			}

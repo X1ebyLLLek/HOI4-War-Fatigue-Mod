@@ -362,3 +362,4 @@
  plus_cs_spirit_fanatic_desc:0 "这位领袖绝不会接受投降，除非国家彻底毁灭。\n\n§RAI 和平接受度：-100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "这位领袖很悲观，一有风吹草动就会寻求和平。\n\n§GAI 和平接受度：+100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "这位领袖很固执，强烈抵制投降。\n\n§YAI 和平接受度：正常§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 \We will not bow!\

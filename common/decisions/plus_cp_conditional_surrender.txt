@@ -58,6 +58,7 @@ peace_options = {
 			# Pre-save targets so the event knows who is who
 			FROM = { save_event_target_as = peace_recipient }
 			save_event_target_as = peace_sender
+			clr_country_flag = plus_cs_peace_type_negotiation
 			set_country_flag = plus_cs_peace_type_preferences
 
 			# Instead of sending the offer immediately, we trigger the "Internal Debate" (plus_cs_surrender_logic.txt).

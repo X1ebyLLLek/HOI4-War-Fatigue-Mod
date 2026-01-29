@@ -18,7 +18,7 @@ country_event = {
 		# 1. LOOP MAINTENANCE
 		set_country_flag = plus_cs_loop_active
 		
-		# Plan next tick (6-8 days)
+		# Plan next tick (6-8 days) - FIXED FREQUENCY for everyone
 		random_list = {
 			33 = { country_event = { id = plus_cs.999 days = 6 } }
 			33 = { country_event = { id = plus_cs.999 days = 7 } }
@@ -50,11 +50,25 @@ country_event = {
 			country_event = { id = plus_cs.300 }
 		}
 
-		# --- ECONOMIC LOGIC ---
-		plus_cs_economy_step = yes
+		# --- ECONOMIC LOGIC (Gated Heavy Stuff) ---
+		# Only run heavy law logic if Active or needs update
+		if = {
+			limit = {
+				OR = {
+					has_war = yes
+					is_major = yes
+					is_ai = no
+					has_stability < 0.6
+					has_idea = tot_economic_mobilisation
+				}
+			}
+			plus_cs_economy_step = yes
+			plus_cs_crisis_step = yes
+		}
 		
-		# --- CRISIS LOGIC ---
-		plus_cs_crisis_step = yes
+		# --- CIVILIAN INVESTMENT (Always run weekly) ---
+		# User requested this to work "as before" (weekly checks)
+		plus_cs_civilian_investment_step = yes
 
 		# =============================================================
 		# 3. HEAVY LOGIC (MONTHLY-ISH)
@@ -86,6 +100,10 @@ country_event = {
 				# EXECUTE HEAVY EFFECTS
 				plus_cs_heavy_calc_step = yes
 				plus_cs_internal_crisis_check_step = yes
+				
+				# Fail-safe: Update Economy Laws monthly for peaceful nations
+				# (Active nations update weekly via the Gated Logic above)
+				plus_cs_economy_step = yes
 
 				# --- STALEMATE & PANIC LOGIC ---
 				if = {
@@ -101,31 +119,36 @@ country_event = {
 						set_country_flag = { flag = plus_cs_urgent_peace days = 180 }
 					}
 					
-				# --- STALEMATE LOGIC (Map Stagnation) ---
-				# Check if map control has changed since last check (Smart Logic)
-				# FIX: "num_controlled_states" is a trigger, using it in set_variable causes CRASH.
-				# We must count states manually.
+				# --- STALEMATE LOGIC (OPTIMIZED) ---
+				# Replaced expensive state counting with surrender_progress comparison.
+				# If surrender progress hasn't changed by +/- 1%, we are in stalemate.
 				
-				set_temp_variable = { current_states = 0 }
-				every_controlled_state = {
-					# This loop is safe but heavier. Only runs for warring nations monthly.
-					add_to_temp_variable = { current_states = 1 }
+				set_temp_variable = { current_surr = surrender_progress }
+				set_temp_variable = { delta = 0 }
+				
+				# Get delta (Absolute difference)
+				if = {
+					limit = { check_variable = { current_surr > plus_cs_last_surrender_progress } }
+					set_temp_variable = { delta = current_surr }
+					subtract_from_temp_variable = { delta = plus_cs_last_surrender_progress }
+				}
+				else = {
+					set_temp_variable = { delta = plus_cs_last_surrender_progress }
+					subtract_from_temp_variable = { delta = current_surr }
 				}
 				
+				# Logic: If delta < 0.005 (0.5%), consider it stalemate tick
 				if = {
-					limit = { 
-						check_variable = { plus_cs_last_controlled_states_count = current_states } 
-					}
-					# No change in borders -> Stagnation tick
+					limit = { check_variable = { delta < 0.005 } }
 					add_to_variable = { plus_cs_stalemate_timer = 1 }
 				}
 				else = {
-					# Map changed (Gain or Loss) -> Reset timer
+					# Progress made! Reset timer.
 					set_variable = { plus_cs_stalemate_timer = 0 }
 				}
 				
-				# Update memory
-				set_variable = { plus_cs_last_controlled_states_count = current_states }
+				# Update Memory
+				set_variable = { plus_cs_last_surrender_progress = current_surr }
 
 				# Trigger Flag if Stagnant for > 6 checks (approx 6 months)
 				if = {
@@ -178,31 +201,120 @@ country_event = {
 			}
 		}
 		
-		# Negotiated Vassalization Check
+		# Negotiated Vassalization Check (Smart Math)
 		if = {
 			limit = {
-				is_major = no
-				is_in_faction = no
+				is_ai = yes
 				is_subject = no
 				has_war = no
+				
+				# 1. CHECK: Does a threat exist? (Trigger only)
+				any_neighbor_country = {
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { has_war_with = ROOT }
+					OR = {
+						has_wargoal_against = ROOT
+						is_justifying_wargoal_against = ROOT
+					}
+					# Strength check: They beats us easily (< 40% strength)
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.4 } }
+				}
 			}
-			random_list = {
-				5 = { country_event = { id = plus_cs_diplomacy.1 } }
-				95 = { }
+			
+			# 2. EFFECT: Find and save the threat
+			random_neighbor_country = {
+				limit = {
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { has_war_with = ROOT }
+					OR = {
+						has_wargoal_against = ROOT
+						is_justifying_wargoal_against = ROOT
+					}
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.4 } }
+				}
+				save_event_target_as = plus_cs_threatening_neighbor
+			}
+			
+			# 3. Probability Calculation ("Smart Math" - Logic Buckets)
+			if = {
+				limit = { has_event_target = plus_cs_threatening_neighbor }
+				
+				# A. IMPOSSIBLE (Fanatics)
+				if = {
+					limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic }
+					# Never surrender
+				}
+				# B. HIGH CHANCE (Defeatist Leader) - ~5%
+				else_if = {
+					limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
+					random_list = {
+						50 = { country_event = { id = plus_cs_diplomacy.1 } }
+						950 = { }
+					}
+				}
+				# C. MEDIUM CHANCE (Crisis or Tiny) - ~1.5%
+				else_if = {
+					limit = {
+						OR = {
+							has_stability < 0.4
+							has_war_support < 0.4
+							# Tiny Nation Check
+							event_target:plus_cs_threatening_neighbor = {
+								ROOT = { strength_ratio = { tag = PREV ratio < 0.1 } }
+							}
+						}
+					}
+					random_list = {
+						15 = { country_event = { id = plus_cs_diplomacy.1 } }
+						985 = { }
+					}
+				}
+				# D. VERY LOW CHANCE (Stubborn Ideologies) - ~0.1%
+				else_if = {
+					limit = {
+						OR = {
+							has_government = fascism
+							has_government = communism
+						}
+					}
+					random_list = {
+						1 = { country_event = { id = plus_cs_diplomacy.1 } }
+						999 = { }
+					}
+				}
+				# E. DEFAULT (Normal) - ~0.3%
+				else = {
+					random_list = {
+						3 = { country_event = { id = plus_cs_diplomacy.1 } }
+						997 = { }
+					}
+				}
 			}
 		}
 		
-		# Pre-War Deal Check
+		# Pre-War Deal Check (FIXED)
 		if = {
 			limit = {
+				is_ai = yes # Player never surrenders automatically
 				has_war = no
 				is_subject = no
 				any_neighbor_country = { has_wargoal_against = ROOT }
 			}
-			random_list = {
-				5 = { country_event = { id = plus_cs_diplomacy.20 } }
-				95 = { }
+			# Strict Logic: Only if we are truly terrified (< 20% strength)
+			random_neighbor_country = {
+				limit = {
+					has_wargoal_against = ROOT
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } }
+				}
+				save_event_target_as = plus_cs_scary_aggressor
+			}
+			
+			if = {
+				limit = { has_event_target = plus_cs_scary_aggressor }
+				# Fire event directly (chance calculated inside)
+				country_event = { id = plus_cs_diplomacy.20 }
 			}
 		}
+
 	}
 }

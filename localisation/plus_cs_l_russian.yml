@@ -8,7 +8,7 @@
  white_peace:0 "Белый мир"
  ceasefire:0 "Прекращение огня"
  propose_peace:0 "Предложить мир"
- propose_peace_desc:0 "У нас [?vp@FROM|Y0] £victory_points ([?p|Y2%])"
+ propose_peace_desc:0 "У нас [?vp@FROM|Y0] £victory_points"
  ceasefire_end:0 "Окончание прекращения огня"
  peace_war_reparations:0 "Военные репарации"
  peace_war_reparations_limit:0 "В настоящее время выплачивает военные репарации не более чем 2 странам"
@@ -315,6 +315,7 @@
  plus_cs_diplomacy.20.t:0 "Угроза вторжения"
  plus_cs_diplomacy.20.d:0 "Враг готовит вторжение, и наши шансы в войне равны нулю. Мы должны предложить любые уступки, чтобы предотвратить катастрофу."
  plus_cs_diplomacy.20.a:0 "Предложить территориальные уступки"
+ plus_cs_diplomacy.20.b:0 "Мы не склонимся!"
  
  plus_cs_diplomacy.21.t:0 "Дипломатический откуп"
  plus_cs_diplomacy.21.d:0 "[From.GetNameDef], видя мощь нашей армии на границе, предлагает выполнить наши территориальные требования без боя, если мы гарантируем и ненападение в будущем."

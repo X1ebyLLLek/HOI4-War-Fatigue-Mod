@@ -372,3 +372,4 @@
  plus_cs_spirit_fanatic_desc:0 "Este líder nunca aceitará a rendição a menos que a nação seja destruída.\n\n§RAceitação de Paz IA: -100%§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Este líder é pessimista e buscará a paz ao primeiro sinal de problema.\n\n§GAceitação de Paz IA: +100%§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Este líder é teimoso e resiste fortemente à rendição.\n\n§YAceitação de Paz IA: Normal§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 " We will not bow!\

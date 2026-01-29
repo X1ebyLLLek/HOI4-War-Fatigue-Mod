@@ -44,14 +44,9 @@ peace_options = {
 				# Removed surrender_progress check to allow losers to propose peace
 				is_puppet = no
 			}
-			set_temp_variable = { pct = 0 }
-			FROM = {
-				all_owned_state = {
-					add_to_temp_variable = { pct = THIS.state_strategic_value }
-				}
-			}
-			set_temp_variable = { p = vp@FROM }
-			divide_temp_variable = { p = pct }
+			# O(N) LOOP REMOVED: Optimization
+			# The PCT calculation here was unused in the trigger logic.
+			# If needed, it should be done in the event, not the GUI trigger.
 		}
 
 		complete_effect = {
@@ -60,6 +55,7 @@ peace_options = {
 			# VETO LOGIC PREP
 			FROM = { save_event_target_as = peace_recipient }
 			save_event_target_as = peace_sender
+			clr_country_flag = plus_cs_peace_type_preferences
 			set_country_flag = plus_cs_peace_type_negotiation
 			
 			if = {
