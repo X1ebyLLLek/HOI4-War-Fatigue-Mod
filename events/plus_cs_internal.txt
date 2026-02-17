@@ -143,7 +143,7 @@ country_event = {
 	option = {
 		name = plus_cs_internal.3.a
 		
-		# FIX: 'white_peace = ALL_ENEMIES' is invalid. Iterating over enemies.
+		# FIX: Iterating over enemies to peace out
 		every_enemy_country = {
 			white_peace = ROOT
 		}
@@ -248,6 +248,7 @@ country_event = {
 		}
 		
 		# 4. White peace with all enemies (they keep occupied territories)
+		# 4. White peace with all enemies (they keep occupied territories)
 		every_enemy_country = {
 			white_peace = ROOT
 		}
@@ -259,11 +260,14 @@ country_event = {
 		add_stability = 0.20
 		add_war_support = 0.10
 		
-		# 7. Remove crisis ideas
+		# 7. Remove crisis ideas AND Synergy modifiers
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
 		remove_ideas = political_paralysis
+		if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
+		if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
+		if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
 	}
 }
 
@@ -351,10 +355,13 @@ country_event = {
 		# Restore third-party control
 		plus_cs_restore_third_party_control = yes
 		
-		# Remove crisis ideas
+		# Remove crisis ideas AND Synergy modifiers
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
 		remove_ideas = political_paralysis
+		if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
+		if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
+		if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
 	}
 }

@@ -158,22 +158,23 @@ country_event = {
 					set_country_flag = { flag = plus_cs_stalemate days = 90 }
 				}
 
-					# Casualties Events
-					if = {
-						limit = { casualties > 50000 }
-						random_list = {
-							2 = { country_event = { id = plus_cs.1001 } }
-							98 = { }
-						}
-					}
-					if = {
-						limit = { casualties > 100000 }
-						random_list = {
-							1 = { country_event = { id = plus_cs.1002 } }
-							99 = { }
-						}
+				# Casualties Events
+				if = {
+					limit = { casualties > 50000 }
+					random_list = {
+						2 = { country_event = { id = plus_cs.1001 } }
+						98 = { }
 					}
 				}
+				if = {
+					limit = { casualties > 100000 }
+					random_list = {
+						1 = { country_event = { id = plus_cs.1002 } }
+						99 = { }
+					}
+				}
+			}
+		}
 			}
 		} 
 		
