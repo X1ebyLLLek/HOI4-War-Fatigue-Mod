@@ -51,19 +51,23 @@ country_event = {
 	hidden = yes
 	
 	immediate = {
-		# Теперь А (ROOT) может официально предложить мир Б.
-		# Мы запускаем оригинальный ивент на Б.
-		event_target:peace_recipient = {
-			if = {
-				limit = { FROM = { has_country_flag = plus_cs_peace_type_negotiation } }
-				country_event = { id = plus_cs.1 } # Negotiation
-			}
-			else_if = {
-				limit = { FROM = { has_country_flag = plus_cs_peace_type_preferences } }
-				country_event = { id = plus_cs.2 } # Preferences
-			}
-			else = {
-				country_event = { id = plus_cs.4 } # White Peace
+		# Теперь А (FROM) может официально предложить мир Б.
+		# FIX: event_target:peace_recipient is lost across event chains.
+		# FROM = Country A (requestor). Find their enemy to send peace offer.
+		FROM = {
+			random_enemy_country = {
+				limit = { is_puppet = no }
+				if = {
+					limit = { PREV = { has_country_flag = plus_cs_peace_type_negotiation } }
+					country_event = { id = plus_cs.1 } # Negotiation
+				}
+				else_if = {
+					limit = { PREV = { has_country_flag = plus_cs_peace_type_preferences } }
+					country_event = { id = plus_cs.2 } # Preferences
+				}
+				else = {
+					country_event = { id = plus_cs.4 } # White Peace
+				}
 			}
 		}
 	}
@@ -87,7 +91,10 @@ country_event = {
 	option = {
 		name = plus_cs.22.b
 		
-		event_target:peace_recipient = {
+		# FIX: event_target:peace_recipient is lost across event chains.
+		# Find FROM's (ROOT's, Country A's) enemy to propose separate peace.
+		random_enemy_country = {
+			limit = { is_puppet = no }
 			country_event = { id = plus_cs.23 }
 		}
 	}
