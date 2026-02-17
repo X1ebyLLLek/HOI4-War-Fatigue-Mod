@@ -11,9 +11,15 @@
 plus_cs_crisis_step = {
 
 	# 1. Civil War Risk Logic
+	# FIX: Synergy crises (homefront_collapse, total_exhaustion) remove internal_crisis_high,
+	# so civil wars never fired. Now we check synergy modifiers too.
 	if = {
 		limit = {
-			has_idea = internal_crisis_high
+			OR = {
+				has_idea = internal_crisis_high
+				has_dynamic_modifier = homefront_collapse
+				has_dynamic_modifier = total_exhaustion
+			}
 			NOT = { has_country_flag = civil_war_risk_active }
 
 			OR = {
@@ -24,8 +30,8 @@ plus_cs_crisis_step = {
 			}
 		}
 		random_list = {
-			95 = {}
-			5 = { 
+			99 = {}
+			1 = { 
 				# Launch Civil War Logic
 				if = {
 					limit = { has_civil_war = no }
@@ -300,17 +306,29 @@ plus_cs_political_collapse_check = {
 
 	# 2. FREE NATION CRISIS DISPATCHER (Monthly Pulse)
 	# This event (internal.10) selects between Coup, Paralysis, etc.
-	# We gate it here so it only fires if Civil War Happened + 5% Chance (for free nations).
+	# FIX: Coups can now also fire without prior civil war if crisis is extreme.
+	# Historical precedent: July 20 plot, military juntas in collapsing regimes.
 	if = {
 		limit = {
 			has_war = yes
 			is_puppet = no
-			has_country_flag = plus_cs_had_civil_war
 			NOT = { has_country_flag = plus_cs_collapse_cooldown }
 			NOT = { has_civil_war = yes }
+			# Path A: Post-civil-war collapse (original logic)
+			# Path B: Extreme crisis without prior civil war (stab < 15%)
+			OR = {
+				has_country_flag = plus_cs_had_civil_war
+				AND = {
+					has_stability < 0.15
+					OR = {
+						has_dynamic_modifier = homefront_collapse
+						has_dynamic_modifier = total_exhaustion
+					}
+				}
+			}
 		}
 		
-		# User restriction: 5% chance monthly for these events
+		# 5% chance monthly for these events
 		random_list = {
 			5 = {
 				country_event = { id = plus_cs_internal.10 }

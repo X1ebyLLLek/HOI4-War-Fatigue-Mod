@@ -148,6 +148,8 @@ country_event = {
 						OR = {
 							has_idea = internal_crisis_medium
 							has_idea = internal_crisis_high
+							has_dynamic_modifier = homefront_collapse
+							has_dynamic_modifier = total_exhaustion
 						}
 					}
 
@@ -179,7 +181,8 @@ country_event = {
 							# Modifiers
 							modifier = { add = 30 surrender_progress > 0.2 }
 							modifier = { add = 60 surrender_progress > 0.4 }
-							modifier = { add = 50 has_idea = internal_crisis_high }
+							modifier = { add = 50 OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
+							modifier = { add = 80 has_dynamic_modifier = total_exhaustion }
 							modifier = { add = 40 has_country_leader_with_trait = plus_cs_spirit_defeatist }
 							
 							# Penalties
@@ -207,7 +210,11 @@ country_event = {
 					modifier = {
 						add = 5
 						surrender_progress > 0.4
-						has_idea = internal_crisis_high
+						OR = {
+							has_idea = internal_crisis_high
+							has_dynamic_modifier = homefront_collapse
+							has_dynamic_modifier = total_exhaustion
+						}
 					}
 					
 					modifier = {

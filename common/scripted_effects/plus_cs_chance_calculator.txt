@@ -38,7 +38,8 @@ plus_cs_calc_negotiation_chance = {
 	if = { limit = { FROM = { surrender_progress > 0.3 } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
 	if = { limit = { FROM = { surrender_progress > 0.5 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
 	if = { limit = { FROM = { has_idea = internal_crisis_medium } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
-	if = { limit = { FROM = { has_idea = internal_crisis_high } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
+	if = { limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
+	if = { limit = { FROM = { has_dynamic_modifier = total_exhaustion } } add_to_temp_variable = { plus_cs_ai_score = 20 } }
 	
 	# === IDEOLOGICAL HATRED ===
 	if = {
@@ -144,7 +145,7 @@ plus_cs_calc_submission_chance = {
 		add_to_temp_variable = { plus_cs_ai_score = 15 }
 	}
 	if = {
-		limit = { FROM = { has_idea = internal_crisis_high } }
+		limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse has_dynamic_modifier = total_exhaustion } } }
 		add_to_temp_variable = { plus_cs_ai_score = 10 }
 	}
 
@@ -185,7 +186,7 @@ plus_cs_calc_conditional_surrender_chance = {
 	
 	# === ENEMY IS DESPERATE ===
 	if = { limit = { FROM = { surrender_progress > 0.4 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
-	if = { limit = { FROM = { has_idea = internal_crisis_high } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+	if = { limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse has_dynamic_modifier = total_exhaustion } } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
 	
 	# === TRAIT MODIFIERS ===
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 10 } }
@@ -220,7 +221,8 @@ plus_cs_calc_reparation_bonus = {
 		
 		if = { limit = { has_idea = internal_crisis_low } add_to_temp_variable = { crisis_mult = 0.5 } }
 		if = { limit = { has_idea = internal_crisis_medium } add_to_temp_variable = { crisis_mult = 1.0 } }
-		if = { limit = { has_idea = internal_crisis_high } add_to_temp_variable = { crisis_mult = 1.5 } }
+		if = { limit = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } } add_to_temp_variable = { crisis_mult = 1.5 } }
+		if = { limit = { has_dynamic_modifier = total_exhaustion } add_to_temp_variable = { crisis_mult = 2.5 } }
 		if = { limit = { has_idea = political_paralysis } add_to_temp_variable = { crisis_mult = 2.0 } }
 		
 		if = { limit = { has_stability < 0.30 } add_to_temp_variable = { crisis_mult = 0.5 } }
