@@ -30,8 +30,8 @@ plus_cs_crisis_step = {
 			}
 		}
 		random_list = {
-			99 = {}
-			1 = { 
+			98 = {}
+			2 = { 
 				# Launch Civil War Logic
 				if = {
 					limit = { has_civil_war = no }
@@ -297,10 +297,10 @@ plus_cs_political_collapse_check = {
 			is_puppet = yes
 			has_country_flag = plus_cs_had_civil_war
 		}
-		# 5% Chance
+		# 2% Chance
 		random_list = {
-			5 = { country_event = { id = plus_cs_internal.12 } }
-			95 = { }
+			2 = { country_event = { id = plus_cs_internal.12 } }
+			98 = { }
 		}
 	}
 
@@ -328,14 +328,14 @@ plus_cs_political_collapse_check = {
 			}
 		}
 		
-		# 5% chance monthly for these events
+		# 2% chance monthly for these events
 		random_list = {
-			5 = {
+			2 = {
 				country_event = { id = plus_cs_internal.10 }
 				# 30 day cooldown before next check
 				set_country_flag = { flag = plus_cs_collapse_cooldown days = 30 }
 			}
-			95 = { }
+			98 = { }
 		}
 	}
 	
