@@ -52,7 +52,11 @@ country_event = {
 		}
 		else = {
 			# Direct Offer Logic
-			event_target:peace_recipient = {
+			# FIX: event_target:peace_recipient is not saved in this event's scope
+			# Use random_enemy_country to find a valid target
+			random_enemy_country = {
+				limit = { is_puppet = no }
+				save_event_target_as = peace_recipient
 				country_event = { id = plus_cs.1 }
 			}
 		}
