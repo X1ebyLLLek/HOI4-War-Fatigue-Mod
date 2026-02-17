@@ -14,6 +14,8 @@ country_event = {
 	
 	immediate = {
 		plus_cs_calc_negotiation_chance = yes
+		# Calculate reparation bonus from SENDER's crisis state
+		FROM = { plus_cs_calc_reparation_bonus = yes }
 	}
 
 	trigger = { is_puppet = no }
@@ -36,6 +38,22 @@ country_event = {
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
 			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -50 } }
 			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -80 } }
+			
+			# === REPARATION BONUS ===
+			# If sender is in crisis, they offer bonus = more likely to accept
+			# Using FACTOR to multiply existing chance, not absolute add
+			modifier = { factor = 1.1 check_variable = { FROM.plus_cs_reparation_bonus > 0 } }   # +10%
+			modifier = { factor = 1.2 check_variable = { FROM.plus_cs_reparation_bonus > 20 } }  # +20% (total 1.32x)
+			modifier = { factor = 1.3 check_variable = { FROM.plus_cs_reparation_bonus > 40 } }  # +30% (total 1.72x)
+			modifier = { factor = 1.4 check_variable = { FROM.plus_cs_reparation_bonus > 80 } }  # +40% (total 2.40x)
+		}
+
+		# === REPARATION BONUS REWARD ===
+		# Recipient gets PP based on sender's crisis level
+		if = {
+			limit = { check_variable = { FROM.plus_cs_reparation_bonus > 0 } }
+			add_political_power = FROM.plus_cs_reparation_bonus
+			custom_effect_tooltip = plus_cs_reparation_bonus_tt
 		}
 
 		# Calculate Strategic Value of owned states
@@ -143,10 +161,9 @@ country_event = {
 			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-			set_truce = {
-				target = FROM
-				days = 720
-			}
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
+			# Centralized mutual truce (handles symmetric + puppets)
+			plus_cs_set_mutual_truce = yes
 			
 			# НОВОЕ: Восстанавливаем контроль третьих сторон после белого мира
 			plus_cs_restore_third_party_control = yes
@@ -168,11 +185,9 @@ country_event = {
 					has_capitulated = no
 				}
 				white_peace = ROOT
-				set_truce = {
-					target = ROOT
-					days = 720
-				}
 			}
+			# Extended truce for faction peace (720 days, handles symmetric + puppets)
+			plus_cs_set_extended_truce = yes
 			
 			# НОВОЕ: Восстанавливаем контроль третьих сторон
 			plus_cs_restore_third_party_control = yes

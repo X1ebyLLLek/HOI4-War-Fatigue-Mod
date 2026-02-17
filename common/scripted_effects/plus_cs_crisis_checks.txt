@@ -15,16 +15,6 @@ plus_cs_crisis_step = {
 		limit = {
 			has_idea = internal_crisis_high
 			NOT = { has_country_flag = civil_war_risk_active }
-			
-			# Historical Protection (Germany AI)
-			NOT = {
-				AND = {
-					tag = GER
-					is_ai = yes
-					date < 1944.1.1
-					surrender_progress < 0.2
-				}
-			}
 
 			OR = {
 				AND = { has_government = democratic democratic < 0.5 }
@@ -55,6 +45,8 @@ plus_cs_crisis_step = {
 					}
 				}
 				set_country_flag = { flag = civil_war_risk_active days = 30 }
+				# Mark that this country had a civil war (enables post-civil war collapse events 11-13)
+				set_country_flag = plus_cs_had_civil_war
 			}
 		}
 	}
@@ -186,6 +178,8 @@ plus_cs_crisis_step = {
 		
 		set_temp_variable = { fatigue_mult = 1 }
 		if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
+		# NEW: Ultra-late war (post-1946) — extreme exhaustion
+		if = { limit = { date > 1946.1.1 } set_temp_variable = { fatigue_mult = 3 } }
 		
 		# Base Stab Hit
 		set_temp_variable = { stab_hit = -0.002 }
@@ -219,20 +213,26 @@ plus_cs_crisis_step = {
 # Handles Ideology Crisis level management
 # =============================================
 plus_cs_internal_crisis_check_step = {
+	# Определяем уровень кризиса
+	set_temp_variable = { crisis_level = 0 }
+	
 	if = {
 		limit = { OR = { has_war_support < 0.2 has_stability < 0.2 } }
+		set_temp_variable = { crisis_level = 3 }
 		add_timed_idea = { idea = internal_crisis_high days = 60 }
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
 	}
 	else_if = {
 		limit = { OR = { has_war_support < 0.4 has_stability < 0.4 } }
+		set_temp_variable = { crisis_level = 2 }
 		add_timed_idea = { idea = internal_crisis_medium days = 60 }
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_low
 	}
 	else_if = {
 		limit = { OR = { has_war_support < 0.6 has_stability < 0.6 } }
+		set_temp_variable = { crisis_level = 1 }
 		add_timed_idea = { idea = internal_crisis_low days = 60 }
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_medium
@@ -242,4 +242,99 @@ plus_cs_internal_crisis_check_step = {
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
 	}
+	
+	# ========================================
+	# ДИНАМИЧЕСКИЙ ДРИФТ К ОППОЗИЦИИ
+	# Зависит от текущей идеологии и уровня кризиса
+	# ========================================
+	if = {
+		limit = { check_variable = { crisis_level > 0 } }
+		
+		# Базовое значение дрифта (0.5% / 1.5% / 3% за тик)
+		set_temp_variable = { drift_value = crisis_level }
+		multiply_temp_variable = { drift_value = 0.005 }
+		
+		# ФАШИЗМ → Дрифт к демократии и коммунизму
+		if = {
+			limit = { has_government = fascism }
+			add_popularity = { ideology = democratic popularity = drift_value }
+			add_popularity = { ideology = communism popularity = drift_value }
+		}
+		# КОММУНИЗМ → Дрифт к демократии
+		else_if = {
+			limit = { has_government = communism }
+			add_popularity = { ideology = democratic popularity = drift_value }
+		}
+		# ДЕМОКРАТИЯ → Дрифт к экстремизму (поровну)
+		else_if = {
+			limit = { has_government = democratic }
+			multiply_temp_variable = { drift_value = 0.5 }
+			add_popularity = { ideology = fascism popularity = drift_value }
+			add_popularity = { ideology = communism popularity = drift_value }
+		}
+		# НЕЙТРАЛ → Дрифт к демократии
+		else = {
+			add_popularity = { ideology = democratic popularity = drift_value }
+		}
+	}
 }
+
+# =============================================
+# plus_cs_political_collapse_check
+# Triggers collapse events when stability/WS < 10%
+# =============================================
+plus_cs_political_collapse_check = {
+	# 1. PUPPET INSTANT CAPITULATION (5% Monthly Chance if Had Civil War)
+	if = {
+		limit = {
+			has_war = yes
+			is_puppet = yes
+			has_country_flag = plus_cs_had_civil_war
+		}
+		# 5% Chance
+		random_list = {
+			5 = { country_event = { id = plus_cs_internal.12 } }
+			95 = { }
+		}
+	}
+
+	# 2. FREE NATION CRISIS DISPATCHER (Monthly Pulse)
+	# This event (internal.10) selects between Coup, Paralysis, etc.
+	# We gate it here so it only fires if Civil War Happened + 5% Chance (for free nations).
+	if = {
+		limit = {
+			has_war = yes
+			is_puppet = no
+			has_country_flag = plus_cs_had_civil_war
+			NOT = { has_country_flag = plus_cs_collapse_cooldown }
+			NOT = { has_civil_war = yes }
+		}
+		
+		# User restriction: 5% chance monthly for these events
+		random_list = {
+			5 = {
+				country_event = { id = plus_cs_internal.10 }
+				# 30 day cooldown before next check
+				set_country_flag = { flag = plus_cs_collapse_cooldown days = 30 }
+			}
+			95 = { }
+		}
+	}
+	
+	# Clean up Civil War Flag if peace returns
+	if = {
+		limit = { has_war = no has_country_flag = plus_cs_had_civil_war }
+		clr_country_flag = plus_cs_had_civil_war
+	}
+	
+	# Remove paralysis if conditions improve
+	if = {
+		limit = {
+			has_idea = political_paralysis
+			has_stability > 0.15
+			has_war_support > 0.15
+		}
+		remove_ideas = political_paralysis
+	}
+}
+

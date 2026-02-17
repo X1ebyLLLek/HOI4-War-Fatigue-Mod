@@ -1,0 +1,154 @@
+# ==============================================================================
+# SCRIPTED EFFECTS: TRUCE SYSTEM
+# Централизованные эффекты для системы перемирия
+# ==============================================================================
+
+# =============================================
+# plus_cs_set_mutual_truce
+# Устанавливает взаимное перемирие между ROOT и FROM
+# Учитывает вассалов обеих сторон
+# Вызывается после white_peace или переговоров
+# =============================================
+plus_cs_set_mutual_truce = {
+	# 1. Базовое взаимное перемирие между ROOT и FROM
+	set_truce = { target = FROM days = 365 }
+	FROM = { set_truce = { target = ROOT days = 365 } }
+	
+	# 2. Вассалы ROOT получают truce с FROM
+	every_country = {
+		limit = { is_puppet_of = ROOT }
+		set_truce = { target = FROM days = 365 }
+		FROM = { set_truce = { target = PREV days = 365 } }
+	}
+	
+	# 3. Вассалы FROM получают truce с ROOT
+	FROM = {
+		every_country = {
+			limit = { is_puppet_of = FROM }
+			set_truce = { target = ROOT days = 365 }
+			ROOT = { set_truce = { target = PREV days = 365 } }
+		}
+	}
+	
+	# 4. Вассалы ROOT vs Вассалы FROM
+	every_country = {
+		limit = { is_puppet_of = ROOT }
+		save_event_target_as = root_puppet
+		FROM = {
+			every_country = {
+				limit = { is_puppet_of = FROM }
+				set_truce = { target = event_target:root_puppet days = 365 }
+				event_target:root_puppet = { set_truce = { target = PREV days = 365 } }
+			}
+		}
+	}
+	
+	# Логирование
+	log = "[TRUCE_LOG] Mutual truce established: [ROOT.GetName] <-> [FROM.GetName] (365 days, incl. puppets)"
+}
+
+# =============================================
+# plus_cs_set_faction_truce
+# Для мира между лидерами фракций - все члены получают truce
+# ROOT = лидер фракции (принимающий мир)
+# FROM = инициатор мира
+# =============================================
+plus_cs_set_faction_truce = {
+	# 1. Перемирие между ROOT и FROM (включая их вассалов)
+	plus_cs_set_mutual_truce = yes
+	
+	# 2. Если ROOT - лидер фракции, все его члены получают truce с FROM
+	if = {
+		limit = { is_faction_leader = yes }
+		every_country = {
+			limit = { 
+				is_in_faction_with = ROOT 
+				NOT = { tag = ROOT }
+			}
+			# Каждый член получает truce с FROM
+			set_truce = { target = FROM days = 365 }
+			FROM = { set_truce = { target = PREV days = 365 } }
+			
+			# И их вассалы тоже
+			every_country = {
+				limit = { is_puppet_of = PREV }
+				set_truce = { target = FROM days = 365 }
+				FROM = { set_truce = { target = PREV days = 365 } }
+			}
+		}
+	}
+	
+	# 3. Если FROM - лидер фракции, все его члены получают truce с ROOT
+	if = {
+		limit = { FROM = { is_faction_leader = yes } }
+		FROM = {
+			every_country = {
+				limit = { 
+					is_in_faction_with = FROM 
+					NOT = { tag = FROM }
+				}
+				# Каждый член FROM получает truce с ROOT
+				set_truce = { target = ROOT days = 365 }
+				ROOT = { set_truce = { target = PREV days = 365 } }
+				
+				# И их вассалы
+				every_country = {
+					limit = { is_puppet_of = PREV }
+					set_truce = { target = ROOT days = 365 }
+					ROOT = { set_truce = { target = PREV days = 365 } }
+				}
+			}
+		}
+	}
+	
+	# 4. Если ОБА лидеры фракций - все члены обеих фракций получают truce друг с другом
+	if = {
+		limit = {
+			is_faction_leader = yes
+			FROM = { is_faction_leader = yes }
+		}
+		every_country = {
+			limit = { is_in_faction_with = ROOT }
+			save_event_target_as = root_faction_member
+			FROM = {
+				every_country = {
+					limit = { is_in_faction_with = FROM }
+					set_truce = { target = event_target:root_faction_member days = 365 }
+					event_target:root_faction_member = { set_truce = { target = PREV days = 365 } }
+				}
+			}
+		}
+	}
+	
+	log = "[TRUCE_LOG] Faction truce established: [ROOT.GetName] faction <-> [FROM.GetName] (365 days)"
+}
+
+# =============================================
+# plus_cs_set_extended_truce
+# Для полной капитуляции/условий - 720 дней (2 года)
+# ROOT = победитель
+# FROM = проигравший
+# =============================================
+plus_cs_set_extended_truce = {
+	# Базовое перемирие на 2 года
+	set_truce = { target = FROM days = 720 }
+	FROM = { set_truce = { target = ROOT days = 720 } }
+	
+	# Вассалы ROOT
+	every_country = {
+		limit = { is_puppet_of = ROOT }
+		set_truce = { target = FROM days = 720 }
+		FROM = { set_truce = { target = PREV days = 720 } }
+	}
+	
+	# Вассалы FROM
+	FROM = {
+		every_country = {
+			limit = { is_puppet_of = FROM }
+			set_truce = { target = ROOT days = 720 }
+			ROOT = { set_truce = { target = PREV days = 720 } }
+		}
+	}
+	
+	log = "[TRUCE_LOG] Extended truce (720 days): [ROOT.GetName] <-> [FROM.GetName]"
+}

@@ -40,9 +40,9 @@
  plus_cs.4.d:0 "O líder [From.GetAdjective], [From.GetLeader], propôs uma paz branca entre nossos países."
  plus_cs.4.a:0 "Vamos parar esta guerra inútil"
  plus_cs.4.b:0 "Não desistiremos facilmente"
- plus_cs.5.t:0 "[From.GetNameDefCap] recusa-se a render"
- plus_cs.5.d:0 "O líder [From.GetAdjectiveCap], [From.GetLeader], recusou-se a render-se a nós."
- plus_cs.5.a:0 "Eles estão apenas prolongando o inevitável"
+ plus_cs.5.t:0 "[From.GetNameDefCap] aceita a paz!"
+ plus_cs.5.d:0 "O líder [From.GetAdjectiveCap], [From.GetLeader], aceitou nossa proposta de paz. A guerra acabou!"
+ plus_cs.5.a:0 "Finalmente paz!"
  plus_cs.6.t:0 "[From.GetNameDefCap] recusa conversas de paz"
  plus_cs.6.d:0 "O líder [From.GetAdjectiveCap], [From.GetLeader], desperdiçou uma oportunidade de acabar a guerra mais cedo."
  plus_cs.6.a:0 "Estamos ferrados!"
@@ -372,4 +372,50 @@
  plus_cs_spirit_fanatic_desc:0 "Este líder nunca aceitará a rendição a menos que a nação seja destruída.\n\n§RAceitação de Paz IA: -100%§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Este líder é pessimista e buscará a paz ao primeiro sinal de problema.\n\n§GAceitação de Paz IA: +100%§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Este líder é teimoso e resiste fortemente à rendição.\n\n§YAceitação de Paz IA: Normal§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 " We will not bow!\
+ plus_cs_diplomacy.20.b:0 "Não nos curvaremos!"
+ 
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "Fanático"
+ plus_cs_spirit_defeatist:0 "Derrotista"
+ plus_cs_spirit_resilient:0 "Resiliente"
+ 
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: Verificar Vontade Oculta"
+ plus_cs_debug_vars_desc:0 "§OVontade Oculta Atual: [?Root.plus_cs_hidden_resolve]§!\\n\\nUse esta decisão para registrar o valor no log."
+ plus_cs_debug_dump_all:0 "DEBUG: Escrever Vontade de TODAS as nações no log"
+ plus_cs_debug_dump_all_desc:0 "Escreve o valor da Vontade Oculta para CADA país em error.log (game.log)."
+ 
+ # --- CUSTOM TOOLTIPS ---
+ plus_cs_spirit_fanatic_tt:0 "Defesa do exército em território nacional: §G+10.0%§!\\nOrganização de divisão: §G+10.0%§!\\n\\nEste líder nunca aceitará a rendição a menos que a nação seja destruída.\\n\\n§RAceitação de Paz IA: -100%§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "Taxa de recuperação de divisão: §R-10.0%§!\\nLimite de rendição: §R+10.0%§!\\n\\nEste líder é pessimista e buscará a paz ao primeiro sinal de problema.\\n\\n§GAceitação de Paz IA: +100%§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "Estabilidade semanal: §G+0.10%§!\\n\\nEste líder é teimoso e resiste fortemente à rendição.\\n\\n§YAceitação de Paz IA: Normal§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "Tributo Econômico por Cessar-Fogo"
+  plus_cs_reparation_bonus_tt:0 "§GBônus de Reparação:§! [FROM.GetName] está desesperado pela paz e oferece §Y[?FROM.plus_cs_reparation_bonus] Poder Político§! como reparações."
+  plus_cs_separate_peace_blocker:0 "Espírito de Paz Separada"
+  plus_cs_separate_peace_blocker_desc:0 "Este país assinou um tratado de paz em separado. Não podemos nos juntar a facções ou chamar aliados, mas nossas fronteiras estão seguras."
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§RDesintegração do Exército§!"
+  army_cohesion_crisis_desc:0 "Baixas catastróficas e escassez de oficiais destruíram o exército. Unidades se recusam a atacar, soldados desertam em massa."
+  homefront_collapse:0 "§RColapso da Frente Interna§!"
+  homefront_collapse_desc:0 "Inflação e crise política paralisaram a economia. Greves varrem as fábricas, filas de pão viram tumultos."
+  total_exhaustion:0 "§RExaustão Total§!"
+  total_exhaustion_desc:0 "O país não pode mais fazer guerra. Exército dissolvido, economia morta, governo paralisado."
+  political_paralysis:0 "§RParalisia Política§!"
+  political_paralysis_desc:0 "O governo é incapaz de governar. Estabilidade e apoio à guerra caíram abaixo do nível crítico."
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "Golpe Militar"
+  plus_cs_internal.11.d:0 "Os generais tomaram o poder. Incapazes de ver a nação ruir, o exército derrubou o governo para restaurar a ordem."
+  plus_cs_internal.11.a:0 "A ordem deve ser restaurada"
+  plus_cs_internal.12.t:0 "Paralisia Política"
+  plus_cs_internal.12.d:0 "O governo perdeu completamente o controle. Debates sem fim, greves e distúrbios paralisaram a nação."
+  plus_cs_internal.12.a:0 "Somos impotentes..."
+  plus_cs_internal.13.t:0 "Capitulação Forçada"
+  plus_cs_internal.13.d:0 "O governo colapsou. Para evitar a aniquilação total, as autoridades restantes decidiram se render."
+  plus_cs_internal.13.a:0 "Não temos escolha"
+  plus_cs.300.c:0 "Estamos sozinhos."
+  plus_cs_crisis_management:0 "Gestão de Crise"
+  plus_cs_debug_options:0 "Opções de Depuração"

@@ -19,6 +19,12 @@ country_event = {
 	desc = plus_cs_diplomacy.1.d
 	picture = GFX_report_event_generic_conference
 	is_triggered_only = yes
+	
+	trigger = {
+		# Gating: Only after Civil War
+		has_country_flag = plus_cs_had_civil_war
+		is_puppet = no
+	}
 
 	option = {
 		name = plus_cs_diplomacy.1.a # Make Offer
@@ -167,7 +173,10 @@ country_event = {
 		}
 		
 		leave_faction = yes
-		white_peace = ALL_ENEMIES
+		# FIX: white_peace = ALL_ENEMIES is invalid syntax
+		every_enemy_country = {
+			white_peace = ROOT
+		}
 		
 		add_stability = 0.10
 		add_war_support = -0.10

@@ -51,9 +51,9 @@
  plus_cs.4.d:0 "Le dirigeant [From.GetAdjective], [From.GetLeader], a proposé une paix blanche entre nos pays."
  plus_cs.4.a:0 "Arrêtons cette guerre inutile"
  plus_cs.4.b:0 "Nous n'abandonnerons pas facilement"
- plus_cs.5.t:0 "[From.GetNameDefCap] refuse de se rendre"
- plus_cs.5.d:0 "Le dirigeant [From.GetAdjectiveCap], [From.GetLeader], a refusé de se rendre à nous."
- plus_cs.5.a:0 "Ils ne font que prolonger l'inévitable"
+ plus_cs.5.t:0 "[From.GetNameDefCap] accepte la paix !"
+ plus_cs.5.d:0 "Le dirigeant [From.GetAdjectiveCap], [From.GetLeader], a accepté notre proposition de paix. La guerre est terminée !"
+ plus_cs.5.a:0 "Enfin la paix !"
  plus_cs.6.t:0 "[From.GetNameDefCap] refuse les pourparlers de paix"
  plus_cs.6.d:0 "Le dirigeant [From.GetAdjectiveCap], [From.GetLeader], a gâché une opportunité de mettre fin à la guerre plus tôt."
  plus_cs.6.a:0 "Nous sommes fichus !"
@@ -368,13 +368,60 @@
 
  # --- LOGIC EVENTS (Débat sur la Reddition) ---
  plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
- plus_cs_logic.1.d:0 "Le cabinet est dans la tourmente. L'ennemi presse nos frontières, et des voix s'élèvent pour demander la fin de l'effusion de sang. Cependant, les partisans de la ligne dure insistent sur le fait que la reddition est une trahison."
- plus_cs_logic.1.a:0 "Nous continuerons le combat ! (Refuser)"
- plus_cs_logic.1.b:0 "Il faut négocier (Reddition)"
- plus_cs_surrender_proceed_tt:0 "§GProcéder aux négociations formelles de reddition§!"
+plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
+plus_cs_logic.1.d:0 "Le cabinet est dans la tourmente. L'ennemi presse nos frontières, et des voix s'élèvent pour demander la fin de l'effusion de sang. Cependant, les partisans de la ligne dure insistent sur le fait que la reddition est une trahison."
+plus_cs_logic.1.a:0 "Nous continuerons le combat ! (Refuser)"
+plus_cs_logic.1.b:0 "Il faut négocier (Reddition)"
+plus_cs_surrender_proceed_tt:0 "§GProcéder aux négociations formelles de reddition§!"
 
  # --- Leader Traits Debug ---
- plus_cs_spirit_fanatic_desc:0 "Ce dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_spirit_defeatist_desc:0 "Ce dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_spirit_resilient_desc:0 "Ce dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 "We will not bow!"
+plus_cs_spirit_fanatic_desc:0 "Ce dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_defeatist_desc:0 "Ce dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_resilient_desc:0 "Ce dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_diplomacy.20.b:0 "Nous ne nous inclinerons pas !"
+ 
+ # --- Leader Traits (Base) ---
+plus_cs_spirit_fanatic:0 "Fanatique"
+plus_cs_spirit_defeatist:0 "Défaitiste"
+plus_cs_spirit_resilient:0 "Résilient"
+ 
+ # --- DEBUG DECISION ---
+plus_cs_debug_vars:0 "DEBUG: Vérifier la Volonté Cachée"
+plus_cs_debug_vars_desc:0 "§OVolonté Cachée Actuelle: [?Root.plus_cs_hidden_resolve]§!\n\nUtilisez cette décision pour enregistrer la valeur."
+plus_cs_debug_dump_all:0 "DEBUG: Écrire la Volonté de TOUTES les nations dans le log"
+plus_cs_debug_dump_all_desc:0 "Écrit la valeur de la Volonté Cachée pour CHAQUE pays dans error.log (game.log)."
+ 
+ # --- CUSTOM TOOLTIPS ---
+plus_cs_spirit_fanatic_tt:0 "Défense de l'armée sur le territoire national: §G+10.0%§!\nOrganisation de division: §G+10.0%§!\n\nCe dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_defeatist_tt:0 "Taux de récupération de division: §R-10.0%§!\nLimite de capitulation: §R+10.0%§!\n\nCe dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_resilient_tt:0 "Stabilité hebdomadaire: §G+0.10%§!\n\nCe dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "Tribut économique pour cessez-le-feu"
+  plus_cs_reparation_bonus_tt:0 "§GBonus de Réparation:§! [FROM.GetName] est désespéré pour la paix et offre §Y[?FROM.plus_cs_reparation_bonus] Pouvoir Politique§! en réparations."
+  plus_cs_separate_peace_blocker:0 "Esprit de Paix Séparée"
+  plus_cs_separate_peace_blocker_desc:0 "Ce pays a signé un traité de paix séparée. Nous ne pouvons pas rejoindre de factions ou appeler des alliés, mais nos frontières sont sécurisées."
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§RDésintégration de l'Armée§!"
+  army_cohesion_crisis_desc:0 "Pertes catastrophiques et pénurie d'officiers ont brisé l'armée. Les troupes refusent d'attaquer, les soldats désertent en masse."
+  homefront_collapse:0 "§REffondrement du Front Intérieur§!"
+  homefront_collapse_desc:0 "L'inflation et la crise politique ont paralysé l'économie. Les usines sont en grève, les queues pour le pain se transforment en émeutes."
+  total_exhaustion:0 "§RÉpuisement Total§!"
+  total_exhaustion_desc:0 "Le pays ne peut plus faire la guerre. L'armée est dissoute, l'économie est morte, le gouvernement est paralysé."
+  political_paralysis:0 "§RParalysie Politique§!"
+  political_paralysis_desc:0 "Le gouvernement est incapable de gouverner. La stabilité et le soutien à la guerre sont tombés en dessous du niveau critique."
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "Coup d'État Militaire"
+  plus_cs_internal.11.d:0 "Les généraux ont pris le pouvoir. Incapables de regarder la nation s'effondrer, l'armée a renversé le gouvernement."
+  plus_cs_internal.11.a:0 "L'ordre doit être restauré"
+  plus_cs_internal.12.t:0 "Paralysie Politique"
+  plus_cs_internal.12.d:0 "Le gouvernement a complètement perdu le contrôle. Débats sans fin, grèves et troubles publics ont paralysé la nation."
+  plus_cs_internal.12.a:0 "Nous sommes impuissants..."
+  plus_cs_internal.13.t:0 "Capitulation Forcée"
+  plus_cs_internal.13.d:0 "Le gouvernement s'est effondré. Pour éviter l'anéantissement total, les autorités restantes ont décidé de se rendre."
+  plus_cs_internal.13.a:0 "Nous n'avons pas le choix"
+  plus_cs.300.c:0 "Nous sommes seuls."
+  plus_cs_crisis_management:0 "Gestion de crise"
+  plus_cs_debug_options:0 "Options de débogage"

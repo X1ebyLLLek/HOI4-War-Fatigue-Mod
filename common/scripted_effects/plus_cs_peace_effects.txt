@@ -158,8 +158,9 @@ plus_cs_check_third_party_control = {
 # Used in Negotiation logic
 # =============================================
 plus_cs_calculate_total_strategic_value = {
-	# 1. Reset Variables
+	# 1. Reset Variables (OPT: only for belligerents)
 	every_country = {
+		limit = { has_war = yes }
 		set_variable = { cnt_og_vp = 0 }
 	}
 

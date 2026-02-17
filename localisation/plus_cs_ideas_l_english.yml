@@ -109,5 +109,20 @@
  plus_cs_spirit_defeatist_tt:0 "Division Recovery Rate: §R-10.0%§!\nSurrender Limit: §R+10.0%§!\n\nThis leader is pessimistic about the war and will seek peace at the first sign of trouble.\n\n§GAI Peace Acceptance: +100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_tt:0 "Weekly Stability: §G+0.10%§!\n\nThis leader is stubborn and provides strong resistance against surrender.\n\n§YAI Peace Acceptance: Normal§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"
 
- plus_cs_debug_dump_all:0 "DEBUG: Dump ALL Nations Resolve to Log"
  plus_cs_debug_dump_all_desc:0 "Writes the Hidden Resolve value for EVERY country effectively into error.log (game.log)."
+
+ plus_cs_separate_peace_blocker:0 "Spirit of Separate Peace"
+ plus_cs_separate_peace_blocker_desc:0 "This country has signed a separate peace treaty. We cannot join factions or call allies, but our borders are secure."
+
+ # --- NEW: Synergy Crisis (Combined Crisis) ---
+ army_cohesion_crisis:0 "§RArmy Disintegration§!"
+ army_cohesion_crisis_desc:0 "Catastrophic casualties and officer shortage have shattered the army. Units refuse to attack, soldiers desert en masse, entire battalions surrender."
+
+ homefront_collapse:0 "§RHomefront Collapse§!"
+ homefront_collapse_desc:0 "Inflation and political crisis have paralyzed the economy. Strikes sweep the factories, bread lines turn into riots. Troops are needed to suppress unrest."
+
+ total_exhaustion:0 "§RTotal Exhaustion§!"
+ total_exhaustion_desc:0 "The country can no longer wage war. Army dissolved, economy dead, government paralyzed. Any enemy can dictate their terms."
+
+ political_paralysis:0 "§RPolitical Paralysis§!"
+ political_paralysis_desc:0 "The government is incapable of governing. Stability and war support have fallen below critical levels. All decisions are paralyzed."

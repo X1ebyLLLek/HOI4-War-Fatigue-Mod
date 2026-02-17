@@ -40,9 +40,9 @@
  plus_cs.4.d:0 "Der [From.GetAdjective] Anführer, [From.GetLeader], hat einen weißen Frieden zwischen unseren Ländern vorgeschlagen."
  plus_cs.4.a:0 "Lasst uns diesen sinnlosen Krieg beenden"
  plus_cs.4.b:0 "Wir werden nicht so leicht aufgeben"
- plus_cs.5.t:0 "[From.GetNameDefCap] weigert sich zu kapitulieren"
- plus_cs.5.d:0 "Der [From.GetAdjectiveCap] Anführer, [From.GetLeader], hat sich geweigert, vor uns zu kapitulieren."
- plus_cs.5.a:0 "Sie zögern nur das Unvermeidliche hinaus"
+ plus_cs.5.t:0 "[From.GetNameDefCap] akzeptiert den Frieden!"
+ plus_cs.5.d:0 "Der [From.GetAdjectiveCap] Anführer, [From.GetLeader], hat unserem Friedensangebot zugestimmt. Der Krieg ist vorbei!"
+ plus_cs.5.a:0 "Endlich Frieden!"
  plus_cs.6.t:0 "[From.GetNameDefCap] lehnt Friedensgespräche ab"
  plus_cs.6.d:0 "Der [From.GetAdjectiveCap] Anführer, [From.GetLeader], hat eine Gelegenheit vertan, den Krieg früher zu beenden."
  plus_cs.6.a:0 "Wir sind am Ende!"
@@ -390,4 +390,50 @@
  plus_cs_spirit_fanatic_desc:0 "Dieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\n\n§RKI-Friedensakzeptanz: -100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Dieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\n\n§GKI-Friedensakzeptanz: +100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Dieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\n\n§YKI-Friedensakzeptanz: Normal§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 "We will not bow!"
+ plus_cs_diplomacy.20.b:0 "Wir werden uns nicht beugen!"
+ 
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "Fanatiker"
+ plus_cs_spirit_defeatist:0 "Defätist"
+ plus_cs_spirit_resilient:0 "Widerstandsfähig"
+ 
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: Verborgenen Willen prüfen"
+ plus_cs_debug_vars_desc:0 "§OAktueller Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!\\n\\nVerwenden Sie diese Entscheidung, um den Wert zu protokollieren."
+ plus_cs_debug_dump_all:0 "DEBUG: Willen ALLER Nationen in Log schreiben"
+ plus_cs_debug_dump_all_desc:0 "Schreibt den Wert des Verborgenen Willens für JEDES Land in error.log (game.log)."
+ 
+ # --- CUSTOM TOOLTIPS ---
+ plus_cs_spirit_fanatic_tt:0 "Armeeverteidigung auf Kernterritorium: §G+10.0%§!\\nDivisionsorganisation: §G+10.0%§!\\n\\nDieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\\n\\n§RKI-Friedensakzeptanz: -100%§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "Erholungsrate der Division: §R-10.0%§!\\nKapitulationsgrenze: §R+10.0%§!\\n\\nDieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\\n\\n§GKI-Friedensakzeptanz: +100%§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "Wöchentliche Stabilität: §G+0.10%§!\\n\\nDieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\\n\\n§YKI-Friedensakzeptanz: Normal§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "Wirtschaftstribut für Waffenruhe"
+  plus_cs_reparation_bonus_tt:0 "§GReparationsbonus:§! [FROM.GetName] ist verzweifelt nach Frieden und bietet §Y[?FROM.plus_cs_reparation_bonus] Politische Macht§! als Reparationen."
+  plus_cs_separate_peace_blocker:0 "Geist des Separatfriedens"
+  plus_cs_separate_peace_blocker_desc:0 "Dieses Land hat einen separaten Friedensvertrag unterzeichnet. Wir können keinen Fraktionen beitreten oder Verbündete rufen, aber unsere Grenzen sind sicher."
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§RArmeeauflösung§!"
+  army_cohesion_crisis_desc:0 "Katastrophale Verluste und Offiziersmangel haben die Armee zerstört. Einheiten weigern sich anzugreifen, Soldaten desertieren."
+  homefront_collapse:0 "§RZusammenbruch der Heimatfront§!"
+  homefront_collapse_desc:0 "Inflation und politische Krise haben die Wirtschaft lahmgelegt. Streiks in den Fabriken, Brotschlangen werden zu Unruhen."
+  total_exhaustion:0 "§RTotale Erschöpfung§!"
+  total_exhaustion_desc:0 "Das Land kann nicht mehr Krieg führen. Armee aufgelöst, Wirtschaft tot, Regierung gelähmt."
+  political_paralysis:0 "§RPolitische Lähmung§!"
+  political_paralysis_desc:0 "Die Regierung ist handlungsunfähig. Stabilität und Kriegsunterstützung sind unter den kritischen Wert gefallen."
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "Militärputsch"
+  plus_cs_internal.11.d:0 "Die Generäle haben die Macht übernommen. Die Armee hat die Regierung gestürzt, um die Nation zu retten."
+  plus_cs_internal.11.a:0 "Die Ordnung muss wiederhergestellt werden"
+  plus_cs_internal.12.t:0 "Politische Lähmung"
+  plus_cs_internal.12.d:0 "Die Regierung hat völlig die Kontrolle verloren. Endlose Debatten, Streiks und Unruhen haben die Nation gelähmt."
+  plus_cs_internal.12.a:0 "Wir sind machtlos..."
+  plus_cs_internal.13.t:0 "Erzwungene Kapitulation"
+  plus_cs_internal.13.d:0 "Die Regierung ist zusammengebrochen. Um die totale Vernichtung zu vermeiden, haben die verbliebenen Behörden beschlossen, sich zu ergeben."
+  plus_cs_internal.13.a:0 "Wir haben keine Wahl"
+  plus_cs.300.c:0 "Wir stehen allein da."
+  plus_cs_crisis_management:0 "Krisenmanagement"
+  plus_cs_debug_options:0 "Debug-Optionen"

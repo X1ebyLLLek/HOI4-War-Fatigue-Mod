@@ -11,6 +11,12 @@ country_event = {
 	desc = plus_cs.4.d
 	picture = GFX_report_event_generic_sign_treaty2
 	is_triggered_only = yes
+	
+	trigger = {
+		# Gating: Only after Civil War
+		has_country_flag = plus_cs_had_civil_war
+		is_puppet = no
+	}
 
 	immediate = {
 		plus_cs_calc_white_peace_chance = yes
@@ -49,22 +55,19 @@ country_event = {
 				limit = { is_in_faction_with = ROOT }
 				white_peace = FROM
 				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-				add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
-				set_truce = { target = FROM days = 365 }
+				add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
 			}
+			# Centralized truce for entire faction (handles symmetric + puppets)
+			plus_cs_set_faction_truce = yes
 		}
 		else = {
-			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 360 }
-			set_truce = { target = FROM days = 365 }
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
+			# Centralized mutual truce (handles symmetric + puppets)
+			plus_cs_set_mutual_truce = yes
 		}
 		
 		FROM = {
-			set_truce = {
-				target = ROOT
-				days = 365
-			}
 			clr_country_flag = plus_cs_waiting_response
 			# Notify sender (NEWS EVENT FIX)
 			news_event = { id = plus_cs.5 }
@@ -101,6 +104,8 @@ country_event = {
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
 			set_country_flag = { flag = plus_cs_peace_cooldown days = 30 }
+			# BUGFIX: Notify sender about rejection
+			news_event = { id = plus_cs.6 }
 		}
 	}
 }

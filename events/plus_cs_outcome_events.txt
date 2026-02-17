@@ -30,31 +30,31 @@ news_event = {
 	}
 }
 
-# Event 7: Cleanup / Ceasefire logic?
-country_event = {
-	id = plus_cs.7
-	title = plus_cs.7.t
-	desc = plus_cs.7.d
-	is_triggered_only = yes
-
-	option = {
-		name = plus_cs.7.a
-		set_temp_variable = { cont = global.province_controllers }
-		white_peace = FROM
-		set_truce = {
-			target = FROM
-			days = 14
-		}
-		for_each_loop = {
-			array = var:cont
-			var:v = {
-				add_political_power = 1
-				set_province_controller = var:i
-			}
-		}
-
-	}
-}
+# Event 7: Cleanup / Ceasefire logic (WIP/PROTOTYPE - never called)
+# country_event = {
+# 	id = plus_cs.7
+# 	title = plus_cs.7.t
+# 	desc = plus_cs.7.d
+# 	is_triggered_only = yes
+# 
+# 	option = {
+# 		name = plus_cs.7.a
+# 		set_temp_variable = { cont = global.province_controllers }
+# 		white_peace = FROM
+# 		set_truce = {
+# 			target = FROM
+# 			days = 14
+# 		}
+# 		for_each_loop = {
+# 			array = var:cont
+# 			var:v = {
+# 				add_political_power = 1
+# 				set_province_controller = var:i
+# 			}
+# 		}
+# 
+# 	}
+# }
 
 # =============================================
 # plus_cs.410 - Уведомление о сепаратном мире

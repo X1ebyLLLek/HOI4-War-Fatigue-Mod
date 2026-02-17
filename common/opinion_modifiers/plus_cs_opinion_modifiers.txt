@@ -1,3 +1,9 @@
+# ==============================================================================
+# OPINION MODIFIERS: DIPLOMACY
+# Note: faction_betrayal, faction_deserter, peace_territory_preserved 
+# are defined in plus_cs_opinion.txt
+# ==============================================================================
+
 opinion_modifiers = {
 
 	peaceful_vassalization = {
@@ -10,15 +16,6 @@ opinion_modifiers = {
 		value = -50
 		decay = 0.5
 		months = 24
-	}
-
-	faction_betrayal = {
-		value = -100
-		decay = 0.5
-	}
-	faction_deserter = {
-		value = -50
-		decay = 0.5
 	}
 
 }

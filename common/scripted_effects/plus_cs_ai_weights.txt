@@ -15,56 +15,49 @@ plus_cs_calc_ai_personality = {
 
 	# --- IDEOLOGY BIAS ---
 	# Democracies are generally more open to peace (accountable to voters).
-	if = { limit = { has_government = democratic } add_to_temp_variable = { plus_cs_ai_score = 15 } }
+	if = { limit = { has_government = democratic } add_to_temp_variable = { plus_cs_ai_score = 8 } }
 	
 	# Neutral countries just want to be left alone.
-	if = { limit = { has_government = neutrality } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { has_government = neutrality } add_to_temp_variable = { plus_cs_ai_score = 5 } }
 	
-	# Fascists/Communists are dogmatic (-15).
+	# Fascists/Communists are dogmatic.
 	if = { 
 		limit = { OR = { has_government = fascism has_government = communism } } 
-		subtract_from_temp_variable = { plus_cs_ai_score = 15 } 
+		subtract_from_temp_variable = { plus_cs_ai_score = 8 } 
 	}
 	
 	# --- LEADER PERSONALITY ---
-	# Traits are significant modifiers.
-	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 30 } }
-	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 25 } }
+	# Traits are significant modifiers (these add up with crisis!)
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 15 } }
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 12 } }
 	
 	# --- CULTURAL/NATIONAL SPIRITS ---
-	# Revanchism (If we lost cores, we are angry -> Less likely to accept peace unless it returns them)
+	# Revanchism
 	if = {
 		limit = { 
 			has_idea = revanchism_spirit 
 			NOT = { has_country_flag = plus_cs_exhausted }
 		}
-		subtract_from_temp_variable = { plus_cs_ai_score = 20 }
-	}
-	
-	# --- INTERNAL RESOLVE (Dynamic Nation Status) ---
-	# Patriotic Fervor (High War Support + Propaganda)
-	if = { 
-		limit = { has_idea = plus_cs_patriotic_fervor }
-		subtract_from_temp_variable = { plus_cs_ai_score = 15 } 
-	}
-	
-
-	
-	# Major Power Arrogance
-	# Majors are prouder and harder to break diplomatically.
-	if = {
-		limit = { is_major = yes }
 		subtract_from_temp_variable = { plus_cs_ai_score = 10 }
 	}
 	
-
+	# --- INTERNAL RESOLVE ---
+	# Patriotic Fervor
+	if = { 
+		limit = { has_idea = plus_cs_patriotic_fervor }
+		subtract_from_temp_variable = { plus_cs_ai_score = 8 } 
+	}
+	
+	# Major Power Arrogance
+	if = {
+		limit = { is_major = yes }
+		subtract_from_temp_variable = { plus_cs_ai_score = 5 }
+	}
 	
 	# --- HIDDEN RANDOM FACTOR ---
-	# Adds an inherent bias (-16 to +16) set at game start/loading
-    # Uses 'plus_cs_hidden_resolve' which is -50 to +50.
     set_temp_variable = { temp_resolve = plus_cs_hidden_resolve }
-    divide_temp_variable = { temp_resolve = 3 } # Div 3 -> Range is ~[-16, +16]. Noticeable variety.
-    subtract_from_temp_variable = { plus_cs_ai_score = temp_resolve } # High Resolve = Low Peace Score
+    divide_temp_variable = { temp_resolve = 8 } # Range ~[-6, +6]
+    subtract_from_temp_variable = { plus_cs_ai_score = temp_resolve }
 }
 
 # =============================================
@@ -75,55 +68,104 @@ plus_cs_calc_ai_personality = {
 plus_cs_calc_ai_situation = {
 	
 	# 1. PRESSURE RATIO (The main fatigue metric)
-	# Ratio < 0.5: Confident (-Score)
-	# Ratio > 1.0: Desperate (+Score)
-	
 	set_temp_variable = { pressure_factor = plus_cs_pressure_ratio }
 	
-	# Normalize: 1.0 ratio = +20 score. 0.0 ratio = -20 score.
-	multiply_temp_variable = { pressure_factor = 40 } # 0.0->0, 1.0->40, 2.0->80
-	subtract_from_temp_variable = { pressure_factor = 20 } # 0.0->-20, 1.0->+20
+	# Normalize: 1.0 ratio = +15 score. 0.0 ratio = -10 score.
+	multiply_temp_variable = { pressure_factor = 25 } # 0.0->0, 1.0->25, 2.0->50
+	subtract_from_temp_variable = { pressure_factor = 10 } # 0.0->-10, 1.0->+15, 1.5->+27
 	
 	add_to_temp_variable = { plus_cs_ai_score = pressure_factor }
 	
-	# 2. MANPOWER PANIC
-	if = { limit = { has_dynamic_modifier = manpower_strain_high } add_to_temp_variable = { plus_cs_ai_score = 15 } }
-	if = { limit = { has_dynamic_modifier = manpower_strain_collapse } add_to_temp_variable = { plus_cs_ai_score = 30 } }
+	# 2. MANPOWER/ARMY CRISIS (Учитываем комбинированный или базовый)
+	# army_cohesion = manpower_collapse(15) + officer_collapse(12) + 5 = 32
+	if = { 
+		limit = { has_dynamic_modifier = army_cohesion_crisis } 
+		add_to_temp_variable = { plus_cs_ai_score = 32 } # manpower(15) + officer(12) + 5
+	}
+	else_if = { 
+		limit = { has_dynamic_modifier = manpower_strain_collapse } 
+		add_to_temp_variable = { plus_cs_ai_score = 15 } 
+	}
+	else_if = { 
+		limit = { has_dynamic_modifier = manpower_strain_high } 
+		add_to_temp_variable = { plus_cs_ai_score = 8 } 
+	}
+	
+	# 2b. OFFICER CRISIS (если нет комбинированного)
+	if = {
+		limit = { 
+			NOT = { has_dynamic_modifier = army_cohesion_crisis }
+			has_dynamic_modifier = officer_shortage_collapse 
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
+	else_if = {
+		limit = { 
+			NOT = { has_dynamic_modifier = army_cohesion_crisis }
+			has_dynamic_modifier = officer_shortage_high 
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 6 }
+	}
 	
 	# 3. STABILITY ISSUES
-	if = { limit = { has_stability < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 15 } }
-	if = { limit = { has_war_support < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { has_stability < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { has_war_support < 0.3 } add_to_temp_variable = { plus_cs_ai_score = 8 } }
 	
 	# 4. CAPITAL THREAT
 	if = { 
 		limit = { 
 			capital_scope = { 
-				is_controlled_by = ROOT # We still have it
-				any_neighbor_state = { NOT = { controller = { tag = ROOT } } } # But enemy is next door
+				is_controlled_by = ROOT
+				any_neighbor_state = { NOT = { controller = { tag = ROOT } } }
 			}
 		} 
-		add_to_temp_variable = { plus_cs_ai_score = 10 } 
+		add_to_temp_variable = { plus_cs_ai_score = 8 } 
 	}
     
-    # 5. GREED FACTOR (Winning)
-    # If we are winning hard, we don't want peace.
+    # 5. GREED FACTOR (Winning) - STRONG penalty
     if = {
         limit = {
             surrender_progress < 0.1
-            FROM = { surrender_progress > 0.3 } # Enemy is losing
+            FROM = { surrender_progress > 0.2 }
         }
-        subtract_from_temp_variable = { plus_cs_ai_score = 30 } # "I can take it all!"
+        subtract_from_temp_variable = { plus_cs_ai_score = 25 }
         
-        # Greed intensifies for aggressors
         if = { 
             limit = { OR = { has_government = fascism has_government = communism } }
-            subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+            subtract_from_temp_variable = { plus_cs_ai_score = 10 }
         }
     }
     
-    # 6. STALEMATE (Boredom/Futility)
+    # 6. STALEMATE
     if = {
         limit = { has_country_flag = plus_cs_stalemate }
-        add_to_temp_variable = { plus_cs_ai_score = 25 } # Let's just end this.
+        add_to_temp_variable = { plus_cs_ai_score = 20 }
     }
+    
+    # 7. HOMEFRONT CRISIS (Комбинированный или базовые)
+    # homefront = inflation(5) + internal_high(12) + 5 = 22
+    if = { 
+		limit = { has_dynamic_modifier = homefront_collapse } 
+		add_to_temp_variable = { plus_cs_ai_score = 22 } # inflation(5) + internal(12) + 5
+	}
+    else = {
+		# Учитываем базовые только если нет комбинированного
+		if = { limit = { has_idea = internal_crisis_low } add_to_temp_variable = { plus_cs_ai_score = 3 } }
+		if = { limit = { has_idea = internal_crisis_medium } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+		if = { limit = { has_idea = internal_crisis_high } add_to_temp_variable = { plus_cs_ai_score = 12 } }
+		
+		# Инфляция
+		if = { limit = { has_dynamic_modifier = war_inflation_crisis } add_to_temp_variable = { plus_cs_ai_score = 5 } }
+	}
+    
+    # 8. TOTAL EXHAUSTION (Это приговор!)
+    # total = army_cohesion(32) + homefront(22) + 5 ≈ 55 (упрощено)
+    if = { 
+		limit = { has_dynamic_modifier = total_exhaustion } 
+		add_to_temp_variable = { plus_cs_ai_score = 55 } # Страна больше не может воевать
+	}
+    
+    # 9. EXHAUSTION FLAGS
+    if = { limit = { has_country_flag = plus_cs_war_strain } add_to_temp_variable = { plus_cs_ai_score = 5 } }
+    if = { limit = { has_country_flag = plus_cs_exhausted } add_to_temp_variable = { plus_cs_ai_score = 10 } }
 }

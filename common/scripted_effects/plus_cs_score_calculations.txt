@@ -42,9 +42,9 @@ plus_cs_calc_scores = {
 		add_to_variable = { plus_cs_resistance_target = 50 }
 	}
 	
-	# War Stance (Assigned per war)
-	if = { limit = { has_country_flag = plus_cs_stance_fanatic } add_to_variable = { plus_cs_resistance_target = 100 } }
-	if = { limit = { has_country_flag = plus_cs_stance_coward } subtract_from_variable = { plus_cs_resistance_target = 50 } }
+	# War Stance (Now uses leader traits instead of obsolete flags)
+	# Note: Leader trait bonuses are already applied in lines 50-51, so this section is now a no-op.
+	# Keeping structure for future expansion (e.g., war-specific stance modifiers).
 	
 	# Leader Traits
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } add_to_variable = { plus_cs_resistance_target = 100 } }

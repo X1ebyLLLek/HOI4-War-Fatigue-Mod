@@ -20,13 +20,13 @@ country_event = {
 	trigger = {
 		has_war = yes
 		has_civil_war = no
+		# New Gating: Only after Civil War
+		has_country_flag = plus_cs_had_civil_war
+		is_puppet = no
+		
 		# Updated to use Score System: Crisis Mode
 		check_variable = { plus_cs_pressure_ratio > 0.8 }
 		has_stability < 0.4
-		
-		# Relative casualties check (> 5% of total population)
-		# Handled via variables in calculation loop
-		# var:casualties_ratio > 0.05
 	}
 
 	# Option A: "Not one step back!" (Purge Generals)
@@ -149,5 +149,212 @@ country_event = {
 		}
 		# TODO: Ideally this should send an offer, but for crisis collapse we force it for now
 		# or consider it a unilateral withdrawal.
+	}
+}
+
+# ==============================================================================
+# POLITICAL COLLAPSE EVENTS (10-13)
+# Triggered when stability < 10% OR war_support < 10%
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 10. POLITICAL COLLAPSE DISPATCHER (Hidden)
+# Determines outcome based on player/AI and random roll
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.10
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		# Player: Just apply debuff
+		if = {
+			limit = { is_ai = no }
+			if = {
+				limit = { NOT = { has_idea = political_paralysis } }
+				add_ideas = political_paralysis
+			}
+		}
+		# AI: Random collapse outcome
+		else = {
+			random_list = {
+				40 = { # Military Coup
+					country_event = { id = plus_cs_internal.11 }
+				}
+				30 = { # Political Paralysis (same debuff as player)
+					country_event = { id = plus_cs_internal.12 }
+				}
+				30 = { # Forced Capitulation
+					country_event = { id = plus_cs_internal.13 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 11. MILITARY COUP
+# Generals seize power to save the nation, negotiate peace
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.11
+	title = plus_cs_internal.11.t
+	desc = plus_cs_internal.11.d
+	picture = GFX_report_event_generic_military_parade
+	is_triggered_only = yes
+	
+	immediate = {
+		# Save third-party control before peace
+		plus_cs_save_third_party_control = yes
+	}
+	
+	option = {
+		name = plus_cs_internal.11.a
+		ai_chance = { factor = 100 }
+		
+		# 1. Change to military junta (neutrality)
+		set_politics = {
+			ruling_party = neutrality
+			elections_allowed = no
+		}
+		
+		# 2. Release all puppets
+		every_subject_country = {
+			ROOT = { end_puppet = PREV }
+		}
+		
+		# 3. Release non-core states to original owners
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = ROOT }
+				any_country = {
+					NOT = { tag = ROOT }
+					PREV = { is_core_of = PREV }
+					exists = yes
+				}
+			}
+			random_country = {
+				limit = {
+					PREV = { is_core_of = PREV }
+					exists = yes
+					NOT = { tag = ROOT }
+				}
+				transfer_state = PREV
+			}
+		}
+		
+		# 4. White peace with all enemies (they keep occupied territories)
+		every_enemy_country = {
+			white_peace = ROOT
+		}
+		
+		# 5. Restore third-party control
+		plus_cs_restore_third_party_control = yes
+		
+		# 6. Stability boost from "order restored"
+		add_stability = 0.20
+		add_war_support = 0.10
+		
+		# 7. Remove crisis ideas
+		remove_ideas = internal_crisis_high
+		remove_ideas = internal_crisis_medium
+		remove_ideas = internal_crisis_low
+		remove_ideas = political_paralysis
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 12. POLITICAL PARALYSIS (AI version)
+# Country is too divided to function, gets harsh debuff
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.12
+	title = plus_cs_internal.12.t
+	desc = plus_cs_internal.12.d
+	picture = GFX_report_event_generic_parliament
+	is_triggered_only = yes
+	
+	option = {
+		name = plus_cs_internal.12.a
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = { NOT = { has_idea = political_paralysis } }
+			add_ideas = political_paralysis
+		}
+		
+		# Additional shock
+		add_stability = -0.05
+		add_war_support = -0.05
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 13. FORCED CAPITULATION
+# Government surrenders to avoid total destruction
+# Becomes puppet of enemy with highest war contribution
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.13
+	title = plus_cs_internal.13.t
+	desc = plus_cs_internal.13.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	immediate = {
+		# Find enemy with highest war contribution
+		set_variable = { best_contribution = 0 }
+		every_enemy_country = {
+			if = {
+				limit = {
+					is_puppet = no
+					check_variable = { ROOT.vp@THIS > ROOT.best_contribution }
+				}
+				set_variable = { ROOT.best_contribution = ROOT.vp@THIS }
+				save_event_target_as = top_contributor
+			}
+		}
+		# Fallback: just pick any enemy
+		if = {
+			limit = { NOT = { has_event_target = top_contributor } }
+			random_enemy_country = {
+				limit = { is_puppet = no }
+				save_event_target_as = top_contributor
+			}
+		}
+	}
+	
+	option = {
+		name = plus_cs_internal.13.a
+		ai_chance = { factor = 100 }
+		
+		# Save third-party control
+		plus_cs_save_third_party_control = yes
+		
+		# Become puppet of top contributor
+		if = {
+			limit = { has_event_target = top_contributor }
+			event_target:top_contributor = {
+				puppet = ROOT
+			}
+		}
+		
+		# White peace with all enemies
+		every_enemy_country = {
+			white_peace = ROOT
+		}
+		
+		# Restore third-party control
+		plus_cs_restore_third_party_control = yes
+		
+		# Remove crisis ideas
+		remove_ideas = internal_crisis_high
+		remove_ideas = internal_crisis_medium
+		remove_ideas = internal_crisis_low
+		remove_ideas = political_paralysis
 	}
 }

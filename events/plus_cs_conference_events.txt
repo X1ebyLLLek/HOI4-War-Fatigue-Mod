@@ -36,7 +36,6 @@ country_event = {
 			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
 			
 			# Score < 0: Decreasing chance
-			# Score < 0: Decreasing chance
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -50 } } # Relaxed from 0.1
 			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -80 } } # Relaxed from 0.0
@@ -138,10 +137,8 @@ country_event = {
 			
 			white_peace = FROM
 			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-			set_truce = {
-				target = FROM
-				days = 720
-			}
+			# Centralized extended truce (720 days, handles symmetric + puppets)
+			plus_cs_set_extended_truce = yes
 			
 			# plus_cs_restore_third_party_control = yes
 		}
@@ -164,11 +161,9 @@ country_event = {
 				}
 				white_peace = FROM
 				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
-				set_truce = {
-					target = FROM
-					days = 720
-				}
 			}
+			# Centralized extended truce for faction (720 days, handles symmetric + puppets)
+			plus_cs_set_extended_truce = yes
 			
 			if = {
 				limit = {
@@ -194,7 +189,6 @@ country_event = {
 		ai_chance = { 
 			base = 50
 			
-			# Win Harder: If Winning, almost definitely Refuse
 			# Win Harder: If Winning, almost definitely Refuse
 			modifier = {
 				add = 50 # Reduced from 100 (Allow ~7% chance to accept)

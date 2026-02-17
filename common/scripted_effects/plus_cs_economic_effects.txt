@@ -103,9 +103,9 @@ plus_cs_economy_step = {
 		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
 	}
 	else = {
-		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
-		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
-		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+		if = { limit = { has_dynamic_modifier = shadow_law_service_penalty } remove_dynamic_modifier = { modifier = shadow_law_service_penalty } }
+		if = { limit = { has_dynamic_modifier = shadow_law_adults_penalty } remove_dynamic_modifier = { modifier = shadow_law_adults_penalty } }
+		if = { limit = { has_dynamic_modifier = shadow_law_scraping_penalty } remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty } }
 	}
 
 	# 3. Retooling Shock (Change Detector)

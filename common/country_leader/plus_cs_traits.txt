@@ -3,7 +3,6 @@ leader_traits = {
 		random = no
 		sprite = 0
 		# Fanatics fight harder
-		# Fanatics fight harder
 		army_core_defence_factor = 0.1
 		army_org_factor = 0.1 # +10% Org
 		ai_will_do = {
@@ -26,7 +25,6 @@ leader_traits = {
 	plus_cs_spirit_defeatist = {
 		random = no
 		sprite = 0
-		# Defeatists weaken the army morale
 		# Defeatists weaken the army morale
 		army_morale_factor = -0.1 # Recovery rate
 		surrender_limit = 0.1 # +10% Surrender Limit (easier to surrender)

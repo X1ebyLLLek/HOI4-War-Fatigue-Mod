@@ -33,10 +33,7 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				political_power_gain = -0.10
-				stability_factor = -0.05
-				# Opposing parties gain traction
-				neutrality_drift = 0.02
-				democratic_drift = 0.02
+				# Дрифт к оппозиции добавляется динамически через scripted effect
 			}
 		}
 
@@ -46,12 +43,10 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				political_power_gain = -0.20
-				stability_factor = -0.10
 				war_support_factor = -0.10
 				army_morale_factor = -0.05
-				# Significant push for regime change
-				neutrality_drift = 0.05
-				democratic_drift = 0.05
+				# Дрифт к оппозиции добавляется динамически
+				resistance_target = 0.03
 			}
 		}
 
@@ -61,17 +56,16 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				political_power_gain = -0.30
-				stability_factor = -0.15
 				war_support_factor = -0.15
 				production_speed_arms_factory_factor = -0.08
 				training_time_army_factor = 0.15
-				army_org_factor = -0.15 # Reduced from 0.20
-				surrender_limit = -0.10 # Reduced from 0.15
+				army_org_factor = -0.15
+				surrender_limit = -0.10
 				dig_in_speed_factor = -0.25
-				
-				# Rapid Regime Collapse
-				neutrality_drift = 0.15
-				democratic_drift = 0.15
+				# Дрифт к оппозиции добавляется динамически
+				resistance_target = 0.08
+				compliance_gain = -0.05
+				required_garrison_factor = 0.25
 			}
 		}
 
@@ -263,14 +257,40 @@ ideas = {
 			}
 		}
 
-		# --- BLOCKER: SEPARATE PEACE ---
+		# --- BLOCKER: SEPARATE PEACE (Now also acts as the Spirit of Separate Peace) ---
 		plus_cs_separate_peace_blocker = {
+			picture = GFX_idea_generic_neutrality_drift_bonus
 			allowed = { always = no }
 			allowed_to_remove = { always = no }
 			removal_cost = -1
 			modifier = {
+				# Technical: Prevent re-joining war
 				ai_join_ally_desire_factor = -1000
 				ai_call_ally_desire_factor = -1000
+				
+				# Bonus: Protection/Defense (Requested by User)
+				army_core_defence_factor = 0.10
+			}
+		}
+
+		# --- POLITICAL COLLAPSE ---
+		# Applied when stability < 10% or war_support < 10%
+		# Country is paralyzed and cannot effectively wage war
+		political_paralysis = {
+			picture = GFX_idea_generic_disjointed_gov
+			allowed = { always = no }
+			allowed_to_remove = { always = no }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = -1.0
+				army_org_factor = -0.50
+				army_attack_factor = -0.50
+				army_defence_factor = -0.50
+				industrial_capacity_factory = -0.50
+				surrender_limit = -0.30
+				supply_consumption_factor = 1.0
+				training_time_army_factor = 0.50
+				planning_speed = -0.50
 			}
 		}
 	}

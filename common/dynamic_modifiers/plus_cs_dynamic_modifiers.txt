@@ -120,6 +120,9 @@ economic_retooling_shock_medium = {
 	production_factory_max_efficiency_factor = -0.10
 	industrial_capacity_factory = -0.10
 	production_speed_buildings_factor = -0.10
+	# NEW: Логистический хаос
+	supply_consumption_factor = 0.10
+	political_power_gain = -0.10
 }
 
 # УРОВЕНЬ 3: Тяжелый шок (Разница в 3+ ступени, например Гражданская -> Военная)
@@ -132,6 +135,11 @@ economic_retooling_shock_major = {
 	production_factory_max_efficiency_factor = -0.20
 	industrial_capacity_factory = -0.20
 	production_speed_buildings_factor = -0.25
+	# NEW: Полный коллапс логистики
+	supply_consumption_factor = 0.25
+	fuel_gain_factor = -0.15
+	political_power_gain = -0.25
+	stability_factor = -0.05
 }
 
 # ----------------------------------------------------------------------
@@ -148,6 +156,11 @@ war_inflation_crisis = {
 	political_power_gain = -0.15        # Снижение прироста полит. власти
 	stability_factor = -0.05            # Удар по стабильности
 	production_speed_buildings_factor = -0.10 # Замедление стройки из-за инфляции
+	# NEW: Ресурсы дорожают
+	local_resources_factor = -0.15      # Ресурсы стоят дороже
+	fuel_gain_factor = -0.10            # Топливный кризис
+	trade_opinion_factor = -0.25        # Торговые партнёры не доверяют
+	supply_consumption_factor = 0.15    # Логистика дорожает
 }
 
 # ----------------------------------------------------------------------
@@ -158,6 +171,8 @@ shadow_law_service_penalty = {
 	enable = { always = yes }
 	industrial_capacity_factory = -0.10
 	production_speed_buildings_factor = -0.10
+	# NEW: Рабочие ушли на фронт
+	local_resources_factor = -0.05
 }
 
 shadow_law_adults_penalty = {
@@ -166,6 +181,10 @@ shadow_law_adults_penalty = {
 	industrial_capacity_factory = -0.20
 	production_speed_buildings_factor = -0.20
 	production_factory_efficiency_gain_factor = -0.10
+	# NEW: Новобранцы неопытны
+	army_attack_factor = -0.05
+	supply_consumption_factor = 0.10           # Неэффективно используют ресурсы
+	experience_gain_army_factor = -0.10
 }
 
 shadow_law_scraping_penalty = {
@@ -174,7 +193,13 @@ shadow_law_scraping_penalty = {
 	industrial_capacity_factory = -0.35
 	production_speed_buildings_factor = -0.30
 	production_factory_efficiency_gain_factor = -0.20
-	army_core_defence_factor = 0.05
+	army_core_defence_factor = 0.05            # Отчаяние даёт бонус к обороне
+	# NEW: Дети и старики в окопах
+	army_attack_factor = -0.15
+	army_org_factor = -0.10
+	supply_consumption_factor = 0.20           # Очень неэффективны
+	experience_gain_army_factor = -0.25
+	attrition_for_controller = 0.05            # Больше небоевых потерь
 }
 
 # ----------------------------------------------------------------------
@@ -189,7 +214,9 @@ officer_shortage_mild = {
 	max_planning_factor = -0.15            
 	planning_speed = -0.15                 
 	experience_gain_army_factor = -0.10    
-	command_power_gain = -0.05             
+	command_power_gain = -0.05
+	# NEW: Управление замедляется
+	army_speed_factor = -0.05
 }
 
 # Уровень 2: Кризис управления (High)
@@ -201,7 +228,11 @@ officer_shortage_high = {
 	planning_speed = -0.30                 
 	army_morale_factor = -0.10             
 	experience_gain_army_factor = -0.20    
-	command_power_gain = -0.15             
+	command_power_gain = -0.15
+	# NEW: Части теряют управление
+	surrender_limit = -0.05
+	army_speed_factor = -0.10
+	army_attack_factor = -0.05
 }
 
 # Уровень 3: Коллапс штабов (Collapse)
@@ -213,7 +244,13 @@ officer_shortage_collapse = {
 	planning_speed = -0.50                 
 	army_morale_factor = -0.25             
 	experience_gain_army_factor = -0.40    
-	command_power_gain = -0.30             
+	command_power_gain = -0.30
+	# NEW: Армия рассыпается
+	surrender_limit = -0.15
+	army_attack_factor = -0.15
+	army_speed_factor = -0.15
+	out_of_supply_factor = 0.25            # Части гибнут без снабжения
+	attrition_for_controller = 0.10        # Дезертирство
 }
 
 # ----------------------------------------------------------------------
@@ -225,6 +262,7 @@ manpower_strain_mild = {
     icon = GFX_idea_conscription_crisis
     enable = { always = yes }
     
+    stability_factor = -0.05
     industrial_capacity_factory = -0.05             
     production_factory_efficiency_gain_factor = -0.10 
     local_resources_factor = -0.05                  
@@ -239,6 +277,7 @@ manpower_strain_high = {
     icon = GFX_idea_conscription_crisis
     enable = { always = yes }
 
+    stability_factor = -0.15
     industrial_capacity_factory = -0.15
     production_speed_buildings_factor = -0.15       
     production_factory_efficiency_gain_factor = -0.25
@@ -279,4 +318,121 @@ manpower_strain_collapse = {
 
     training_time_army_factor = 0.50
     war_support_factor = -0.20
+}
+
+# ----------------------------------------------------------------------
+# КОМБИНИРОВАННЫЕ КРИЗИСЫ (SYNERGY CRISIS)
+# Триггерятся когда несколько кризисов активны одновременно
+# ----------------------------------------------------------------------
+
+# ARMY COHESION CRISIS (Manpower Strain Collapse + Officer Shortage Collapse)
+# Включает ВСЕ эффекты из officer_shortage_collapse + manpower_strain_collapse
+army_cohesion_crisis = {
+    icon = GFX_idea_generic_morale_bonus
+    enable = { always = yes }
+    
+    # === ИЗ OFFICER_SHORTAGE_COLLAPSE ===
+    max_planning_factor = -0.50            
+    planning_speed = -0.50                 
+    army_morale_factor = -0.25             
+    experience_gain_army_factor = -0.40    
+    command_power_gain = -0.30
+    surrender_limit = -0.15
+    army_attack_factor = -0.15
+    army_speed_factor = -0.15
+    out_of_supply_factor = 0.25
+    attrition_for_controller = 0.10
+    
+    # === ИЗ MANPOWER_STRAIN_COLLAPSE ===
+    industrial_capacity_factory = -0.40
+    production_speed_buildings_factor = -0.40
+    production_factory_efficiency_gain_factor = -0.50 
+    production_factory_max_efficiency_factor = -0.30
+    local_resources_factor = -0.40         
+    research_speed_factor = -0.25
+    consumer_goods_factor = 0.05              
+    compliance_gain = -0.002
+    resistance_target = 0.25     
+    required_garrison_factor = 0.25  
+    supply_consumption_factor = 0.50
+    stability_factor = -0.25
+    monthly_population = -0.30  
+    training_time_army_factor = 0.50
+    war_support_factor = -0.20
+}
+
+# HOMEFRONT COLLAPSE (War Inflation + Internal Crisis High)
+# Включает ВСЕ эффекты из war_inflation_crisis + internal_crisis_high
+homefront_collapse = {
+    icon = GFX_idea_generic_disjointed_gov
+    enable = { always = yes }
+    
+    # === ИЗ WAR_INFLATION_CRISIS ===
+    consumer_goods_factor = 0.05
+    # political_power_gain = -0.15 (Удалено дублирование, используется -0.30 ниже)
+    stability_factor = -0.05
+    production_speed_buildings_factor = -0.10
+    local_resources_factor = -0.15
+    fuel_gain_factor = -0.10
+    trade_opinion_factor = -0.25
+    supply_consumption_factor = 0.15
+    
+    # === ИЗ INTERNAL_CRISIS_HIGH (через idea) ===
+    # political_power_gain уже есть, берём худшее = -0.30
+    political_power_gain = -0.30
+    war_support_factor = -0.15
+    production_speed_arms_factory_factor = -0.08
+    training_time_army_factor = 0.15
+    army_org_factor = -0.15
+    surrender_limit = -0.10
+    dig_in_speed_factor = -0.25
+    resistance_target = 0.08
+    compliance_gain = -0.05
+    required_garrison_factor = 0.25
+}
+
+# TOTAL EXHAUSTION (3+ серьёзных кризиса одновременно)
+# Страна больше не способна вести войну - МАКСИМАЛЬНЫЕ штрафы
+total_exhaustion = {
+    icon = GFX_idea_generic_civil_support
+    enable = { always = yes }
+    
+    # === АРМИЯ МЕРТВА ===
+    surrender_limit = -0.40
+    army_org_factor = -0.40
+    army_attack_factor = -0.40
+    army_defence_factor = -0.40
+    army_morale_factor = -0.40
+    max_planning_factor = -0.75
+    planning_speed = -0.75
+    experience_gain_army_factor = -0.60
+    command_power_gain = -0.50
+    army_speed_factor = -0.25
+    out_of_supply_factor = 0.50
+    attrition_for_controller = 0.20
+    training_time_army_factor = 1.0
+    
+    # === ЭКОНОМИКА МЕРТВА ===
+    industrial_capacity_factory = -0.60
+    production_speed_buildings_factor = -0.60
+    production_factory_efficiency_gain_factor = -0.70
+    production_factory_max_efficiency_factor = -0.50
+    local_resources_factor = -0.50
+    consumer_goods_factor = 0.25
+    fuel_gain_factor = -0.50
+    research_speed_factor = -0.40
+    
+    # === ПРАВИТЕЛЬСТВО ПАРАЛИЗОВАНО ===
+    political_power_gain = -1.0
+    stability_factor = -0.30
+    war_support_factor = -0.30
+    
+    # === ЛОГИСТИКА РУХНУЛА ===
+    supply_consumption_factor = 1.0
+    
+    # === ТОТАЛЬНЫЙ ХАОС ===
+    resistance_target = 0.30
+    required_garrison_factor = 1.0
+    compliance_gain = -0.10
+    monthly_population = -0.50
 }

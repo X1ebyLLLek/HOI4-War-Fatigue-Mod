@@ -11,6 +11,12 @@ country_event = {
 	picture = GFX_report_event_generic_conference
 	is_triggered_only = yes
 	
+	trigger = {
+		# Gating: Only after Civil War
+		has_country_flag = plus_cs_had_civil_war
+		is_puppet = no
+	}
+	
 	immediate = {
 		plus_cs_calc_submission_chance = yes
 		log = "[PEACE_LOG] EVENT: [ROOT.GetName] considering SUBMISSION from [FROM.GetName]. Score: [?plus_cs_final_calc_score]."
@@ -106,7 +112,6 @@ country_event = {
 			modifier = { add = 50 check_variable = { plus_cs_final_calc_score < -60 } }
 			
 			# Score > 0: Low chance to refuse
-			# Score > 0: Low chance to refuse
 			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score > 20 } }
 			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score > 60 } } # Never zero
 		}
@@ -118,6 +123,8 @@ country_event = {
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
+			# FIX: Add cooldown to prevent submission spam
+			set_country_flag = { flag = plus_cs_peace_cooldown days = 30 }
 			country_event = { id = plus_cs.203 }
 		}
 	}
@@ -268,7 +275,10 @@ country_event = {
 		}
 
 		if = {
-			limit = { has_event_target = cruel_aggressor }
+			limit = { 
+				has_event_target = cruel_aggressor 
+				NOT = { has_war_with = event_target:cruel_aggressor }
+			}
 			declare_war_on = {
 				target = event_target:cruel_aggressor
 				type = annex_everything

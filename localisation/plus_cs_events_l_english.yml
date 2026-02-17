@@ -15,9 +15,9 @@
   plus_cs.4.d:0 "The [From.GetAdjective] leader, [From.GetLeader], has proposed a white peace between our countries."
   plus_cs.4.a:0 "Let's stop this useless war"
   plus_cs.4.b:0 "We'll not give up easily"
-  plus_cs.5.t:0 "[From.GetNameDefCap] refuses to surrender"
-  plus_cs.5.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has refused to surrender to us."
-  plus_cs.5.a:0 "They're just prolonging the inevitable"
+  plus_cs.5.t:0 "[From.GetNameDefCap] accepts peace!"
+  plus_cs.5.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has agreed to our peace proposal. The war is over!"
+  plus_cs.5.a:0 "Finally, peace!"
   plus_cs.6.t:0 "[From.GetNameDefCap] refuses to have peace talks"
   plus_cs.6.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has wasted an opportunity to end the war earlier."
   plus_cs.6.a:0 "We're screwed!"
@@ -29,6 +29,7 @@
   plus_cs.2.b.tooltip_1:0 "The people do not understand why we continue the war when the enemy was ready to surrender."
   plus_cs.2.b.tooltip_2:0 "Our refusal to accept surrender amidst national exhaustion has caused serious discontent!"
   plus_cs.4.b.tooltip_1:0 "Refusing a 'White Peace' during a stalemate on the front undermines morale."
+  plus_cs_reparation_bonus_tt:0 "§GReparation Bonus:§! [FROM.GetName] is desperate for peace and offers §Y[?FROM.plus_cs_reparation_bonus] Political Power§! as reparations."
 
   # --- ДОБАВЛЕННЫЕ ПЕРЕВОДЫ (Added missing translations) ---
   plus_cs.8.t:0 "Growing Unrest"
@@ -215,3 +216,21 @@
  plus_cs_logic.1.a:0 "We shall fight on! (Refuse)"
  plus_cs_logic.1.b:0 "We must seek terms (Surrender)"
  plus_cs_surrender_proceed_tt:0 "§GProceed to formal surrender negotiations§!"
+
+ # --- POLITICAL COLLAPSE EVENTS ---
+ plus_cs_internal.11.t:0 "Military Coup"
+ plus_cs_internal.11.d:0 "The generals have seized power. Unable to watch the nation crumble, the army has overthrown the government. The new military junta seeks to restore order and end the war."
+ plus_cs_internal.11.a:0 "Order must be restored"
+ 
+ plus_cs_internal.12.t:0 "Political Paralysis"
+ plus_cs_internal.12.d:0 "The government has completely lost control. Endless debates, strikes, and public unrest have paralyzed the nation. Nothing works anymore."
+ plus_cs_internal.12.a:0 "We are powerless..."
+ 
+ plus_cs_internal.13.t:0 "Forced Capitulation"
+ plus_cs_internal.13.d:0 "The government has collapsed. To avoid total annihilation, the remaining authorities have decided to surrender to the enemy."
+ plus_cs_internal.13.a:0 "We have no choice"
+ 
+ # --- POLITICAL PARALYSIS IDEA ---
+ political_paralysis:0 "Political Paralysis"
+ political_paralysis_desc:0 "The government has completely lost the ability to govern. The country is paralyzed by internal conflicts and cannot effectively wage war."
+  plus_cs.300.c:0 "We stand alone."

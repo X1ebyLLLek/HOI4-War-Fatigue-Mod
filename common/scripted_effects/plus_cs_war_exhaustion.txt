@@ -36,7 +36,10 @@ plus_cs_heavy_calc_step = {
 		add_war_support = -0.005
 	}
 	else = {
-		remove_dynamic_modifier = { modifier = war_inflation_crisis }
+		if = {
+			limit = { has_dynamic_modifier = war_inflation_crisis }
+			remove_dynamic_modifier = { modifier = war_inflation_crisis }
+		}
 	}
 
 	# --- OFFICER CHAOS LOGIC ---
@@ -103,9 +106,9 @@ plus_cs_heavy_calc_step = {
 			remove_dynamic_modifier = { modifier = officer_shortage_high }
 		}
 		else = {
-			remove_dynamic_modifier = { modifier = officer_shortage_collapse }
-			remove_dynamic_modifier = { modifier = officer_shortage_high }
-			remove_dynamic_modifier = { modifier = officer_shortage_mild }
+			if = { limit = { has_dynamic_modifier = officer_shortage_collapse } remove_dynamic_modifier = { modifier = officer_shortage_collapse } }
+			if = { limit = { has_dynamic_modifier = officer_shortage_high } remove_dynamic_modifier = { modifier = officer_shortage_high } }
+			if = { limit = { has_dynamic_modifier = officer_shortage_mild } remove_dynamic_modifier = { modifier = officer_shortage_mild } }
 		}
 		set_variable = { plus_cs_prev_battalions = num_divisions }
 		set_variable = { plus_cs_prev_casualties = casualties }
@@ -118,27 +121,35 @@ plus_cs_heavy_calc_step = {
 		if = {
 			limit = {
 				OR = {
-					# Cache Population every ~350 days
-					check_variable = { plus_cs_pop_check_timer > 50 } 
+					# Cache Population every ~560 days (80 ticks × 7 days)
+					check_variable = { plus_cs_pop_check_timer > 80 } 
 					check_variable = { plus_cs_need_recalc = 1 }
 					check_variable = { core_pop_calc = 0 }
 				}
 			}
 			set_variable = { plus_cs_pop_check_timer = 0 }
 			set_variable = { plus_cs_need_recalc = 0 }
+			
+			# OPTIMIZATION: Use country variable instead of temp for caching
 			set_variable = { core_pop_calc = 0 }
+			
 			every_owned_state = {
-				if = { limit = { is_core_of = ROOT } add_to_temp_variable = { core_pop_calc = state_population } }
+				if = { limit = { is_core_of = ROOT } add_to_variable = { ROOT.core_pop_calc = state_population } }
 				else = {
 					set_temp_variable = { local_pop = state_population }
 					multiply_temp_variable = { local_pop = 0.15 }
-					add_to_temp_variable = { core_pop_calc = local_pop }
+					add_to_variable = { ROOT.core_pop_calc = local_pop }
 				}
 			}
-			every_subject_country = {
-				set_temp_variable = { subj_pop = core_population }
-				multiply_temp_variable = { subj_pop = 0.25 }
-				add_to_temp_variable = { ROOT.core_pop_calc = subj_pop }
+			
+			# OPTIMIZATION: Skip every_subject_country if no subjects
+			if = {
+				limit = { any_country = { is_puppet_of = ROOT } }
+				every_subject_country = {
+					set_temp_variable = { subj_pop = core_population }
+					multiply_temp_variable = { subj_pop = 0.25 }
+					add_to_variable = { ROOT.core_pop_calc = subj_pop }
+				}
 			}
 		}
 
@@ -200,9 +211,188 @@ plus_cs_heavy_calc_step = {
 		else = { remove_ideas = desperate_defense_effort }
 	}
 	else = {
+		if = { limit = { has_dynamic_modifier = manpower_strain_mild } remove_dynamic_modifier = { modifier = manpower_strain_mild } }
+		if = { limit = { has_dynamic_modifier = manpower_strain_high } remove_dynamic_modifier = { modifier = manpower_strain_high } }
+		if = { limit = { has_dynamic_modifier = manpower_strain_collapse } remove_dynamic_modifier = { modifier = manpower_strain_collapse } }
+		remove_ideas = desperate_defense_effort
+		# Также убираем комбинированные кризисы при мире
+		if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
+		if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
+		if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
+	}
+}
+
+# =============================================
+# plus_cs_synergy_crisis_check
+# Проверяет комбинации кризисов и применяет
+# синергетические модификаторы
+# ВАЖНО: Комбинированные кризисы ЗАМЕНЯЮТ базовые,
+# а не суммируются с ними!
+# =============================================
+plus_cs_synergy_crisis_check = {
+	# Считаем количество серьёзных кризисов ДО замены
+	set_temp_variable = { crisis_count = 0 }
+	
+	# Флаги для отслеживания активных кризисов
+	set_temp_variable = { has_manpower_crisis = 0 }
+	set_temp_variable = { has_officer_crisis = 0 }
+	set_temp_variable = { has_internal_crisis = 0 }
+	set_temp_variable = { has_inflation_crisis = 0 }
+	
+	# Manpower Strain High/Collapse
+	if = {
+		limit = {
+			OR = {
+				has_dynamic_modifier = manpower_strain_high
+				has_dynamic_modifier = manpower_strain_collapse
+			}
+		}
+		set_temp_variable = { has_manpower_crisis = 1 }
+		add_to_temp_variable = { crisis_count = 1 }
+	}
+	
+	# Officer Shortage High/Collapse
+	if = {
+		limit = {
+			OR = {
+				has_dynamic_modifier = officer_shortage_high
+				has_dynamic_modifier = officer_shortage_collapse
+			}
+		}
+		set_temp_variable = { has_officer_crisis = 1 }
+		add_to_temp_variable = { crisis_count = 1 }
+	}
+	
+	# Internal Crisis High
+	if = {
+		limit = { has_idea = internal_crisis_high }
+		set_temp_variable = { has_internal_crisis = 1 }
+		add_to_temp_variable = { crisis_count = 1 }
+	}
+	
+	# War Inflation
+	if = {
+		limit = { has_dynamic_modifier = war_inflation_crisis }
+		set_temp_variable = { has_inflation_crisis = 1 }
+		add_to_temp_variable = { crisis_count = 1 }
+	}
+	
+	# ========================================
+	# TOTAL EXHAUSTION (проверяем первым!)
+	# Триггер: 3+ серьёзных кризиса одновременно
+	# ЗАМЕНЯЕТ ВСЕ базовые кризисы
+	# ========================================
+	if = {
+		limit = {
+			check_variable = { crisis_count > 2 }
+		}
+		# Применяем Total Exhaustion
+		add_dynamic_modifier = { modifier = total_exhaustion days = 35 }
+		set_country_flag = { flag = plus_cs_total_exhaustion days = 35 }
+		
+		# УБИРАЕМ ВСЕ базовые кризисы (они поглощены)
 		remove_dynamic_modifier = { modifier = manpower_strain_mild }
 		remove_dynamic_modifier = { modifier = manpower_strain_high }
 		remove_dynamic_modifier = { modifier = manpower_strain_collapse }
-		remove_ideas = desperate_defense_effort
+		remove_dynamic_modifier = { modifier = officer_shortage_mild }
+		remove_dynamic_modifier = { modifier = officer_shortage_high }
+		remove_dynamic_modifier = { modifier = officer_shortage_collapse }
+		remove_dynamic_modifier = { modifier = war_inflation_crisis }
+		remove_ideas = internal_crisis_high
+		# Убираем также подкризисы
+		remove_dynamic_modifier = { modifier = army_cohesion_crisis }
+		remove_dynamic_modifier = { modifier = homefront_collapse }
+		
+		# TOTAL EXHAUSTION = МАКСИМАЛЬНЫЙ ДРИФТ К ОППОЗИЦИИ (5% за тик)
+		set_temp_variable = { drift_value = 0.05 }
+		if = {
+			limit = { has_government = fascism }
+			add_popularity = { ideology = democratic popularity = drift_value }
+			add_popularity = { ideology = communism popularity = drift_value }
+		}
+		else_if = {
+			limit = { has_government = communism }
+			add_popularity = { ideology = democratic popularity = drift_value }
+		}
+		else_if = {
+			limit = { has_government = democratic }
+			set_temp_variable = { drift_value = 0.025 }
+			add_popularity = { ideology = fascism popularity = drift_value }
+			add_popularity = { ideology = communism popularity = drift_value }
+		}
+		else = {
+			add_popularity = { ideology = democratic popularity = drift_value }
+		}
+	}
+	else = {
+		remove_dynamic_modifier = { modifier = total_exhaustion }
+		clr_country_flag = plus_cs_total_exhaustion
+		
+		# ========================================
+		# ARMY COHESION CRISIS
+		# Триггер: Manpower High/Collapse + Officer High/Collapse
+		# ЗАМЕНЯЕТ: officer_shortage_*, manpower_strain_*
+		# ========================================
+		if = {
+			limit = {
+				check_variable = { has_manpower_crisis = 1 }
+				check_variable = { has_officer_crisis = 1 }
+			}
+			# Применяем Army Cohesion Crisis
+			add_dynamic_modifier = { modifier = army_cohesion_crisis days = 35 }
+			
+			# УБИРАЕМ базовые кризисы армии (они поглощены)
+			remove_dynamic_modifier = { modifier = manpower_strain_mild }
+			remove_dynamic_modifier = { modifier = manpower_strain_high }
+			remove_dynamic_modifier = { modifier = manpower_strain_collapse }
+			remove_dynamic_modifier = { modifier = officer_shortage_mild }
+			remove_dynamic_modifier = { modifier = officer_shortage_high }
+			remove_dynamic_modifier = { modifier = officer_shortage_collapse }
+		}
+		else = {
+			remove_dynamic_modifier = { modifier = army_cohesion_crisis }
+		}
+		
+		# ========================================
+		# HOMEFRONT COLLAPSE
+		# Триггер: War Inflation + Internal Crisis High
+		# ЗАМЕНЯЕТ: war_inflation_crisis, internal_crisis_high
+		# ========================================
+		if = {
+			limit = {
+				check_variable = { has_inflation_crisis = 1 }
+				check_variable = { has_internal_crisis = 1 }
+			}
+			# Применяем Homefront Collapse
+			add_dynamic_modifier = { modifier = homefront_collapse days = 35 }
+			
+			# УБИРАЕМ базовые кризисы тыла (они поглощены)
+			remove_dynamic_modifier = { modifier = war_inflation_crisis }
+			remove_ideas = internal_crisis_high
+			
+			# HOMEFRONT COLLAPSE = СИЛЬНЫЙ ДРИФТ К ОППОЗИЦИИ (3% за тик)
+			set_temp_variable = { drift_value = 0.03 }
+			if = {
+				limit = { has_government = fascism }
+				add_popularity = { ideology = democratic popularity = drift_value }
+				add_popularity = { ideology = communism popularity = drift_value }
+			}
+			else_if = {
+				limit = { has_government = communism }
+				add_popularity = { ideology = democratic popularity = drift_value }
+			}
+			else_if = {
+				limit = { has_government = democratic }
+				set_temp_variable = { drift_value = 0.015 }
+				add_popularity = { ideology = fascism popularity = drift_value }
+				add_popularity = { ideology = communism popularity = drift_value }
+			}
+			else = {
+				add_popularity = { ideology = democratic popularity = drift_value }
+			}
+		}
+		else = {
+			remove_dynamic_modifier = { modifier = homefront_collapse }
+		}
 	}
 }

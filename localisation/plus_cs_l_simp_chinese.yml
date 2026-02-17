@@ -40,9 +40,9 @@
  plus_cs.4.d:0 "[From.GetAdjective] 领袖 [From.GetLeader] 提议在两国之间实现白和平。"
  plus_cs.4.a:0 "停止这场无意义的战争吧"
  plus_cs.4.b:0 "我们不会轻易放弃"
- plus_cs.5.t:0 "[From.GetNameDefCap] 拒绝投降"
- plus_cs.5.d:0 "[From.GetAdjectiveCap] 领袖 [From.GetLeader] 拒绝向我们投降。"
- plus_cs.5.a:0 "他们只是在拖延不可避免的结局"
+ plus_cs.5.t:0 "[From.GetNameDefCap] 接受和平！"
+ plus_cs.5.d:0 "[From.GetAdjectiveCap] 领袖 [From.GetLeader] 同意了我们的和平提议。战争结束了！"
+ plus_cs.5.a:0 "终于和平了！"
  plus_cs.6.t:0 "[From.GetNameDefCap] 拒绝和平谈判"
  plus_cs.6.d:0 "[From.GetAdjectiveCap] 领袖 [From.GetLeader] 浪费了尽早结束战争的机会。"
  plus_cs.6.a:0 "我们完蛋了！"
@@ -357,9 +357,250 @@
  plus_cs_logic.1.a:0 "我们将战斗到底！（拒绝）"
  plus_cs_logic.1.b:0 "我们必须寻求和平条款（投降）"
  plus_cs_surrender_proceed_tt:0 "§G进行正式投降谈判§!"
- 
- # --- Leader Traits Debug ---
- plus_cs_spirit_fanatic_desc:0 "这位领袖绝不会接受投降，除非国家彻底毁灭。\n\n§RAI 和平接受度：-100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_spirit_defeatist_desc:0 "这位领袖很悲观，一有风吹草动就会寻求和平。\n\n§GAI 和平接受度：+100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_spirit_resilient_desc:0 "这位领袖很固执，强烈抵制投降。\n\n§YAI 和平接受度：正常§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 \We will not bow!\
+officer_shortage_mild_desc:0 "军队的迅速扩张稀释了军官团的质量。命令被延误。"
+officer_shortage_high:0 "§O军官团危机§!"
+officer_shortage_high_desc:0 "我们缺乏胜任的营级和团级指挥官。协调正在崩溃。"
+officer_shortage_collapse:0 "§R总参谋部崩溃§!"
+officer_shortage_collapse_desc:0 "指挥链实际上已经解体。恐慌统治着司令部。"
+
+# --- 政治点数决策：危机管理 ---
+decision_category_crisis_management:0 "危机管理"
+decree_stop_panic:0 "法令：“一步也不许后退！”"
+decree_stop_panic_desc:0 "关键城市失守后恐慌蔓延。我们必须颁布严厉的法令以立即恢复秩序，即使通过高昂的政治代价也在所不惜。"
+decree_internal_stability:0 "国内宣传运动"
+decree_internal_stability_desc:0 "战争正在引发动荡。我们需要大规模的宣传工作来安抚民众并降低内部危机等级。"
+
+# --- 政治点数决策：经济刺激 ---
+decision_category_economic_stimulus:0 "经济刺激"
+stimulus_civilian_sector:0 "补贴民用部门"
+stimulus_civilian_sector_desc:0 "向私营企业注入政治资本以加快民用建设速度。需要 §Y投资天堂§! 经济。"
+stimulus_state_contract:0 "政府建设合同"
+stimulus_state_contract_desc:0 "国家直接干预以平衡军事和民用需求。需要 §Y工程整备§! 或 §Y优质生产§! 经济。"
+stimulus_mil_industrial_complex:0 "军工注资"
+stimulus_mil_industrial_complex_desc:0 "人为地支撑军火工业。虽然昂贵，但对于全面战争生产是必要的。需要 §Y战时流水线§! 或 §Y全面枯竭§! 经济。"
+
+# --- 新增：工业惯性与通货膨胀 ---
+war_inflation_crisis:0 "战时通胀危机"
+war_inflation_crisis_desc:0 "战争持续太久了。货币贬值，民用建设放缓。"
+
+economic_retooling_shock_minor:0 "轻微转产冲击"
+economic_retooling_shock_minor_desc:0 "工厂正在适应新的配额。生产效率暂时下降。"
+
+economic_retooling_shock_medium:0 "工业重组"
+economic_retooling_shock_medium_desc:0 "物流和生产线的重大变化。工厂暂时无法满负荷运转。"
+
+economic_retooling_shock_major:0 "工业瘫痪"
+economic_retooling_shock_major_desc:0 "剧烈的经济转型引发了混乱。机器设备正在更换，车间正在重建。生产崩溃。"
+
+# --- 新增：傀儡国的命运 (Судьба марионеток) ---
+plus_cs.puppet_fate.t:0 "宗主国的陨落"
+plus_cs.puppet_fate.d:0 "我们的政府收到了令人震惊的消息：我们的宗主国已经投降并接受了 [event_target:new_potential_master.GetNameDef] 的条件。旧秩序已经崩溃。\n\n胜利者要求我们立即放下武器并承认他们的权威。另一种选择是完全独立，但要与他们强大的战争机器保持战争状态。"
+plus_cs.puppet_fate.a:0 "我们承认新的主人（经济加成）"
+plus_cs.puppet_fate.b:0 "我们将战斗！为了独立！"
+
+# 新增：特权附庸 (Новая идея)
+high_status_puppet_benefit:0 "特权附庸"
+high_status_puppet_benefit_desc:0 "我们和平地接受了新秩序。作为对我们忠诚的交换，我们的新宗主国向我们的经济投资并保证稳定。"
+panic_retreat_shock:0 "撤退恐慌冲击"
+panic_retreat_shock_desc:0 "关键城市的丧失在军队中引发了一波恐慌。组织度正在急剧下降，士兵们正在逃跑。我们需要采取严厉措施！"
+offer_preventive_submission:0 "提议预防性屈服"
+offer_preventive_submission_desc:0 "与大国开战无异于自杀。我们必须在我们的城市被摧毁之前提议成为他们的保护国。"
+
+# --- 修正与补充 (Fixes and Additions) ---
+
+# 投降事件中缺失的选项
+plus_cs.submission.1.c:0 "割让索取领土（和平）"
+
+# 事件 205: 不经战争割让领土
+plus_cs.submission.5.t:0 "领土让步"
+plus_cs.submission.5.d:0 "为了避免全面战争，我们被迫向侵略者移交领土。这是国家的耻辱，但我们保全了士兵的生命。"
+plus_cs.submission.5.a:0 "我们绝不会忘记这一切。"
+
+# 事件 300: 革命者的抉择
+plus_cs.300.t:0 "革命的命运"
+plus_cs.300.d:0 "我们的内战已经升级。原政府正与一个大国交战。我们面临抉择：寻求我们敌人的敌人的庇护，还是利用混乱武力夺取政权。"
+plus_cs.300.a:0 "寻求庇护（成为强权的傀儡）"
+plus_cs.300.b:0 "没有主人！（向所有人宣战并夺取政权）"
+
+# 事件 305 (代码使用 301 键值): 政变成功
+plus_cs.301.t:0 "新秩序"
+plus_cs.301.d:0 "感谢外部支持，旧政权已经倒台。现在我们控制了国家，但我们欠了赞助者的人情。"
+plus_cs.301.a:0 "我们的新同盟万岁！"
+
+# 国民精神描述 (对应代码 id=conditional_surrender)
+conditional_surrender_desc:0 "该国已有条件地承认战败。在条约限制生效期间，它无法加入或创建阵营。"
+
+# ==============================================================================
+# 新增：世界大战和联盟机制
+# ==============================================================================
+
+plus_cs.410.t:0 "[From.GetAdjective]战线上的单独和平"
+plus_cs.410.d:0 "[From.GetNameDef]与我们的敌人缔结了单独和平。但由于我们的军事存在，我们占领的领土控制权得以保留。"
+plus_cs.410.a:0 "我们的阵地是安全的。"
+plus_cs_territory_preserved_tt:0 "§G我们控制下的领土已被保留！§!"
+
+plus_cs.420.t:0 "[From.GetNameDefCap]请求退出联盟"
+plus_cs.420.d:0 "[From.GetNameDef]政府请求允许退出我们的联盟以谈判单独和平。"
+plus_cs.420.a:0 "放行（允许退出）"
+plus_cs.420.b:0 "必须继续战斗！（拒绝）"
+
+plus_cs.421.t:0 "退出请求获批"
+plus_cs.421.d:0 "我们的联盟领袖理解了我们的处境，允许我们退出联盟。"
+plus_cs.421.a:0 "感谢理解。"
+plus_cs_can_now_peace_tt:0 "§G您现在可以谈判单独和平§!"
+
+plus_cs.422.t:0 "退出被拒绝！"
+plus_cs.422.d:0 "我们的联盟领袖拒绝了我们的退出请求。尽管国家已经疲惫，他们仍要求我们继续战斗。"
+plus_cs.422.a:0 "服从并继续战争"
+plus_cs.422.b:0 "违背其意愿退出！（有后果）"
+
+plus_cs.430.t:0 "[From.GetNameDefCap]请求投降"
+plus_cs.430.d:0 "[From.GetNameDef]已投降，请求允许向敌人完全投降。"
+plus_cs.430.a:0 "允许单独投降"
+plus_cs.430.b:0 "必须等待全面和平"
+
+plus_cs.431.t:0 "请求获批"
+plus_cs.431.d:0 "我们的联盟领袖允许我们谈判单独和平。我们正在退出联盟。"
+plus_cs.431.a:0 "这是唯一的出路..."
+
+plus_cs.432.t:0 "投降被拒绝"
+plus_cs.432.d:0 "我们被剥夺了单独和平的权利。我们仍是联盟的投降成员。"
+plus_cs.432.a:0 "我们别无选择..."
+
+forced_continuation_war:0 "被迫继续战争"
+forced_continuation_war_desc:0 "我们的联盟要求我们在疲惫时继续战斗。"
+faction_betrayal:0 "背叛联盟"
+faction_deserter:0 "脱离联盟"
+peace_territory_preserved:0 "领土控制权保留"
+
+# --- Smart Diplomacy & Crises (智能外交与危机) ---
+
+plus_cs_diplomacy.1.t:0 "主权问题"
+plus_cs_diplomacy.1.d:0 "面对邻国的压倒性优势，我们的指挥部认为战争无异于自杀。我们有机会通过提议成为保护国来拯救国家。"
+plus_cs_diplomacy.1.a:0 "发送附庸化提议"
+
+plus_cs_diplomacy.2.t:0 "臣服提议"
+plus_cs_diplomacy.2.d:0 "[From.GetNameDef] 明白不可避免的结局，并提议成为我们的保护国以换取保护。这使我们不开一枪就能扩大影响力。"
+plus_cs_diplomacy.2.a:0 "接受他们的效忠宣誓"
+plus_cs_diplomacy.2.b:0 "我们想要的是土地，不是誓言！（吞并）"
+peaceful_vassalization:0 "和平附庸化"
+diplo_insult:0 "外交侮辱"
+
+plus_cs_diplomacy.10.t:0 "宗主国崩溃"
+plus_cs_diplomacy.10.d:0 "我们的主人 [Overlord.GetName] 正在输掉战争。本土的混乱给了我们重获独立的唯一机会。"
+plus_cs_diplomacy.10.a:0 "宣布独立！"
+plus_cs_diplomacy.10.b:0 "我们将忠诚到底"
+
+plus_cs_diplomacy.20.t:0 "入侵威胁"
+plus_cs_diplomacy.20.d:0 "敌人正在通过制造针对我们的战争借口准备入侵，我们在战争中毫无胜算。我们必须提供任何让步来防止灾难。"
+plus_cs_diplomacy.20.a:0 "提供领土让步"
+
+plus_cs_diplomacy.21.t:0 "外交回报"
+plus_cs_diplomacy.21.d:0 "[From.GetNameDef] 看到我们在边境的军力，提议如果我们保证未来互不侵犯，就接受我们的领土要求而不进行战斗。"
+plus_cs_diplomacy.21.a:0 "同意（接收领土）"
+plus_cs_diplomacy.21.b:0 "我们将用武力夺取一切！"
+
+# --- Internal Crisis (内部危机) ---
+plus_cs_internal.1.t:0 "将军们的最后通牒"
+plus_cs_internal.1.d:0 "军队由于无休止的战斗已经流干了血。伤亡人数超过了临界点。总参谋部要求立即和平或改组政府。"
+plus_cs_internal.1.a:0 "进行清洗（拒绝）"
+plus_cs_internal.1.b:0 "政府辞职（政变）"
+army_purge_aftershock:0 "军队清洗的余波"
+
+# --- Partisans (游击队) ---
+broken_nation_resistance:0 "破碎但未被征服的国家"
+plus_cs_partisan_activity:0 "游击队活动"
+
+# --- Crisis Decisions (危机决策) ---
+plus_cs_marshall_law:0 "宣布戒严令"
+plus_cs_marshall_law_desc:0 "恢复秩序的严厉措施。降低生产力，但由于更加专制管理，可以防止国家崩溃。"
+plus_cs_patriotic_propaganda:0 "宣传“祖国在危险中”"
+plus_cs_patriotic_propaganda_desc:0 "调动所有媒体资源来提振士气。"
+plus_cs_faction_bailout:0 "援助盟友经济"
+plus_cs_faction_bailout_desc:0 "引导资源稳定我们盟友的货币。"
+plus_cs_bailout_tt:0 "从目标国家移除 §R通货膨胀§!。"
+
+# Peace Acceptance Chance Tooltips
+plus_cs_chance_high_tt:0 "§G接受可能性高§!"
+plus_cs_chance_medium_tt:0 "§Y接受可能性中等§!"
+plus_cs_chance_low_tt:0 "§R接受可能性低§!"
+
+# Missing Keys (缺失的键值)
+plus_cs.20.t:0 "[From.GetNameDefCap] 请求和平许可"
+plus_cs.20.d:0 "[From.GetNameDef] 请求我们允许与敌人谈判和平。他们声称无法继续战争。"
+plus_cs.20.a:0 "允许谈判"
+plus_cs.20.b:0 "禁止！（否决）"
+plus_cs.21.t:0 "许可已批准"
+plus_cs.21.d:0 "我们的阵营领袖已同意让我们谈判和平。"
+plus_cs.22.t:0 "许可被拒绝"
+plus_cs.22.d:0 "我们的阵营领袖禁止我们谈判和平。他们要求我们继续战斗。"
+plus_cs.22.a:0 "我们必须服从。"
+plus_cs.22.b:0 "无论如何我们要谈判！（离开阵营）"
+plus_cs.23.t:0 "[From.GetNameDefCap] 提议单独和平"
+plus_cs.23.d:0 "[From.GetNameDef] 提供了一个单独的和平协议，违背了他们的阵营领袖。如果接受，他们将离开阵营。"
+plus_cs.23.a:0 "拒绝"
+plus_cs.23.b:0 "接受单独和平"
+plus_cs_internal.3.t:0 "白和平谈判"
+plus_cs_internal.3.d:0 "新政府寻求立即结束战争。"
+plus_cs_internal.3.a:0 "发送提议"
+plus_cs_purge_tt:0 "§R最高统帅部清洗将降低陆军组织度90天§!"
+peace_treaty_desc:0 ""
+
+# --- LOGIC EVENTS (关于投降的内阁辩论) ---
+plus_cs_logic.1.t:0 "关于投降的内阁辩论"
+plus_cs_logic.1.d:0 "内阁一片混乱。敌军压境，政府内部出现了要求停止流血的声音。然而，强硬派坚持认为投降就是叛国。"
+plus_cs_logic.1.a:0 "我们将战斗到底！（拒绝）"
+plus_cs_logic.1.b:0 "我们必须寻求和平条款（投降）"
+plus_cs_surrender_proceed_tt:0 "§G进行正式投降谈判§!"
+
+# --- Leader Traits Debug ---
+plus_cs_spirit_fanatic_desc:0 "这位领袖绝不会接受投降，除非国家彻底毁灭。\n\n§RAI 和平接受度：-100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_defeatist_desc:0 "这位领袖很悲观，一有风吹草动就会寻求和平。\n\n§GAI 和平接受度：+100%§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_resilient_desc:0 "这位领袖很固执，强烈抵制投降。\n\n§YAI 和平接受度：正常§!\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_diplomacy.20.b:0 "我们绝不屈服！"
+
+# --- Leader Traits (Base) ---
+plus_cs_spirit_fanatic:0 "狂热者"
+plus_cs_spirit_defeatist:0 "失败主义者"
+plus_cs_spirit_resilient:0 "坚韧不拔"
+
+# --- DEBUG DECISION ---
+plus_cs_debug_vars:0 "DEBUG: 检查隐藏决心"
+plus_cs_debug_vars_desc:0 "§O当前隐藏决心: [?Root.plus_cs_hidden_resolve]§!\\n\\n使用此决策将数值记录到日志。"
+plus_cs_debug_dump_all:0 "DEBUG: 将所有国家的决心输出到日志"
+plus_cs_debug_dump_all_desc:0 "将每个国家的隐藏决心值写入error.log (game.log)。"
+
+# --- CUSTOM TOOLTIPS ---
+plus_cs_spirit_fanatic_tt:0 "本土防御: §G+10.0%§!\\n师组织度: §G+10.0%§!\\n\\n这位领袖绝不会接受投降，除非国家彻底毁灭。\\n\\n§RAI 和平接受度：-100%§!\\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_defeatist_tt:0 "师恢复率: §R-10.0%§!\\n投降阈值: §R+10.0%§!\\n\\n这位领袖很悲观，一有风吹草动就会寻求和平。\\n\\n§GAI 和平接受度：+100%§!\\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+plus_cs_spirit_resilient_tt:0 "每周稳定度: §G+0.10%§!\\n\\n这位领袖很固执，强烈抵制投降。\\n\\n§YAI 和平接受度：正常§!\\n§O[调试]: 隐藏决心: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "停战经济贡品"
+  plus_cs_reparation_bonus_tt:0 "§G赔款加成：§![FROM.GetName] 渴望和平，并提供 §Y[?FROM.plus_cs_reparation_bonus] 政治点数§! 作为赔款。"
+  plus_cs_separate_peace_blocker:0 "单独和平精神"
+  plus_cs_separate_peace_blocker_desc:0 "该国签署了单独和平条约。我们无法加入阵营或召唤盟友，但边界是安全的。"
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§R军队瓦解§!"
+  army_cohesion_crisis_desc:0 "灾难性的伤亡和军官短缺摧毁了军队。部队拒绝进攻，士兵大量逃兵。"
+  homefront_collapse:0 "§R后方崩溃§!"
+  homefront_collapse_desc:0 "通货膨胀和政治危机瘫痪了经济。工厂罢工，由于面包短缺引发了骚乱。"
+  total_exhaustion:0 "§R彻底筋疲力尽§!"
+  total_exhaustion_desc:0 "国家已无力继续战争。军队解散，经济崩溃，政府瘫痪。"
+  political_paralysis:0 "§R政治瘫痪§!"
+  political_paralysis_desc:0 "政府已无法治理国家。稳定度和战争支持度已降至临界水平以下。"
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "军事政变"
+  plus_cs_internal.11.d:0 "将军们夺取了政权。无法坐视国家崩溃，军队推翻了政府以恢复秩序。"
+  plus_cs_internal.11.a:0 "秩序必须恢复"
+  plus_cs_internal.12.t:0 "政治瘫痪"
+  plus_cs_internal.12.d:0 "政府已完全失去控制。无休止的辩论、罢工和骚乱瘫痪了国家。"
+  plus_cs_internal.12.a:0 "我们无能为力……"
+  plus_cs_internal.13.t:0 "被迫投降"
+  plus_cs_internal.13.d:0 "政府已经崩溃。为了避免彻底的毁灭，残余当局决定向敌人投降。"
+  plus_cs_internal.13.a:0 "我们别无选择"
+  plus_cs.300.c:0 "我们孤立无援。"
+  plus_cs_crisis_management:0 "危机管理"
+  plus_cs_debug_options:0 "调试选项"

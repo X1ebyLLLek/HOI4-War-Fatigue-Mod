@@ -40,9 +40,9 @@
  plus_cs.4.d:0 "[From.GetAdjective]の指導者[From.GetLeader]は、両国間の白紙講和を提案しました。"
  plus_cs.4.a:0 "この無益な戦いを終わらせよう"
  plus_cs.4.b:0 "そう簡単には諦めない"
- plus_cs.5.t:0 "[From.GetNameDefCap]が降伏を拒否"
- plus_cs.5.d:0 "[From.GetAdjectiveCap]の指導者[From.GetLeader]は、我々への降伏を拒否しました。"
- plus_cs.5.a:0 "彼らは不可避な結末を先延ばしにしているだけだ"
+ plus_cs.5.t:0 "[From.GetNameDefCap]が講和を受諾！"
+ plus_cs.5.d:0 "[From.GetAdjectiveCap]の指導者[From.GetLeader]は、我々の講和提案に同意しました。戦争は終わりました！"
+ plus_cs.5.a:0 "ついに平和が！"
  plus_cs.6.t:0 "[From.GetNameDefCap]が和平交渉を拒否"
  plus_cs.6.d:0 "[From.GetAdjectiveCap]の指導者[From.GetLeader]は、戦争を早期に終わらせる機会を無駄にしました。"
  plus_cs.6.a:0 "なんてことだ！"
@@ -362,4 +362,50 @@
  plus_cs_spirit_fanatic_desc:0 "この指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\n\n§RAI講和受諾: -100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "この指導者は悲観的で、問題の最初の兆候で講和を模索します。\n\n§GAI講和受諾: +100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "この指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 \We will not bow!\
+ plus_cs_diplomacy.20.b:0 "我々は屈しない！"
+  
+  # --- Leader Traits (Base) ---
+  plus_cs_spirit_fanatic:0 "狂信者"
+  plus_cs_spirit_defeatist:0 "敗北主義者"
+  plus_cs_spirit_resilient:0 "不屈"
+  
+  # --- DEBUG DECISION ---
+  plus_cs_debug_vars:0 "DEBUG: 隠された意思を確認"
+  plus_cs_debug_vars_desc:0 "§O現在の隠された意思: [?Root.plus_cs_hidden_resolve]§!\\n\\nこの決断を使用して値をログに記録します。"
+  plus_cs_debug_dump_all:0 "DEBUG: すべての国の意思をログに出力"
+  plus_cs_debug_dump_all_desc:0 "すべての国の隠された意思の値をerror.log (game.log)に書き込みます。"
+  
+  # --- CUSTOM TOOLTIPS ---
+  plus_cs_spirit_fanatic_tt:0 "国土防衛: §G+10.0%§!\\n師団組織率: §G+10.0%§!\\n\\nこの指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\\n\\n§RAI講和受諾: -100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+  plus_cs_spirit_defeatist_tt:0 "師団回復率: §R-10.0%§!\\n降伏閾値: §R+10.0%§!\\n\\nこの指導者は悲観的で、問題の最初の兆候で講和を模索します。\\n\\n§GAI講和受諾: +100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+  plus_cs_spirit_resilient_tt:0 "週間安定度: §G+0.10%§!\\n\\nこの指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "停戦のための経済的貢物"
+  plus_cs_reparation_bonus_tt:0 "§G賠償ボーナス:§! [FROM.GetName] は平和を切望しており、賠償として §Y[?FROM.plus_cs_reparation_bonus] 政治力§! を提供しています。"
+  plus_cs_separate_peace_blocker:0 "単独講和の精神"
+  plus_cs_separate_peace_blocker_desc:0 "この国は単独講和条約を締結しました。陣営に参加したり同盟国を呼んだりすることはできませんが、国境は安全です。"
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§R軍の崩壊§!"
+  army_cohesion_crisis_desc:0 "壊滅的な損害と将校不足により軍が崩壊しました。部隊は攻撃を拒否し、兵士は大量に脱走しています。"
+  homefront_collapse:0 "§R銃後の崩壊§!"
+  homefront_collapse_desc:0 "インフレと政治危機により経済が麻痺しています。工場ではストライキが発生し、食料配給の列が暴動に変わっています。"
+  total_exhaustion:0 "§R完全な疲弊§!"
+  total_exhaustion_desc:0 "もはや戦争を遂行することはできません。軍は解散し、経済は死に、政府は麻痺しています。"
+  political_paralysis:0 "§R政治麻痺§!"
+  political_paralysis_desc:0 "政府は統治能力を失いました。安定度と戦争協力度は危険なレベルまで低下しています。"
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "軍事クーデター"
+  plus_cs_internal.11.d:0 "将軍たちが権力を掌握しました。国家の崩壊を見過ごすことができず、軍は秩序を回復するために政府を転覆させました。"
+  plus_cs_internal.11.a:0 "秩序を回復しなければならない"
+  plus_cs_internal.12.t:0 "政治的麻痺"
+  plus_cs_internal.12.d:0 "政府は完全にコントロールを失いました。終わりのない議論、ストライキ、騒乱が国家を麻痺させました。"
+  plus_cs_internal.12.a:0 "我々は無力だ..."
+  plus_cs_internal.13.t:0 "強制降伏"
+  plus_cs_internal.13.d:0 "政府は崩壊しました。完全な全滅を避けるため、残存する当局は敵への降伏を決定しました。"
+  plus_cs_internal.13.a:0 "選択肢はない"
+  plus_cs.300.c:0 "我々は孤立している。"
+  plus_cs_crisis_management:0 "危機管理"
+  plus_cs_debug_options:0 "デバッグオプション"

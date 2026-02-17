@@ -94,135 +94,138 @@ peace_options = {
 		}
 	}
 
-	ceasefire = {
-		icon = GFX_decision_hol_exchange_intelligence_data
-		cost = 0
-		target_trigger = {
-			always = no
-			has_war_with = FROM
-			FROM = {
-				is_puppet = no
-			}
-		}
-
-		days_re_enable = 14
-
-		visible = {
-			always = no
-			has_war_with = FROM
-			is_puppet = no
-			has_capitulated = no
-			FROM = {
-				has_capitulated = no
-				is_puppet = no
-			}
-		}
-
-		available = {
-			NOT = {
-				has_country_flag = plus_cs_waiting_response
-			}
-			has_war_with = FROM
-			FROM = {
-				has_capitulated = no
-				is_puppet = no
-			}
-		}
-
-		complete_effect = {
-			set_temp_variable = { a = 1 }
-			var:global.province_controllers^var:a = {
-				add_political_power = 1
-			}
-			for_each_loop = {
-				array = var:global.province_controllers
-				add_to_temp_array = {
-					array = cont
-					value = var:v
-					index = var:i
-				}
-			}
-			white_peace = FROM
-			set_truce = {
-				target = FROM
-				days = 14
-			}
-			for_each_loop = {
-				array = var:cont
-				index = in
-				if = {
-					limit = {
-						NOT = {
-							check_variable = { var:v = var:global.province_controllers^var:in }
-						}
-					}
-					add_political_power = 1
-					log = "[?in] [?v.GetName]"
-					add_to_array = {
-						array = t_prov_scopes@FROM
-						value = var:v
-					}
-					add_to_array = {
-						array = t_prov_indexes@FROM
-						value = var:in
-					}
-				}
-				var:v = {
-					set_province_controller = var:in
-				}
-			}
-			set_variable = { truce@FROM = 1 }
-			set_variable = { FROM.truce@ROOT = 1 }
-			
-			every_other_country = {
-				limit = {
-					check_variable = { ROOT.t_prov_scopes@THIS^num > 0 }
-				}
-				log = "FROM IS [?FROM.GetName]"
-				
-				for_each_loop = {
-					array = var:ROOT.t_prov_scopes@THIS
-					index = i
-					var:v = {
-						set_province_controller = var:ROOT.t_prov_indexes@THIS^var:i
-					}
-				}
-			}
-		}
-		
-		ai_will_do = {
-			base = 0
-			
-			# === WHITE PEACE LOGIC ===
-			
-			# 1. STALEMATE (The intended use)
-			# If we are tired and getting nowhere -> Propose White Peace
-			modifier = {
-				add = 100
-				has_country_flag = plus_cs_stalemate
-				check_variable = { plus_cs_pressure_ratio < 0.6 }
-			}
-			
-			# 2. DESPERATION (The "Hail Mary")
-			# We are losing. Enemy probably refuses, but we TRY.
-			modifier = {
-				add = 20
-				check_variable = { plus_cs_pressure_ratio > 0.8 }
-			}
-			
-			# 3. WINNING (Mercy?)
-			# Unlikely against AI, but if we are democratic/pacifist
-			modifier = {
-				add = 10
-				check_variable = { plus_cs_pressure_ratio < 0.2 }
-				has_government = democratic
-			}
-			
-			# Modifiers
-			modifier = {
-				factor = 0.1
-				has_country_leader_with_trait = plus_cs_spirit_fanatic
-			}
-		}
-	}
+	# ==============================================================================
+	# CEASEFIRE (WIP/PROTOTYPE - disabled, never triggers due to always = no)
+	# ==============================================================================
+	# ceasefire = {
+	# 	icon = GFX_decision_hol_exchange_intelligence_data
+	# 	cost = 0
+	# 	target_trigger = {
+	# 		always = no
+	# 		has_war_with = FROM
+	# 		FROM = {
+	# 			is_puppet = no
+	# 		}
+	# 	}
+	# 
+	# 	days_re_enable = 14
+	# 
+	# 	visible = {
+	# 		always = no
+	# 		has_war_with = FROM
+	# 		is_puppet = no
+	# 		has_capitulated = no
+	# 		FROM = {
+	# 			has_capitulated = no
+	# 			is_puppet = no
+	# 		}
+	# 	}
+	# 
+	# 	available = {
+	# 		NOT = {
+	# 			has_country_flag = plus_cs_waiting_response
+	# 		}
+	# 		has_war_with = FROM
+	# 		FROM = {
+	# 			has_capitulated = no
+	# 			is_puppet = no
+	# 		}
+	# 	}
+	# 
+	# 	complete_effect = {
+	# 		set_temp_variable = { a = 1 }
+	# 		var:global.province_controllers^var:a = {
+	# 			add_political_power = 1
+	# 		}
+	# 		for_each_loop = {
+	# 			array = var:global.province_controllers
+	# 			add_to_temp_array = {
+	# 				array = cont
+	# 				value = var:v
+	# 				index = var:i
+	# 			}
+	# 		}
+	# 		white_peace = FROM
+	# 		set_truce = {
+	# 			target = FROM
+	# 			days = 14
+	# 		}
+	# 		for_each_loop = {
+	# 			array = var:cont
+	# 			index = in
+	# 			if = {
+	# 				limit = {
+	# 					NOT = {
+	# 						check_variable = { var:v = var:global.province_controllers^var:in }
+	# 					}
+	# 				}
+	# 				add_political_power = 1
+	# 				log = "[?in] [?v.GetName]"
+	# 				add_to_array = {
+	# 					array = t_prov_scopes@FROM
+	# 					value = var:v
+	# 				}
+	# 				add_to_array = {
+	# 					array = t_prov_indexes@FROM
+	# 					value = var:in
+	# 				}
+	# 			}
+	# 			var:v = {
+	# 				set_province_controller = var:in
+	# 			}
+	# 		}
+	# 		set_variable = { truce@FROM = 1 }
+	# 		set_variable = { FROM.truce@ROOT = 1 }
+	# 		
+	# 		every_other_country = {
+	# 			limit = {
+	# 				check_variable = { ROOT.t_prov_scopes@THIS^num > 0 }
+	# 			}
+	# 			log = "FROM IS [?FROM.GetName]"
+	# 			
+	# 			for_each_loop = {
+	# 				array = var:ROOT.t_prov_scopes@THIS
+	# 				index = i
+	# 				var:v = {
+	# 					set_province_controller = var:ROOT.t_prov_indexes@THIS^var:i
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# 	
+	# 	ai_will_do = {
+	# 		base = 0
+	# 		
+	# 		# === WHITE PEACE LOGIC ===
+	# 		
+	# 		# 1. STALEMATE (The intended use)
+	# 		# If we are tired and getting nowhere -> Propose White Peace
+	# 		modifier = {
+	# 			add = 100
+	# 			has_country_flag = plus_cs_stalemate
+	# 			check_variable = { plus_cs_pressure_ratio < 0.6 }
+	# 		}
+	# 		
+	# 		# 2. DESPERATION (The "Hail Mary")
+	# 		# We are losing. Enemy probably refuses, but we TRY.
+	# 		modifier = {
+	# 			add = 20
+	# 			check_variable = { plus_cs_pressure_ratio > 0.8 }
+	# 		}
+	# 		
+	# 		# 3. WINNING (Mercy?)
+	# 		# Unlikely against AI, but if we are democratic/pacifist
+	# 		modifier = {
+	# 			add = 10
+	# 			check_variable = { plus_cs_pressure_ratio < 0.2 }
+	# 			has_government = democratic
+	# 		}
+	# 		
+	# 		# Modifiers
+	# 		modifier = {
+	# 			factor = 0.1
+	# 			has_country_leader_with_trait = plus_cs_spirit_fanatic
+	# 		}
+	# 	}
+	# }
 }

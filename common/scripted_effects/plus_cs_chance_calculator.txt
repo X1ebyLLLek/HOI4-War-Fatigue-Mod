@@ -1,48 +1,46 @@
 # ==============================================================================
 # SCRIPTED EFFECTS: PEACE ACCEPTANCE CHANCE CALCULATOR
 # Calculates AI peace acceptance probability using weighted scores.
+# Target chances (crisis only, no other factors):
+#   No crisis: ~0%
+#   Low crisis: 1-3%
+#   Medium crisis: 4-8%
+#   High crisis: 9-12%
+# Other factors (traits, ideology, enemy desperation) add on top.
 # ==============================================================================
 
 # =============================================
 # plus_cs_calc_negotiation_chance
 # Chance to accept NEGOTIATION OFFER (plus_cs.1)
-# ROOT = Recipient
-# PREV = Sender
-# Sets: plus_cs_chance_high/medium/low
+# ROOT = Recipient (usually winner, receives preferences)
+# FROM = Sender (usually loser, offers territories)
 # =============================================
 plus_cs_calc_negotiation_chance = {
-	# 1. Update Base Metrics
 	plus_cs_calc_scores = yes
-	
-	# 2. Calculate Personality & Situation
-	# Result is stored in 'plus_cs_ai_score'
 	plus_cs_calc_ai_personality = yes
 	plus_cs_calc_ai_situation = yes
 	
-	# 3. Add Offer Value (Negotiated Peace)
-	# Base value for "Negotiation" is roughly 0 (Neutral).
-	# It becomes positive if they offer land.
+	# === BASE RELUCTANCE ===
+	# Winner doesn't want to stop - but not TOO reluctant
+	subtract_from_temp_variable = { plus_cs_ai_score = 10 }
 	
-	# Check what is being offered (This requires inspecting the offer context, which is tricky in pure script without saved flags)
-	# Assuming this is called during the decision context or event where we know the offer quality.
-	# For generic "Negotiation", we assume a baseline.
-	
-	# Logic: If I am losing (Score > 0), I value negotiation more.
-	# If I am winning (Score < 0), I value it less.
-	
-	# === WINNING PENALTY (CRITICAL FIX) ===
+	# === I AM WINNING - GREED ===
 	if = {
 		limit = { 
 			surrender_progress < 0.1 
-			FROM = { surrender_progress > 0.1 } # Enemy is losing ground
+			FROM = { surrender_progress > 0.2 }
 		}
-		subtract_from_temp_variable = { plus_cs_ai_score = 20 } # Reduced from 50 (Was too arrogant)
+		subtract_from_temp_variable = { plus_cs_ai_score = 15 }
 	}
 	
-	# Context: Is the sender offering territories? 
-	# (We can't easily check 'future' transferred states here, so we rely on the Sender's intent)
+	# === ENEMY DESPERATION BONUS ===
+	# The more desperate the enemy, the better their offer
+	if = { limit = { FROM = { surrender_progress > 0.3 } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
+	if = { limit = { FROM = { surrender_progress > 0.5 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { FROM = { has_idea = internal_crisis_medium } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+	if = { limit = { FROM = { has_idea = internal_crisis_high } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
 	
-	# Ideological Hatred Malus (Specific to Negotiation)
+	# === IDEOLOGICAL HATRED ===
 	if = {
 		limit = {
 			OR = {
@@ -50,23 +48,22 @@ plus_cs_calc_negotiation_chance = {
 				AND = { has_government = communism FROM = { has_government = fascism } }
 			}
 		}
-		subtract_from_temp_variable = { plus_cs_ai_score = 25 }
+		subtract_from_temp_variable = { plus_cs_ai_score = 15 }
 	}
 	
-	# Major vs Minor Arrogance
+	# === MAJOR VS MINOR ===
 	if = {
 		limit = { is_major = yes FROM = { is_major = no } }
-		subtract_from_temp_variable = { plus_cs_ai_score = 10 }
+		subtract_from_temp_variable = { plus_cs_ai_score = 5 }
 	}
 
-	# ==============================================================================
-	# 4. Final Evaluation
+	# Final
 	clr_country_flag = plus_cs_chance_high
 	clr_country_flag = plus_cs_chance_medium
 	clr_country_flag = plus_cs_chance_low
 	
-	if = { limit = { check_variable = { plus_cs_ai_score > 40 } } set_country_flag = plus_cs_chance_high }
-	else_if = { limit = { check_variable = { plus_cs_ai_score > 10 } } set_country_flag = plus_cs_chance_medium }
+	if = { limit = { check_variable = { plus_cs_ai_score > 30 } } set_country_flag = plus_cs_chance_high }
+	else_if = { limit = { check_variable = { plus_cs_ai_score > 0 } } set_country_flag = plus_cs_chance_medium }
 	else = { set_country_flag = plus_cs_chance_low }
 	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
@@ -81,60 +78,86 @@ plus_cs_calc_white_peace_chance = {
 	plus_cs_calc_ai_personality = yes
 	plus_cs_calc_ai_situation = yes
 	
-	# Status Quo: Generally hated if winning.
-	subtract_from_temp_variable = { plus_cs_ai_score = 20 } # Base Reluctance
+	# === BASE: STRONG RELUCTANCE ===
+	# White peace = giving up without gain. Nobody wants this unless forced.
+	subtract_from_temp_variable = { plus_cs_ai_score = 25 }
 	
-	# Winning Penalty (Stronger now)
+	# === I AM WINNING ===
+	# If winning, white peace is TERRIBLE - lose all progress!
 	if = {
 		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.2 } }
-		subtract_from_temp_variable = { plus_cs_ai_score = 50 } # "I am winning, why stop?"
+		subtract_from_temp_variable = { plus_cs_ai_score = 40 }
 	}
 	
-	# Stalemate Bonus (The only real reason to accept)
+	# === I AM LOSING ===
+	# If losing, white peace is salvation!
+	if = { limit = { surrender_progress > 0.2 } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	if = { limit = { surrender_progress > 0.4 } add_to_temp_variable = { plus_cs_ai_score = 25 } }
+	if = { limit = { surrender_progress > 0.6 } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	
+	# === STALEMATE ===
 	if = {
 		limit = { has_country_flag = plus_cs_stalemate }
-		add_to_temp_variable = { plus_cs_ai_score = 40 }
+		add_to_temp_variable = { plus_cs_ai_score = 30 }
 	}
 	
-	# Fatigue scaling (If tired, more likely to accept)
-	if = { limit = { has_country_flag = plus_cs_war_strain } add_to_temp_variable = { plus_cs_ai_score = 10 } }
-	if = { limit = { has_country_flag = plus_cs_exhausted } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	# === MUTUAL EXHAUSTION ===
+	if = {
+		limit = { 
+			has_country_flag = plus_cs_war_strain 
+			FROM = { has_country_flag = plus_cs_war_strain }
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 8 }
+	}
+	if = {
+		limit = { 
+			has_country_flag = plus_cs_exhausted 
+			FROM = { has_country_flag = plus_cs_exhausted }
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
 	
-	# Final Eval
+	# Personal fatigue
+	if = { limit = { has_country_flag = plus_cs_war_strain } add_to_temp_variable = { plus_cs_ai_score = 3 } }
+	if = { limit = { has_country_flag = plus_cs_exhausted } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
 }
 
 # =============================================
 # plus_cs_calc_submission_chance
 # Chance to accept SUBMISSION (plus_cs.201)
+# Winner gets free puppet - ALWAYS good!
 # =============================================
 plus_cs_calc_submission_chance = {
 	plus_cs_calc_scores = yes
 	plus_cs_calc_ai_personality = yes
-	plus_cs_calc_ai_situation = yes # Situation applies to ME (Winner). Am I stressed?
+	plus_cs_calc_ai_situation = yes
 	
-	# Base: High. Free puppet!
-	add_to_temp_variable = { plus_cs_ai_score = 150 } 
+	# === BASE: VERY HIGH ===
+	# Free puppet is pure profit!
+	add_to_temp_variable = { plus_cs_ai_score = 80 }
 	
-	# Winning Bonus: If I am winning hard, I love submission.
+	# === ENEMY DESPERATION ===
 	if = {
-		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.4 } }
-		add_to_temp_variable = { plus_cs_ai_score = 20 }
+		limit = { FROM = { surrender_progress > 0.3 } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	if = {
+		limit = { FROM = { has_idea = internal_crisis_high } }
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
 	}
 
-	# Ideology Adjustments
-	if = { limit = { has_government = democratic } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	# === IDEOLOGY ===
+	if = { limit = { has_government = democratic } add_to_temp_variable = { plus_cs_ai_score = 10 } }
 	
-	# Fascist: Formerly malus, now acceptable if it saves time.
-	if = { 
-		limit = { has_government = fascism } 
-		# No malus. It's fine.
-	}
+	# Fascist prefers annexation
+	if = { limit = { has_government = fascism } subtract_from_temp_variable = { plus_cs_ai_score = 10 } }
 
-    # Core Veto (Reduced from -200 to -20: Allow submitting even if land is occupied)
+    # Core issue
     if = {
-        limit = { PREV = { any_owned_state = { is_core_of = ROOT } } }
-        subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+        limit = { FROM = { any_owned_state = { is_core_of = ROOT } } }
+        subtract_from_temp_variable = { plus_cs_ai_score = 15 }
     }
 	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
@@ -143,28 +166,77 @@ plus_cs_calc_submission_chance = {
 # =============================================
 # plus_cs_calc_conditional_surrender_chance
 # Chance to accept CONDITIONAL SURRENDER (plus_cs.2)
+# Winner accepts conditions instead of total victory
 # =============================================
 plus_cs_calc_conditional_surrender_chance = {
 	plus_cs_calc_scores = yes
 	plus_cs_calc_ai_personality = yes
 	plus_cs_calc_ai_situation = yes
 	
-	# Base: Medium/Low (5). "I want total victory, not conditions".
-	add_to_temp_variable = { plus_cs_ai_score = 5 } 
+	# === BASE: LOW ===
+	# Conditional = I don't get everything. Reluctant.
+	subtract_from_temp_variable = { plus_cs_ai_score = 10 }
 	
-	# Winning Malus: If I am crushing them, I refuse conditions.
+	# === I AM WINNING EASILY ===
 	if = {
-		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.1 } }
-		subtract_from_temp_variable = { plus_cs_ai_score = 20 } # Reduced from 60
+		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.2 } }
+		subtract_from_temp_variable = { plus_cs_ai_score = 20 }
 	}
 	
-	# Fatigue Bonus: If I am tired, I might accept conditions to end it.
-	if = { limit = { has_country_flag = plus_cs_war_strain } add_to_temp_variable = { plus_cs_ai_score = 15 } }
-	if = { limit = { has_country_flag = plus_cs_exhausted } add_to_temp_variable = { plus_cs_ai_score = 30 } }
+	# === ENEMY IS DESPERATE ===
+	if = { limit = { FROM = { surrender_progress > 0.4 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { FROM = { has_idea = internal_crisis_high } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
 	
-	# Trait Modifiers
-	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 20 } }
-	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 20 } }
+	# === TRAIT MODIFIERS ===
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 12 } }
 
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
+}
+
+# =============================================
+# plus_cs_calc_reparation_bonus
+# =============================================
+plus_cs_calc_reparation_bonus = {
+	set_variable = { plus_cs_reparation_bonus = 0 }
+	
+	if = {
+		limit = {
+			OR = {
+				has_idea = internal_crisis_low
+				has_idea = internal_crisis_medium
+				has_idea = internal_crisis_high
+				has_idea = political_paralysis
+				has_stability < 0.30
+				has_war_support < 0.30
+			}
+		}
+		
+		set_temp_variable = { country_base = num_of_factories }
+		divide_temp_variable = { country_base = 5 }
+		clamp_temp_variable = { var = country_base min = 2 max = 50 }
+		
+		set_temp_variable = { crisis_mult = 1.0 }
+		
+		if = { limit = { has_idea = internal_crisis_low } add_to_temp_variable = { crisis_mult = 0.5 } }
+		if = { limit = { has_idea = internal_crisis_medium } add_to_temp_variable = { crisis_mult = 1.0 } }
+		if = { limit = { has_idea = internal_crisis_high } add_to_temp_variable = { crisis_mult = 1.5 } }
+		if = { limit = { has_idea = political_paralysis } add_to_temp_variable = { crisis_mult = 2.0 } }
+		
+		if = { limit = { has_stability < 0.30 } add_to_temp_variable = { crisis_mult = 0.5 } }
+		if = { limit = { has_war_support < 0.30 } add_to_temp_variable = { crisis_mult = 0.5 } }
+		
+		set_temp_variable = { casualty_mult = casualties }
+		divide_temp_variable = { casualty_mult = 500000 }
+		multiply_temp_variable = { casualty_mult = 0.1 }
+		add_to_temp_variable = { casualty_mult = 1.0 }
+		clamp_temp_variable = { var = casualty_mult min = 1.0 max = 2.0 }
+		
+		set_variable = { plus_cs_reparation_bonus = country_base }
+		multiply_variable = { plus_cs_reparation_bonus = crisis_mult }
+		multiply_variable = { plus_cs_reparation_bonus = casualty_mult }
+		
+		round_variable = plus_cs_reparation_bonus
+		clamp_variable = { var = plus_cs_reparation_bonus min = 5 max = 200 }
+	}
 }

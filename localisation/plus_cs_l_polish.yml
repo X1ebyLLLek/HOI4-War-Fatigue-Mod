@@ -40,9 +40,9 @@
  plus_cs.4.d:0 "[From.GetAdjective] przywódca, [From.GetLeader], zaproponował biały pokój między naszymi krajami."
  plus_cs.4.a:0 "Zakończmy tę bezsensowną wojnę"
  plus_cs.4.b:0 "Nie poddamy się łatwo"
- plus_cs.5.t:0 "[From.GetNameDefCap] odmawia kapitulacji"
- plus_cs.5.d:0 "[From.GetAdjectiveCap] przywódca, [From.GetLeader], odmówił poddania się nam."
- plus_cs.5.a:0 "Oni tylko przedłużają to, co nieuniknione"
+ plus_cs.5.t:0 "[From.GetNameDefCap] akceptuje pokój!"
+ plus_cs.5.d:0 "[From.GetAdjectiveCap] przywódca, [From.GetLeader], zgodził się na naszą propozycję pokoju. Wojna się skończyła!"
+ plus_cs.5.a:0 "W końcu pokój!"
  plus_cs.6.t:0 "[From.GetNameDefCap] odmawia rozmów pokojowych"
  plus_cs.6.d:0 "[From.GetAdjectiveCap] przywódca, [From.GetLeader], zmarnował okazję, by zakończyć wojnę wcześniej."
  plus_cs.6.a:0 "Mamy przechlapane!"
@@ -372,4 +372,50 @@
  plus_cs_spirit_fanatic_desc:0 "Ten przywódca nigdy się nie podda, dopóki kraj nie zostanie zniszczony.\n\n§RAcceptacja Pokoju AI: -100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Ten przywódca jest pesimista i będzie szukał pokoju przy pierwszych problemach.\n\n§GAcceptacja Pokoju AI: +100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Ten przywódca jest uparty i stawia silny opór kapitulacji.\n\n§YAcceptacja Pokoju AI: Normalna§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
- plus_cs_diplomacy.20.b:0 \We will not bow!\
+ plus_cs_diplomacy.20.b:0 "Nie ugniemy się!"
+ 
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "Fanatyk"
+ plus_cs_spirit_defeatist:0 "Defetystа"
+ plus_cs_spirit_resilient:0 "Nieugięty"
+ 
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: Sprawdź Ukrytą Wolę"
+ plus_cs_debug_vars_desc:0 "§OBieżąca Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!\n\nUżyj tej decyzji, aby zapisać wartość do logu."
+ plus_cs_debug_dump_all:0 "DEBUG: Zapisz Wolę WSZYSTKICH narodów do logu"
+ plus_cs_debug_dump_all_desc:0 "Zapisuje wartość Ukrytej Woli dla KAŻDEGO kraju do error.log (game.log)."
+ 
+ # --- CUSTOM TOOLTIPS ---
+ plus_cs_spirit_fanatic_tt:0 "Obrona armii na terytorium narodowym: §G+10.0%§!\nOrganizacja dywizji: §G+10.0%§!\n\nTen przywódca nigdy się nie podda, dopóki kraj nie zostanie zniszczony.\n\n§RAcceptacja Pokoju AI: -100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "Tempo regeneracji dywizji: §R-10.0%§!\nPróg kapitulacji: §R+10.0%§!\n\nTen przywódca jest pesymistą i będzie szukał pokoju przy pierwszych problemach.\n\n§GAcceptacja Pokoju AI: +100%§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "Tygodniowa stabilność: §G+0.10%§!\n\nTen przywódca jest uparty i stawia silny opór kapitulacji.\n\n§YAcceptacja Pokoju AI: Normalna§!\n§O[Debug]: Ukryta Wola: [?Root.plus_cs_hidden_resolve]§!"
+
+  # --- MISSING KEYS ---
+  peace_economic_tribute:0 "Trybut Ekonomiczny za Zawieszenie Broni"
+  plus_cs_reparation_bonus_tt:0 "§GPremia za Reparacje:§! [FROM.GetName] desperacko pragnie pokoju i oferuje §Y[?FROM.plus_cs_reparation_bonus] Siły Politycznej§! w ramach reparacji."
+  plus_cs_separate_peace_blocker:0 "Duch Osobnego Pokoju"
+  plus_cs_separate_peace_blocker_desc:0 "Ten kraj podpisał osobny traktat pokojowy. Nie możemy dołączać do frakcji ani wzywać sojuszników, ale nasze granice są bezpieczne."
+  
+  # --- SYNERGY CRISIS ---
+  army_cohesion_crisis:0 "§RRozpad Armii§!"
+  army_cohesion_crisis_desc:0 "Katastrofalne straty i brak oficerów zniszczyły armię. Jednostki odmawiają ataku, żołnierze masowo dezerterują."
+  homefront_collapse:0 "§RZapaść Frontu Domowego§!"
+  homefront_collapse_desc:0 "Inflacja i kryzys polityczny sparaliżowały gospodarkę. Strajki w fabrykach, kolejki po chleb zamieniają się w zamieszki."
+  total_exhaustion:0 "§RCałkowite Wyczerpanie§!"
+  total_exhaustion_desc:0 "Kraj nie może już prowadzić wojny. Armia rozwiązana, gospodarka martwa, rząd sparaliżowany."
+  political_paralysis:0 "§RParaliż Polityczny§!"
+  political_paralysis_desc:0 "Rząd nie jest w stanie rządzić. Stabilność i poparcie dla wojny spadły poniżej poziomu krytycznego."
+  
+  # --- POLITICAL COLLAPSE EVENTS ---
+  plus_cs_internal.11.t:0 "Przewrót Wojskowy"
+  plus_cs_internal.11.d:0 "Generałowie przejęli władzę. Nie mogąc patrzeć na upadek narodu, armia obaliła rząd, by przywrócić porządek."
+  plus_cs_internal.11.a:0 "Porządek musi zostać przywrócony"
+  plus_cs_internal.12.t:0 "Paraliż Polityczny"
+  plus_cs_internal.12.d:0 "Rząd całkowicie stracił kontrolę. Niekończące się debaty, strajki i niepokoje sparaliżowały naród. Nic już nie działa."
+  plus_cs_internal.12.a:0 "Jesteśmy bezsilni..."
+  plus_cs_internal.13.t:0 "Wymuszona Kapitulacja"
+  plus_cs_internal.13.d:0 "Rząd upadł. Aby uniknąć całkowitej zagłady, pozostałe władze zdecydowały się poddać wrogowi."
+  plus_cs_internal.13.a:0 "Nie mamy wyboru"
+  plus_cs.300.c:0 "Jesteśmy sami."
+  plus_cs_crisis_management:0 "Zarządzanie kryzysowe"
+  plus_cs_debug_options:0 "Opcje debugowania"

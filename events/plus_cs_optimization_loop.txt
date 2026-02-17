@@ -100,10 +100,12 @@ country_event = {
 				# EXECUTE HEAVY EFFECTS
 				plus_cs_heavy_calc_step = yes
 				plus_cs_internal_crisis_check_step = yes
+				plus_cs_political_collapse_check = yes
+				# NEW: Проверка комбинированных кризисов
+				plus_cs_synergy_crisis_check = yes
 				
-				# Fail-safe: Update Economy Laws monthly for peaceful nations
-				# (Active nations update weekly via the Gated Logic above)
-				plus_cs_economy_step = yes
+				# OPT: Removed duplicate plus_cs_economy_step
+				# Weekly gated logic (line 65) already covers active nations
 
 				# --- STALEMATE & PANIC LOGIC ---
 				if = {

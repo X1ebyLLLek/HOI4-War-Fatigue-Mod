@@ -38,13 +38,15 @@ country_event = {
 			
 			# --- STANCE MODIFIERS ---
 			
+			# Fanatic leaders fight harder
 			modifier = {
 				factor = 2.0
-				has_country_flag = plus_cs_stance_fanatic
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
 			}
+			# Defeatist leaders fold easier
 			modifier = {
 				factor = 0.2
-				has_country_flag = plus_cs_stance_coward
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
 			}
 			
 			# --- CONTEXT MODIFIERS ---
@@ -88,13 +90,15 @@ country_event = {
 			
 			# --- STANCE MODIFIERS ---
 			
+			# Defeatist leaders want to surrender
 			modifier = {
 				factor = 2.0
-				has_country_flag = plus_cs_stance_coward
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
 			}
+			# Fanatic leaders refuse to surrender
 			modifier = {
 				factor = 0.1
-				has_country_flag = plus_cs_stance_fanatic
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
 			}
 			
 			# --- CONTEXT MODIFIERS ---
