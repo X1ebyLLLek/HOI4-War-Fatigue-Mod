@@ -54,8 +54,11 @@ country_event = {
 			country_event = { id = plus_cs.300 }
 		}
 
-		# --- ECONOMIC LOGIC (Gated Heavy Stuff) ---
-		# Only run heavy law logic if Active or needs update
+		# --- ECONOMIC LOGIC ---
+		# Always run economy step (lightweight) so peaceful minors get modifiers
+		plus_cs_economy_step = yes
+		
+		# Only run heavy crisis logic if Active or needs update
 		if = {
 			limit = {
 				OR = {
@@ -66,7 +69,6 @@ country_event = {
 					has_idea = tot_economic_mobilisation
 				}
 			}
-			plus_cs_economy_step = yes
 			plus_cs_crisis_step = yes
 		}
 		
