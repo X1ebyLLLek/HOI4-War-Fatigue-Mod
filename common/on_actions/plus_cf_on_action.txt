@@ -153,7 +153,7 @@ on_actions = {
 			# --- Пассивное остывание мира ---
 			if = {
 				limit = {
-					tag = GER 
+					original_tag = GER # Якорь: один мажор проверяет глобальный threat раз в месяц
 					threat > 0.05
 				}
 				
@@ -278,40 +278,44 @@ on_actions = {
 					# Fallback: Third-party capture (e.g., ally capturing from enemy)
 					# Only do expensive loop if truly necessary
 					set_temp_variable = { has_combatants = 0 }
-					random_country = {
-						limit = { 
-							has_war_with = FROM 
-							check_variable = { num_armies_in_state@FROM.FROM > 0 }
+					FROM = {
+						random_enemy_country = {
+							limit = { 
+								check_variable = { num_armies_in_state@FROM.FROM > 0 }
+							}
+							set_temp_variable = { has_combatants = 1 }
 						}
-						set_temp_variable = { has_combatants = 1 }
 					}
 					
 					if = {
 						limit = { check_variable = { has_combatants = 1 } }
 						
 						# First pass: calculate total points
-						every_country = {
-							limit = { 
-								has_war_with = FROM 
-								check_variable = { num_armies_in_state@FROM.FROM > 0 }
+						FROM = {
+							every_enemy_country = {
+								limit = { 
+									check_variable = { num_armies_in_state@FROM.FROM > 0 }
+								}
+								add_to_temp_variable = { tot_pts = num_armies_in_state@FROM.FROM }
 							}
-							add_to_temp_variable = { tot_pts = num_armies_in_state@FROM.FROM }
 						}
 						
 						# Second pass: distribute VP (only if total > 0)
 						if = {
 							limit = { check_variable = { tot_pts > 0 } }
-							every_country = {
-								limit = { 
-									has_war_with = FROM 
-									check_variable = { num_armies_in_state@FROM.FROM > 0 }
+							FROM = {
+								every_enemy_country = {
+									limit = { 
+										check_variable = { num_armies_in_state@FROM.FROM > 0 }
+									}
+									set_temp_variable = { pts = num_armies_in_state@FROM.FROM }
+									divide_temp_variable = { pts = tot_pts }
+									multiply_temp_variable = { pts = state_vp }
+									
+									add_to_variable = { vp@PREV = pts }
+									subtract_from_variable = { PREV.vp@THIS = pts }
+									clamp_variable = { var = PREV.vp@THIS min = 0 }
 								}
-								set_temp_variable = { pts = num_armies_in_state@FROM.FROM }
-								divide_temp_variable = { pts = tot_pts }
-								multiply_temp_variable = { pts = state_vp }
-								add_to_variable = { vp@FROM = pts }
-								subtract_from_variable = { FROM.vp@THIS = pts }
-								clamp_variable = { var = FROM.vp@THIS min = 0 }
 							}
 						}
 					}

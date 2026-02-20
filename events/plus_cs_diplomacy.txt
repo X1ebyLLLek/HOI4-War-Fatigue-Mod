@@ -167,10 +167,7 @@ country_event = {
 		}
 		
 		# Become Free
-		set_autonomy = {
-			target = OVERLORD
-			autonomy_state = autonomy_free
-		}
+		overlord = { end_puppet = ROOT }
 		
 		leave_faction = yes
 		# FIX: white_peace = ALL_ENEMIES is invalid syntax
@@ -347,8 +344,6 @@ country_event = {
 		else = {
 			puppet = FROM
 		}
-		
-		white_peace = FROM # Logic safety if war technically started
 	}
 	
 	# Option B: Refuse (Full Annexation Goal / War)

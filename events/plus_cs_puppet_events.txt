@@ -20,7 +20,10 @@ country_event = {
 			modifier = { factor = 0.5 has_government = communism }
 		}
 
-		white_peace = event_target:new_potential_master
+		if = {
+			limit = { has_war_with = event_target:new_potential_master }
+			white_peace = event_target:new_potential_master
+		}
 		
 		event_target:new_potential_master = {
 			puppet = ROOT

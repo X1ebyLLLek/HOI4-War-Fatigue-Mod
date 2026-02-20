@@ -60,93 +60,71 @@ country_event = {
 		plus_cs_calculate_total_strategic_value = yes
 
 		if = {
-			limit = {
-				FROM = { is_faction_leader = no }
-			}
+			limit = { FROM = { is_faction_leader = no } }
+			# WINNER LOOP: FROM and its puppets
 			every_country = {
-				limit = {
-					OR = {
-						AND = {
-							ROOT = { is_faction_leader = no }
-							OR = {
-								tag = ROOT
-								is_puppet_of = ROOT
-							}
-						}
-						AND = {
-							ROOT = { is_faction_leader = yes }
-							is_in_faction_with = ROOT
+				limit = { OR = { tag = FROM is_puppet_of = FROM } }
+				save_event_target_as = current_winner
+				
+				# LOSER LOOP: Enemies of the Winner that belong to ROOT's side
+				every_enemy_country = {
+					limit = {
+						OR = {
+							AND = { ROOT = { is_faction_leader = no } OR = { tag = ROOT is_puppet_of = ROOT } }
+							AND = { ROOT = { is_faction_leader = yes } is_in_faction_with = ROOT }
 						}
 					}
-				}
-				every_owned_state = {
-					every_country = {
-						limit = {
-							OR = {
-								tag = FROM
-								is_puppet_of = FROM
-							}
-						}
-						set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
-						activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
-						activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
-						activate_targeted_decision = { target = PREV decision = peace_take_state }
+					# Assign Country-Level decisions to the Winner
+					event_target:current_winner = {
+						set_variable = { og_vp@PREV = cnt_og_vp@PREV }
+						activate_targeted_decision = { target = PREV decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV decision = peace_disarm }
 						activate_targeted_decision = { target = PREV decision = peace_puppet }
-						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
 						activate_targeted_decision = { target = PREV decision = peace_liberate }
 						activate_targeted_decision = { target = PREV decision = peace_claim }
 					}
-					set_variable = { state_taken = 0 }
+					# STATE LOOP
+					every_owned_state = {
+						event_target:current_winner = {
+							activate_targeted_decision = { target = PREV decision = peace_take_state }
+							activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						}
+					}
+					set_variable = { state_taken = 0 } # Reset var on Loser
 				}
 			}
 		}
-		# OPTIMIZATION: Removed O(N^3) Loop.
-		# Instead of looping every_country > every_owned_state > every_country,
-		# We check only relevant neighbors/enemies.
 		else = {
+			# WINNER LOOP: FROM's faction
 			every_country = {
-				# Limit 1: Only consider relevant countries (Majors, Neighbors, Enemies)
-				limit = {
-					OR = {
-						AND = {
-							ROOT = { is_faction_leader = no }
-							OR = {
-								tag = ROOT
-								is_puppet_of = ROOT
-							}
-						}
-						AND = {
-							ROOT = { is_faction_leader = yes }
-							is_in_faction_with = ROOT
+				limit = { is_in_faction_with = FROM has_war_with = ROOT }
+				save_event_target_as = current_winner
+				
+				# LOSER LOOP: Enemies of the Winner that belong to ROOT's side
+				every_enemy_country = {
+					limit = {
+						OR = {
+							AND = { ROOT = { is_faction_leader = no } OR = { tag = ROOT is_puppet_of = ROOT } }
+							AND = { ROOT = { is_faction_leader = yes } is_in_faction_with = ROOT }
 						}
 					}
-				}
-				every_owned_state = {
-					# Limit 2: Do not iterate ALL countries for every state. 
-					# Use scoped checks.
-					every_country = {
-						limit = {
-							is_in_faction_with = FROM
-							has_war_with = ROOT
-							# OPTIMIZATION: Only if they actually have a claim or core here
-							PREV = {
-								OR = {
-									is_core_of = PREV.PREV
-									is_claimed_by = PREV.PREV
-								}
-							}
-						}
-						
-						set_variable = { og_vp@PREV.PREV = cnt_og_vp@PREV.PREV }
-						activate_targeted_decision = { target = PREV.PREV decision = peace_war_reparations }
-						activate_targeted_decision = { target = PREV.PREV decision = peace_disarm }
-						activate_targeted_decision = { target = PREV decision = peace_take_state }
-						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+					# Assign Country-Level decisions to the Winner
+					event_target:current_winner = {
+						set_variable = { og_vp@PREV = cnt_og_vp@PREV }
+						activate_targeted_decision = { target = PREV decision = peace_war_reparations }
+						activate_targeted_decision = { target = PREV decision = peace_disarm }
 						activate_targeted_decision = { target = PREV decision = peace_puppet }
 						activate_targeted_decision = { target = PREV decision = peace_liberate }
 						activate_targeted_decision = { target = PREV decision = peace_claim }
 					}
-					set_variable = { state_taken = 0 }
+					# STATE LOOP
+					every_owned_state = {
+						event_target:current_winner = {
+							activate_targeted_decision = { target = PREV decision = peace_take_state }
+							activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						}
+					}
+					set_variable = { state_taken = 0 } # Reset var on Loser
 				}
 			}
 		}

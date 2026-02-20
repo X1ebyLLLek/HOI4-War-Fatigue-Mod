@@ -2,6 +2,8 @@ ideas = {
 	country = {
 		conditional_surrender = {
 			allowed = { always = no }
+			allowed_to_remove = { always = no }
+			removal_cost = -1
 			picture = HUN_treaty_of_triannon
 			modifier = {
 				ai_join_ally_desire_factor = -3000

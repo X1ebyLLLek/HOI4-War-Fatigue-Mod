@@ -222,8 +222,14 @@ country_event = {
 			elections_allowed = no
 		}
 		
-		# 2. Release all puppets
+		# 2. Release unstable puppets (that are also in crisis)
 		every_subject_country = {
+			limit = {
+				OR = {
+					has_war = yes
+					has_stability < 0.3
+				}
+			}
 			ROOT = { end_puppet = PREV }
 		}
 		
@@ -247,7 +253,6 @@ country_event = {
 			}
 		}
 		
-		# 4. White peace with all enemies (they keep occupied territories)
 		# 4. White peace with all enemies (they keep occupied territories)
 		every_enemy_country = {
 			white_peace = ROOT
@@ -347,10 +352,7 @@ country_event = {
 			}
 		}
 		
-		# White peace with all enemies
-		every_enemy_country = {
-			white_peace = ROOT
-		}
+		# puppet уже заканчивает войну автоматически
 		
 		# Restore third-party control
 		plus_cs_restore_third_party_control = yes

@@ -15,28 +15,24 @@ plus_cs_set_mutual_truce = {
 	FROM = { set_truce = { target = ROOT days = 365 } }
 	
 	# 2. Вассалы ROOT получают truce с FROM
-	every_country = {
-		limit = { is_puppet_of = ROOT }
+	every_subject_country = {
 		set_truce = { target = FROM days = 365 }
 		FROM = { set_truce = { target = PREV days = 365 } }
 	}
 	
 	# 3. Вассалы FROM получают truce с ROOT
 	FROM = {
-		every_country = {
-			limit = { is_puppet_of = FROM }
+		every_subject_country = {
 			set_truce = { target = ROOT days = 365 }
 			ROOT = { set_truce = { target = PREV days = 365 } }
 		}
 	}
 	
 	# 4. Вассалы ROOT vs Вассалы FROM
-	every_country = {
-		limit = { is_puppet_of = ROOT }
+	every_subject_country = {
 		save_event_target_as = root_puppet
 		FROM = {
-			every_country = {
-				limit = { is_puppet_of = FROM }
+			every_subject_country = {
 				set_truce = { target = event_target:root_puppet days = 365 }
 				event_target:root_puppet = { set_truce = { target = PREV days = 365 } }
 			}
@@ -70,8 +66,7 @@ plus_cs_set_faction_truce = {
 			FROM = { set_truce = { target = PREV days = 365 } }
 			
 			# И их вассалы тоже
-			every_country = {
-				limit = { is_puppet_of = PREV }
+			every_subject_country = {
 				set_truce = { target = FROM days = 365 }
 				FROM = { set_truce = { target = PREV days = 365 } }
 			}
@@ -92,8 +87,7 @@ plus_cs_set_faction_truce = {
 				ROOT = { set_truce = { target = PREV days = 365 } }
 				
 				# И их вассалы
-				every_country = {
-					limit = { is_puppet_of = PREV }
+				every_subject_country = {
 					set_truce = { target = ROOT days = 365 }
 					ROOT = { set_truce = { target = PREV days = 365 } }
 				}
@@ -135,16 +129,14 @@ plus_cs_set_extended_truce = {
 	FROM = { set_truce = { target = ROOT days = 720 } }
 	
 	# Вассалы ROOT
-	every_country = {
-		limit = { is_puppet_of = ROOT }
+	every_subject_country = {
 		set_truce = { target = FROM days = 720 }
 		FROM = { set_truce = { target = PREV days = 720 } }
 	}
 	
 	# Вассалы FROM
 	FROM = {
-		every_country = {
-			limit = { is_puppet_of = FROM }
+		every_subject_country = {
 			set_truce = { target = ROOT days = 720 }
 			ROOT = { set_truce = { target = PREV days = 720 } }
 		}

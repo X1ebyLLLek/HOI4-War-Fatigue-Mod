@@ -66,11 +66,8 @@ country_event = {
 		# 4. Save Control (Custom Logic)
 		plus_cs_save_third_party_control = yes
 		
-		# 5. Puppet (First - change sides)
+		# 5. Puppet (ends war automatically in HOI4)
 		puppet = FROM
-		
-		# 6. End War (Second - clear conflicts)
-		white_peace = FROM
 		
 		if = {
 			limit = { is_in_faction = yes }
@@ -156,16 +153,15 @@ country_event = {
 		}
 		
 		# 2. Transfer Land
-		every_state = {
-			limit = {
-				is_owned_by = FROM
-				OR = {
-					is_claimed_by = ROOT
-					is_core_of = ROOT
+		FROM = {
+			every_owned_state = {
+				limit = {
+					OR = {
+						is_claimed_by = ROOT
+						is_core_of = ROOT
+					}
 				}
-			}
-			ROOT = {
-				transfer_state = PREV
+				ROOT = { transfer_state = PREV }
 			}
 		}
 		

@@ -4,72 +4,72 @@ peace_treaty = {
 	# REPARATION & ADMINISTRATIVE DECISIONS
 	# ==============================================================================
 
-	ceasefire_end = {
-		icon = GFX_decision_hol_exchange_intelligence_data
-		target_trigger = {
-			FROM = {
-				check_variable = { truce@ROOT = 1 }
-			}
-		}
-		visible = {
-			FROM = {
-				check_variable = { truce@ROOT = 1 }
-			}
-		}
-		fire_only_once = yes
-		is_good = yes
-		selectable_mission = no
-		days_mission_timeout = 14
-		war_with_target_on_timeout = yes
-
-		targeted_modifier = {
-			political_power_gain = 0.25
-		}
-
-		activation = {
-			always = yes
-		}
-
-		available = {
-			always = no
-		}
-
-		timeout_effect = {
-			every_other_country = {
-				limit = {
-					check_variable = { ROOT.t_prov_scopes@THIS^num > 0 }
-				}
-				log = "FROM IS [?FROM.GetName]"
-				for_each_loop = {
-					array = var:ROOT.t_prov_scopes@THIS
-					log = "DAILY"
-					log = "[?ROOT.t_prov_indexes@THIS^i]"
-					log = "[?v.GetName]"
-					var:v = {
-						set_province_controller = var:ROOT.t_prov_indexes@THIS^var:i
-					}
-				}
-			}
-			if = {
-				limit = {
-					check_variable = { original_tag = FROM.original_tag }
-				}
-				declare_war_on = {
-					target = FROM
-					type = civil_war
-				}
-				add_civil_war_target = FROM
-			}
-			else = {
-				declare_war_on = {
-					target = FROM
-					type = annex_everything
-				}
-			}
-			set_variable = { truce@FROM = 0 }
-			set_variable = { FROM.truce@ROOT = 0 }
-		}
-	}
+	# ceasefire_end = {
+	# 	icon = GFX_decision_hol_exchange_intelligence_data
+	# 	target_trigger = {
+	# 		FROM = {
+	# 			check_variable = { truce@ROOT = 1 }
+	# 		}
+	# 	}
+	# 	visible = {
+	# 		FROM = {
+	# 			check_variable = { truce@ROOT = 1 }
+	# 		}
+	# 	}
+	# 	fire_only_once = yes
+	# 	is_good = yes
+	# 	selectable_mission = no
+	# 	days_mission_timeout = 14
+	# 	war_with_target_on_timeout = yes
+	# 
+	# 	targeted_modifier = {
+	# 		political_power_gain = 0.25
+	# 	}
+	# 
+	# 	activation = {
+	# 		always = yes
+	# 	}
+	# 
+	# 	available = {
+	# 		always = no
+	# 	}
+	# 
+	# 	timeout_effect = {
+	# 		every_other_country = {
+	# 			limit = {
+	# 				check_variable = { ROOT.t_prov_scopes@THIS^num > 0 }
+	# 			}
+	# 			log = "FROM IS [?FROM.GetName]"
+	# 			for_each_loop = {
+	# 				array = var:ROOT.t_prov_scopes@THIS
+	# 				log = "DAILY"
+	# 				log = "[?ROOT.t_prov_indexes@THIS^i]"
+	# 				log = "[?v.GetName]"
+	# 				var:v = {
+	# 					set_province_controller = var:ROOT.t_prov_indexes@THIS^var:i
+	# 				}
+	# 			}
+	# 		}
+	# 		if = {
+	# 			limit = {
+	# 				check_variable = { original_tag = FROM.original_tag }
+	# 			}
+	# 			declare_war_on = {
+	# 				target = FROM
+	# 				type = civil_war
+	# 			}
+	# 			add_civil_war_target = FROM
+	# 		}
+	# 		else = {
+	# 			declare_war_on = {
+	# 				target = FROM
+	# 				type = annex_everything
+	# 			}
+	# 		}
+	# 		set_variable = { truce@FROM = 0 }
+	# 		set_variable = { FROM.truce@ROOT = 0 }
+	# 	}
+	# }
 
 	peace_war_reparations = {
 		icon = GFX_decision_hol_attract_foreign_investors

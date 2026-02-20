@@ -14,6 +14,11 @@ plus_cs_heavy_calc_step = {
 	if = {
 		limit = {
 			has_war = yes
+			# CIVIL WAR GUARD
+			OR = {
+				has_civil_war = no
+				has_country_flag = plus_cs_had_civil_war
+			}
 			OR = {
 				has_stability < 0.20
 				AND = {
@@ -23,8 +28,6 @@ plus_cs_heavy_calc_step = {
 						has_dynamic_modifier = manpower_strain_mild
 						has_dynamic_modifier = manpower_strain_high
 						has_war_support < 0.30
-						# Strategic Collapse Trigger
-						surrender_progress > 0.3 # Already checked above, but adding clarity
 					}
 				}
 				has_dynamic_modifier = manpower_strain_high
@@ -62,29 +65,29 @@ plus_cs_heavy_calc_step = {
 		if = { limit = { is_major = yes } add_to_temp_variable = { officer_cap_calc = 500 } }
 
 		set_temp_variable = { total_strain = num_divisions }
-		subtract_from_temp_variable = { total_strain = var:plus_cs_prev_battalions }
+		subtract_from_temp_variable = { var = total_strain value = var:plus_cs_prev_battalions }
 		clamp_temp_variable = { var = total_strain min = 0 }
 		multiply_temp_variable = { total_strain = 0.5 } 
 
 		set_temp_variable = { casualty_load = casualties }
 		subtract_from_temp_variable = { casualty_load = var:plus_cs_prev_casualties }
 		clamp_temp_variable = { var = casualty_load min = 0 }
-		divide_temp_variable = { casualty_load = 3500 }
+		divide_temp_variable = { var = casualty_load value = 3500 }
 
-		add_to_temp_variable = { total_strain = var:casualty_load }
+		add_to_temp_variable = { var = total_strain value = var:casualty_load }
 
 		if = { 
 			limit = { num_divisions > 0 } 
 			set_temp_variable = { div_count = num_divisions }
-			divide_temp_variable = { total_strain = div_count } 
+			divide_temp_variable = { var = total_strain value = div_count } 
 		}
 
 		if = {
 			limit = { check_variable = { var = num_divisions value = var:officer_cap_calc compare = greater_than } }
-			multiply_temp_variable = { total_strain = 1.2 }
+			multiply_temp_variable = { var = total_strain value = 1.2 }
 			set_temp_variable = { double_cap = var:officer_cap_calc }
-			multiply_temp_variable = { double_cap = 2 }
-			if = { limit = { check_variable = { var = num_divisions value = var:double_cap compare = greater_than } } multiply_temp_variable = { total_strain = 1.66 } }
+			multiply_temp_variable = { var = double_cap value = 2 }
+			if = { limit = { check_variable = { var = num_divisions value = var:double_cap compare = greater_than } } multiply_temp_variable = { var = total_strain value = 1.66 } }
 		}
 
 		if = {
@@ -134,11 +137,11 @@ plus_cs_heavy_calc_step = {
 			set_variable = { core_pop_calc = 0 }
 			
 			every_owned_state = {
-				if = { limit = { is_core_of = ROOT } add_to_variable = { ROOT.core_pop_calc = state_population } }
+				if = { limit = { is_core_of = ROOT } add_to_variable = { var = ROOT.core_pop_calc value = state_population } }
 				else = {
 					set_temp_variable = { local_pop = state_population }
-					multiply_temp_variable = { local_pop = 0.15 }
-					add_to_variable = { ROOT.core_pop_calc = local_pop }
+					multiply_temp_variable = { var = local_pop value = 0.15 }
+					add_to_variable = { var = ROOT.core_pop_calc value = local_pop }
 				}
 			}
 			
@@ -147,20 +150,20 @@ plus_cs_heavy_calc_step = {
 				limit = { any_country = { is_puppet_of = ROOT } }
 				every_subject_country = {
 					set_temp_variable = { subj_pop = core_population }
-					multiply_temp_variable = { subj_pop = 0.25 }
-					add_to_variable = { ROOT.core_pop_calc = subj_pop }
+					multiply_temp_variable = { var = subj_pop value = 0.25 }
+					add_to_variable = { var = ROOT.core_pop_calc value = subj_pop }
 				}
 			}
 		}
 
 		set_temp_variable = { total_drain = num_divisions }
-		multiply_temp_variable = { total_drain = 1000 }
-		add_to_temp_variable = { total_drain = casualties }
+		multiply_temp_variable = { var = total_drain value = 1000 }
+		add_to_temp_variable = { var = total_drain value = casualties }
 		set_temp_variable = { limit_base = var:core_pop_calc }
 		
 		# Collapse (> 5% of core pop)
 		set_temp_variable = { limit_check = var:limit_base }
-		multiply_temp_variable = { limit_check = 0.05 }
+		multiply_temp_variable = { var = limit_check value = 0.05 }
 
 		if = {
 			limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
@@ -173,7 +176,7 @@ plus_cs_heavy_calc_step = {
 		else = {
 			# High (> 3% of core pop)
 			set_temp_variable = { limit_check = var:limit_base }
-			multiply_temp_variable = { limit_check = 0.03 }
+			multiply_temp_variable = { var = limit_check value = 0.03 }
 			if = {
 				limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
 				add_dynamic_modifier = { modifier = manpower_strain_high days = 35 }
@@ -185,7 +188,7 @@ plus_cs_heavy_calc_step = {
 			else = {
 				# Mild (> 1.5% of core pop)
 				set_temp_variable = { limit_check = var:limit_base }
-				multiply_temp_variable = { limit_check = 0.015 }
+				multiply_temp_variable = { var = limit_check value = 0.015 }
 				if = {
 					limit = { check_variable = { var = total_drain value = var:limit_check compare = greater_than } }
 					add_dynamic_modifier = { modifier = manpower_strain_mild days = 35 }

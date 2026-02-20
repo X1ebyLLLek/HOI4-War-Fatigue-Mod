@@ -29,6 +29,10 @@ country_event = {
 		# 2. LOGIC MODULES
 		# =============================================================
 
+		# --- TRAIT MANAGEMENT ---
+		# Ensures new leaders (after elections/civil wars) get a spirit
+		plus_cs_assign_fighting_spirit = yes
+
 		# --- SCORE CALCULATION ---
 		if = {
 			limit = { has_war = yes }
@@ -80,6 +84,12 @@ country_event = {
 					has_war = yes
 					has_dynamic_modifier = war_inflation_crisis
 					has_country_flag = plus_cs_exhausted
+				}
+				
+				# CIVIL WAR GUARD: Only run for normal wars OR mod-induced civil wars
+				OR = {
+					has_civil_war = no
+					has_country_flag = plus_cs_had_civil_war
 				}
 			}
 			
@@ -175,9 +185,7 @@ country_event = {
 				}
 			}
 		}
-			}
-		} 
-		
+		}
 		# =============================================================
 		# 4. RANDOM LOGIC INTEGRATION
 		# =============================================================

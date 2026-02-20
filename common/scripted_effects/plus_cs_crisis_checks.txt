@@ -28,6 +28,11 @@ plus_cs_crisis_step = {
 				AND = { has_government = communism communism < 0.5 }
 				AND = { has_government = neutrality neutrality < 0.5 }
 			}
+			# CIVIL WAR GUARD
+			OR = {
+				has_civil_war = no
+				has_country_flag = plus_cs_had_civil_war
+			}
 		}
 		random_list = {
 			98 = {}
@@ -36,19 +41,34 @@ plus_cs_crisis_step = {
 				if = {
 					limit = { has_civil_war = no }
 					random_list = {
-						50 = {
-							if = { limit = { has_government = democratic } start_civil_war = { ideology = fascism size = 0.3 } }
-							if = { limit = { has_government = neutrality } start_civil_war = { ideology = fascism size = 0.3 } }
-							if = { limit = { has_government = fascism } start_civil_war = { ideology = democratic size = 0.3 } }
-							if = { limit = { has_government = communism } start_civil_war = { ideology = democratic size = 0.3 } }
-						}
-						50 = {
-							if = { limit = { has_government = democratic } start_civil_war = { ideology = communism size = 0.3 } }
-							if = { limit = { has_government = neutrality } start_civil_war = { ideology = communism size = 0.3 } }
-							if = { limit = { has_government = fascism } start_civil_war = { ideology = communism size = 0.3 } }
-							if = { limit = { has_government = communism } start_civil_war = { ideology = fascism size = 0.3 } }
-						}
+					50 = {
+						# Размер мятежа зависит от оппозиции (мин 15%, макс 50%)
+						set_temp_variable = { cw_size = 0.15 }
+						if = { limit = { has_government = democratic fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = democratic fascism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
+						if = { limit = { has_government = neutrality fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = fascism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = communism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						
+						if = { limit = { has_government = democratic } start_civil_war = { ideology = fascism size = var:cw_size } }
+						if = { limit = { has_government = neutrality } start_civil_war = { ideology = fascism size = var:cw_size } }
+						if = { limit = { has_government = fascism } start_civil_war = { ideology = democratic size = var:cw_size } }
+						if = { limit = { has_government = communism } start_civil_war = { ideology = democratic size = var:cw_size } }
 					}
+					50 = {
+						set_temp_variable = { cw_size = 0.15 }
+						if = { limit = { has_government = democratic communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = democratic communism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
+						if = { limit = { has_government = neutrality communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = fascism communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						if = { limit = { has_government = communism fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						
+						if = { limit = { has_government = democratic } start_civil_war = { ideology = communism size = var:cw_size } }
+						if = { limit = { has_government = neutrality } start_civil_war = { ideology = communism size = var:cw_size } }
+						if = { limit = { has_government = fascism } start_civil_war = { ideology = communism size = var:cw_size } }
+						if = { limit = { has_government = communism } start_civil_war = { ideology = fascism size = var:cw_size } }
+					}
+				}
 				}
 				set_country_flag = { flag = civil_war_risk_active days = 30 }
 				# Mark that this country had a civil war (enables post-civil war collapse events 11-13)
@@ -57,118 +77,80 @@ plus_cs_crisis_step = {
 		}
 	}
 	
-	# 2. Ideology Drift (Shift towards extremes)
+	# ==============================================================================
+	# 2. REALISTIC WEEKLY IDEOLOGY DRIFT
+	# Replaced monthly heavy drift with smoother weekly ticks.
+	# Drift depends on current ideology and crisis level.
+	# ==============================================================================
 	if = {
 		limit = { NOT = { AND = { date < 1938.1.1 has_civil_war = yes } } }
 		
-		# HIGH CRISIS (10% target shift)
+		# Define Base Drift Value based on Crisis Level
+		set_temp_variable = { drift_tick = 0 }
+		
 		if = {
 			limit = { has_idea = internal_crisis_high }
-			if = {
-				limit = { has_government = democratic }
-				random_list = {
-					40 = { add_popularity = { ideology = fascism popularity = 0.005 } }
-					40 = { add_popularity = { ideology = communism popularity = 0.005 } }
-					20 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = neutrality }
-				random_list = {
-					35 = { add_popularity = { ideology = fascism popularity = 0.005 } } 
-					35 = { add_popularity = { ideology = communism popularity = 0.005 } } 
-					30 = { add_popularity = { ideology = democratic popularity = 0.005 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = fascism }
-				random_list = {
-					50 = { add_popularity = { ideology = communism popularity = 0.005 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.0025 } add_popularity = { ideology = neutrality popularity = 0.0025 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = communism }
-				random_list = {
-					50 = { add_popularity = { ideology = fascism popularity = 0.005 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.0025 } add_popularity = { ideology = neutrality popularity = 0.0025 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.005 } }
-				}
-			}
+			set_temp_variable = { drift_tick = 0.002 } # 0.2% per week (~0.8% month)
 		}
-		
-		# MEDIUM CRISIS (5% target shift)
 		else_if = {
 			limit = { has_idea = internal_crisis_medium }
-			if = {
-				limit = { has_government = democratic }
-				random_list = {
-					40 = { add_popularity = { ideology = fascism popularity = 0.002 } }
-					40 = { add_popularity = { ideology = communism popularity = 0.002 } }
-					20 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
-				}
-			}
-			# ... (Simplification: Applied similar drift reduction logic) ...
-			else_if = {
-				limit = { has_government = neutrality }
-				random_list = {
-					35 = { add_popularity = { ideology = fascism popularity = 0.002 } } 
-					35 = { add_popularity = { ideology = communism popularity = 0.002 } } 
-					30 = { add_popularity = { ideology = democratic popularity = 0.002 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = fascism }
-				random_list = {
-					50 = { add_popularity = { ideology = communism popularity = 0.002 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.001 } add_popularity = { ideology = neutrality popularity = 0.001 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = communism }
-				random_list = {
-					50 = { add_popularity = { ideology = fascism popularity = 0.002 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.001 } add_popularity = { ideology = neutrality popularity = 0.001 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.002 } }
-				}
-			}
+			set_temp_variable = { drift_tick = 0.001 } # 0.1% per week (~0.4% month)
 		}
-
-		# LOW CRISIS (2% target shift)
 		else_if = {
 			limit = { has_idea = internal_crisis_low }
+			set_temp_variable = { drift_tick = 0.0005 } # 0.05% per week (~0.2% month)
+		}
+
+		# Execute Drift (Only if crisis active)
+		if = {
+			limit = { check_variable = { drift_tick > 0 } }
+			
+			# A. DEMOCRACIES -> Drift to Extremism ("Strong Hand" or "Revolution")
 			if = {
 				limit = { has_government = democratic }
 				random_list = {
-					40 = { add_popularity = { ideology = fascism popularity = 0.001 } }
-					40 = { add_popularity = { ideology = communism popularity = 0.001 } }
-					20 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
+					# 50% Fascism (Order/Nationalism)
+					50 = { add_popularity = { ideology = fascism popularity = var:drift_tick } }
+					# 50% Communism (Equality/Protest)
+					50 = { add_popularity = { ideology = communism popularity = var:drift_tick } }
 				}
 			}
-			else_if = {
-				limit = { has_government = neutrality }
-				random_list = {
-					35 = { add_popularity = { ideology = fascism popularity = 0.001 } } 
-					35 = { add_popularity = { ideology = communism popularity = 0.001 } } 
-					30 = { add_popularity = { ideology = democratic popularity = 0.001 } }
-				}
-			}
-			else_if = {
-				limit = { has_government = fascism }
-				random_list = {
-					50 = { add_popularity = { ideology = communism popularity = 0.001 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.0005 } add_popularity = { ideology = neutrality popularity = 0.0005 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
-				}
-			}
+			
+			# B. COMMUNISM -> Drift to Democracy (Freedom) or Fascism (Reaction)
 			else_if = {
 				limit = { has_government = communism }
 				random_list = {
-					50 = { add_popularity = { ideology = fascism popularity = 0.001 } }
-					25 = { add_popularity = { ideology = democratic popularity = 0.0005 } add_popularity = { ideology = neutrality popularity = 0.0005 } }
-					25 = { add_popularity = { ideology = neutrality popularity = 0.001 } }
+					# 40% Democracy (Peace/Freedom)
+					40 = { add_popularity = { ideology = democratic popularity = var:drift_tick } }
+					# 40% Fascism (Civil War/Coup)
+					40 = { add_popularity = { ideology = fascism popularity = var:drift_tick } }
+					# 20% Neturality (Apathy)
+					20 = { add_popularity = { ideology = neutrality popularity = var:drift_tick } }
+				}
+			}
+
+			# C. FASCISM -> Drift to Democracy (Peace) or Communism (Resistance)
+			else_if = {
+				limit = { has_government = fascism }
+				random_list = {
+					# 40% Democracy (Peace/Freedom)
+					40 = { add_popularity = { ideology = democratic popularity = var:drift_tick } }
+					# 40% Communism (Partisans)
+					40 = { add_popularity = { ideology = communism popularity = var:drift_tick } }
+					# 20% Neturality (Apathy)
+					20 = { add_popularity = { ideology = neutrality popularity = var:drift_tick } }
+				}
+			}
+			
+			# D. NEUTRALITY -> Radicalization in ALL directions
+			else = {
+				random_list = {
+					# 33% Democracy (Reformers)
+					33 = { add_popularity = { ideology = democratic popularity = var:drift_tick } }
+					# 33% Fascism (Nationalists)
+					33 = { add_popularity = { ideology = fascism popularity = var:drift_tick } }
+					# 33% Communism (Socialists)
+					33 = { add_popularity = { ideology = communism popularity = var:drift_tick } }
 				}
 			}
 		}
@@ -198,18 +180,21 @@ plus_cs_crisis_step = {
 			add_stability = var:stab_hit
 		}
 		
-		# Democratic Sensitivity
+		# Democratic Sensitivity — war fatigue destabilizes democracies more
 		if = {
 			limit = { has_government = democratic }
-			add_stability = var:stab_hit 
-			set_temp_variable = { pop_hit = -0.005 }
-			multiply_temp_variable = { pop_hit = var:fatigue_mult }
-			add_popularity = { ideology = democratic popularity = var:pop_hit }
-			
-			set_temp_variable = { opposition_growth = var:pop_hit }
-			multiply_temp_variable = { opposition_growth = -0.5 }
-			add_popularity = { ideology = communism popularity = var:opposition_growth }
-			add_popularity = { ideology = fascism popularity = var:opposition_growth }
+			add_stability = var:stab_hit
+			# Долгая война радикализирует население: буст крупнейшей оппозиции
+			set_temp_variable = { war_pop_drift = 0.001 }
+			multiply_temp_variable = { war_pop_drift = var:fatigue_mult }
+			# Дрифт в сторону самой большой оппозиции
+			if = {
+				limit = { fascism > communism }
+				add_popularity = { ideology = fascism popularity = var:war_pop_drift }
+			}
+			else = {
+				add_popularity = { ideology = communism popularity = var:war_pop_drift }
+			}
 		}
 	}
 }
@@ -223,21 +208,28 @@ plus_cs_internal_crisis_check_step = {
 	set_temp_variable = { crisis_level = 0 }
 	
 	if = {
-		limit = { OR = { has_war_support < 0.2 has_stability < 0.2 } }
+		limit = { 
+			OR = { has_war_support < 0.2 has_stability < 0.2 }
+			# CIVIL WAR GUARD
+			OR = {
+				has_civil_war = no
+				has_country_flag = plus_cs_had_civil_war
+			}
+		}
 		set_temp_variable = { crisis_level = 3 }
 		add_timed_idea = { idea = internal_crisis_high days = 60 }
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
 	}
 	else_if = {
-		limit = { OR = { has_war_support < 0.4 has_stability < 0.4 } }
+		limit = { has_war = yes OR = { has_war_support < 0.4 has_stability < 0.4 } }
 		set_temp_variable = { crisis_level = 2 }
 		add_timed_idea = { idea = internal_crisis_medium days = 60 }
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_low
 	}
 	else_if = {
-		limit = { OR = { has_war_support < 0.6 has_stability < 0.6 } }
+		limit = { has_war = yes OR = { has_war_support < 0.6 has_stability < 0.6 } }
 		set_temp_variable = { crisis_level = 1 }
 		add_timed_idea = { idea = internal_crisis_low days = 60 }
 		remove_ideas = internal_crisis_high
@@ -250,39 +242,9 @@ plus_cs_internal_crisis_check_step = {
 	}
 	
 	# ========================================
-	# ДИНАМИЧЕСКИЙ ДРИФТ К ОППОЗИЦИИ
-	# Зависит от текущей идеологии и уровня кризиса
+	# [REMOVED] MONTHLY IDEOLOGY DRIFT
+	# Logic moved to weekly 'plus_cs_crisis_step' for better granularity.
 	# ========================================
-	if = {
-		limit = { check_variable = { crisis_level > 0 } }
-		
-		# Базовое значение дрифта (0.5% / 1.5% / 3% за тик)
-		set_temp_variable = { drift_value = crisis_level }
-		multiply_temp_variable = { drift_value = 0.005 }
-		
-		# ФАШИЗМ → Дрифт к демократии и коммунизму
-		if = {
-			limit = { has_government = fascism }
-			add_popularity = { ideology = democratic popularity = drift_value }
-			add_popularity = { ideology = communism popularity = drift_value }
-		}
-		# КОММУНИЗМ → Дрифт к демократии
-		else_if = {
-			limit = { has_government = communism }
-			add_popularity = { ideology = democratic popularity = drift_value }
-		}
-		# ДЕМОКРАТИЯ → Дрифт к экстремизму (поровну)
-		else_if = {
-			limit = { has_government = democratic }
-			multiply_temp_variable = { drift_value = 0.5 }
-			add_popularity = { ideology = fascism popularity = drift_value }
-			add_popularity = { ideology = communism popularity = drift_value }
-		}
-		# НЕЙТРАЛ → Дрифт к демократии
-		else = {
-			add_popularity = { ideology = democratic popularity = drift_value }
-		}
-	}
 }
 
 # =============================================
