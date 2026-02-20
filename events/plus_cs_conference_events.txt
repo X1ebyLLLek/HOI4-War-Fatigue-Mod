@@ -117,28 +117,30 @@ country_event = {
 					every_owned_state = {
 						# Switch to Winner (PREV.PREV)
 						PREV.PREV = {
-							limit = {
-								# OPTIMIZATION: Only if relevant to this state (State is PREV)
-								PREV = {
-									OR = {
-										is_core_of = PREV.PREV # Winner
-										is_claimed_by = PREV.PREV
+							if = {
+								limit = {
+									# OPTIMIZATION: Only if relevant to this state (State is PREV)
+									PREV = {
+										OR = {
+											is_core_of = PREV.PREV # Winner
+											is_claimed_by = PREV.PREV
+										}
 									}
 								}
+								
+								set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
+								
+								# Decisions taken by COUNTRY (Winner), targeting STATE (PREV) or OWNER (PREV.owner)
+								activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
+								activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
+								
+								activate_targeted_decision = { target = PREV decision = peace_take_state }
+								activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+								activate_targeted_decision = { target = PREV decision = peace_claim }
+								
+								activate_targeted_decision = { target = PREV.owner decision = peace_puppet }
+								activate_targeted_decision = { target = PREV.owner decision = peace_liberate }
 							}
-							
-							set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
-							
-							# Decisions taken by COUNTRY (Winner), targeting STATE (PREV) or OWNER (PREV.owner)
-							activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
-							activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
-							
-							activate_targeted_decision = { target = PREV decision = peace_take_state }
-							activate_targeted_decision = { target = PREV decision = peace_set_dmz }
-							activate_targeted_decision = { target = PREV decision = peace_claim }
-							
-							activate_targeted_decision = { target = PREV.owner decision = peace_puppet }
-							activate_targeted_decision = { target = PREV.owner decision = peace_liberate }
 						}
 					}
 				}
