@@ -36,10 +36,11 @@ plus_cs_heavy_calc_step = {
 		}
 		add_dynamic_modifier = { modifier = war_inflation_crisis days = 35 }
 		# R4: Динамический удар от инфляции — масштабируется от тяжести кризисов
-		set_temp_variable = { inflation_hit = -0.003 }
-		if = { limit = { has_dynamic_modifier = manpower_strain_collapse } multiply_temp_variable = { inflation_hit = 2.0 } }
-		else_if = { limit = { has_dynamic_modifier = manpower_strain_high } multiply_temp_variable = { inflation_hit = 1.5 } }
-		if = { limit = { has_stability < 0.3 } multiply_temp_variable = { inflation_hit = 1.5 } }
+		# P1 FIX: Halved base, reduced multipliers to prevent cascade
+		set_temp_variable = { inflation_hit = -0.0015 }
+		if = { limit = { has_dynamic_modifier = manpower_strain_collapse } multiply_temp_variable = { inflation_hit = 1.5 } }
+		else_if = { limit = { has_dynamic_modifier = manpower_strain_high } multiply_temp_variable = { inflation_hit = 1.25 } }
+		if = { limit = { has_stability < 0.2 } multiply_temp_variable = { inflation_hit = 1.25 } }
 		add_stability = var:inflation_hit
 		add_war_support = var:inflation_hit
 	}

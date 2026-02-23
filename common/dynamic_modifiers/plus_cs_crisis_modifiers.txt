@@ -58,7 +58,7 @@ manpower_strain_mild = {
     icon = GFX_idea_conscription_crisis
     enable = { always = yes }
     
-    stability_factor = -0.05
+    stability_factor = -0.03    # P3 FIX: was -0.05
     industrial_capacity_factory = -0.05             
     production_factory_efficiency_gain_factor = -0.10 
     local_resources_factor = -0.05                  
@@ -73,7 +73,7 @@ manpower_strain_high = {
     icon = GFX_idea_conscription_crisis
     enable = { always = yes }
 
-    stability_factor = -0.15
+    stability_factor = -0.08    # P3 FIX: was -0.15
     industrial_capacity_factory = -0.15
     production_speed_buildings_factor = -0.15       
     production_factory_efficiency_gain_factor = -0.25
@@ -109,11 +109,11 @@ manpower_strain_collapse = {
                 
     required_garrison_factor = 0.25  
     supply_consumption_factor = 0.50
-    stability_factor = -0.25
+    stability_factor = -0.12    # P3 FIX: was -0.25
     monthly_population = -0.30  
 
     training_time_army_factor = 0.50
-    war_support_factor = -0.20
+    war_support_factor = -0.12  # P3 FIX: was -0.20
 }
 
 # ----------------------------------------------------------------------
@@ -151,10 +151,10 @@ army_cohesion_crisis = {
     resistance_target = 0.25     
     required_garrison_factor = 0.25  
     supply_consumption_factor = 0.50
-    stability_factor = -0.25
+    stability_factor = -0.12    # P3 FIX: was -0.25
     monthly_population = -0.30  
     training_time_army_factor = 0.50
-    war_support_factor = -0.20
+    war_support_factor = -0.12  # P3 FIX: was -0.20
 }
 
 # HOMEFRONT COLLAPSE (War Inflation + Internal Crisis High)
@@ -166,7 +166,7 @@ homefront_collapse = {
     # === ИЗ WAR_INFLATION_CRISIS ===
     consumer_goods_factor = 0.05
     # political_power_gain = -0.15 (Удалено дублирование, используется -0.30 ниже)
-    stability_factor = -0.05
+    stability_factor = -0.03    # P3 FIX: was -0.05
     production_speed_buildings_factor = -0.10
     local_resources_factor = -0.15
     fuel_gain_factor = -0.10
@@ -176,7 +176,7 @@ homefront_collapse = {
     # === ИЗ INTERNAL_CRISIS_HIGH (через idea) ===
     # political_power_gain уже есть, берём худшее = -0.30
     political_power_gain = -0.30
-    war_support_factor = -0.15
+    war_support_factor = -0.10  # P3 FIX: was -0.15
     production_speed_arms_factory_factor = -0.08
     training_time_army_factor = 0.15
     army_org_factor = -0.15
@@ -220,8 +220,8 @@ total_exhaustion = {
     
     # === ПРАВИТЕЛЬСТВО ПАРАЛИЗОВАНО ===
     political_power_gain = -1.0
-    stability_factor = -0.30
-    war_support_factor = -0.30
+    stability_factor = -0.15    # P3 FIX: was -0.30
+    war_support_factor = -0.20  # P3 FIX: was -0.30
     
     # === ЛОГИСТИКА РУХНУЛА ===
     supply_consumption_factor = 1.0

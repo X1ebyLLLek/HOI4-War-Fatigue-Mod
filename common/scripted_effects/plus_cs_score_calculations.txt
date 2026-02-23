@@ -109,14 +109,13 @@ plus_cs_calc_scores = {
 	if = { limit = { has_dynamic_modifier = officer_shortage_collapse } add_to_variable = { plus_cs_current_pressure = 40 } }
 	else_if = { limit = { has_dynamic_modifier = officer_shortage_high } add_to_variable = { plus_cs_current_pressure = 20 } }
 	
-	# === STABILITY COLLAPSE ===
-	if = { limit = { has_stability < 0.3 } add_to_variable = { plus_cs_current_pressure = 40 } }
-	if = { limit = { has_stability < 0.15 } add_to_variable = { plus_cs_current_pressure = 30 } } # +30 more
+	# === STABILITY COLLAPSE === P4 FIX: else_if (was cumulative +70 → now max +50)
+	if = { limit = { has_stability < 0.15 } add_to_variable = { plus_cs_current_pressure = 50 } }
+	else_if = { limit = { has_stability < 0.3 } add_to_variable = { plus_cs_current_pressure = 25 } }
 	
-	# === WAR SUPPORT DRAIN ===
-	# Low war support = people refuse to fight = extreme pressure
-	if = { limit = { has_war_support < 0.4 } add_to_variable = { plus_cs_current_pressure = 20 } }
-	if = { limit = { has_war_support < 0.25 } add_to_variable = { plus_cs_current_pressure = 40 } } # +40 more
+	# === WAR SUPPORT DRAIN === P4 FIX: else_if (was cumulative +60 → now max +40)
+	if = { limit = { has_war_support < 0.25 } add_to_variable = { plus_cs_current_pressure = 40 } }
+	else_if = { limit = { has_war_support < 0.4 } add_to_variable = { plus_cs_current_pressure = 15 } }
 	
 	# === CAPITAL LOST ===
 	if = {

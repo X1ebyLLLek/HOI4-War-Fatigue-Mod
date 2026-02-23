@@ -156,44 +156,74 @@ plus_cs_crisis_step = {
 		}
 	}
 
-	# 3. Late War Fatigue (Vietnam Effect)
+	# 3. War Fatigue — DRIVEN BY REAL CONDITIONS, NOT CALENDAR
+	# P2 FIX: Fatigue depends on: war duration, casualties, stability, war support
+	# NOT on global date. A country that joined in 1944 shouldn't suffer "late war" penalty.
 	if = {
 		limit = {
 			has_war = yes
-			date > 1942.1.1
 			NOT = { has_country_flag = plus_cs_exhausted }
+			has_country_flag = plus_cs_at_war_start # Only if country has been at war
 		}
 		
-		# OPT: else_if chain — dates are progressive
-		set_temp_variable = { fatigue_mult = 1 }
-		if = { limit = { date > 1946.1.1 } set_temp_variable = { fatigue_mult = 3 } }
-		else_if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
+		# Duration multiplier based on THIS COUNTRY's war duration, not global date
+		set_temp_variable = { fatigue_mult = 0 }
+		if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1825 } } set_temp_variable = { fatigue_mult = 3 } }      # 5+ years
+		else_if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } } set_temp_variable = { fatigue_mult = 2 } }  # 3+ years
+		else_if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } } set_temp_variable = { fatigue_mult = 1 } }   # 2+ years
+		# Under 2 years: fatigue_mult = 0, no time-based drain at all
 		
-		# Base Stab Hit
-		set_temp_variable = { stab_hit = -0.002 }
-		multiply_temp_variable = { stab_hit = var:fatigue_mult }
-		add_stability = var:stab_hit
-		
-		# Casualty Fatigue
+		# Base Stab Hit (only if war is actually long enough)
 		if = {
-			limit = { casualties > 500000 }
+			limit = { check_variable = { fatigue_mult > 0 } }
+			set_temp_variable = { stab_hit = -0.001 }
+			multiply_temp_variable = { stab_hit = var:fatigue_mult }
 			add_stability = var:stab_hit
 		}
 		
-		# Democratic Sensitivity — war fatigue destabilizes democracies more
+		# Casualty Fatigue — INDEPENDENT of war length, driven by real losses relative to population
+		if = {
+			limit = {
+				OR = {
+					has_dynamic_modifier = manpower_strain_mild
+					has_dynamic_modifier = manpower_strain_high
+					has_dynamic_modifier = manpower_strain_collapse
+				}
+			}
+			set_temp_variable = { cas_hit = -0.0005 }
+			# Heavier casualties = heavier hit
+			if = { limit = { has_dynamic_modifier = manpower_strain_collapse } multiply_temp_variable = { cas_hit = 3 } }
+			else_if = { limit = { has_dynamic_modifier = manpower_strain_high } multiply_temp_variable = { cas_hit = 2 } }
+			add_stability = var:cas_hit
+			add_war_support = var:cas_hit
+		}
+		
+		# Low War Support penalty — people don't want to fight
+		if = {
+			limit = { has_war_support < 0.3 }
+			add_stability = -0.0005
+		}
+		
+		# Democratic Sensitivity — independent additive, NOT triple-hit
 		if = {
 			limit = { has_government = democratic }
-			add_stability = var:stab_hit
-			# Долгая война радикализирует население: буст крупнейшей оппозиции
-			set_temp_variable = { war_pop_drift = 0.001 }
-			multiply_temp_variable = { war_pop_drift = var:fatigue_mult }
-			# Дрифт в сторону самой большой оппозиции
+			# Smaller additive penalty, not full stab_hit copy
+			set_temp_variable = { dem_hit = -0.0005 }
+			if = { limit = { check_variable = { fatigue_mult > 0 } } multiply_temp_variable = { dem_hit = var:fatigue_mult } }
+			add_stability = var:dem_hit
+			
+			# Long war radicalizes population
 			if = {
-				limit = { fascism > communism }
-				add_popularity = { ideology = fascism popularity = var:war_pop_drift }
-			}
-			else = {
-				add_popularity = { ideology = communism popularity = var:war_pop_drift }
+				limit = { check_variable = { fatigue_mult > 1 } }
+				set_temp_variable = { war_pop_drift = 0.0005 }
+				multiply_temp_variable = { war_pop_drift = var:fatigue_mult }
+				if = {
+					limit = { fascism > communism }
+					add_popularity = { ideology = fascism popularity = var:war_pop_drift }
+				}
+				else = {
+					add_popularity = { ideology = communism popularity = var:war_pop_drift }
+				}
 			}
 		}
 	}

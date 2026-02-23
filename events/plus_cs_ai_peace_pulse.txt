@@ -71,8 +71,8 @@ country_event = {
 				# ----------------------------------------------------------
 				# OPTION 1: DO NOTHING (Default)
 				# ----------------------------------------------------------
-				120 = {
-					# Base inertia: 120 (increased for less frequent proposals)
+				200 = {
+					# Base inertia: 200 (P5 FIX: was 120, increased to reduce premature proposals)
 					# Winning Bonus: If we are winning, this weight is HUGE.
 					modifier = {
 						add = 400

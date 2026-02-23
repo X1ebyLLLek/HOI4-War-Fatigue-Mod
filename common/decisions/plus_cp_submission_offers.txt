@@ -243,15 +243,22 @@ peace_options = {
 				has_war_support < 0.25
 			}
 			
-			# Высокие потери
+			# Высокие потери (через динамические модификаторы, чтобы учитывался размер страны)
 			modifier = {
 				add = 20
-				casualties > 100000
+				OR = {
+					has_dynamic_modifier = manpower_strain_mild
+					has_dynamic_modifier = manpower_strain_high
+					has_dynamic_modifier = manpower_strain_collapse
+				}
 			}
 			
 			modifier = {
 				add = 30
-				casualties > 500000
+				OR = {
+					has_dynamic_modifier = manpower_strain_high
+					has_dynamic_modifier = manpower_strain_collapse
+				}
 			}
 			
 			# Внутренний кризис прямо давит
