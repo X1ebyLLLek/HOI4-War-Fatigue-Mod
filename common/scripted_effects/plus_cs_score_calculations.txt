@@ -34,43 +34,115 @@ plus_cs_init_hidden_resolve = {
 plus_cs_calc_scores = {
 	
 	# --- 1. CALCULATE RESISTANCE TARGET (CAPACITY) ---
+	# THIS = How much punishment we CAN absorb before breaking
 	set_variable = { plus_cs_resistance_target = 100 } # Base
 	
-	# Ideology
+	# === IDEOLOGY RESILIENCE ===
+	# Totalitarian regimes enforce obedience through fear/propaganda
 	if = {
 		limit = { OR = { has_government = fascism has_government = communism } }
 		add_to_variable = { plus_cs_resistance_target = 50 }
 	}
+	# Democracies: resilient through institutions and legitimacy
+	if = {
+		limit = { has_government = democratic }
+		add_to_variable = { plus_cs_resistance_target = 20 }
+	}
 	
-	# War Stance (Now uses leader traits instead of obsolete flags)
-	# Note: Leader trait bonuses are already applied in lines 50-51, so this section is now a no-op.
-	# Keeping structure for future expansion (e.g., war-specific stance modifiers).
-	
-	# Leader Traits
+	# === LEADER TRAITS ===
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } add_to_variable = { plus_cs_resistance_target = 100 } }
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } subtract_from_variable = { plus_cs_resistance_target = 50 } }
 	
-	# Hidden Resolve (Character)
+	# === HIDDEN RESOLVE (Character) ===
 	add_to_variable = { plus_cs_resistance_target = plus_cs_hidden_resolve }
+	
+	# === MAJOR POWER BONUS ===
+	# Great powers have deeper reserves, stronger institutions, more to lose
+	if = {
+		limit = { is_major = yes }
+		add_to_variable = { plus_cs_resistance_target = 40 }
+	}
+	
+	# === ALLIANCE SUPPORT ===
+	# Being in a faction with a living major = hope and material aid
+	if = {
+		limit = {
+			is_in_faction = yes
+			any_other_country = {
+				is_in_faction_with = ROOT
+				is_major = yes
+				NOT = { has_capitulated = yes }
+			}
+		}
+		add_to_variable = { plus_cs_resistance_target = 30 }
+	}
+	
+	# === WAR SUPPORT AS MORALE ===
+	# High war_support = population endures more punishment
+	if = { limit = { has_war_support > 0.7 } add_to_variable = { plus_cs_resistance_target = 40 } }
+	if = { limit = { has_war_support > 0.5 } add_to_variable = { plus_cs_resistance_target = 20 } }
+	
+	# === NATIONAL SPIRIT IDEAS ===
+	# "Fight for Survival" / "Desperate Defense" = rally effect
+	if = { limit = { has_idea = fight_for_survival } add_to_variable = { plus_cs_resistance_target = 25 } }
+	if = { limit = { has_idea = desperate_defense_effort } add_to_variable = { plus_cs_resistance_target = 15 } }
 	
 	# Clamp Min to 10 (To avoid divide by zero or instant surrender bugs)
 	clamp_variable = { var = plus_cs_resistance_target min = 10 }
 	
 	
 	# --- 2. CALCULATE CURRENT PRESSURE (LOAD) ---
+	# THIS = How much punishment we ARE currently suffering
 	set_variable = { plus_cs_current_pressure = 0 }
 	
-	# Surrender Progress (0.0 to 1.0 -> 0 to 200 Pressure)
+	# === SURRENDER PROGRESS (Primary metric: 0.0-1.0 → 0-200) ===
 	set_temp_variable = { surr_score = surrender_progress }
 	multiply_temp_variable = { surr_score = 200 }
 	add_to_variable = { plus_cs_current_pressure = surr_score }
 	
-	# Casualties Factor (If manpower is drained)
-	if = { limit = { has_dynamic_modifier = manpower_strain_high } add_to_variable = { plus_cs_current_pressure = 30 } }
+	# === MANPOWER CRISIS === OPT: else_if chain (mutually exclusive)
 	if = { limit = { has_dynamic_modifier = manpower_strain_collapse } add_to_variable = { plus_cs_current_pressure = 60 } }
+	else_if = { limit = { has_dynamic_modifier = manpower_strain_high } add_to_variable = { plus_cs_current_pressure = 30 } }
+	else_if = { limit = { has_dynamic_modifier = manpower_strain_mild } add_to_variable = { plus_cs_current_pressure = 10 } }
 	
-	# Bombing / Stability hits
+	# === OFFICER CRISIS === OPT: else_if chain (mutually exclusive)
+	if = { limit = { has_dynamic_modifier = officer_shortage_collapse } add_to_variable = { plus_cs_current_pressure = 40 } }
+	else_if = { limit = { has_dynamic_modifier = officer_shortage_high } add_to_variable = { plus_cs_current_pressure = 20 } }
+	
+	# === STABILITY COLLAPSE ===
 	if = { limit = { has_stability < 0.3 } add_to_variable = { plus_cs_current_pressure = 40 } }
+	if = { limit = { has_stability < 0.15 } add_to_variable = { plus_cs_current_pressure = 30 } } # +30 more
+	
+	# === WAR SUPPORT DRAIN ===
+	# Low war support = people refuse to fight = extreme pressure
+	if = { limit = { has_war_support < 0.4 } add_to_variable = { plus_cs_current_pressure = 20 } }
+	if = { limit = { has_war_support < 0.25 } add_to_variable = { plus_cs_current_pressure = 40 } } # +40 more
+	
+	# === CAPITAL LOST ===
+	if = {
+		limit = { capital_scope = { NOT = { is_controlled_by = ROOT } } }
+		add_to_variable = { plus_cs_current_pressure = 50 }
+	}
+	
+	# === SYNERGY CRISES (Combined effects = catastrophic pressure) ===
+	if = { limit = { has_dynamic_modifier = army_cohesion_crisis } add_to_variable = { plus_cs_current_pressure = 40 } }
+	if = { limit = { has_dynamic_modifier = homefront_collapse } add_to_variable = { plus_cs_current_pressure = 50 } }
+	if = { limit = { has_dynamic_modifier = total_exhaustion } add_to_variable = { plus_cs_current_pressure = 80 } }
+	
+	# === INTERNAL POLITICAL CRISIS ===
+	if = { limit = { has_idea = internal_crisis_medium } add_to_variable = { plus_cs_current_pressure = 15 } }
+	if = { limit = { has_idea = internal_crisis_high } add_to_variable = { plus_cs_current_pressure = 35 } }
+	if = { limit = { has_idea = political_paralysis } add_to_variable = { plus_cs_current_pressure = 50 } }
+	
+	# === CAPITULATION ===
+	# Already capitulated = maximum existential pressure
+	if = {
+		limit = { has_capitulated = yes }
+		add_to_variable = { plus_cs_current_pressure = 80 }
+	}
+	
+	# === INFLATION ===
+	if = { limit = { has_dynamic_modifier = war_inflation_crisis } add_to_variable = { plus_cs_current_pressure = 15 } }
 	
 	
 	# --- 3. CALCULATE RATIO ---

@@ -76,10 +76,10 @@
  peace_disarmed_nation:0 "Entwaffnete Nation"
  peace_civilian_economy:0 "Zivilwirtschaft"
  ceasefire_economic_tribute:0 "Wirtschaftstribut für Waffenruhe"
- 
+
  # FIX: Neuer Key für Idea
  idea_conditional_surrender:0 "Bedingte Kapitulation (Geist)"
- 
+
  internal_crisis_low:0 "Niedrige interne Krise"
  internal_crisis_medium:0 "Mittlere interne Krise"
  internal_crisis_high:0 "Hohe interne Krise"
@@ -91,24 +91,24 @@
  humiliated_leader_desc:0 "Die Annahme schmachvoller Friedensbedingungen (Entwaffnung) hat den Ruf dieses Anführers befleckt. Das Volk nimmt ihn als schwach wahr."
 
  # --- NEUE MECHANIKEN: Wirtschaft 5.0 (Deutsch) ---
- 
+
  shadow_econ_civilian:0 "Investitionsparadies"
  shadow_econ_civilian_desc:0 "§GFriedensnische:§! Das Geschäft blüht, solange die Waffen schweigen. Bietet massiven Zuwachs an politischer Macht und die Chance auf §Yprivate Investitionen§!.\n\n§RUnwirksam im Krieg.§!"
- 
+
  shadow_econ_early:0 "Technische Vorbereitung"
  shadow_econ_early_desc:0 "§GLogistiknische:§! Der Staat konzentriert sich auf Infrastruktur und Verteidigung. Beste Wahl für den Bau von Bunkern, Radar und Straßen vor dem Krieg."
- 
+
  shadow_econ_partial:0 "Qualitätsproduktion"
  shadow_econ_partial_desc:0 "§GBalance:§! Der goldene Mittelweg. Fabriken arbeiten mit höchster Effizienz und Qualität, ohne das Tempo zu erzwingen."
- 
+
  shadow_econ_war:0 "Kriegsfließband"
  shadow_econ_war_desc:0 "§GQuantität:§! Massenproduktion von Waffen auf Kosten der Qualität (Zuverlässigkeit). \n\n§RWarnung:§! Längerer Einsatz in Friedenszeiten führt zu §YWirtschaftsüberhitzung§!."
- 
+
  shadow_econ_total:0 "Totale Erschöpfung"
  shadow_econ_total_desc:0 "§RVerzweiflung:§! Das Land ist ein einziges Militärlager. Maximale Baugeschwindigkeit auf Kosten der Zerstörung von §YWissenschaft§! und §YStabilität§!."
 
  # --- Andere Mechaniken ---
- 
+
  manpower_strain_mild:0 "§YArbeitskräftemangel§!"
  manpower_strain_mild_desc:0 "Die Mobilisierung beginnt, die Wirtschaft zu belasten. Maschinen stehen still und Lehrlinge ersetzen qualifizierte Ingenieure."
  manpower_strain_high:0 "§OArbeitsmarktkrise§!"
@@ -131,7 +131,7 @@
  # --- NEU: Ehrenhafte Unterwerfung ---
  offer_honorable_submission:0 "Ehrenhafte Unterwerfung anbieten"
  offer_honorable_submission_desc:0 "Unsere Lage ist kritisch. Wir bieten an, ein Untertan des Feindes zu werden, im Austausch für Schutz."
- 
+
  plus_cs_coalition_name:0 "Koalition der Rettung"
 
  rapid_autonomy_recovery:0 "Weg zur Unabhängigkeit"
@@ -189,10 +189,10 @@
 
  economic_retooling_shock_minor:0 "Leichter Umrüstungsschock"
  economic_retooling_shock_minor_desc:0 "Fabriken passen sich neuen Quoten an. Vorübergehender Rückgang der Effizienz."
- 
+
  economic_retooling_shock_medium:0 "Industrielle Umrüstung"
  economic_retooling_shock_medium_desc:0 "Signifikante Änderungen in Logistik und Produktionslinien. Fabriken arbeiten vorübergehend unterdurchschnittlich."
- 
+
  economic_retooling_shock_major:0 "Industrielle Lähmung"
  economic_retooling_shock_major_desc:0 "Drastische wirtschaftliche Veränderungen haben Chaos verursacht. Maschinen werden ausgetauscht. Die Produktion bricht ein."
 
@@ -215,7 +215,7 @@
  offer_preventive_submission_desc:0 "Ein Krieg mit einer Großmacht ist Selbstmord. Wir müssen anbieten, ihr Protektorat zu werden, bevor unsere Städte zerstört werden."
 
  # --- KORREKTUREN UND ERGÄNZUNGEN (Fixes and Additions) ---
- 
+
  # Fehlende Option im Kapitulations-Event
  plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
 
@@ -307,43 +307,43 @@
  peace_territory_preserved:0 "Gebietskontrolle erhalten"
 
  # --- Smart Diplomacy & Crises (Kluge Diplomatie & Krisen) ---
- 
+
  plus_cs_diplomacy.1.t:0 "Souveränitätsfrage"
  plus_cs_diplomacy.1.d:0 "Angesichts der überwältigenden Überlegenheit unseres Nachbarn hält unser Kommando einen Krieg für Selbstmord. Wir haben die Chance, die Nation zu retten, indem wir anbieten, ein Protektorat zu werden."
  plus_cs_diplomacy.1.a:0 "Vasallisierung anbieten"
-  
+
  plus_cs_diplomacy.2.t:0 "Unterwerfungsangebot"
  plus_cs_diplomacy.2.d:0 "[From.GetNameDef] versteht das Unvermeidliche und bietet an, im Austausch für Schutz unser Protektorat zu werden. Dies erlaubt uns, unseren Einfluss ohne einen einzigen Schuss zu erweitern."
  plus_cs_diplomacy.2.a:0 "Ihren Treueeid annehmen"
  plus_cs_diplomacy.2.b:0 "Wir wollen ihr Land, keine Eide! (Annektierung)"
  peaceful_vassalization:0 "Friedliche Vasallisierung"
  diplo_insult:0 "Diplomatische Beleidigung"
-  
+
  plus_cs_diplomacy.10.t:0 "Zusammenbruch des Lehnsherrn"
  plus_cs_diplomacy.10.d:0 "Unser Herr [Overlord.GetName] verliert den Krieg. Das Chaos im Mutterland gibt uns die einmalige Chance, die Unabhängigkeit wiederzuerlangen."
  plus_cs_diplomacy.10.a:0 "Unabhängigkeit erklären!"
  plus_cs_diplomacy.10.b:0 "Wir bleiben bis zum Ende loyal"
-  
+
  plus_cs_diplomacy.20.t:0 "Invasionsbedrohung"
  plus_cs_diplomacy.20.d:0 "Der Feind bereitet eine Invasion vor, und unsere Chancen im Krieg sind gleich null. Wir müssen Zugeständnisse anbieten, um eine Katastrophe zu verhindern."
  plus_cs_diplomacy.20.a:0 "Gebietsabtretungen anbieten"
-  
+
  plus_cs_diplomacy.21.t:0 "Diplomatische Auszahlung"
  plus_cs_diplomacy.21.d:0 "[From.GetNameDef], angesichts der Macht unserer Armee an der Grenze, bietet an, unsere territorialen Forderungen kampflos zu erfüllen, wenn wir zukünftige Nichtangriffe garantieren."
  plus_cs_diplomacy.21.a:0 "Zustimmen (Gebiete erhalten)"
  plus_cs_diplomacy.21.b:0 "Wir nehmen uns alles mit Gewalt!"
-  
+
  # --- Internal Crisis (Interne Krise) ---
  plus_cs_internal.1.t:0 "Ultimatum der Generäle"
  plus_cs_internal.1.d:0 "Die Armee ist ausgeblutet. Die Verluste haben die kritische Marke überschritten. Der Generalstab fordert entweder sofortigen Frieden oder einen Regierungswechsel."
  plus_cs_internal.1.a:0 "Säuberungen durchführen (Ablehnen)"
  plus_cs_internal.1.b:0 "Regierung tritt zurück (Putsch)"
  army_purge_aftershock:0 "Nachwirkungen der Armeesäuberung"
-  
+
  # --- Partisans (Partisanen) ---
  broken_nation_resistance:0 "Gebrochene aber unbesiegte Nation"
  plus_cs_partisan_activity:0 "Partisanenaktivität (Guerilla)"
-  
+
  # --- Crisis Decisions (Krisenentscheidungen) ---
  plus_cs_marshall_law:0 "Kriegsrecht ausrufen"
  plus_cs_marshall_law_desc:0 "Harte Maßnahmen zur Wiederherstellung der Ordnung. Reduziert die Produktivität, verhindert aber den Zusammenbruch des Landes."
@@ -378,62 +378,99 @@
  plus_cs_internal.3.a:0 "Angebot senden"
  plus_cs_purge_tt:0 "§RDie Säuberung des Oberkommandos reduziert die Armeeorganisation für 90 Tage§!"
  peace_treaty_desc:0 ""
- 
+
  # --- LOGIC EVENTS (Kapitulationsdebatte) ---
  plus_cs_logic.1.t:0 "Kabinettsdebatte über Kapitulation"
  plus_cs_logic.1.d:0 "Das Kabinett ist in Aufruhr. Der Feind steht an unseren Grenzen, und Stimmen in der Regierung fordern ein Ende des Blutvergießens. Die Hardliner bestehen jedoch darauf, dass Kapitulation Verrat ist."
  plus_cs_logic.1.a:0 "Wir kämpfen weiter! (Ablehnen)"
  plus_cs_logic.1.b:0 "Wir müssen verhandeln (Kapitulation)"
  plus_cs_surrender_proceed_tt:0 "§GZu formellen Kapitulationsverhandlungen übergehen§!"
- 
+
  # --- Leader Traits Debug ---
  plus_cs_spirit_fanatic_desc:0 "Dieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\n\n§RKI-Friedensakzeptanz: -100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "Dieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\n\n§GKI-Friedensakzeptanz: +100%§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Dieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\n\n§YKI-Friedensakzeptanz: Normal§!\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_diplomacy.20.b:0 "Wir werden uns nicht beugen!"
- 
+
  # --- Leader Traits (Base) ---
  plus_cs_spirit_fanatic:0 "Fanatiker"
  plus_cs_spirit_defeatist:0 "Defätist"
  plus_cs_spirit_resilient:0 "Widerstandsfähig"
- 
+
  # --- DEBUG DECISION ---
  plus_cs_debug_vars:0 "DEBUG: Verborgenen Willen prüfen"
  plus_cs_debug_vars_desc:0 "§OAktueller Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!\\n\\nVerwenden Sie diese Entscheidung, um den Wert zu protokollieren."
  plus_cs_debug_dump_all:0 "DEBUG: Willen ALLER Nationen in Log schreiben"
  plus_cs_debug_dump_all_desc:0 "Schreibt den Wert des Verborgenen Willens für JEDES Land in error.log (game.log)."
- 
+
  # --- CUSTOM TOOLTIPS ---
  plus_cs_spirit_fanatic_tt:0 "Armeeverteidigung auf Kernterritorium: §G+10.0%§!\\nDivisionsorganisation: §G+10.0%§!\\n\\nDieser Anführer wird niemals kapitulieren, solange die Nation nicht vollständig zerstört ist.\\n\\n§RKI-Friedensakzeptanz: -100%§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_tt:0 "Erholungsrate der Division: §R-10.0%§!\\nKapitulationsgrenze: §R+10.0%§!\\n\\nDieser Anführer ist pessimistisch und sucht beim ersten Anzeichen von Schwierigkeiten Frieden.\\n\\n§GKI-Friedensakzeptanz: +100%§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_tt:0 "Wöchentliche Stabilität: §G+0.10%§!\\n\\nDieser Anführer ist stur und leistet starken Widerstand gegen Kapitulation.\\n\\n§YKI-Friedensakzeptanz: Normal§!\\n§O[Debug]: Verborgener Wille: [?Root.plus_cs_hidden_resolve]§!"
 
-  # --- MISSING KEYS ---
-  peace_economic_tribute:0 "Wirtschaftstribut für Waffenruhe"
-  plus_cs_reparation_bonus_tt:0 "§GReparationsbonus:§! [FROM.GetName] ist verzweifelt nach Frieden und bietet §Y[?FROM.plus_cs_reparation_bonus] Politische Macht§! als Reparationen."
-  plus_cs_separate_peace_blocker:0 "Geist des Separatfriedens"
-  plus_cs_separate_peace_blocker_desc:0 "Dieses Land hat einen separaten Friedensvertrag unterzeichnet. Wir können keinen Fraktionen beitreten oder Verbündete rufen, aber unsere Grenzen sind sicher."
-  
-  # --- SYNERGY CRISIS ---
-  army_cohesion_crisis:0 "§RArmeeauflösung§!"
-  army_cohesion_crisis_desc:0 "Katastrophale Verluste und Offiziersmangel haben die Armee zerstört. Einheiten weigern sich anzugreifen, Soldaten desertieren."
-  homefront_collapse:0 "§RZusammenbruch der Heimatfront§!"
-  homefront_collapse_desc:0 "Inflation und politische Krise haben die Wirtschaft lahmgelegt. Streiks in den Fabriken, Brotschlangen werden zu Unruhen."
-  total_exhaustion:0 "§RTotale Erschöpfung§!"
-  total_exhaustion_desc:0 "Das Land kann nicht mehr Krieg führen. Armee aufgelöst, Wirtschaft tot, Regierung gelähmt."
-  political_paralysis:0 "§RPolitische Lähmung§!"
-  political_paralysis_desc:0 "Die Regierung ist handlungsunfähig. Stabilität und Kriegsunterstützung sind unter den kritischen Wert gefallen."
-  
-  # --- POLITICAL COLLAPSE EVENTS ---
-  plus_cs_internal.11.t:0 "Militärputsch"
-  plus_cs_internal.11.d:0 "Die Generäle haben die Macht übernommen. Die Armee hat die Regierung gestürzt, um die Nation zu retten."
-  plus_cs_internal.11.a:0 "Die Ordnung muss wiederhergestellt werden"
-  plus_cs_internal.12.t:0 "Politische Lähmung"
-  plus_cs_internal.12.d:0 "Die Regierung hat völlig die Kontrolle verloren. Endlose Debatten, Streiks und Unruhen haben die Nation gelähmt."
-  plus_cs_internal.12.a:0 "Wir sind machtlos..."
-  plus_cs_internal.13.t:0 "Erzwungene Kapitulation"
-  plus_cs_internal.13.d:0 "Die Regierung ist zusammengebrochen. Um die totale Vernichtung zu vermeiden, haben die verbliebenen Behörden beschlossen, sich zu ergeben."
-  plus_cs_internal.13.a:0 "Wir haben keine Wahl"
-  plus_cs.300.c:0 "Wir stehen allein da."
-  plus_cs_crisis_management:0 "Krisenmanagement"
-  plus_cs_debug_options:0 "Debug-Optionen"
+ # --- MISSING KEYS ---
+ peace_economic_tribute:0 "Wirtschaftstribut für Waffenruhe"
+ plus_cs_reparation_bonus_tt:0 "§GReparationsbonus:§! [FROM.GetName] ist verzweifelt nach Frieden und bietet §Y[?FROM.plus_cs_reparation_bonus] Politische Macht§! als Reparationen."
+ plus_cs_separate_peace_blocker:0 "Geist des Separatfriedens"
+ plus_cs_separate_peace_blocker_desc:0 "Dieses Land hat einen separaten Friedensvertrag unterzeichnet. Wir können keinen Fraktionen beitreten oder Verbündete rufen, aber unsere Grenzen sind sicher."
+
+ # --- SYNERGY CRISIS ---
+ army_cohesion_crisis:0 "§RArmeeauflösung§!"
+ army_cohesion_crisis_desc:0 "Katastrophale Verluste und Offiziersmangel haben die Armee zerstört. Einheiten weigern sich anzugreifen, Soldaten desertieren."
+ homefront_collapse:0 "§RZusammenbruch der Heimatfront§!"
+ homefront_collapse_desc:0 "Inflation und politische Krise haben die Wirtschaft lahmgelegt. Streiks in den Fabriken, Brotschlangen werden zu Unruhen."
+ total_exhaustion:0 "§RTotale Erschöpfung§!"
+ total_exhaustion_desc:0 "Das Land kann nicht mehr Krieg führen. Armee aufgelöst, Wirtschaft tot, Regierung gelähmt."
+ political_paralysis:0 "§RPolitische Lähmung§!"
+ political_paralysis_desc:0 "Die Regierung ist handlungsunfähig. Stabilität und Kriegsunterstützung sind unter den kritischen Wert gefallen."
+
+ # --- POLITICAL COLLAPSE EVENTS ---
+ plus_cs_internal.11.t:0 "Militärputsch"
+ plus_cs_internal.11.d:0 "Die Generäle haben die Macht übernommen. Die Armee hat die Regierung gestürzt, um die Nation zu retten."
+ plus_cs_internal.11.a:0 "Die Ordnung muss wiederhergestellt werden"
+ plus_cs_internal.12.t:0 "Politische Lähmung"
+ plus_cs_internal.12.d:0 "Die Regierung hat völlig die Kontrolle verloren. Endlose Debatten, Streiks und Unruhen haben die Nation gelähmt."
+ plus_cs_internal.12.a:0 "Wir sind machtlos..."
+ plus_cs_internal.13.t:0 "Erzwungene Kapitulation"
+ plus_cs_internal.13.d:0 "Die Regierung ist zusammengebrochen. Um die totale Vernichtung zu vermeiden, haben die verbliebenen Behörden beschlossen, sich zu ergeben."
+ plus_cs_internal.13.a:0 "Wir haben keine Wahl"
+ plus_cs.300.c:0 "Wir stehen allein da."
+ plus_cs_crisis_management:0 "Krisenmanagement"
+ plus_cs_debug_options:0 "Debug-Optionen"
+
+ plus_cp_demands:0 "Diplomatische Forderungen"
+ plus_cp_demands_desc:0 "Nutzen Sie diplomatisches Gewicht und die Androhung von Krieg, um Zugeständnisse zu fordern."
+ plus_cp_demand_core_states:0 "Kerngebiete zurückfordern"
+ plus_cp_demand_core_states_title:0 "Kerngebiete zurückfordern"
+ PLUS_CP_DEMAND_CORE_STATES_TITLE:0 "Kerngebiete zurückfordern"
+ PLUS_CP_DEMAND_CORE_STATES_ACTION_DESC:0 "Fordern Sie die Rückgabe unserer rechtmäßigen Kerngebiete, die derzeit von einer fremden Macht gehalten werden. Wenn sie sich weigern, bedeutet das Krieg."
+ plus_cs_demands.1.t:0 "Forderung nach Kerngebieten"
+ plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] hat uns ein formelles Ultimatum gestellt: Geben Sie ihre Kerngebiete sofort zurück oder rechnen Sie mit einer Invasion."
+ plus_cs_demands.1.a:0 "Wir haben keine andere Wahl, als nachzugeben."
+ plus_cs_demands.1.b:0 "Niemals! Macht euch bereit für den Krieg!"
+ plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] gibt nach"
+ plus_cs_demands.2.d:0 "Aus Angst vor unserer militärischen Macht haben sie sich unseren Forderungen gebeugt und unsere Gebiete friedlich zurückgegeben."
+ plus_cs_demands.2.a:0 "Ein unblutiger Sieg."
+ plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] weigert sich"
+ plus_cs_demands.3.d:0 "Sie haben unser Ultimatum unverschämt abgelehnt. Die Zeit für Diplomatie ist vorbei."
+ plus_cs_demands.3.a:0 "In den Krieg!"
+
+ # --- Einschränkungen für die Kerngebietsforderung ---
+ plus_cs_demand_not_core_tt:0 "Das Ziel muss mindestens einen unserer Kern- oder beanspruchten Staaten kontrollieren."
+ plus_cs_demand_not_at_war_tt:0 "Beide Nationen müssen im Frieden sein und dürfen keine Bürgerkriege haben."
+ plus_cs_demand_not_faction_tt:0 "Das Ziel darf nicht unser Untertan, Lehnsherr oder Fraktionsmitglied sein."
+ plus_cs_demand_no_recent_tt:0 "Wir haben ihm in letzter Zeit keine Gebietsforderung gestellt."
+ plus_cs_demand_full_annexation_tt:0 "Das Ziel muss mindestens einen Staat haben, der §RNICHT§! unser Kerngebiet ist. (Wir können nicht ihr gesamtes Land friedlich annektieren)."
+
+ plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs.250.a:0 "We submit... (Become puppet)"
+ plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
+ plus_cs.250.c:0 "Counter-propose conditional terms"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs_internal.14.t:0 "Overlord Annexation"
+ plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
+ plus_cs_internal.14.a:0 "Submit to direct rule"
+ plus_cs_internal.15.t:0 "Defection to the Enemy"
+ plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
+ plus_cs_internal.15.a:0 "Switch sides to survive"

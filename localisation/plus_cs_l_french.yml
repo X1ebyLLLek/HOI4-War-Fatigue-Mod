@@ -87,10 +87,10 @@
  peace_disarmed_nation:0 "Nation désarmée"
  peace_civilian_economy:0 "Économie civile"
  ceasefire_economic_tribute:0 "Tribut économique pour cessez-le-feu"
- 
+
  # FIX: Renommé pour éviter le doublon
  idea_conditional_surrender:0 "Reddition conditionnelle (Esprit)"
- 
+
  internal_crisis_low:0 "Crise interne faible"
  internal_crisis_medium:0 "Crise interne moyenne"
  internal_crisis_high:0 "Crise interne élevée"
@@ -102,24 +102,24 @@
  humiliated_leader_desc:0 "Le fait d'accepter des conditions de paix honteuses (désarmement) a entaché la réputation de ce dirigeant. Le peuple le perçoit comme faible."
 
  # --- NOUVELLES MÉCANIQUES: Économie 5.0 (Français) ---
- 
+
  shadow_econ_civilian:0 "Paradis de l'Investissement"
  shadow_econ_civilian_desc:0 "§GNiche de Paix :§! Les affaires prospèrent lorsque les armes se taisent. Fournit un gain massif de Pouvoir Politique et des chances d'§YInvestissements Privés§!.\n\n§RInefficace en guerre.§!"
- 
+
  shadow_econ_early:0 "Préparation Technique"
  shadow_econ_early_desc:0 "§GNiche Logistique :§! L'État se concentre sur les infrastructures et la défense. Idéal pour construire des bunkers, radars et routes avant la guerre."
- 
+
  shadow_econ_partial:0 "Production de Qualité"
  shadow_econ_partial_desc:0 "§GÉquilibre :§! Le juste milieu. Les usines fonctionnent avec une efficacité et une qualité maximales, sans forcer la cadence."
- 
+
  shadow_econ_war:0 "Chaîne de Montage de Guerre"
  shadow_econ_war_desc:0 "§GQuantité :§! Production de masse d'armes au détriment de la qualité (fiabilité). \n\n§RAttention :§! Une utilisation prolongée en temps de paix provoquera une §YSurchauffe Économique§!."
- 
+
  shadow_econ_total:0 "Épuisement Total"
  shadow_econ_total_desc:0 "§RDésespoir :§! Le pays est un camp militaire unique. Vitesse de construction maximale au prix de la destruction de la §YScience§! et de la §YStabilité§!."
 
  # --- Autres mécaniques ---
- 
+
  manpower_strain_mild:0 "§YPénurie de main-d'œuvre§!"
  manpower_strain_mild_desc:0 "La mobilisation commence à affecter l'économie. Les machines sont à l'arrêt et les ingénieurs qualifiés sont remplacés par des apprentis."
  manpower_strain_high:0 "§OCrise du marché du travail§!"
@@ -139,10 +139,10 @@
  COUNTRY_subject_DEF:0 "$OVERLORDADJ$ $NONIDEOLOGY$"
  COUNTRY_subject_ADJ:0 "$OVERLORDADJ$ $NONIDEOLOGYADJ$"
 
-# --- NOUVEAU : Soumission Honorable ---
+ # --- NOUVEAU : Soumission Honorable ---
  offer_honorable_submission:0 "Offrir une soumission honorable"
  offer_honorable_submission_desc:0 "Notre situation est critique. Nous offrons de devenir un sujet de l'ennemi en échange de notre survie."
- 
+
  plus_cs_coalition_name:0 "Coalition du Salut"
 
  rapid_autonomy_recovery:0 "Chemin vers l'indépendance"
@@ -170,7 +170,7 @@
  plus_cs.submission.4.a:0 "Nous devons intervenir !"
  plus_cs.submission.4.b:0 "Ce n'est pas notre combat."
 
-# Chaos des officiers
+ # Chaos des officiers
  officer_shortage_mild:0 "§YConfusion du commandement§!"
  officer_shortage_mild_desc:0 "L'expansion rapide de l'armée a dilué la qualité de notre corps d'officiers."
  officer_shortage_high:0 "§OCrise des officiers§!"
@@ -178,7 +178,7 @@
  officer_shortage_collapse:0 "§REffondrement de l'État-major§!"
  officer_shortage_collapse_desc:0 "La chaîne de commandement s'est désintégrée. La panique règne au QG."
 
-# --- Décisions PP : Gestion de crise ---
+ # --- Décisions PP : Gestion de crise ---
  decision_category_crisis_management:0 "Gestion de crise"
  decree_stop_panic:0 "Décret : « Pas un pas en arrière ! »"
  decree_stop_panic_desc:0 "La panique se répand après la perte de villes clés. Nous devons prendre un décret sévère pour rétablir l'ordre immédiatement."
@@ -194,20 +194,20 @@
  stimulus_mil_industrial_complex:0 "Injection militaro-industrielle"
  stimulus_mil_industrial_complex_desc:0 "Soutenir artificiellement l'industrie de l'armement. Coûteux, mais nécessaire pour la production de guerre totale."
 
-# --- NOUVEAU : Inertie industrielle et inflation ---
+ # --- NOUVEAU : Inertie industrielle et inflation ---
  war_inflation_crisis:0 "Crise d'inflation de guerre"
  war_inflation_crisis_desc:0 "La guerre dure depuis trop longtemps. La monnaie est dévaluée et la construction civile ralentit."
 
  economic_retooling_shock_minor:0 "Choc de réoutillage mineur"
  economic_retooling_shock_minor_desc:0 "Les usines s'adaptent aux nouveaux quotas. Baisse temporaire de l'efficacité."
- 
+
  economic_retooling_shock_medium:0 "Réoutillage industriel"
  economic_retooling_shock_medium_desc:0 "Changements importants dans la logistique et les chaînes de production. Les usines tournent au ralenti."
- 
+
  economic_retooling_shock_major:0 "Paralysie industrielle"
  economic_retooling_shock_major_desc:0 "Des changements économiques drastiques ont provoqué le chaos. Les machines sont remplacées. La production s'effondre."
 
-# --- NOUVEAU : Le sort des marionnettes ---
+ # --- NOUVEAU : Le sort des marionnettes ---
  plus_cs.puppet_fate.t:0 "La Chute du Suzerain"
  plus_cs.puppet_fate.d:0 "Notre gouvernement a reçu des nouvelles choquantes : notre suzerain a capitulé et accepté les conditions de [event_target:new_potential_master.GetNameDef]. L'ancien ordre s'est effondré.\n\nLes vainqueurs exigent que nous déposions immédiatement les armes et reconnaissions leur autorité. L'alternative est l'indépendance totale, mais en restant en guerre contre leur puissante machine militaire."
  plus_cs.puppet_fate.a:0 "Nous reconnaissons notre nouveau maître (Bonus économiques)"
@@ -217,7 +217,7 @@
  high_status_puppet_benefit:0 "Sujet Privilégié"
  high_status_puppet_benefit_desc:0 "Nous avons accepté pacifiquement le nouvel ordre. En échange de notre loyauté, notre nouveau suzerain investit dans notre économie et garantit la stabilité."
 
-# В секцию "Idées"
+ # В секцию "Idées"
  panic_retreat_shock:0 "Choc de retraite paniquée"
  panic_retreat_shock_desc:0 "La perte de villes clés a déclenché une vague de panique dans l'armée. L'organisation s'effondre, les soldats désertent. Nous devons prendre des mesures sévères !"
 
@@ -225,8 +225,8 @@
  offer_preventive_submission:0 "Offrir une soumission préventive"
  offer_preventive_submission_desc:0 "La guerre contre une grande puissance est un suicide. Nous devons proposer de devenir leur protectorat avant que nos villes ne soient détruites."
 
-# --- CORRECTIONS ET AJOUTS (Fixes and Additions) ---
- 
+ # --- CORRECTIONS ET AJOUTS (Fixes and Additions) ---
+
  # Option manquante dans l'événement de reddition
  plus_cs.submission.1.c:0 "Céder les territoires revendiqués (Paix)"
 
@@ -249,179 +249,216 @@
  # Description de l'Esprit National (Si le code utilise id=conditional_surrender)
  conditional_surrender_desc:0 "Ce pays a admis sa défaite sous conditions. Il ne peut rejoindre aucune faction ni créer d'alliances tant que les restrictions du traité sont en vigueur."
 
-# ==============================================================================
-# NOUVEAU : MÉCANIQUES DE GUERRE MONDIALE ET D'ALLIANCE
-# ==============================================================================
+ # ==============================================================================
+ # NOUVEAU : MÉCANIQUES DE GUERRE MONDIALE ET D'ALLIANCE
+ # ==============================================================================
 
-  # --- Notification de paix séparée ---
-  plus_cs.410.t:0 "Paix séparée sur le front [From.GetAdjective]"
-  plus_cs.410.d:0 "[From.GetNameDef] a conclu une paix séparée avec notre ennemi. Cependant, grâce à notre présence militaire, le contrôle des territoires que nous occupons a été préservé."
-  plus_cs.410.a:0 "Nos positions sont sécurisées."
-  plus_cs_territory_preserved_tt:0 "§GLes territoires sous notre contrôle ont été préservés !§!"
-  
-  # --- Chef de faction : un membre veut partir ---
-  plus_cs.420.t:0 "[From.GetNameDefCap] demande à quitter l'alliance"
-  plus_cs.420.d:0 "Le gouvernement de [From.GetNameDef] a demandé la permission de quitter notre alliance afin de négocier une paix séparée. Ils affirment que leur pays ne peut plus supporter le fardeau de la guerre."
-  plus_cs.420.a:0 "Nous les libérons (Autoriser la sortie)"
-  plus_cs.420.b:0 "Ils doivent se battre ! (Refuser)"
-  
-  # --- Membre de faction : autorisé à partir ---
-  plus_cs.421.t:0 "Permission de partir accordée"
-  plus_cs.421.d:0 "Notre chef d'alliance a compris notre situation et nous a permis de quitter l'alliance. Nous pouvons maintenant négocier une paix séparée."
-  plus_cs.421.a:0 "Nous sommes reconnaissants pour la compréhension."
-  plus_cs_can_now_peace_tt:0 "§GVous pouvez maintenant négocier une paix séparée§!"
-  
-  # --- Membre de faction : sortie refusée ---
-  plus_cs.422.t:0 "Sortie refusée !"
-  plus_cs.422.d:0 "Notre chef d'alliance a rejeté notre demande de départ. Ils exigent que nous continuions à nous battre malgré l'épuisement de notre pays.\n\nNous pouvons nous conformer à leur décision ou aller contre la volonté de l'alliance et partir unilatéralement."
-  plus_cs.422.a:0 "Se conformer et continuer la guerre"
-  plus_cs.422.b:0 "Partir contre leur volonté ! (Conséquences)"
-  
-  # --- Allié capitulé veut la paix ---
-  plus_cs.430.t:0 "[From.GetNameDefCap] demande la reddition"
-  plus_cs.430.d:0 "[From.GetNameDef] a capitulé et demande notre permission pour une reddition complète à l'ennemi. Si nous l'autorisons, ils quitteront notre alliance."
-  plus_cs.430.a:0 "Autoriser la reddition séparée"
-  plus_cs.430.b:0 "Ils doivent attendre une paix générale"
-  
-  # --- Reddition séparée autorisée ---
-  plus_cs.431.t:0 "Permission accordée"
-  plus_cs.431.d:0 "Notre chef d'alliance nous a permis de négocier une paix séparée. Nous quittons l'alliance."
-  plus_cs.431.a:0 "C'est la seule solution..."
-  
-  # --- Reddition refusée ---
-  plus_cs.432.t:0 "Reddition refusée"
-  plus_cs.432.d:0 "Nous avons été privés du droit à une paix séparée. Nous restons un membre capitulé de l'alliance et devons attendre l'issue générale de la guerre."
-  plus_cs.432.a:0 "Nous n'avons pas le choix..."
+ # --- Notification de paix séparée ---
+ plus_cs.410.t:0 "Paix séparée sur le front [From.GetAdjective]"
+ plus_cs.410.d:0 "[From.GetNameDef] a conclu une paix séparée avec notre ennemi. Cependant, grâce à notre présence militaire, le contrôle des territoires que nous occupons a été préservé."
+ plus_cs.410.a:0 "Nos positions sont sécurisées."
+ plus_cs_territory_preserved_tt:0 "§GLes territoires sous notre contrôle ont été préservés !§!"
 
-  # --- Nouvelles idées ---
-  forced_continuation_war:0 "Continuation forcée de la guerre"
-  forced_continuation_war_desc:0 "Notre alliance exige que nous continuions à nous battre malgré notre épuisement. La population est démoralisée, l'armée est fatiguée, mais nous ne sommes pas autorisés à nous rendre."
+ # --- Chef de faction : un membre veut partir ---
+ plus_cs.420.t:0 "[From.GetNameDefCap] demande à quitter l'alliance"
+ plus_cs.420.d:0 "Le gouvernement de [From.GetNameDef] a demandé la permission de quitter notre alliance afin de négocier une paix séparée. Ils affirment que leur pays ne peut plus supporter le fardeau de la guerre."
+ plus_cs.420.a:0 "Nous les libérons (Autoriser la sortie)"
+ plus_cs.420.b:0 "Ils doivent se battre ! (Refuser)"
 
-  # --- Modificateurs d'opinion ---
-  faction_betrayal:0 "Trahison de l'alliance"
-  faction_deserter:0 "Désertion de l'alliance"
-  peace_territory_preserved:0 "Contrôle territorial préservé"
+ # --- Membre de faction : autorisé à partir ---
+ plus_cs.421.t:0 "Permission de partir accordée"
+ plus_cs.421.d:0 "Notre chef d'alliance a compris notre situation et nous a permis de quitter l'alliance. Nous pouvons maintenant négocier une paix séparée."
+ plus_cs.421.a:0 "Nous sommes reconnaissants pour la compréhension."
+ plus_cs_can_now_peace_tt:0 "§GVous pouvez maintenant négocier une paix séparée§!"
 
-  # Peace Acceptance Chance Tooltips
-  plus_cs_chance_high_tt:0 "§GForte probabilité d'acceptation§!"
-  plus_cs_chance_medium_tt:0 "§YProbabilité moyenne d'acceptation§!"
-  plus_cs_chance_low_tt:0 "§RFaible probabilité d'acceptation§!"
+ # --- Membre de faction : sortie refusée ---
+ plus_cs.422.t:0 "Sortie refusée !"
+ plus_cs.422.d:0 "Notre chef d'alliance a rejeté notre demande de départ. Ils exigent que nous continuions à nous battre malgré l'épuisement de notre pays.\n\nNous pouvons nous conformer à leur décision ou aller contre la volonté de l'alliance et partir unilatéralement."
+ plus_cs.422.a:0 "Se conformer et continuer la guerre"
+ plus_cs.422.b:0 "Partir contre leur volonté ! (Conséquences)"
 
-  # --- Smart Diplomacy (Manquant) ---
-  plus_cs_diplomacy.1.t:0 "Question de Souveraineté"
-  plus_cs_diplomacy.1.d:0 "Face à la supériorité écrasante de notre voisin, notre commandement considère la guerre comme un suicide. Nous avons une chance de sauver la nation en offrant de devenir un protectorat."
-  plus_cs_diplomacy.1.a:0 "Envoyer une offre de vassalisation"
-  
-  plus_cs_diplomacy.2.t:0 "Offre de soumission"
-  plus_cs_diplomacy.2.d:0 "[From.GetNameDef] comprend l'inévitable et propose de devenir notre protectorat en échange de protection."
-  plus_cs_diplomacy.2.a:0 "Accepter leur serment d'allégeance"
-  plus_cs_diplomacy.2.b:0 "Nous voulons leurs terres, pas des serments ! (Annexion)"
-  
-  peaceful_vassalization:0 "Vassalisation pacifique"
-  diplo_insult:0 "Insulte diplomatique"
-  
-  plus_cs_diplomacy.10.t:0 "Effondrement du Suzerain"
-  plus_cs_diplomacy.10.d:0 "Notre maître [Overlord.GetName] perd la guerre. Le chaos en métropole nous donne une chance unique de retrouver l'indépendance."
-  plus_cs_diplomacy.10.a:0 "Déclarer l'indépendance !"
-  plus_cs_diplomacy.10.b:0 "Nous resterons loyaux jusqu'au bout"
-  
-  plus_cs_diplomacy.20.t:0 "Menace d'invasion"
-  plus_cs_diplomacy.20.d:0 "L'ennemi prépare une invasion, et nos chances sont nulles. Nous devons offrir des concessions pour éviter une catastrophe."
-  plus_cs_diplomacy.20.a:0 "Offrir des concessions territoriales"
-  
-  plus_cs_diplomacy.21.t:0 "Paiement diplomatique"
-  plus_cs_diplomacy.21.d:0 "[From.GetNameDef] offre de satisfaire nos revendications territoriales sans combat."
-  plus_cs_diplomacy.21.a:0 "Accepter (Recevoir territoires)"
-  plus_cs_diplomacy.21.b:0 "Nous prendrons tout par la force !"
-  
-  # --- Crise Interne ---
-  plus_cs_internal.1.t:0 "Ultimatum des Généraux"
-  plus_cs_internal.1.d:0 "L'armée est exsangue. L'État-major exige la paix immédiate ou un changement de gouvernement."
-  plus_cs_internal.1.a:0 "Mener des purges (Refuser)"
-  plus_cs_internal.1.b:0 "Le gouvernement démissionne (Coup d'État)"
-  army_purge_aftershock:0 "Conséquences des purges de l'armée"
-  broken_nation_resistance:0 "Nation brisée mais non conquise"
-  
-  # --- Veto Logic ---
-  plus_cs.20.t:0 "[From.GetNameDefCap] Demande la permission de paix"
-  plus_cs.20.d:0 "[From.GetNameDef] demande notre permission pour négocier la paix."
-  plus_cs.20.a:0 "Autoriser les négociations"
-  plus_cs.20.b:0 "Interdire ! (Veto)"
-  
-  plus_cs.21.t:0 "Permission accordée"
-  plus_cs.21.d:0 "Notre chef d'alliance a accepté de nous laisser négocier."
-  
-  plus_cs.22.t:0 "Permission refusée"
-  plus_cs.22.d:0 "Notre chef d'alliance nous a interdit de négocier la paix."
-  plus_cs.22.a:0 "Nous devons obéir."
-  plus_cs.22.b:0 "Nous négocierons quand même ! (Quitter l'alliance)"
-  
-  plus_cs.23.t:0 "[From.GetNameDefCap] Propose une paix séparée"
-  plus_cs.23.d:0 "[From.GetNameDef] offre un accord de paix séparé, défiant son chef d'alliance."
-  plus_cs.23.a:0 "Refuser"
-  plus_cs.23.b:0 "Accepter la paix séparée"
-  
-  plus_cs_internal.3.t:0 "Négociation de paix blanche"
-  plus_cs_internal.3.d:0 "Le nouveau gouvernement cherche à mettre fin à la guerre immédiatement."
-  plus_cs_internal.3.a:0 "Envoyer une offre"
-  plus_cs_purge_tt:0 "§RLes purges réduisent l'organisation de l'armée pendant 90 jours§!"
+ # --- Allié capitulé veut la paix ---
+ plus_cs.430.t:0 "[From.GetNameDefCap] demande la reddition"
+ plus_cs.430.d:0 "[From.GetNameDef] a capitulé et demande notre permission pour une reddition complète à l'ennemi. Si nous l'autorisons, ils quitteront notre alliance."
+ plus_cs.430.a:0 "Autoriser la reddition séparée"
+ plus_cs.430.b:0 "Ils doivent attendre une paix générale"
+
+ # --- Reddition séparée autorisée ---
+ plus_cs.431.t:0 "Permission accordée"
+ plus_cs.431.d:0 "Notre chef d'alliance nous a permis de négocier une paix séparée. Nous quittons l'alliance."
+ plus_cs.431.a:0 "C'est la seule solution..."
+
+ # --- Reddition refusée ---
+ plus_cs.432.t:0 "Reddition refusée"
+ plus_cs.432.d:0 "Nous avons été privés du droit à une paix séparée. Nous restons un membre capitulé de l'alliance et devons attendre l'issue générale de la guerre."
+ plus_cs.432.a:0 "Nous n'avons pas le choix..."
+
+ # --- Nouvelles idées ---
+ forced_continuation_war:0 "Continuation forcée de la guerre"
+ forced_continuation_war_desc:0 "Notre alliance exige que nous continuions à nous battre malgré notre épuisement. La population est démoralisée, l'armée est fatiguée, mais nous ne sommes pas autorisés à nous rendre."
+
+ # --- Modificateurs d'opinion ---
+ faction_betrayal:0 "Trahison de l'alliance"
+ faction_deserter:0 "Désertion de l'alliance"
+ peace_territory_preserved:0 "Contrôle territorial préservé"
+
+ # Peace Acceptance Chance Tooltips
+ plus_cs_chance_high_tt:0 "§GForte probabilité d'acceptation§!"
+ plus_cs_chance_medium_tt:0 "§YProbabilité moyenne d'acceptation§!"
+ plus_cs_chance_low_tt:0 "§RFaible probabilité d'acceptation§!"
+
+ # --- Smart Diplomacy (Manquant) ---
+ plus_cs_diplomacy.1.t:0 "Question de Souveraineté"
+ plus_cs_diplomacy.1.d:0 "Face à la supériorité écrasante de notre voisin, notre commandement considère la guerre comme un suicide. Nous avons une chance de sauver la nation en offrant de devenir un protectorat."
+ plus_cs_diplomacy.1.a:0 "Envoyer une offre de vassalisation"
+
+ plus_cs_diplomacy.2.t:0 "Offre de soumission"
+ plus_cs_diplomacy.2.d:0 "[From.GetNameDef] comprend l'inévitable et propose de devenir notre protectorat en échange de protection."
+ plus_cs_diplomacy.2.a:0 "Accepter leur serment d'allégeance"
+ plus_cs_diplomacy.2.b:0 "Nous voulons leurs terres, pas des serments ! (Annexion)"
+
+ peaceful_vassalization:0 "Vassalisation pacifique"
+ diplo_insult:0 "Insulte diplomatique"
+
+ plus_cs_diplomacy.10.t:0 "Effondrement du Suzerain"
+ plus_cs_diplomacy.10.d:0 "Notre maître [Overlord.GetName] perd la guerre. Le chaos en métropole nous donne une chance unique de retrouver l'indépendance."
+ plus_cs_diplomacy.10.a:0 "Déclarer l'indépendance !"
+ plus_cs_diplomacy.10.b:0 "Nous resterons loyaux jusqu'au bout"
+
+ plus_cs_diplomacy.20.t:0 "Menace d'invasion"
+ plus_cs_diplomacy.20.d:0 "L'ennemi prépare une invasion, et nos chances sont nulles. Nous devons offrir des concessions pour éviter une catastrophe."
+ plus_cs_diplomacy.20.a:0 "Offrir des concessions territoriales"
+
+ plus_cs_diplomacy.21.t:0 "Paiement diplomatique"
+ plus_cs_diplomacy.21.d:0 "[From.GetNameDef] offre de satisfaire nos revendications territoriales sans combat."
+ plus_cs_diplomacy.21.a:0 "Accepter (Recevoir territoires)"
+ plus_cs_diplomacy.21.b:0 "Nous prendrons tout par la force !"
+
+ # --- Crise Interne ---
+ plus_cs_internal.1.t:0 "Ultimatum des Généraux"
+ plus_cs_internal.1.d:0 "L'armée est exsangue. L'État-major exige la paix immédiate ou un changement de gouvernement."
+ plus_cs_internal.1.a:0 "Mener des purges (Refuser)"
+ plus_cs_internal.1.b:0 "Le gouvernement démissionne (Coup d'État)"
+ army_purge_aftershock:0 "Conséquences des purges de l'armée"
+ broken_nation_resistance:0 "Nation brisée mais non conquise"
+
+ # --- Veto Logic ---
+ plus_cs.20.t:0 "[From.GetNameDefCap] Demande la permission de paix"
+ plus_cs.20.d:0 "[From.GetNameDef] demande notre permission pour négocier la paix."
+ plus_cs.20.a:0 "Autoriser les négociations"
+ plus_cs.20.b:0 "Interdire ! (Veto)"
+
+ plus_cs.21.t:0 "Permission accordée"
+ plus_cs.21.d:0 "Notre chef d'alliance a accepté de nous laisser négocier."
+
+ plus_cs.22.t:0 "Permission refusée"
+ plus_cs.22.d:0 "Notre chef d'alliance nous a interdit de négocier la paix."
+ plus_cs.22.a:0 "Nous devons obéir."
+ plus_cs.22.b:0 "Nous négocierons quand même ! (Quitter l'alliance)"
+
+ plus_cs.23.t:0 "[From.GetNameDefCap] Propose une paix séparée"
+ plus_cs.23.d:0 "[From.GetNameDef] offre un accord de paix séparé, défiant son chef d'alliance."
+ plus_cs.23.a:0 "Refuser"
+ plus_cs.23.b:0 "Accepter la paix séparée"
+
+ plus_cs_internal.3.t:0 "Négociation de paix blanche"
+ plus_cs_internal.3.d:0 "Le nouveau gouvernement cherche à mettre fin à la guerre immédiatement."
+ plus_cs_internal.3.a:0 "Envoyer une offre"
+ plus_cs_purge_tt:0 "§RLes purges réduisent l'organisation de l'armée pendant 90 jours§!"
 
  # --- LOGIC EVENTS (Débat sur la Reddition) ---
  plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
-plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
-plus_cs_logic.1.d:0 "Le cabinet est dans la tourmente. L'ennemi presse nos frontières, et des voix s'élèvent pour demander la fin de l'effusion de sang. Cependant, les partisans de la ligne dure insistent sur le fait que la reddition est une trahison."
-plus_cs_logic.1.a:0 "Nous continuerons le combat ! (Refuser)"
-plus_cs_logic.1.b:0 "Il faut négocier (Reddition)"
-plus_cs_surrender_proceed_tt:0 "§GProcéder aux négociations formelles de reddition§!"
+ plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
+ plus_cs_logic.1.d:0 "Le cabinet est dans la tourmente. L'ennemi presse nos frontières, et des voix s'élèvent pour demander la fin de l'effusion de sang. Cependant, les partisans de la ligne dure insistent sur le fait que la reddition est une trahison."
+ plus_cs_logic.1.a:0 "Nous continuerons le combat ! (Refuser)"
+ plus_cs_logic.1.b:0 "Il faut négocier (Reddition)"
+ plus_cs_surrender_proceed_tt:0 "§GProcéder aux négociations formelles de reddition§!"
 
  # --- Leader Traits Debug ---
-plus_cs_spirit_fanatic_desc:0 "Ce dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
-plus_cs_spirit_defeatist_desc:0 "Ce dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
-plus_cs_spirit_resilient_desc:0 "Ce dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
-plus_cs_diplomacy.20.b:0 "Nous ne nous inclinerons pas !"
- 
- # --- Leader Traits (Base) ---
-plus_cs_spirit_fanatic:0 "Fanatique"
-plus_cs_spirit_defeatist:0 "Défaitiste"
-plus_cs_spirit_resilient:0 "Résilient"
- 
- # --- DEBUG DECISION ---
-plus_cs_debug_vars:0 "DEBUG: Vérifier la Volonté Cachée"
-plus_cs_debug_vars_desc:0 "§OVolonté Cachée Actuelle: [?Root.plus_cs_hidden_resolve]§!\n\nUtilisez cette décision pour enregistrer la valeur."
-plus_cs_debug_dump_all:0 "DEBUG: Écrire la Volonté de TOUTES les nations dans le log"
-plus_cs_debug_dump_all_desc:0 "Écrit la valeur de la Volonté Cachée pour CHAQUE pays dans error.log (game.log)."
- 
- # --- CUSTOM TOOLTIPS ---
-plus_cs_spirit_fanatic_tt:0 "Défense de l'armée sur le territoire national: §G+10.0%§!\nOrganisation de division: §G+10.0%§!\n\nCe dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
-plus_cs_spirit_defeatist_tt:0 "Taux de récupération de division: §R-10.0%§!\nLimite de capitulation: §R+10.0%§!\n\nCe dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
-plus_cs_spirit_resilient_tt:0 "Stabilité hebdomadaire: §G+0.10%§!\n\nCe dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_fanatic_desc:0 "Ce dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_desc:0 "Ce dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_desc:0 "Ce dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_diplomacy.20.b:0 "Nous ne nous inclinerons pas !"
 
-  # --- MISSING KEYS ---
-  peace_economic_tribute:0 "Tribut économique pour cessez-le-feu"
-  plus_cs_reparation_bonus_tt:0 "§GBonus de Réparation:§! [FROM.GetName] est désespéré pour la paix et offre §Y[?FROM.plus_cs_reparation_bonus] Pouvoir Politique§! en réparations."
-  plus_cs_separate_peace_blocker:0 "Esprit de Paix Séparée"
-  plus_cs_separate_peace_blocker_desc:0 "Ce pays a signé un traité de paix séparée. Nous ne pouvons pas rejoindre de factions ou appeler des alliés, mais nos frontières sont sécurisées."
-  
-  # --- SYNERGY CRISIS ---
-  army_cohesion_crisis:0 "§RDésintégration de l'Armée§!"
-  army_cohesion_crisis_desc:0 "Pertes catastrophiques et pénurie d'officiers ont brisé l'armée. Les troupes refusent d'attaquer, les soldats désertent en masse."
-  homefront_collapse:0 "§REffondrement du Front Intérieur§!"
-  homefront_collapse_desc:0 "L'inflation et la crise politique ont paralysé l'économie. Les usines sont en grève, les queues pour le pain se transforment en émeutes."
-  total_exhaustion:0 "§RÉpuisement Total§!"
-  total_exhaustion_desc:0 "Le pays ne peut plus faire la guerre. L'armée est dissoute, l'économie est morte, le gouvernement est paralysé."
-  political_paralysis:0 "§RParalysie Politique§!"
-  political_paralysis_desc:0 "Le gouvernement est incapable de gouverner. La stabilité et le soutien à la guerre sont tombés en dessous du niveau critique."
-  
-  # --- POLITICAL COLLAPSE EVENTS ---
-  plus_cs_internal.11.t:0 "Coup d'État Militaire"
-  plus_cs_internal.11.d:0 "Les généraux ont pris le pouvoir. Incapables de regarder la nation s'effondrer, l'armée a renversé le gouvernement."
-  plus_cs_internal.11.a:0 "L'ordre doit être restauré"
-  plus_cs_internal.12.t:0 "Paralysie Politique"
-  plus_cs_internal.12.d:0 "Le gouvernement a complètement perdu le contrôle. Débats sans fin, grèves et troubles publics ont paralysé la nation."
-  plus_cs_internal.12.a:0 "Nous sommes impuissants..."
-  plus_cs_internal.13.t:0 "Capitulation Forcée"
-  plus_cs_internal.13.d:0 "Le gouvernement s'est effondré. Pour éviter l'anéantissement total, les autorités restantes ont décidé de se rendre."
-  plus_cs_internal.13.a:0 "Nous n'avons pas le choix"
-  plus_cs.300.c:0 "Nous sommes seuls."
-  plus_cs_crisis_management:0 "Gestion de crise"
-  plus_cs_debug_options:0 "Options de débogage"
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "Fanatique"
+ plus_cs_spirit_defeatist:0 "Défaitiste"
+ plus_cs_spirit_resilient:0 "Résilient"
+
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: Vérifier la Volonté Cachée"
+ plus_cs_debug_vars_desc:0 "§OVolonté Cachée Actuelle: [?Root.plus_cs_hidden_resolve]§!\n\nUtilisez cette décision pour enregistrer la valeur."
+ plus_cs_debug_dump_all:0 "DEBUG: Écrire la Volonté de TOUTES les nations dans le log"
+ plus_cs_debug_dump_all_desc:0 "Écrit la valeur de la Volonté Cachée pour CHAQUE pays dans error.log (game.log)."
+
+ # --- CUSTOM TOOLTIPS ---
+ plus_cs_spirit_fanatic_tt:0 "Défense de l'armée sur le territoire national: §G+10.0%§!\nOrganisation de division: §G+10.0%§!\n\nCe dirigeant n'acceptera jamais la capitulation tant que la nation n'est pas détruite.\n\n§RAcceptation de Paix IA: -100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "Taux de récupération de division: §R-10.0%§!\nLimite de capitulation: §R+10.0%§!\n\nCe dirigeant est pessimiste et cherchera la paix au premier signe de trouble.\n\n§GAcceptation de Paix IA: +100%§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "Stabilité hebdomadaire: §G+0.10%§!\n\nCe dirigeant est têtu et résiste fortement à la capitulation.\n\n§YAcceptation de Paix IA: Normale§!\n§O[Debug]: Volonté Cachée: [?Root.plus_cs_hidden_resolve]§!"
+
+ # --- MISSING KEYS ---
+ peace_economic_tribute:0 "Tribut économique pour cessez-le-feu"
+ plus_cs_reparation_bonus_tt:0 "§GBonus de Réparation:§! [FROM.GetName] est désespéré pour la paix et offre §Y[?FROM.plus_cs_reparation_bonus] Pouvoir Politique§! en réparations."
+ plus_cs_separate_peace_blocker:0 "Esprit de Paix Séparée"
+ plus_cs_separate_peace_blocker_desc:0 "Ce pays a signé un traité de paix séparée. Nous ne pouvons pas rejoindre de factions ou appeler des alliés, mais nos frontières sont sécurisées."
+
+ # --- SYNERGY CRISIS ---
+ army_cohesion_crisis:0 "§RDésintégration de l'Armée§!"
+ army_cohesion_crisis_desc:0 "Pertes catastrophiques et pénurie d'officiers ont brisé l'armée. Les troupes refusent d'attaquer, les soldats désertent en masse."
+ homefront_collapse:0 "§REffondrement du Front Intérieur§!"
+ homefront_collapse_desc:0 "L'inflation et la crise politique ont paralysé l'économie. Les usines sont en grève, les queues pour le pain se transforment en émeutes."
+ total_exhaustion:0 "§RÉpuisement Total§!"
+ total_exhaustion_desc:0 "Le pays ne peut plus faire la guerre. L'armée est dissoute, l'économie est morte, le gouvernement est paralysé."
+ political_paralysis:0 "§RParalysie Politique§!"
+ political_paralysis_desc:0 "Le gouvernement est incapable de gouverner. La stabilité et le soutien à la guerre sont tombés en dessous du niveau critique."
+
+ # --- POLITICAL COLLAPSE EVENTS ---
+ plus_cs_internal.11.t:0 "Coup d'État Militaire"
+ plus_cs_internal.11.d:0 "Les généraux ont pris le pouvoir. Incapables de regarder la nation s'effondrer, l'armée a renversé le gouvernement."
+ plus_cs_internal.11.a:0 "L'ordre doit être restauré"
+ plus_cs_internal.12.t:0 "Paralysie Politique"
+ plus_cs_internal.12.d:0 "Le gouvernement a complètement perdu le contrôle. Débats sans fin, grèves et troubles publics ont paralysé la nation."
+ plus_cs_internal.12.a:0 "Nous sommes impuissants..."
+ plus_cs_internal.13.t:0 "Capitulation Forcée"
+ plus_cs_internal.13.d:0 "Le gouvernement s'est effondré. Pour éviter l'anéantissement total, les autorités restantes ont décidé de se rendre."
+ plus_cs_internal.13.a:0 "Nous n'avons pas le choix"
+ plus_cs.300.c:0 "Nous sommes seuls."
+ plus_cs_crisis_management:0 "Gestion de crise"
+ plus_cs_debug_options:0 "Options de débogage"
+
+ plus_cp_demands:0 "Demandes diplomatiques"
+ plus_cp_demands_desc:0 "Utilisez le poids diplomatique et la menace de guerre pour exiger des concessions."
+ plus_cp_demand_core_states:0 "Exiger les territoires nationaux"
+ plus_cp_demand_core_states_title:0 "Exiger les territoires nationaux"
+ PLUS_CP_DEMAND_CORE_STATES_TITLE:0 "Exiger les territoires nationaux"
+ PLUS_CP_DEMAND_CORE_STATES_ACTION_DESC:0 "Exiger le retour de nos territoires nationaux légitimes actuellement détenus par une puissance étrangère. S'ils refusent, ce sera la guerre."
+ plus_cs_demands.1.t:0 "Demande de territoires nationaux"
+ plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] nous a envoyé un ultimatum formel : rendre immédiatement leurs territoires nationaux ou faire face à une invasion."
+ plus_cs_demands.1.a:0 "Nous n'avons pas d'autre choix que de céder."
+ plus_cs_demands.1.b:0 "Jamais ! Préparez-vous à la guerre !"
+ plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] cède"
+ plus_cs_demands.2.d:0 "Craignant notre puissance militaire, ils ont cédé à nos exigences et rendu pacifiquement nos territoires."
+ plus_cs_demands.2.a:0 "Une victoire sans effusion de sang."
+ plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] refuse"
+ plus_cs_demands.3.d:0 "Ils ont effrontément rejeté notre ultimatum. Le temps de la diplomatie est révolu."
+ plus_cs_demands.3.a:0 "À la guerre !"
+
+ # --- Contraintes de Demande de Territoires Nationaux ---
+ plus_cs_demand_not_core_tt:0 "La cible doit contrôler au moins un de nos États nationaux ou revendiqués."
+ plus_cs_demand_not_at_war_tt:0 "Les deux nations doivent être en paix et sans guerre civile."
+ plus_cs_demand_not_faction_tt:0 "La cible ne peut pas être notre sujet, notre suzerain ou un membre de notre faction."
+ plus_cs_demand_no_recent_tt:0 "Nous ne leur avons pas envoyé de demande territoriale récemment."
+ plus_cs_demand_full_annexation_tt:0 "La cible doit avoir au moins un État qui n'est §RPAS§! notre territoire national. (Impossible d'annexer tout le pays pacifiquement)."
+
+ plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs.250.a:0 "We submit... (Become puppet)"
+ plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
+ plus_cs.250.c:0 "Counter-propose conditional terms"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs_internal.14.t:0 "Overlord Annexation"
+ plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
+ plus_cs_internal.14.a:0 "Submit to direct rule"
+ plus_cs_internal.15.t:0 "Defection to the Enemy"
+ plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
+ plus_cs_internal.15.a:0 "Switch sides to survive"

@@ -1,5 +1,7 @@
 add_namespace = plus_cs_logic
 
+
+
 # ==============================================================================
 # SURRENDER LOGIC EVENTS
 # The "Council Debate" that determines if a country actually surrenders.
@@ -56,6 +58,68 @@ country_event = {
 				factor = 5.0
 				surrender_progress < 0.1
 			}
+			
+			# Capital is safe = morale anchor
+			modifier = {
+				factor = 1.5
+				capital_scope = { is_controlled_by = ROOT }
+			}
+			# Capital lost = no anchor, fighting on is delusional
+			modifier = {
+				factor = 0.3
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Ideology: totalitarians fight longer
+			modifier = {
+				factor = 1.8
+				OR = { has_government = fascism has_government = communism }
+			}
+			# Democrats: rational calculus, less likely to fight bitterly
+			modifier = {
+				factor = 0.6
+				has_government = democratic
+				surrender_progress > 0.3
+			}
+			
+			# Alliance hope: major ally alive means fight on
+			modifier = {
+				factor = 2.0
+				is_in_faction = yes
+				any_other_country = {
+					is_in_faction_with = ROOT
+					is_major = yes
+					NOT = { has_capitulated = yes }
+				}
+			}
+			# All allies dead: no reason to keep fighting
+			modifier = {
+				factor = 0.3
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = ROOT
+						NOT = { has_capitulated = yes }
+					}
+				}
+			}
+			
+			# War dragging on: fatigue (F5: else_if, not cumulative)
+			modifier = {
+				factor = 0.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
+			modifier = {
+				factor = 0.7
+				NOT = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Already capitulated: almost zero chance to "fight on"
+			modifier = {
+				factor = 0.05
+				has_capitulated = yes
+			}
 		}
 		
 		# Effect: Rally
@@ -107,6 +171,78 @@ country_event = {
 			modifier = {
 				add = 100
 				strength_ratio = { tag = event_target:peace_recipient ratio < 0.1 }
+			}
+			
+			# Capital lost = government wants peace desperately
+			modifier = {
+				factor = 3.0
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Capitulated = almost certain surrender
+			modifier = {
+				factor = 20.0
+				has_capitulated = yes
+			}
+			
+			# All allies dead = total isolation
+			modifier = {
+				factor = 3.0
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = ROOT
+						NOT = { has_capitulated = yes }
+					}
+				}
+			}
+			
+			# Democrats fold rationally under pressure
+			modifier = {
+				factor = 1.5
+				has_government = democratic
+			}
+			# Totalitarians resist longer
+			modifier = {
+				factor = 0.5
+				OR = { has_government = fascism has_government = communism }
+				NOT = { has_capitulated = yes }
+			}
+			
+			# War fatigue (F5: else_if, not cumulative)
+			modifier = {
+				factor = 2.0
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Exhaustion flags
+			modifier = {
+				factor = 2.5
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Low war support = people demand peace  
+			modifier = {
+				factor = 2.0
+				has_war_support < 0.25
+			}
+			
+			# Internal crisis
+			modifier = {
+				factor = 2.0
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+				}
+			}
+			modifier = {
+				factor = 5.0
+				has_dynamic_modifier = total_exhaustion
 			}
 		}
 		

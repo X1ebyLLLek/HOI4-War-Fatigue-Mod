@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==========================================
 # CONFERENCE & TREATY EVENTS
 # ==========================================
@@ -12,7 +14,10 @@ country_event = {
 	picture = GFX_report_event_imperial_conference
 	is_triggered_only = yes
 	
-	trigger = { is_puppet = no }
+	trigger = {
+		is_puppet = no
+		NOT = { tag = FROM } # SELF-PEACE GUARD
+	}
 
 	immediate = {
 		set_temp_variable = { cnt_og_vp = 0 }
@@ -46,103 +51,28 @@ country_event = {
 				is_faction_leader = no
 			}
 			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Minor Flow)."
-			every_country = {
-				limit = {
-					OR = {
-						tag = ROOT
-						is_puppet_of = ROOT
-					}
+			ROOT = {
+				save_event_target_as = current_winner
+				plus_cs_apply_peace_decisions_to_losers = yes
+				every_subject_country = {
+					save_event_target_as = current_winner
+					plus_cs_apply_peace_decisions_to_losers = yes
 				}
-			# OPTIMIZED LOOP: Iterate relevant losers -> their states (Instead of all states)
-			every_enemy_country = {
-				limit = {
-					OR = {
-						AND = {
-							FROM = { is_faction_leader = no }
-							OR = {
-								tag = FROM
-								is_puppet_of = FROM
-							}
-						}
-						AND = {
-							FROM = { is_faction_leader = yes }
-							is_in_faction_with = FROM
-						}
-					}
-				}
-				every_owned_state = {
-					# Switch to Winner (PREV.PREV) to take actions
-					PREV.PREV = {
-						set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner } 
-						
-						# Decisions taken by Winner (THIS), targeting Owner/State (PREV)
-						activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
-						activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
-						
-						activate_targeted_decision = { target = PREV decision = peace_take_state }
-						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
-						activate_targeted_decision = { target = PREV decision = peace_claim }
-						
-						activate_targeted_decision = { target = PREV.owner decision = peace_puppet }
-						activate_targeted_decision = { target = PREV.owner decision = peace_liberate }
-					}
-				}
-			}
 			}
 		}
 		else = {
 			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Major Flow)."
-			every_country = { # Iterate Winners
-				limit = {
-					is_in_faction_with = ROOT
-					has_war_with = FROM
-				}
-				# OPTIMIZED: Iterate Losers -> Their States
-				every_enemy_country = {
+			ROOT = {
+				save_event_target_as = current_winner
+				plus_cs_apply_conditional_demands = yes
+				
+				every_other_country = {
 					limit = {
-						OR = {
-							AND = {
-								FROM = { is_faction_leader = no }
-								OR = {
-									tag = FROM
-									is_puppet_of = FROM
-								}
-							}
-							AND = {
-								FROM = { is_faction_leader = yes }
-								is_in_faction_with = FROM
-							}
-						}
+						is_in_faction_with = ROOT
+						has_war_with = FROM
 					}
-					every_owned_state = {
-						# Switch to Winner (PREV.PREV)
-						PREV.PREV = {
-							if = {
-								limit = {
-									# OPTIMIZATION: Only if relevant to this state (State is PREV)
-									PREV = {
-										OR = {
-											is_core_of = PREV.PREV # Winner
-											is_claimed_by = PREV.PREV
-										}
-									}
-								}
-								
-								set_variable = { og_vp@PREV.owner = cnt_og_vp@PREV.owner }
-								
-								# Decisions taken by COUNTRY (Winner), targeting STATE (PREV) or OWNER (PREV.owner)
-								activate_targeted_decision = { target = PREV.owner decision = peace_war_reparations }
-								activate_targeted_decision = { target = PREV.owner decision = peace_disarm }
-								
-								activate_targeted_decision = { target = PREV decision = peace_take_state }
-								activate_targeted_decision = { target = PREV decision = peace_set_dmz }
-								activate_targeted_decision = { target = PREV decision = peace_claim }
-								
-								activate_targeted_decision = { target = PREV.owner decision = peace_puppet }
-								activate_targeted_decision = { target = PREV.owner decision = peace_liberate }
-							}
-						}
-					}
+					save_event_target_as = current_winner
+					plus_cs_apply_conditional_demands = yes
 				}
 			}
 		}
@@ -161,7 +91,8 @@ country_event = {
 			plus_cs_restore_third_party_control = yes
 		}
 		else = {
-			every_country = {
+			if = { limit = { has_capitulated = yes } remove_from_faction = yes }
+			every_other_country = {
 				limit = {
 					is_in_faction_with = ROOT
 					has_war_with = FROM
@@ -171,7 +102,12 @@ country_event = {
 			}
 			plus_cs_save_third_party_control = yes
 			
-			every_country = {
+			if = { 
+				limit = { has_capitulated = no }
+				white_peace = FROM
+				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+			}
+			every_other_country = {
 				limit = {
 					is_in_faction_with = ROOT
 					has_war_with = FROM
@@ -207,17 +143,66 @@ country_event = {
 		ai_chance = { 
 			base = 50
 			
-			# Win Harder: If Winning, almost definitely Refuse
+			# Win Harder: If Winning, definitely refuse
 			modifier = {
-				add = 50 # Reduced from 100 (Allow ~7% chance to accept)
+				add = 50
 				surrender_progress < 0.1
 				FROM = { surrender_progress > 0.1 }
+			}
+			
+			# Ideology: totalitarians want total victory
+			modifier = {
+				factor = 2.0
+				OR = { has_government = fascism has_government = communism }
+			}
+			
+			# Democrats: more pragmatic about accepting terms
+			modifier = {
+				factor = 0.5
+				has_government = democratic
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# We have claims/cores on the sender → refuse (we want more)
+			modifier = {
+				add = 40
+				FROM = { any_owned_state = { OR = { is_claimed_by = ROOT is_core_of = ROOT } } }
+			}
+			
+			# Enemy has capitulated → why refuse their surrender??
+			modifier = {
+				factor = 0.1
+				FROM = { has_capitulated = yes }
+			}
+			
+			# Enemy lost capital → they're broken, accept
+			modifier = {
+				factor = 0.5
+				FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } }
+			}
+			
+			# Our own exhaustion: we want this war over
+			modifier = {
+				factor = 0.2
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_stalemate
+				}
+			}
+			
+			# Long war fatigue
+			modifier = {
+				factor = 0.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 		}
 		
 		
-		add_war_support = 0.05
-		add_stability = 0.02
+		# F2 FIX: Было +stab/+ws (награда за отказ!). Теперь политическая цена.
+		set_temp_variable = { penalty_stab = -0.02 }
+		set_temp_variable = { penalty_ws = -0.05 }
+		set_temp_variable = { penalty_pp = 0 }
+		plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] REFUSED Conditional Surrender from [FROM.GetName]."
 
@@ -228,8 +213,10 @@ country_event = {
 					has_country_flag = plus_cs_stalemate
 				}
 			}
-			add_war_support = -0.10
-			add_stability = -0.10
+			set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = -0.10 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 			custom_effect_tooltip = plus_cs.2.b.tooltip_1
 		}
 		if = {
@@ -239,13 +226,17 @@ country_event = {
 					has_country_flag = plus_cs_urgent_peace
 				}
 			}
-			add_war_support = -0.15
-			add_stability = -0.15
+			set_temp_variable = { penalty_stab = -0.15 }
+			set_temp_variable = { penalty_ws = -0.15 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 			custom_effect_tooltip = plus_cs.2.b.tooltip_2
 		}
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
+			set_country_flag = { flag = plus_cs_peace_cooldown days = 45 }
+			set_country_flag = plus_cs_offered_peace_before
 			news_event = { id = plus_cs.6 }
 		}
 	}

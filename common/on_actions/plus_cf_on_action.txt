@@ -60,6 +60,12 @@ on_actions = {
 			set_variable = { plus_cs_last_month_vp = 0 }
 			set_variable = { plus_cs_stalemate_timer = 0 }
 			
+			# War Duration Tracking (permanent flag, checked by plus_cs_calc_ai_situation)
+			if = {
+				limit = { NOT = { has_country_flag = plus_cs_at_war_start } }
+				set_country_flag = plus_cs_at_war_start
+			}
+			
 			set_variable = { plus_cs_need_recalc = 1 }
 			set_variable = { economy_overheat_counter = 0 }
 		}
@@ -114,6 +120,9 @@ on_actions = {
 				clr_country_flag = plus_cs_war_strain
 				clr_country_flag = civil_war_risk_active
 				clr_country_flag = plus_cs_revolter_processed
+				clr_country_flag = plus_cs_at_war_start
+				clr_country_flag = plus_cs_offered_peace_before
+				clr_country_flag = plus_cs_offered_peace_twice
 				clr_country_flag = plus_cs_collapse_cooldown
 
 				# Удаление идей 
@@ -196,18 +205,21 @@ on_actions = {
 	on_daily = {
 		effect = {
 			# Fail-safe: Если страна "выпала" из цикла или появилась только что
-			# OPTIMIZATION: Check only 10% of the time to reduce overhead
-			random_list = {
-				10 = {
-					random_country = {
-						limit = {
-							NOT = { has_country_flag = plus_cs_loop_active }
-							exists = yes
+			# OPT: Якорь на GER — проверяем только от одной страны вместо всех ~80
+			if = {
+				limit = { original_tag = GER }
+				random_list = {
+					3 = {
+						random_country = {
+							limit = {
+								NOT = { has_country_flag = plus_cs_loop_active }
+								exists = yes
+							}
+							country_event = { id = plus_cs.999 }
 						}
-						country_event = { id = plus_cs.999 }
 					}
+					97 = { }
 				}
-				90 = { }
 			}
 		}
 	}

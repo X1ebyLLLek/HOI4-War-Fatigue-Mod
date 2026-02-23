@@ -57,6 +57,50 @@ plus_cs_calc_negotiation_chance = {
 		limit = { is_major = yes FROM = { is_major = no } }
 		subtract_from_temp_variable = { plus_cs_ai_score = 5 }
 	}
+	
+	# === CAPITULATED ENEMY ===
+	# If the enemy has already capitulated, the victor eagerly accepts formal surrender
+	if = {
+		limit = { FROM = { has_capitulated = yes } }
+		add_to_temp_variable = { plus_cs_ai_score = 50 }
+	}
+	
+	# === IDEOLOGY AFFINITY ===
+	# Easier to negotiate with ideologically similar nations
+	if = {
+		limit = {
+			OR = {
+				AND = { has_government = democratic FROM = { has_government = democratic } }
+				AND = { has_government = neutrality FROM = { has_government = neutrality } }
+				AND = { has_government = fascism FROM = { has_government = fascism } }
+				AND = { has_government = communism FROM = { has_government = communism } }
+			}
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
+	}
+	
+	# === ENEMY LOST CAPITAL ===
+	# If the sender lost their capital, victor sees them as already broken
+	if = {
+		limit = { FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	
+	# === ENEMY IS ISOLATED (all allies dead) ===
+	if = {
+		limit = {
+			FROM = {
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = FROM
+						NOT = { has_capitulated = yes }
+					}
+				}
+			}
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
 
 	# Final
 	clr_country_flag = plus_cs_chance_high
@@ -122,6 +166,42 @@ plus_cs_calc_white_peace_chance = {
 	if = { limit = { has_country_flag = plus_cs_war_strain } add_to_temp_variable = { plus_cs_ai_score = 3 } }
 	if = { limit = { has_country_flag = plus_cs_exhausted } add_to_temp_variable = { plus_cs_ai_score = 8 } }
 	
+	# === CAPITULATED ENEMY ===
+	# Reject white peace outright from a capitulated country
+	if = {
+		limit = { FROM = { has_capitulated = yes } }
+		subtract_from_temp_variable = { plus_cs_ai_score = 150 }
+	}
+	
+	# === IDEOLOGY AFFINITY ===
+	if = {
+		limit = {
+			OR = {
+				AND = { has_government = democratic FROM = { has_government = democratic } }
+				AND = { has_government = neutrality FROM = { has_government = neutrality } }
+			}
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
+	# Fascist/Communist white peace is rarer (ideological stubbornness)
+	if = {
+		limit = {
+			OR = { has_government = fascism has_government = communism }
+		}
+		subtract_from_temp_variable = { plus_cs_ai_score = 8 }
+	}
+	
+	# === War Duration Bonus ===
+	# White peace becomes more attractive the longer the war drags
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } }
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
+	}
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
 }
 
@@ -161,6 +241,35 @@ plus_cs_calc_submission_chance = {
         subtract_from_temp_variable = { plus_cs_ai_score = 15 }
     }
 	
+	# === CAPITULATED ENEMY ===
+	# Even greater desire to puppet a capitulated country (officially ends resistance)
+	if = {
+		limit = { FROM = { has_capitulated = yes } }
+		add_to_temp_variable = { plus_cs_ai_score = 40 }
+	}
+	
+	# === ENEMY IS ISOLATED (no living allies) ===
+	if = {
+		limit = {
+			FROM = {
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = FROM
+						NOT = { has_capitulated = yes }
+					}
+				}
+			}
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	
+	# === ENEMY LOST CAPITAL ===
+	if = {
+		limit = { FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } } }
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
+	}
+	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
 }
 
@@ -191,6 +300,29 @@ plus_cs_calc_conditional_surrender_chance = {
 	# === TRAIT MODIFIERS ===
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 10 } }
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic } subtract_from_temp_variable = { plus_cs_ai_score = 12 } }
+
+	# === CAPITULATED ENEMY ===
+	if = {
+		limit = { FROM = { has_capitulated = yes } }
+		add_to_temp_variable = { plus_cs_ai_score = 30 }
+	}
+	
+	# === IDEOLOGY AFFINITY ===
+	if = {
+		limit = {
+			OR = {
+				AND = { has_government = democratic FROM = { has_government = democratic } }
+				AND = { has_government = neutrality FROM = { has_government = neutrality } }
+			}
+		}
+		add_to_temp_variable = { plus_cs_ai_score = 8 }
+	}
+	
+	# === ENEMY LOST CAPITAL ===
+	if = {
+		limit = { FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } } }
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
 
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
 }

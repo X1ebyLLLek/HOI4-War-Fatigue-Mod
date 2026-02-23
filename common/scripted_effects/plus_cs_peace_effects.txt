@@ -158,39 +158,144 @@ plus_cs_check_third_party_control = {
 # Used in Negotiation logic
 # =============================================
 plus_cs_calculate_total_strategic_value = {
-	# 1. Reset Variables (OPT: only for belligerents)
-	every_country = {
-		limit = { has_war = yes }
-		set_variable = { cnt_og_vp = 0 }
+	# 1. Reset & Calculate for ROOT
+	set_variable = { cnt_og_vp = 0 }
+	every_owned_state = {
+		if = {
+			limit = { controller = { has_war_with = PREV.owner } }
+			add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+		}
 	}
 
-	# 2. Calculate
-	every_country = {
+	# 2. Reset & Calculate for ROOT's allies
+	if = {
+		limit = { is_faction_leader = yes }
+		every_other_country = {
+			limit = { is_in_faction_with = ROOT }
+			set_variable = { cnt_og_vp = 0 }
+			every_owned_state = {
+				if = {
+					limit = { controller = { has_war_with = PREV.owner } }
+					add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+				}
+			}
+		}
+	}
+	else = {
+		every_subject_country = {
+			set_variable = { cnt_og_vp = 0 }
+			every_owned_state = {
+				if = {
+					limit = { controller = { has_war_with = PREV.owner } }
+					add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+				}
+			}
+		}
+	}
+	
+	# 3. Reset & Calculate for ROOT's enemies
+	every_enemy_country = {
+		set_variable = { cnt_og_vp = 0 }
+		every_owned_state = {
+			if = {
+				limit = { controller = { has_war_with = PREV.owner } }
+				add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+			}
+		}
+	}
+}
+
+# =============================================
+# plus_cs_apply_peace_decisions_to_losers
+# Distributes decisions to losers on behalf of the current_winner
+# =============================================
+plus_cs_apply_peace_decisions_to_losers = {
+	every_enemy_country = {
+		limit = {
+			OR = {
+				AND = { ROOT = { is_faction_leader = no } OR = { tag = ROOT is_puppet_of = ROOT } }
+				AND = { ROOT = { is_faction_leader = yes } is_in_faction_with = ROOT }
+			}
+		}
+		# Assign Country-Level decisions to the Winner
+		event_target:current_winner = {
+			set_variable = { og_vp@PREV = cnt_og_vp@PREV }
+			activate_targeted_decision = { target = PREV decision = peace_war_reparations }
+			activate_targeted_decision = { target = PREV decision = peace_disarm }
+			activate_targeted_decision = { target = PREV decision = peace_puppet }
+			activate_targeted_decision = { target = PREV decision = peace_liberate }
+			activate_targeted_decision = { target = PREV decision = peace_claim }
+		}
+		# STATE LOOP
+		every_owned_state = {
+			event_target:current_winner = {
+				activate_targeted_decision = { target = PREV decision = peace_take_state }
+				activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+			}
+		}
+		set_variable = { state_taken = 0 } # Reset var on Loser
+	}
+}
+
+# =============================================
+# plus_cs_apply_conditional_demands
+# Used for major flows in conditional surrenders.
+# Winners only get to dictate terms over cores/claims, not total annexation.
+# =============================================
+plus_cs_apply_conditional_demands = {
+	every_enemy_country = {
 		limit = {
 			OR = {
 				AND = {
-					ROOT = { is_faction_leader = no }
-					OR = {
-						tag = ROOT
-						is_puppet_of = ROOT
-					}
+					FROM = { is_faction_leader = no }
+					OR = { tag = FROM is_puppet_of = FROM }
 				}
 				AND = {
-					ROOT = { is_faction_leader = yes }
-					is_in_faction_with = ROOT
+					FROM = { is_faction_leader = yes }
+					is_in_faction_with = FROM
 				}
-				has_war_with = ROOT
 			}
 		}
-		every_owned_state = {
-			if = {
-				limit = {
-					controller = {
-						has_war_with = PREV.owner
+		# Skip this country entirely if the winner has no claims/cores on them.
+		# any_owned_state stops searching after the 1st match, hugely saving performance.
+		if = {
+			limit = {
+				any_owned_state = {
+					OR = {
+						is_core_of = event_target:current_winner
+						is_claimed_by = event_target:current_winner
 					}
 				}
-				# FIX: Use persistent variable, not temp
-				add_to_variable = { cnt_og_vp@PREV = THIS.state_strategic_value }
+			}
+			
+			# Switch to Winner to assign Country-level penalties ONCE (instead of for every state)
+			event_target:current_winner = {
+				set_variable = { og_vp@PREV = cnt_og_vp@PREV }
+				
+				activate_targeted_decision = { target = PREV decision = peace_war_reparations }
+				activate_targeted_decision = { target = PREV decision = peace_disarm }
+				activate_targeted_decision = { target = PREV decision = peace_puppet }
+				activate_targeted_decision = { target = PREV decision = peace_liberate }
+			}
+			
+			# Run the heavy state loop ONLY if necessary
+			every_owned_state = {
+				event_target:current_winner = {
+					if = {
+						limit = {
+							PREV = {
+								OR = {
+									is_core_of = event_target:current_winner
+									is_claimed_by = event_target:current_winner
+								}
+							}
+						}
+						
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+				}
 			}
 		}
 	}

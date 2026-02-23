@@ -1,3 +1,5 @@
+
+
 peace_treaty = {
 
 	# ==============================================================================
@@ -148,6 +150,17 @@ peace_treaty = {
 				factor = 1.5
 				has_government = democratic
 			}
+			# Kick a man while he is down
+			modifier = {
+				factor = 5.0
+				FROM = {
+					OR = {
+						has_idea = political_paralysis
+						has_idea = internal_crisis_high
+						has_dynamic_modifier = homefront_collapse
+					}
+				}
+			}
 			modifier = {
 				factor = 0.5
 				OR = {
@@ -252,6 +265,17 @@ peace_treaty = {
 			modifier = {
 				factor = 2.0
 				has_government = democratic
+			}
+			# Kick a man while he is down
+			modifier = {
+				factor = 5.0
+				FROM = {
+					OR = {
+						has_idea = political_paralysis
+						has_idea = internal_crisis_high
+						has_dynamic_modifier = homefront_collapse
+					}
+				}
 			}
 			modifier = {
 				factor = 0.2

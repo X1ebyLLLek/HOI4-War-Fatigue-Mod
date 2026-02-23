@@ -42,10 +42,10 @@ plus_cs_crisis_step = {
 					limit = { has_civil_war = no }
 					random_list = {
 					50 = {
-						# Размер мятежа зависит от оппозиции (мин 15%, макс 50%)
+						# Размер мятежа зависит от оппозиции (мин 15%, макс 50%) — OPT: else_if chain
 						set_temp_variable = { cw_size = 0.15 }
-						if = { limit = { has_government = democratic fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = democratic fascism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
+						else_if = { limit = { has_government = democratic fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = neutrality fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = fascism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = communism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
@@ -57,8 +57,8 @@ plus_cs_crisis_step = {
 					}
 					50 = {
 						set_temp_variable = { cw_size = 0.15 }
-						if = { limit = { has_government = democratic communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = democratic communism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
+						else_if = { limit = { has_government = democratic communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = neutrality communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = fascism communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = communism fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
@@ -164,10 +164,10 @@ plus_cs_crisis_step = {
 			NOT = { has_country_flag = plus_cs_exhausted }
 		}
 		
+		# OPT: else_if chain — dates are progressive
 		set_temp_variable = { fatigue_mult = 1 }
-		if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
-		# NEW: Ultra-late war (post-1946) — extreme exhaustion
 		if = { limit = { date > 1946.1.1 } set_temp_variable = { fatigue_mult = 3 } }
+		else_if = { limit = { date > 1944.1.1 } set_temp_variable = { fatigue_mult = 2 } }
 		
 		# Base Stab Hit
 		set_temp_variable = { stab_hit = -0.002 }
@@ -266,14 +266,14 @@ plus_cs_political_collapse_check = {
 		}
 	}
 
-	# 2. FREE NATION CRISIS DISPATCHER (Monthly Pulse)
+	# 2. CRISIS DISPATCHER (Monthly Pulse)
 	# This event (internal.10) selects between Coup, Paralysis, etc.
-	# FIX: Coups can now also fire without prior civil war if crisis is extreme.
-	# Historical precedent: July 20 plot, military juntas in collapsing regimes.
+	# FIX: Coups can now fire for BOTH free nations AND puppets.
+	# Puppets get their own branch (overlord annex / defect / break free).
 	if = {
 		limit = {
 			has_war = yes
-			is_puppet = no
+			# REMOVED: is_puppet = no — puppets now get collapse events too
 			NOT = { has_country_flag = plus_cs_collapse_cooldown }
 			NOT = { has_civil_war = yes }
 			# Path A: Post-civil-war collapse (original logic)

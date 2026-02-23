@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==============================================================================
 # FACTION PEACE EVENTS
 # Handling members asking faction leaders to leave/surrender
@@ -27,14 +29,44 @@ country_event = {
 		name = plus_cs.420.a
 		ai_chance = {
 			base = 30
+			
+			# Ideology: democrats respect self-determination
 			modifier = {
 				add = 50
 				has_government = democratic
 			}
+			
+			# Member is exhausted — let them go
 			modifier = {
 				add = 30
 				event_target:peace_seeker = { has_country_flag = plus_cs_exhausted }
 			}
+			
+			# Member has capitulated — holding them is cruel and pointless
+			modifier = {
+				add = 60
+				event_target:peace_seeker = { has_capitulated = yes }
+			}
+			
+			# Member lost their capital — they're done
+			modifier = {
+				add = 25
+				event_target:peace_seeker = { capital_scope = { NOT = { is_controlled_by = PREV } } }
+			}
+			
+			# War is long — fatigue affects the leader too
+			modifier = {
+				add = 20
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Leader itself is exhausted — no point forcing others
+			modifier = {
+				add = 40
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Major member = reluctant to release (strategic asset)
 			modifier = {
 				factor = 0.5
 				event_target:peace_seeker = { is_major = yes }
@@ -45,8 +77,10 @@ country_event = {
 			country_event = { id = plus_cs.421 }
 		}
 		
-		add_political_power = -25
-		add_stability = -0.03
+		set_temp_variable = { penalty_stab = -0.03 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = -25 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 	}
 
 	# Вариант B: Отклонить и потребовать продолжения войны
@@ -54,6 +88,8 @@ country_event = {
 		name = plus_cs.420.b
 		ai_chance = {
 			base = 70
+			
+			# Totalitarians force compliance
 			modifier = {
 				factor = 2.0
 				OR = {
@@ -61,17 +97,33 @@ country_event = {
 					has_government = communism
 				}
 			}
+			
+			# Leader itself is exhausted — no point forcing others
 			modifier = {
 				factor = 0.3
 				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Member is capitulated — forced continuation is absurd
+			modifier = {
+				factor = 0.1
+				event_target:peace_seeker = { has_capitulated = yes }
+			}
+			
+			# Long war — less willing to force
+			modifier = {
+				factor = 0.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 		}
 		
 		event_target:peace_seeker = {
 			country_event = { id = plus_cs.422 }
 			# Небольшой дебафф за принуждение
-			add_war_support = -0.05
-			add_stability = -0.03
+			set_temp_variable = { penalty_stab = -0.03 }
+			set_temp_variable = { penalty_ws = -0.05 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		}
 		
 		add_political_power = 10
@@ -100,8 +152,10 @@ country_event = {
 		clr_country_flag = plus_cs_waiting_faction_approval
 		
 		# Теперь можно заключать мир
-		add_stability = 0.05
-		add_war_support = -0.10
+		set_temp_variable = { penalty_stab = 0.05 }
+			set_temp_variable = { penalty_ws = -0.10 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		custom_effect_tooltip = plus_cs_can_now_peace_tt
 	}
@@ -131,8 +185,10 @@ country_event = {
 		
 		clr_country_flag = plus_cs_waiting_faction_approval
 		
-		add_war_support = -0.15
-		add_stability = -0.10
+		set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = -0.15 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		# Получаем идею "Принудительная война"
 		add_timed_idea = {
@@ -146,10 +202,60 @@ country_event = {
 		name = plus_cs.422.b
 		ai_chance = {
 			base = 30
+			
+			# Exhausted: desperate to leave
 			modifier = {
 				factor = 3.0
 				has_country_flag = plus_cs_exhausted
 			}
+			
+			# Dying nation: leave at all costs
+			modifier = {
+				factor = 10.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+					has_idea = internal_crisis_high
+				}
+			}
+			
+			# Capitulated: leaving is the only sane option
+			modifier = {
+				factor = 5.0
+				has_capitulated = yes
+			}
+			
+			# Capital lost: government authority shattered
+			modifier = {
+				factor = 2.0
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Long war: loyalty erodes
+			modifier = {
+				factor = 1.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			modifier = {
+				factor = 2.0
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
+			
+			# Ideology mismatch with leader: easier to betray
+			modifier = {
+				factor = 2.0
+				NOT = {
+					OR = {
+						AND = { has_government = democratic FROM = { has_government = democratic } }
+						AND = { has_government = fascism FROM = { has_government = fascism } }
+						AND = { has_government = communism FROM = { has_government = communism } }
+						AND = { has_government = neutrality FROM = { has_government = neutrality } }
+					}
+				}
+			}
+			
+			# Puppet: impossible to defy
 			modifier = {
 				factor = 0
 				is_puppet_of = FROM
@@ -171,14 +277,15 @@ country_event = {
 		}
 		
 		# Все члены альянса теряют opinion
-		every_country = {
+		every_other_country = {
 			limit = { is_in_faction_with = FROM }
 			add_opinion_modifier = { target = ROOT modifier = faction_deserter }
 		}
 		
-		add_stability = -0.15
-		add_war_support = -0.20
-		add_political_power = -100
+		set_temp_variable = { penalty_stab = -0.15 }
+			set_temp_variable = { penalty_ws = -0.20 }
+			set_temp_variable = { penalty_pp = -100 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		custom_effect_tooltip = plus_cs_can_now_peace_tt
 	}

@@ -12,11 +12,24 @@ plus_cs_assign_fighting_spirit = {
 			NOT = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
 		}
 		
-		# Assign new trait (Universal Distribution)
+		# C4: Ideology-aware distribution
+		# Base: 15% Fanatic / 70% Resilient / 15% Defeatist
 		random_list = {
-			15 = { add_country_leader_trait = plus_cs_spirit_fanatic }   # 15% Fanatic
-			70 = { add_country_leader_trait = plus_cs_spirit_resilient } # 70% Normal
-			15 = { add_country_leader_trait = plus_cs_spirit_defeatist } # 15% Defeatist
+			15 = {
+				# Тоталитарные чаще фанатики
+				modifier = { add = 10 OR = { has_government = fascism has_government = communism } }
+				add_country_leader_trait = plus_cs_spirit_fanatic
+			}
+			70 = {
+				add_country_leader_trait = plus_cs_spirit_resilient
+			}
+			15 = {
+				# Демократии чаще готовы к уступкам
+				modifier = { add = 10 has_government = democratic }
+				# Тоталитарные редко бывают дефитистами
+				modifier = { add = -5 OR = { has_government = fascism has_government = communism } }
+				add_country_leader_trait = plus_cs_spirit_defeatist
+			}
 		}
 	}
 }

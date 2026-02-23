@@ -1,3 +1,5 @@
+
+
 peace_options = {
 
 	# ==============================================================================
@@ -40,9 +42,31 @@ peace_options = {
 		}
 
 		ai_will_do = {
-			base = 0
+		base = 0
+		
+		# Preventive: only tiny nations with compatible ideologies consider it
+		modifier = {
+			add = 15
+			OR = { has_government = democratic has_government = neutrality }
+			is_major = no
+			FROM = { is_major = yes }
+		}
+		# Power imbalance: we are massively outmatched
+		modifier = {
+			add = 30
+			strength_ratio = { tag = FROM ratio < 0.1 }
+		}
+		# Block if we have strong resolve
+		modifier = {
+			factor = 0
+			OR = { has_government = fascism has_government = communism }
+		}
+		modifier = {
+			factor = 0
+			has_country_leader_with_trait = plus_cs_spirit_fanatic
 		}
 	}
+}
 
 	offer_honorable_submission = {
 		icon = GFX_decision_generic_assassination
@@ -69,6 +93,8 @@ peace_options = {
 				}
 				# Столица потеряна
 				capital_scope = { NOT = { is_controlled_by = ROOT } }
+				# Или страна уже капитулировала (можно официально сдаться)
+				has_capitulated = yes
 			}
 		}
 
@@ -89,6 +115,8 @@ peace_options = {
 						check_variable = { var = num_of_factories value = ROOT.num_of_factories compare = greater_than }
 					}
 				}
+				# Если страна капитулировала - она на грани исчезновения
+				has_capitulated = yes
 			}
 		}
 
@@ -144,6 +172,12 @@ peace_options = {
 				capital_scope = { NOT = { is_controlled_by = ROOT } }
 			}
 			
+			# Уже капитулировали - хотим закончить оккупацию официально
+			modifier = {
+				add = 200
+				has_capitulated = yes
+			}
+			
 			# Страна истощена
 			modifier = {
 				add = 60
@@ -159,6 +193,38 @@ peace_options = {
 			modifier = {
 				add = 30
 				surrender_progress > 0.35
+			}
+			
+			# ===============================================
+			# === СООТНОШЕНИЕ СИЛ (Power Ratio) ===
+			# ===============================================
+			
+			# Мы значительно слабее врага - логично сдаться
+			modifier = {
+				add = 30
+				strength_ratio = { tag = FROM ratio < 0.2 }
+			}
+			
+			# Мы абсолютно ничтожны перед врагом
+			modifier = {
+				add = 40
+				strength_ratio = { tag = FROM ratio < 0.05 }
+			}
+			
+			# ===============================================
+			# === ДЛИТЕЛЬНОСТЬ ВОЙНЫ ===
+			# ===============================================
+			
+			# Война длится больше 2 лет - усталость
+			modifier = {
+				add = 15
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Война длится больше 3 лет - глубокая усталость
+			modifier = {
+				add = 20
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 			
 			# ===============================================
@@ -186,6 +252,40 @@ peace_options = {
 			modifier = {
 				add = 30
 				casualties > 500000
+			}
+			
+			# Внутренний кризис прямо давит
+			modifier = {
+				add = 15
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+				}
+			}
+			modifier = {
+				add = 30
+				has_dynamic_modifier = total_exhaustion
+			}
+			
+			# ===============================================
+			# === ИДЕОЛОГИЧЕСКАЯ СОВМЕСТИМОСТЬ С ВРАГОМ ===
+			# ===============================================
+			
+			# Легче сдаться стране с похожей идеологией
+			modifier = {
+				add = 15
+				OR = {
+					AND = { has_government = democratic FROM = { has_government = democratic } }
+					AND = { has_government = neutrality FROM = { has_government = neutrality } }
+				}
+			}
+			# Сдаться идеологическому противнику — хуже смерти
+			modifier = {
+				factor = 0.3
+				OR = {
+					AND = { has_government = fascism FROM = { has_government = communism } }
+					AND = { has_government = communism FROM = { has_government = fascism } }
+				}
 			}
 			
 			# ===============================================
@@ -277,6 +377,18 @@ peace_options = {
 				add = 25
 				is_in_faction = no
 				NOT = { any_owned_state = { is_coastal = yes } }
+			}
+			
+			# Мы единственный выживший в сломанном альянсе
+			modifier = {
+				add = 50
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = ROOT
+						NOT = { has_capitulated = yes }
+					}
+				}
 			}
 		}
 	}

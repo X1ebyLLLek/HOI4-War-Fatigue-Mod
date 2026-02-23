@@ -1,0 +1,200 @@
+add_namespace = plus_cs_demands
+
+
+
+# ==============================================================================
+# DIPLOMATIC EVENT: DEMAND CORE TERRITORY
+# ==============================================================================
+
+# Event for the Target (They hold the cores, the sender wants them back)
+country_event = {
+	id = plus_cs_demands.1
+	title = plus_cs_demands.1.t
+	desc = plus_cs_demands.1.d
+	picture = GFX_report_event_generic_conference
+	is_triggered_only = yes
+
+	# Option A: YIELD (Give the states back)
+	option = {
+		name = plus_cs_demands.1.a
+		ai_chance = {
+			base = 50
+			
+			# CRISIS AVOIDANCE: Yield immediately if economy is collapsing or in active crisis
+			modifier = {
+				factor = 50.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
+			# MANPOWER/CRISIS SHORTAGE: Can't fight right now
+			modifier = {
+				factor = 10.0
+				OR = {
+					has_idea = internal_crisis_medium
+					has_idea = internal_crisis_high
+				}
+			}
+			
+			# AI LOGIC: Yield if the demander is much stronger
+			modifier = {
+				factor = 5.0
+				FROM = {
+					strength_ratio = { tag = ROOT ratio > 1.5 }
+				}
+			}
+			# AI LOGIC: Yield if terrified
+			modifier = {
+				factor = 100.0
+				FROM = {
+					strength_ratio = { tag = ROOT ratio > 3.0 }
+				}
+			}
+			# AI LOGIC: Yield if already losing another war
+			modifier = {
+				factor = 20.0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+			
+			# AI LOGIC: Refuse if we are stronger or equal
+			modifier = {
+				factor = 0.1
+				FROM = {
+					strength_ratio = { tag = ROOT ratio < 1.0 }
+				}
+			}
+			
+			# WARMONGER/PRIDE LOGIC (Totalitarians hate yielding)
+			modifier = {
+				factor = 0.1
+				OR = {
+					has_government = fascism
+					has_government = communism
+					has_country_leader_with_trait = plus_cs_spirit_fanatic
+				}
+			}
+			
+			# PACIFIST LOGIC
+			modifier = {
+				factor = 2.0
+				OR = {
+					has_government = democratic
+					has_government = neutrality
+					has_country_leader_with_trait = plus_cs_spirit_defeatist
+				}
+			}
+		}
+
+		# EFFECT: Find all states controlled by ROOT that are cores of the SENDER and transfer them
+		every_owned_state = {
+			limit = {
+				is_core_of = FROM
+			}
+			FROM = { transfer_state = PREV }
+		}
+		
+		# Penalty for yielding
+		set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = -50 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
+		
+		FROM = {
+			country_event = { id = plus_cs_demands.2 }
+		}
+	}
+
+	# Option B: REFUSE (Prepare for War)
+	option = {
+		name = plus_cs_demands.1.b
+		ai_chance = {
+			base = 50
+			
+			# AI LOGIC: See above for inversion.
+			modifier = {
+				factor = 10.0
+				FROM = {
+					strength_ratio = { tag = ROOT ratio < 1.0 }
+				}
+			}
+			
+			# WARMONGER/PRIDE
+			modifier = {
+				factor = 10.0
+				OR = {
+					has_government = fascism
+					has_government = communism
+					has_country_leader_with_trait = plus_cs_spirit_fanatic
+				}
+			}
+			
+			# TOO WEAK OR BUSY TO REFUSE
+			modifier = {
+				factor = 0.01
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+					has_idea = internal_crisis_high
+				}
+			}
+			modifier = {
+				factor = 0.1
+				has_war = yes
+				surrender_progress > 0.1
+			}
+			
+			# PACIFISTS PREFER YIELDING
+			modifier = {
+				factor = 0.5
+				OR = {
+					has_government = democratic
+					has_government = neutrality
+					has_country_leader_with_trait = plus_cs_spirit_defeatist
+				}
+			}
+		}
+
+		# Give the sender a goal
+		FROM = {
+			country_event = { id = plus_cs_demands.3 }
+		}
+	}
+}
+
+# The target yielded!
+country_event = {
+	id = plus_cs_demands.2
+	title = plus_cs_demands.2.t
+	desc = plus_cs_demands.2.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs_demands.2.a
+		add_political_power = 50
+		add_stability = 0.05
+	}
+}
+
+# The target refused!
+country_event = {
+	id = plus_cs_demands.3
+	title = plus_cs_demands.3.t
+	desc = plus_cs_demands.3.d
+	picture = GFX_report_event_generic_read_peacreaty
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs_demands.3.a
+		# We get a wargoal (Take State / Conquer) against the stubborn target
+		create_wargoal = {
+			type = take_state_focus
+			target = FROM
+		}
+		add_war_support = 0.05
+	}
+}

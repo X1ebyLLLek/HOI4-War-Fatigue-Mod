@@ -1,5 +1,7 @@
 add_namespace = plus_cs_opt
 
+
+
 # ==============================================================================
 # SMART EVENT LOOP (TICK-SPREADING)
 # Replaces on_weekly for performance distribution.
@@ -151,9 +153,15 @@ country_event = {
 					subtract_from_temp_variable = { delta = current_surr }
 				}
 				
-				# Logic: If delta < 0.005 (0.5%), consider it stalemate tick
+				# R2: Динамический порог стагнации — зависит от war_support
+				# Высокая WS — терпелив, низкая — любая стагнация раздражает
+				set_temp_variable = { stale_threshold = 0.005 }
+				if = { limit = { has_war_support > 0.7 } set_temp_variable = { stale_threshold = 0.002 } }
+				else_if = { limit = { has_war_support < 0.3 } set_temp_variable = { stale_threshold = 0.01 } }
+				
+				# Logic: If delta < threshold, consider it stalemate tick
 				if = {
-					limit = { check_variable = { delta < 0.005 } }
+					limit = { check_variable = { delta < stale_threshold } }
 					add_to_variable = { plus_cs_stalemate_timer = 1 }
 				}
 				else = {
@@ -203,38 +211,41 @@ country_event = {
 		}
 
 		# Puppet Chain Reaction Check
+		# R3: Шанс масштабируется от surrender_progress оверлорда и состояния вассала
 		if = {
 			limit = {
 				is_puppet = yes
 				overlord = { surrender_progress > 0.5 }
 			}
 			random_list = {
-				10 = { country_event = { id = plus_cs_diplomacy.10 } }
-				90 = { }
+				5 = {
+					# Оверлорд проигрывает сильнее → вассал смелее
+					modifier = { add = 5 overlord = { surrender_progress > 0.7 } }
+					modifier = { add = 15 overlord = { surrender_progress > 0.85 } }
+					# Низкая поддержка войны у вассала
+					modifier = { add = 5 has_war_support < 0.3 }
+					# Одна идеология — лояльнее
+					modifier = { factor = 0.3 overlord = { has_government = ROOT } }
+					country_event = { id = plus_cs_diplomacy.10 }
+				}
+				95 = {
+					# Компенсация: при сильном поражении оверлорда do_nothing вес падает
+					modifier = { add = -10 overlord = { surrender_progress > 0.7 } }
+					modifier = { add = -25 overlord = { surrender_progress > 0.85 } }
+				}
 			}
 		}
 		
 		# Negotiated Vassalization Check (Smart Math)
+		# OPT: Merged any_neighbor_country check + random_neighbor_country into one pass
 		if = {
 			limit = {
 				is_ai = yes
 				is_subject = no
 				has_war = no
-				
-				# 1. CHECK: Does a threat exist? (Trigger only)
-				any_neighbor_country = {
-					NOT = { is_in_faction_with = ROOT }
-					NOT = { has_war_with = ROOT }
-					OR = {
-						has_wargoal_against = ROOT
-						is_justifying_wargoal_against = ROOT
-					}
-					# Strength check: They beats us easily (< 40% strength)
-					ROOT = { strength_ratio = { tag = PREV ratio < 0.4 } }
-				}
 			}
 			
-			# 2. EFFECT: Find and save the threat
+			# Find and save the threat (one pass instead of two)
 			random_neighbor_country = {
 				limit = {
 					NOT = { is_in_faction_with = ROOT }
@@ -242,76 +253,104 @@ country_event = {
 					OR = {
 						has_wargoal_against = ROOT
 						is_justifying_wargoal_against = ROOT
+						any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
 					}
-					ROOT = { strength_ratio = { tag = PREV ratio < 0.4 } }
+					# Basic strength check: The threat must at least be stronger than us
+					ROOT = { strength_ratio = { tag = PREV ratio < 0.9 } }
 				}
 				save_event_target_as = plus_cs_threatening_neighbor
 			}
 			
-			# 3. Probability Calculation ("Smart Math" - Logic Buckets)
+			# Probability Calculation ("Smart Math" - Logic Buckets)
 			if = {
 				limit = { has_event_target = plus_cs_threatening_neighbor }
 				
-				# A. IMPOSSIBLE (Fanatics)
-				if = {
-					limit = { has_country_leader_with_trait = plus_cs_spirit_fanatic }
-					# Never surrender
-				}
-				# B. HIGH CHANCE (Defeatist Leader) - ~5%
-				else_if = {
-					limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist }
-					random_list = {
-						50 = { country_event = { id = plus_cs_diplomacy.1 } }
-						950 = { }
-					}
-				}
-				# C. MEDIUM CHANCE (Crisis or Tiny) - ~1.5%
-				else_if = {
-					limit = {
-						OR = {
-							has_stability < 0.4
-							has_war_support < 0.4
-							# Tiny Nation Check
-							event_target:plus_cs_threatening_neighbor = {
-								ROOT = { strength_ratio = { tag = PREV ratio < 0.1 } }
+				# Base chance to surrender is extremely low (1 in 1000 daily check)
+				# But modifiers will increase this based on the situation.
+				random_list = {
+					1 = {
+						# --- ABSOLUTE OVERRIDES ---
+						modifier = {
+							factor = 0 # FANATICS never surrender
+							has_country_leader_with_trait = plus_cs_spirit_fanatic
+						}
+						modifier = {
+							factor = 50 # DEFEATISTS are cowards
+							has_country_leader_with_trait = plus_cs_spirit_defeatist
+						}
+						
+						# --- MOD MECHANICS (FATIGUE & CRISIS) ---
+						modifier = {
+							factor = 50 # ECONOMIC/POLITICAL COLLAPSE (Total ruin)
+							OR = {
+								has_idea = political_paralysis
+								has_dynamic_modifier = homefront_collapse
+								has_dynamic_modifier = total_exhaustion
 							}
 						}
-					}
-					random_list = {
-						15 = { country_event = { id = plus_cs_diplomacy.1 } }
-						985 = { }
-					}
-				}
-				# D. VERY LOW CHANCE (Stubborn Ideologies) - ~0.1%
-				else_if = {
-					limit = {
-						OR = {
-							has_government = fascism
-							has_government = communism
+						modifier = {
+							factor = 10 # INTERNAL CRISIS (Severe issues)
+							OR = {
+								has_idea = internal_crisis_medium
+								has_idea = internal_crisis_high
+							}
 						}
+						modifier = {
+							factor = 10 # TERRIFIED (They are >5x stronger)
+							event_target:plus_cs_threatening_neighbor = {
+								ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } }
+							}
+						}
+						modifier = {
+							factor = 3 # SCARED (They are >2x stronger)
+							event_target:plus_cs_threatening_neighbor = {
+								ROOT = { strength_ratio = { tag = PREV ratio < 0.5 } }
+							}
+						}
+						
+						# --- STABILITY & SUPPORT ---
+						modifier = {
+							factor = 3 # CHAOS (Low Support & Stability)
+							has_stability < 0.3
+							has_war_support < 0.3
+						}
+						modifier = {
+							factor = 0 # PROUD (High Support & Stability)
+							has_stability > 0.8
+							has_war_support > 0.8
+						}
+						
+						# --- IDEOLOGY ---
+						modifier = {
+							factor = 0.5 # IDEOLOGY (Democracies / Non-Aligned more likely to yield)
+							OR = {
+								has_government = democratic
+								has_government = neutrality
+							}
+						}
+						modifier = {
+							factor = 0.1 # IDEOLOGY (Totalitarians fight to the end)
+							OR = {
+								has_government = fascism
+								has_government = communism
+							}
+						}
+						
+						# The Event
+						country_event = { id = plus_cs_diplomacy.1 }
 					}
-					random_list = {
-						1 = { country_event = { id = plus_cs_diplomacy.1 } }
-						999 = { }
-					}
-				}
-				# E. DEFAULT (Normal) - ~0.3%
-				else = {
-					random_list = {
-						3 = { country_event = { id = plus_cs_diplomacy.1 } }
-						997 = { }
-					}
+					1000 = { } # Do Nothing
 				}
 			}
 		}
 		
 		# Pre-War Deal Check (FIXED)
+		# OPT: Removed duplicate any_neighbor_country check
 		if = {
 			limit = {
 				is_ai = yes # Player never surrenders automatically
 				has_war = no
 				is_subject = no
-				any_neighbor_country = { has_wargoal_against = ROOT }
 			}
 			# Strict Logic: Only if we are truly terrified (< 20% strength)
 			random_neighbor_country = {

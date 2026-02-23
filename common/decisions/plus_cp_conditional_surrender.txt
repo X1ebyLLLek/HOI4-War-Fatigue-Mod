@@ -1,3 +1,5 @@
+
+
 peace_options = {
 
 	# ==============================================================================
@@ -46,7 +48,6 @@ peace_options = {
 		available = {
 			NOT = { has_country_flag = plus_cs_waiting_response }
 			has_war_with = FROM
-			has_capitulated = no
 			is_puppet = no
 			NOT = { has_civil_war = yes }
 		}
@@ -114,6 +115,10 @@ peace_options = {
 				add = 200
 				check_variable = { plus_cs_pressure_ratio > 1.5 } # Collapse
 			}
+			modifier = {
+				add = 500
+				has_capitulated = yes # Already capitulated, massive desire to end the war formally
+			}
 			
 			# === PERSONALITY MODIFIERS (Accelerators/Brakes) ===
 			
@@ -143,6 +148,50 @@ peace_options = {
 			modifier = {
 				factor = 2.0
 				strength_ratio = { tag = FROM ratio < 0.1 }
+			}
+			# Total internal doom
+			modifier = {
+				factor = 5.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
+			
+			# === NEW: CAPITAL LOST ===
+			modifier = {
+				add = 50
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# === NEW: ALLIANCE ISOLATION ===
+			# All allies dead — no hope of rescue
+			modifier = {
+				add = 40
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = ROOT
+						NOT = { has_capitulated = yes }
+					}
+				}
+			}
+			
+			# === NEW: WAR DURATION FATIGUE ===
+			modifier = {
+				factor = 1.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			modifier = {
+				factor = 2.0
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
+			
+			# === NEW: LOW WAR SUPPORT ===
+			modifier = {
+				factor = 2.0
+				has_war_support < 0.25
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==========================================
 # VETO LOGIC (FACTION LEADER INTERVENTION)
 # ==========================================
@@ -17,7 +19,39 @@ country_event = {
 	# Option A: Разрешить (Approve)
 	option = {
 		name = plus_cs.20.a
-		ai_chance = { base = 90 }
+		ai_chance = {
+			base = 70
+			
+			# Democrats respect sovereignty
+			modifier = {
+				add = 30
+				has_government = democratic
+			}
+			
+			# Member is exhausted — no point blocking
+			modifier = {
+				add = 30
+				FROM = { has_country_flag = plus_cs_exhausted }
+			}
+			
+			# Member is capitulated — they can’t fight anyway
+			modifier = {
+				add = 50
+				FROM = { has_capitulated = yes }
+			}
+			
+			# Leader itself is exhausted: we want peace too
+			modifier = {
+				add = 40
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Long war — alliance fatigue
+			modifier = {
+				add = 20
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+		}
 		
 		# Сообщаем Стране А, что мы согласны
 		FROM = { country_event = { id = plus_cs.21 } }
@@ -27,12 +61,43 @@ country_event = {
 	option = {
 		name = plus_cs.20.b
 		ai_chance = { 
-			base = 10 
+			base = 30
+			
+			# Totalitarians demand obedience
 			modifier = {
-				factor = 0
-				has_war_with = FROM 
+				factor = 2.0
+				OR = { has_government = fascism has_government = communism }
+			}
+			
+			# We’re winning strongly: veto (use the member as a distraction)
+			modifier = {
+				add = 50
 				surrender_progress < 0.1
 				has_war_support > 0.6
+			}
+			
+			# Member is a major: strategic asset, don’t let go
+			modifier = {
+				factor = 2.0
+				FROM = { is_major = yes }
+			}
+			
+			# We’re exhausted ourselves: no point vetoing
+			modifier = {
+				factor = 0.1
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Member capitulated — vetoing is cruel and pointless
+			modifier = {
+				factor = 0.1
+				FROM = { has_capitulated = yes }
+			}
+			
+			# Long war — less willing to enforce
+			modifier = {
+				factor = 0.3
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 		}
 		
@@ -90,6 +155,43 @@ country_event = {
 	# Option B: Предложить сепаратный мир (В обход лидера)
 	option = {
 		name = plus_cs.22.b
+		ai_chance = {
+			base = 30
+			
+			# Exhaustion: desperate
+			modifier = {
+				factor = 3.0
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Capitulated: must leave
+			modifier = {
+				factor = 5.0
+				has_capitulated = yes
+			}
+			
+			# Capital lost: authority shattered
+			modifier = {
+				factor = 2.0
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Long war: loyalty erodes
+			modifier = {
+				factor = 1.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Crisis: leave at all costs
+			modifier = {
+				factor = 10.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
+		}
 		
 		# FIX: event_target:peace_recipient is lost across event chains.
 		# Find FROM's (ROOT's, Country A's) enemy to propose separate peace.
@@ -112,9 +214,25 @@ country_event = {
 	# Option A: Я верен альянсу (Отказ)
 	option = {
 		name = plus_cs.23.a
-		ai_chance = { base = 90 }
-		add_stability = 0.05
-		add_war_support = 0.05
+		ai_chance = {
+			base = 70
+			
+			# Ideology affinity with faction leader
+			modifier = {
+				add = 30
+				faction_leader = { has_government = ROOT }
+			}
+			
+			# We’re winning: loyalty is easy
+			modifier = {
+				add = 50
+				surrender_progress < 0.1
+			}
+		}
+		set_temp_variable = { penalty_stab = 0.05 }
+			set_temp_variable = { penalty_ws = 0.05 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		FROM = { clr_country_flag = plus_cs_waiting_response }
 	}
 	
@@ -122,20 +240,56 @@ country_event = {
 	option = {
 		name = plus_cs.23.b
 		ai_chance = { 
-			base = 10 
+			base = 30
+			
+			# Urgent peace overrides loyalty
 			modifier = {
 				add = 100
 				has_country_flag = plus_cs_urgent_peace
 			}
+			
+			# Losing badly: self-preservation
 			modifier = {
 				add = 50
 				surrender_progress > 0.3
 			}
+			
+			# Exhausted: need peace at any cost
+			modifier = {
+				factor = 3.0
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Capitulated: loyalty means nothing
+			modifier = {
+				factor = 5.0
+				has_capitulated = yes
+			}
+			
+			# Capital lost: government authority gone
+			modifier = {
+				factor = 2.0
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Long war: why bleed for someone else?
+			modifier = {
+				factor = 1.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Ideology mismatch: easier to break away
+			modifier = {
+				factor = 2.0
+				NOT = { faction_leader = { has_government = ROOT } }
+			}
 		}
 		
 		leave_faction = yes
-		add_stability = -0.1
-		add_political_power = -50
+		set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = -50 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		# Теперь мы можем принять мир.
 		if = {

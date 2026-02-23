@@ -1,0 +1,29 @@
+# ==========================================
+# CENTRALIZED MOD VARIABLES
+# ==========================================
+
+# --- PP Costs ---
+@plus_cs_base_peace_cost = 25
+@plus_cs_base_crisis_cost = 50
+
+# --- Severity Penalties ---
+@plus_cs_heavy_stab_hit = -0.15
+@plus_cs_heavy_ws_hit = -0.15
+
+@plus_cs_moderate_stab_hit = -0.10
+@plus_cs_base_stab_hit = -0.10
+@plus_cs_moderate_ws_hit = -0.10
+@plus_cs_base_ws_hit = -0.10
+
+@plus_cs_light_stab_hit = -0.05
+@plus_cs_light_ws_hit = -0.05
+
+# --- Rewards ---
+@plus_cs_heavy_victory_stab_gain = 0.10
+@plus_cs_heavy_victory_ws_gain = 0.10
+
+@plus_cs_victory_stab_gain = 0.05
+@plus_cs_victory_ws_gain = 0.05
+
+@plus_cs_small_victory_stab_gain = 0.02
+@plus_cs_small_victory_ws_gain = 0.02

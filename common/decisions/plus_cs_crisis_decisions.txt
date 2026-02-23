@@ -1,5 +1,7 @@
 
 
+
+
 plus_cs_crisis_management = {
 
 	# 1. ВОЕННОЕ ПОЛОЖЕНИЕ (MARSHALL LAW)
@@ -11,7 +13,6 @@ plus_cs_crisis_management = {
 			has_war = yes
 			has_stability < 0.5
 		}
-		
 		cost = 50
 		
 		fire_only_once = no
@@ -42,7 +43,6 @@ plus_cs_crisis_management = {
 			has_war_support < 0.6
 			NOT = { has_idea = plus_cs_patriotic_fervor }
 		}
-		
 		cost = 25
 		
 		fire_only_once = no
@@ -90,13 +90,15 @@ plus_cs_crisis_management = {
 			has_dynamic_modifier = war_inflation_crisis
 			NOT = { tag = ROOT }
 		}
-		
 		cost = 50
 		
 
 		
 		complete_effect = {
-			add_political_power = -50
+			set_temp_variable = { penalty_stab = 0 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = -50 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 			custom_effect_tooltip = plus_cs_bailout_tt
 			
 			# Снимаем инфляцию у цели на полгода
@@ -107,7 +109,10 @@ plus_cs_crisis_management = {
 				add_stability = 0.10
 			}
 			# Штраф лидеру (абстрактный, через PP и стабу, т.к. фабрики забрать на время сложно в instant)
-			add_stability = -0.05
+			set_temp_variable = { penalty_stab = -0.05 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 			add_resource = {
 				type = oil
 				amount = -100 # Симуляция поставок

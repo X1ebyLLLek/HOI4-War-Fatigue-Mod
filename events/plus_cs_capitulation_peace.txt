@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==============================================================================
 # CAPITULATION PEACE EVENTS
 # Handling capitulated allies asking to seek separate peace
@@ -25,9 +27,30 @@ country_event = {
 		name = plus_cs.430.a
 		ai_chance = {
 			base = 50
+			
+			# Democrats: respect human rights, allow separate peace
 			modifier = {
 				add = 50
 				has_government = democratic
+			}
+			
+			# War dragging on: fatigue makes leader more lenient
+			modifier = {
+				add = 25
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Leader itself is exhausted: no point holding others
+			modifier = {
+				add = 40
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Ally's ideology differs from ours: weaker bond
+			modifier = {
+				add = 20
+				# F4: Simplified — one check instead of four ANDs
+				NOT = { event_target:capitulated_ally = { has_government = ROOT } }
 			}
 		}
 		
@@ -43,15 +66,37 @@ country_event = {
 		name = plus_cs.430.b
 		ai_chance = {
 			base = 50
+			
+			# Totalitarians: force compliance
+			modifier = {
+				factor = 2.0
+				OR = { has_government = fascism has_government = communism }
+			}
+			
+			# Major power: has authority to force
 			modifier = {
 				factor = 2.0
 				is_major = yes
+			}
+			
+			# Leader itself is exhausted: no point forcing
+			modifier = {
+				factor = 0.3
+				has_country_flag = plus_cs_exhausted
+			}
+			
+			# Long war: less willing to force capitulated ally
+			modifier = {
+				factor = 0.3
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 		}
 		
 		# Ничего не делаем - страна остается капитулировавшей в альянсе
 		event_target:capitulated_ally = {
 			country_event = { id = plus_cs.432 }
+			# Add penalty for forced continuation
+			add_timed_idea = { idea = forced_continuation_war days = 180 }
 		}
 	}
 }

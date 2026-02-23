@@ -1,3 +1,5 @@
+
+
 peace_treaty = {
 
 	# ==============================================================================
@@ -140,6 +142,40 @@ peace_treaty = {
 
 		ai_will_do = {
 			base = 5
+			
+			# === WAR CONTRIBUTION PRIORITY ===
+			# Страна с наибольшим вкладом (vp@FROM.owner) получает приоритет
+			
+			# Высокий вклад — сильно хотим марионетку
+			modifier = {
+				add = 50
+				check_variable = { vp@FROM.owner > 20 }
+			}
+			modifier = {
+				add = 100
+				check_variable = { vp@FROM.owner > 50 }
+			}
+			modifier = {
+				add = 200
+				check_variable = { vp@FROM.owner > 100 }
+			}
+			
+			# Низкий/нулевой вклад — почти не хотим (пусть возьмёт тот, кто воевал)
+			modifier = {
+				factor = 0.1
+				check_variable = { vp@FROM.owner < 5 }
+			}
+			
+			# Минор не должен забирать марионетку, если мажор из фракции внёс больший вклад
+			modifier = {
+				factor = 0.05
+				is_major = no
+				any_other_country = {
+					is_in_faction_with = ROOT
+					is_major = yes
+					check_variable = { vp@FROM.owner > ROOT.vp@FROM.owner }
+				}
+			}
 			
 			modifier = {
 				add = 20

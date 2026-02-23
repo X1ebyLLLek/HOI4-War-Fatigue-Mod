@@ -56,10 +56,9 @@ plus_cs_set_faction_truce = {
 	# 2. Если ROOT - лидер фракции, все его члены получают truce с FROM
 	if = {
 		limit = { is_faction_leader = yes }
-		every_country = {
+		every_other_country = {
 			limit = { 
 				is_in_faction_with = ROOT 
-				NOT = { tag = ROOT }
 			}
 			# Каждый член получает truce с FROM
 			set_truce = { target = FROM days = 365 }
@@ -77,10 +76,9 @@ plus_cs_set_faction_truce = {
 	if = {
 		limit = { FROM = { is_faction_leader = yes } }
 		FROM = {
-			every_country = {
+			every_other_country = {
 				limit = { 
 					is_in_faction_with = FROM 
-					NOT = { tag = FROM }
 				}
 				# Каждый член FROM получает truce с ROOT
 				set_truce = { target = ROOT days = 365 }
@@ -101,11 +99,11 @@ plus_cs_set_faction_truce = {
 			is_faction_leader = yes
 			FROM = { is_faction_leader = yes }
 		}
-		every_country = {
+		every_other_country = {
 			limit = { is_in_faction_with = ROOT }
 			save_event_target_as = root_faction_member
 			FROM = {
-				every_country = {
+				every_other_country = {
 					limit = { is_in_faction_with = FROM }
 					set_truce = { target = event_target:root_faction_member days = 365 }
 					event_target:root_faction_member = { set_truce = { target = PREV days = 365 } }

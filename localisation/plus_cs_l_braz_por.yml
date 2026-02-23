@@ -76,10 +76,10 @@
  peace_disarmed_nation:0 "Nação Desarmada"
  peace_civilian_economy:0 "Economia Civil"
  ceasefire_economic_tribute:0 "Tributo Econômico por Cessar-fogo"
- 
+
  # FIX: Chave renomeada para evitar duplicatas
  idea_conditional_surrender:0 "Rendição Condicional (Espírito)"
- 
+
  internal_crisis_low:0 "Crise Interna Baixa"
  internal_crisis_medium:0 "Crise Interna Média"
  internal_crisis_high:0 "Crise Interna Alta"
@@ -91,24 +91,24 @@
  humiliated_leader_desc:0 "Aceitar termos de paz vergonhosos manchou a reputação deste líder. O povo o percebe como fraco."
 
  # --- NOVAS MECÂNICAS: Economia 5.0 (Português) ---
- 
+
  shadow_econ_civilian:0 "Paraíso de Investimentos"
  shadow_econ_civilian_desc:0 "§GNicho de Paz:§! Os negócios prosperam enquanto as armas calam. Fornece Poder Político massivo e chance de §YInvestimentos Privados§!.\n\n§RIneficaz na guerra.§!"
- 
+
  shadow_econ_early:0 "Preparação de Engenharia"
  shadow_econ_early_desc:0 "§GNicho Logístico:§! O estado foca em infraestrutura e defesa. Melhor para construir bunkers, radares e estradas antes da guerra."
- 
+
  shadow_econ_partial:0 "Produção de Qualidade"
  shadow_econ_partial_desc:0 "§GBalanço:§! O ponto ideal. Fábricas operam com eficiência e qualidade máximas, sem forçar o ritmo."
- 
+
  shadow_econ_war:0 "Linha de Montagem de Guerra"
  shadow_econ_war_desc:0 "§GQuantidade:§! Produção em massa de armas ao custo da qualidade (confiabilidade). \n\n§RAviso:§! Uso prolongado em tempo de paz causará §YSuperaquecimento Econômico§!."
- 
+
  shadow_econ_total:0 "Exaustão Total"
  shadow_econ_total_desc:0 "§RDesespero:§! O país é um único campo militar. Velocidade máxima de construção ao custo de destruir §YCiência§! e §YEstabilidade§!."
 
  # --- Outras Mecânicas ---
- 
+
  manpower_strain_mild:0 "§Escassez de Mão de Obra§!"
  manpower_strain_mild_desc:0 "A mobilização afeta a economia. Máquinas ficam ociosas e engenheiros qualificados são substituídos por aprendices."
  manpower_strain_high:0 "§OCrise no Mercado de Trabalho§!"
@@ -131,7 +131,7 @@
  # --- NOVO: Submissão Honrosa ---
  offer_honorable_submission:0 "Oferecer Submissão Honrosa"
  offer_honorable_submission_desc:0 "Nossa situação é crítica. Oferecemos nos tornar súditos do inimigo em troca de proteção."
- 
+
  plus_cs_coalition_name:0 "Coalizão da Salvação"
 
  rapid_autonomy_recovery:0 "Caminho para a Independência"
@@ -189,10 +189,10 @@
 
  economic_retooling_shock_minor:0 "Choque Menor de Reequipamento"
  economic_retooling_shock_minor_desc:0 "As fábricas estão se adaptando a novas cotas. Queda temporária na eficiência."
- 
+
  economic_retooling_shock_medium:0 "Reequipamento Industrial"
  economic_retooling_shock_medium_desc:0 "Mudanças significativas na logística e linhas de produção. As fábricas estão temporariamente abaixo da capacidade."
- 
+
  economic_retooling_shock_major:0 "Paralisia Industrial"
  economic_retooling_shock_major_desc:0 "Mudanças econômicas drásticas causaram o caos. O maquinário está sendo substituído. A produção entra em colapso."
 
@@ -215,7 +215,7 @@
  offer_preventive_submission_desc:0 "Guerra com uma grande potência é suicídio. Devemos oferecer tornar-nos seu protetorado antes que nossas cidades sejam destruídas."
 
  # --- CORREÇÕES E ADIÇÕES (Fixes and Additions) ---
- 
+
  # Opção ausente no evento de rendição
  plus_cs.submission.1.c:0 "Ceder territórios reivindicados (Paz)"
 
@@ -289,43 +289,43 @@
  peace_territory_preserved:0 "Controle territorial preservado"
 
  # --- Smart Diplomacy & Crises (Diplomacia Inteligente e Crises) ---
- 
+
  plus_cs_diplomacy.1.t:0 "Questão de Soberania"
  plus_cs_diplomacy.1.d:0 "Enfrentando a esmagadora superioridade de nosso vizinho, nosso comando considera a guerra suicídio. Temos a chance de salvar a nação oferecendo-nos para nos tornar um protetorado."
  plus_cs_diplomacy.1.a:0 "Enviar oferta de vassalagem"
- 
+
  plus_cs_diplomacy.2.t:0 "Oferta de Submissão"
  plus_cs_diplomacy.2.d:0 "[From.GetNameDef] entende o inevitável e oferece-se para se tornar nosso protetorado em troca de proteção. Isso nos permite expandir nossa influência sem disparar um tiro."
  plus_cs_diplomacy.2.a:0 "Aceitar seu juramento de lealdade"
  plus_cs_diplomacy.2.b:0 "Queremos suas terras, não juramentos! (Anexação)"
  peaceful_vassalization:0 "Vassalagem Pacífica"
  diplo_insult:0 "Insulto Diplomático"
- 
+
  plus_cs_diplomacy.10.t:0 "Colapso do Suserano"
  plus_cs_diplomacy.10.d:0 "Nosso mestre [Overlord.GetName] está perdendo a guerra. O caos na metrópole nos dá uma chance única de recuperar a independência."
  plus_cs_diplomacy.10.a:0 "Declarar Independência!"
  plus_cs_diplomacy.10.b:0 "Permaneceremos leais até o fim"
- 
+
  plus_cs_diplomacy.20.t:0 "Ameaça de Invasão"
  plus_cs_diplomacy.20.d:0 "O inimigo está preparando uma invasão, e nossas chances na guerra são nulas. Devemos oferecer concessões para evitar uma catástrofe."
  plus_cs_diplomacy.20.a:0 "Oferecer Concessões Territoriais"
- 
+
  plus_cs_diplomacy.21.t:0 "Pagamento Diplomático"
  plus_cs_diplomacy.21.d:0 "[From.GetNameDef], vendo o poder de nosso exército na fronteira, oferece atender nossas demandas territoriais sem luta se garantirmos a não agressão no futuro."
  plus_cs_diplomacy.21.a:0 "Concordar (Receber Territórios)"
  plus_cs_diplomacy.21.b:0 "Tomaremos tudo à força!"
- 
+
  # --- Internal Crisis ---
  plus_cs_internal.1.t:0 "Ultimato dos Generais"
  plus_cs_internal.1.d:0 "O exército está sangrando. As baixas excederam a marca crítica. O Estado-Maior exige paz imediata ou mudança de governo."
  plus_cs_internal.1.a:0 "Conduzir Purgos (Recusar)"
  plus_cs_internal.1.b:0 "Governo Renuncia (Golpe)"
  army_purge_aftershock:0 "Consequências dos Purgos do Exército"
- 
+
  # --- Partisans ---
  broken_nation_resistance:0 "Nação Quebrada mas não Conquistada"
  plus_cs_partisan_activity:0 "Atividade Partidária (Guerrilha)"
- 
+
  # --- Crisis Decisions ---
  plus_cs_marshall_law:0 "Declarar Lei Marcial"
  plus_cs_marshall_law_desc:0 "Medidas duras para restaurar a ordem. Reduz a produtividade, mas impede o colapso do país."
@@ -360,7 +360,7 @@
  plus_cs_internal.3.a:0 "Enviar Oferta"
  plus_cs_purge_tt:0 "§RO purgo do Alto Comando reduz a Organização do Exército por 90 dias§!"
  peace_treaty_desc:0 ""
- 
+
  # --- LOGIC EVENTS (Debate de Rendição) ---
  plus_cs_logic.1.t:0 "Debate do Conselho sobre Rendição"
  plus_cs_logic.1.d:0 "O gabinete está em tumulto. O inimigo pressiona nossas fronteiras e vozes pedem o fim do derramamento de sangue. No entanto, a linha dura insiste que a rendição é traição."
@@ -373,49 +373,86 @@
  plus_cs_spirit_defeatist_desc:0 "Este líder é pessimista e buscará a paz ao primeiro sinal de problema.\n\n§GAceitação de Paz IA: +100%§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "Este líder é teimoso e resiste fortemente à rendição.\n\n§YAceitação de Paz IA: Normal§!\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_diplomacy.20.b:0 "Não nos curvaremos!"
- 
+
  # --- Leader Traits (Base) ---
  plus_cs_spirit_fanatic:0 "Fanático"
  plus_cs_spirit_defeatist:0 "Derrotista"
  plus_cs_spirit_resilient:0 "Resiliente"
- 
+
  # --- DEBUG DECISION ---
  plus_cs_debug_vars:0 "DEBUG: Verificar Vontade Oculta"
  plus_cs_debug_vars_desc:0 "§OVontade Oculta Atual: [?Root.plus_cs_hidden_resolve]§!\\n\\nUse esta decisão para registrar o valor no log."
  plus_cs_debug_dump_all:0 "DEBUG: Escrever Vontade de TODAS as nações no log"
  plus_cs_debug_dump_all_desc:0 "Escreve o valor da Vontade Oculta para CADA país em error.log (game.log)."
- 
+
  # --- CUSTOM TOOLTIPS ---
  plus_cs_spirit_fanatic_tt:0 "Defesa do exército em território nacional: §G+10.0%§!\\nOrganização de divisão: §G+10.0%§!\\n\\nEste líder nunca aceitará a rendição a menos que a nação seja destruída.\\n\\n§RAceitação de Paz IA: -100%§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_tt:0 "Taxa de recuperação de divisão: §R-10.0%§!\\nLimite de rendição: §R+10.0%§!\\n\\nEste líder é pessimista e buscará a paz ao primeiro sinal de problema.\\n\\n§GAceitação de Paz IA: +100%§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_tt:0 "Estabilidade semanal: §G+0.10%§!\\n\\nEste líder é teimoso e resiste fortemente à rendição.\\n\\n§YAceitação de Paz IA: Normal§!\\n§O[Debug]: Vontade Oculta: [?Root.plus_cs_hidden_resolve]§!"
 
-  # --- MISSING KEYS ---
-  peace_economic_tribute:0 "Tributo Econômico por Cessar-Fogo"
-  plus_cs_reparation_bonus_tt:0 "§GBônus de Reparação:§! [FROM.GetName] está desesperado pela paz e oferece §Y[?FROM.plus_cs_reparation_bonus] Poder Político§! como reparações."
-  plus_cs_separate_peace_blocker:0 "Espírito de Paz Separada"
-  plus_cs_separate_peace_blocker_desc:0 "Este país assinou um tratado de paz em separado. Não podemos nos juntar a facções ou chamar aliados, mas nossas fronteiras estão seguras."
-  
-  # --- SYNERGY CRISIS ---
-  army_cohesion_crisis:0 "§RDesintegração do Exército§!"
-  army_cohesion_crisis_desc:0 "Baixas catastróficas e escassez de oficiais destruíram o exército. Unidades se recusam a atacar, soldados desertam em massa."
-  homefront_collapse:0 "§RColapso da Frente Interna§!"
-  homefront_collapse_desc:0 "Inflação e crise política paralisaram a economia. Greves varrem as fábricas, filas de pão viram tumultos."
-  total_exhaustion:0 "§RExaustão Total§!"
-  total_exhaustion_desc:0 "O país não pode mais fazer guerra. Exército dissolvido, economia morta, governo paralisado."
-  political_paralysis:0 "§RParalisia Política§!"
-  political_paralysis_desc:0 "O governo é incapaz de governar. Estabilidade e apoio à guerra caíram abaixo do nível crítico."
-  
-  # --- POLITICAL COLLAPSE EVENTS ---
-  plus_cs_internal.11.t:0 "Golpe Militar"
-  plus_cs_internal.11.d:0 "Os generais tomaram o poder. Incapazes de ver a nação ruir, o exército derrubou o governo para restaurar a ordem."
-  plus_cs_internal.11.a:0 "A ordem deve ser restaurada"
-  plus_cs_internal.12.t:0 "Paralisia Política"
-  plus_cs_internal.12.d:0 "O governo perdeu completamente o controle. Debates sem fim, greves e distúrbios paralisaram a nação."
-  plus_cs_internal.12.a:0 "Somos impotentes..."
-  plus_cs_internal.13.t:0 "Capitulação Forçada"
-  plus_cs_internal.13.d:0 "O governo colapsou. Para evitar a aniquilação total, as autoridades restantes decidiram se render."
-  plus_cs_internal.13.a:0 "Não temos escolha"
-  plus_cs.300.c:0 "Estamos sozinhos."
-  plus_cs_crisis_management:0 "Gestão de Crise"
-  plus_cs_debug_options:0 "Opções de Depuração"
+ # --- MISSING KEYS ---
+ peace_economic_tribute:0 "Tributo Econômico por Cessar-Fogo"
+ plus_cs_reparation_bonus_tt:0 "§GBônus de Reparação:§! [FROM.GetName] está desesperado pela paz e oferece §Y[?FROM.plus_cs_reparation_bonus] Poder Político§! como reparações."
+ plus_cs_separate_peace_blocker:0 "Espírito de Paz Separada"
+ plus_cs_separate_peace_blocker_desc:0 "Este país assinou um tratado de paz em separado. Não podemos nos juntar a facções ou chamar aliados, mas nossas fronteiras estão seguras."
+
+ # --- SYNERGY CRISIS ---
+ army_cohesion_crisis:0 "§RDesintegração do Exército§!"
+ army_cohesion_crisis_desc:0 "Baixas catastróficas e escassez de oficiais destruíram o exército. Unidades se recusam a atacar, soldados desertam em massa."
+ homefront_collapse:0 "§RColapso da Frente Interna§!"
+ homefront_collapse_desc:0 "Inflação e crise política paralisaram a economia. Greves varrem as fábricas, filas de pão viram tumultos."
+ total_exhaustion:0 "§RExaustão Total§!"
+ total_exhaustion_desc:0 "O país não pode mais fazer guerra. Exército dissolvido, economia morta, governo paralisado."
+ political_paralysis:0 "§RParalisia Política§!"
+ political_paralysis_desc:0 "O governo é incapaz de governar. Estabilidade e apoio à guerra caíram abaixo do nível crítico."
+
+ # --- POLITICAL COLLAPSE EVENTS ---
+ plus_cs_internal.11.t:0 "Golpe Militar"
+ plus_cs_internal.11.d:0 "Os generais tomaram o poder. Incapazes de ver a nação ruir, o exército derrubou o governo para restaurar a ordem."
+ plus_cs_internal.11.a:0 "A ordem deve ser restaurada"
+ plus_cs_internal.12.t:0 "Paralisia Política"
+ plus_cs_internal.12.d:0 "O governo perdeu completamente o controle. Debates sem fim, greves e distúrbios paralisaram a nação."
+ plus_cs_internal.12.a:0 "Somos impotentes..."
+ plus_cs_internal.13.t:0 "Capitulação Forçada"
+ plus_cs_internal.13.d:0 "O governo colapsou. Para evitar a aniquilação total, as autoridades restantes decidiram se render."
+ plus_cs_internal.13.a:0 "Não temos escolha"
+ plus_cs.300.c:0 "Estamos sozinhos."
+ plus_cs_crisis_management:0 "Gestão de Crise"
+ plus_cs_debug_options:0 "Opções de Depuração"
+
+ plus_cp_demands:0 "Demandas Diplomáticas"
+ plus_cp_demands_desc:0 "Use peso diplomático e a ameaça de guerra para exigir concessões."
+ plus_cp_demand_core_states:0 "Exigir Territórios Nacionais"
+ plus_cp_demand_core_states_title:0 "Exigir Territórios Nacionais"
+ PLUS_CP_DEMAND_CORE_STATES_TITLE:0 "Exigir Territórios Nacionais"
+ PLUS_CP_DEMAND_CORE_STATES_ACTION_DESC:0 "Exigir o retorno de nossos legítimos territórios nacionais atualmente detidos por uma potência estrangeira. Se eles recusarem, significará guerra."
+ plus_cs_demands.1.t:0 "Demanda por Territórios Nacionais"
+ plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] nos enviou um ultimato formal: devolver seus territórios nacionais imediatamente ou enfrentar uma invasão."
+ plus_cs_demands.1.a:0 "Não temos escolha a não ser ceder."
+ plus_cs_demands.1.b:0 "Nunca! Preparem-se para a guerra!"
+ plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Cede"
+ plus_cs_demands.2.d:0 "Temendo nosso poderio militar, eles se curvaram às nossas demandas e devolveram pacificamente nossos territórios."
+ plus_cs_demands.2.a:0 "Uma vitória sem derramamento de sangue."
+ plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Recusa"
+ plus_cs_demands.3.d:0 "Eles rejeitaram descaradamente nosso ultimato. O tempo da diplomacia acabou."
+ plus_cs_demands.3.a:0 "À guerra!"
+
+ # --- Restrições de Demanda de Territórios Nacionais ---
+ plus_cs_demand_not_core_tt:0 "O alvo deve controlar pelo menos um de nossos estados nacionais ou reivindicados."
+ plus_cs_demand_not_at_war_tt:0 "Ambas as nações devem estar em paz, sem guerras civis internas."
+ plus_cs_demand_not_faction_tt:0 "O alvo não pode ser nosso súdito, suserano ou membro de facção."
+ plus_cs_demand_no_recent_tt:0 "Não lhes enviamos uma demanda territorial recentemente."
+ plus_cs_demand_full_annexation_tt:0 "O alvo deve ter pelo menos um estado que §RNÃO§! seja do nosso núcleo. (Não podemos anexar pacificamente o país inteiro deles)."
+
+ plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs.250.a:0 "We submit... (Become puppet)"
+ plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
+ plus_cs.250.c:0 "Counter-propose conditional terms"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs_internal.14.t:0 "Overlord Annexation"
+ plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
+ plus_cs_internal.14.a:0 "Submit to direct rule"
+ plus_cs_internal.15.t:0 "Defection to the Enemy"
+ plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
+ plus_cs_internal.15.a:0 "Switch sides to survive"

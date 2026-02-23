@@ -1,3 +1,5 @@
+
+
 peace_options = {
 
 	# ==============================================================================
@@ -22,8 +24,10 @@ peace_options = {
 				has_civil_war = yes
 			}
 			is_puppet = no
+			# NOT ALLOWED FOR CAPITULATED COUNTRIES (White Peace requires leverage)
 			has_capitulated = no
 			FROM = {
+				# We also cannot propose White Peace to a capitulated country (just annex/puppet them via their surrender offer instead)
 				has_capitulated = no
 				is_puppet = no
 			}
@@ -34,12 +38,15 @@ peace_options = {
 				has_country_flag = plus_cs_waiting_response
 			}
 			has_war_with = FROM
+			# White Peace implies returning to pre-war borders which capitulated countries cannot demand
+			has_capitulated = no
 			check_variable = {
 				var = vp@FROM
 				value = 0
 				compare = greater_than_or_equals
 			}
 			FROM = {
+				# We cannot propose white peace to a fallen enemy
 				has_capitulated = no
 				# Removed surrender_progress check to allow losers to propose peace
 				is_puppet = no

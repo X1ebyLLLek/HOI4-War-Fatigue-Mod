@@ -77,10 +77,10 @@
  peace_civilian_economy:0 "民需経済"
  peace_economic_tribute:0 "停戦のための経済的貢納" # Fix key if needed
  ceasefire_economic_tribute:0 "停戦のための経済的貢納"
- 
+
  # 修正: 決断との重複を避けるための新しいキー
  idea_conditional_surrender:0 "条件付き降伏 (精神)"
- 
+
  internal_crisis_low:0 "国内危機 (低)"
  internal_crisis_medium:0 "国内危機 (中)"
  internal_crisis_high:0 "国内危機 (高)"
@@ -92,24 +92,24 @@
  humiliated_leader_desc:0 "屈辱的な和平条件（武装解除）を受け入れたことで、この指導者の評判は地に落ちました。国民は彼を弱腰だと見なしています。"
 
  # --- 新メカニクス: 経済 5.0 (日本語) ---
- 
+
  shadow_econ_civilian:0 "投資の楽園"
  shadow_econ_civilian_desc:0 "§G平和の恩恵:§! 銃声が止んでいる間、ビジネスは繁栄します。政治力の大きな増加と、§Y民間投資§!の機会を提供します。\n\n§R戦時には非効率です。§!"
- 
+
  shadow_econ_early:0 "工学的準備"
  shadow_econ_early_desc:0 "§G兵站の恩恵:§! 国家はインフラと防衛に重点を置きます。開戦前に要塞、レーダー、道路を建設するのに最適です。"
- 
+
  shadow_econ_partial:0 "品質重視の生産"
  shadow_econ_partial_desc:0 "§Gバランス:§! 最適解です。工場は無理な増産をせず、最高の効率と品質で稼働します。"
- 
+
  shadow_econ_war:0 "軍需組立ライン"
  shadow_econ_war_desc:0 "§G量産:§! 品質（信頼性）を犠牲にして兵器を大量生産します。\n\n§R警告:§! 平時に長期間使用すると、§Y経済の過熱§!を引き起こします。"
- 
+
  shadow_econ_total:0 "完全な消耗"
  shadow_econ_total_desc:0 "§R絶望:§! 国家は一つの巨大な軍事キャンプと化します。§Y科学§!と§Y安定度§!の崩壊を代償に、建設速度を最大化します。"
 
  # --- その他のメカニクス ---
- 
+
  manpower_strain_mild:0 "§Y労働力不足§!"
  manpower_strain_mild_desc:0 "動員が経済に影響を及ぼし始めています。機械はアイドル状態になり、熟練した技術者は見習いに置き換えられています。"
  manpower_strain_high:0 "§O労働市場の危機§!"
@@ -132,7 +132,7 @@
  # --- 新機能: 名誉ある服従 ---
  offer_honorable_submission:0 "名誉ある服従を申し出る"
  offer_honorable_submission_desc:0 "状況は危機的です。保護と引き換えに、敵の従属国となることを提案します。"
- 
+
  plus_cs_coalition_name:0 "救国連合"
 
  rapid_autonomy_recovery:0 "独立への道"
@@ -190,10 +190,10 @@
 
  economic_retooling_shock_minor:0 "軽微な産業転換ショック"
  economic_retooling_shock_minor_desc:0 "工場は新しいノルマに適応しようとしています。生産効率が一時的に低下します。"
- 
+
  economic_retooling_shock_medium:0 "産業の再編"
  economic_retooling_shock_medium_desc:0 "物流と生産ラインの大幅な変更。工場は一時的に能力を下回る稼働を強いられます。"
- 
+
  economic_retooling_shock_major:0 "産業の麻痺"
  economic_retooling_shock_major_desc:0 "急激な経済転換が混乱を引き起こしました。機械設備の交換が行われています。生産は崩壊状態です。"
 
@@ -212,7 +212,7 @@
  offer_preventive_submission_desc:0 "大国との戦争は自殺行為です。都市が破壊される前に、彼らの保護国となることを申し出なければなりません。"
 
  # --- 修正と追加 (Fixes and Additions) ---
- 
+
  # 降伏イベントで欠落していた選択肢
  plus_cs.submission.1.c:0 "要求された領土を割譲する（和平）"
 
@@ -238,40 +238,40 @@
  # ==============================================================================
  # 新規: 世界大戦と同盟メカニクス
  # ==============================================================================
- 
+
  plus_cs.410.t:0 "[From.GetAdjective]戦線での単独講和"
  plus_cs.410.d:0 "[From.GetNameDef]が我々の敵と単独講和を結びました。しかし、我々の軍事的存在のおかげで、占領している領土の支配は維持されました。"
  plus_cs.410.a:0 "我々の陣地は確保されている。"
  plus_cs_territory_preserved_tt:0 "§G我々の支配下にある領土は維持されました！§!"
- 
+
  plus_cs.420.t:0 "[From.GetNameDefCap]が同盟からの離脱を要請"
  plus_cs.420.d:0 "[From.GetNameDef]政府が単独講和を交渉するために我々の同盟から離脱する許可を要請しました。"
  plus_cs.420.a:0 "解放する（離脱を許可）"
  plus_cs.420.b:0 "戦わなければならない！（拒否）"
- 
+
  plus_cs.421.t:0 "離脱許可が下りた"
  plus_cs.421.d:0 "同盟のリーダーが我々の状況を理解し、同盟からの離脱を許可しました。"
  plus_cs.421.a:0 "理解に感謝します。"
  plus_cs_can_now_peace_tt:0 "§G単独講和を交渉できるようになりました§!"
- 
+
  plus_cs.422.t:0 "離脱が拒否された！"
  plus_cs.422.d:0 "同盟のリーダーが我々の離脱要請を拒否しました。国の疲弊にもかかわらず戦い続けることを要求しています。"
  plus_cs.422.a:0 "従って戦争を続ける"
  plus_cs.422.b:0 "意に反して離脱する！（結果あり）"
- 
+
  plus_cs.430.t:0 "[From.GetNameDefCap]が降伏を要請"
  plus_cs.430.d:0 "[From.GetNameDef]が降伏し、敵への完全降伏の許可を求めています。"
  plus_cs.430.a:0 "単独降伏を許可"
  plus_cs.430.b:0 "全体的な講和を待つ必要がある"
- 
+
  plus_cs.431.t:0 "許可が下りた"
  plus_cs.431.d:0 "同盟のリーダーが単独講和の交渉を許可しました。同盟を離脱します。"
  plus_cs.431.a:0 "これが唯一の方法..."
- 
+
  plus_cs.432.t:0 "降伏が拒否された"
  plus_cs.432.d:0 "単独講和の権利を拒否されました。同盟の降伏したメンバーとして留まります。"
  plus_cs.432.a:0 "選択肢はない..."
- 
+
  forced_continuation_war:0 "強制的な戦争継続"
  forced_continuation_war_desc:0 "我々の同盟は疲弊にもかかわらず戦い続けることを要求しています。"
  faction_betrayal:0 "同盟の裏切り"
@@ -279,43 +279,43 @@
  peace_territory_preserved:0 "領土支配の維持"
 
  # --- Smart Diplomacy & Crises (スマート外交と危機) ---
- 
+
  plus_cs_diplomacy.1.t:0 "主権問題"
  plus_cs_diplomacy.1.d:0 "隣国の圧倒的な優位に直面し、我々の司令部は戦争を自殺行為とみなしています。保護国となることを申し出ることで、国家を救うチャンスがあります。"
  plus_cs_diplomacy.1.a:0 "従属化の申し出を送る"
- 
+
  plus_cs_diplomacy.2.t:0 "服従の申し出"
  plus_cs_diplomacy.2.d:0 "[From.GetNameDef]は不可避な結末を理解しており、保護と引き換えに我々の保護国となることを申し出ています。これにより、一発も撃たずに影響力を拡大できます。"
  plus_cs_diplomacy.2.a:0 "忠誠の誓いを受け入れる"
  plus_cs_diplomacy.2.b:0 "我々が欲しいのは土地だ、誓いではない！（併合）"
  peaceful_vassalization:0 "平和的従属化"
  diplo_insult:0 "外交的侮辱"
- 
+
  plus_cs_diplomacy.10.t:0 "宗主国の崩壊"
  plus_cs_diplomacy.10.d:0 "我々の主人[Overlord.GetName]は戦争に負けています。本国での混乱は、独立を取り戻すまたとない機会を与えてくれます。"
  plus_cs_diplomacy.10.a:0 "独立を宣言する！"
  plus_cs_diplomacy.10.b:0 "最後まで忠誠を尽くす"
- 
+
  plus_cs_diplomacy.20.t:0 "侵略の脅威"
  plus_cs_diplomacy.20.d:0 "敵は侵略を準備しており、我々の勝機はゼロです。破滅を防ぐために、あらゆる譲歩を申し出なければなりません。"
  plus_cs_diplomacy.20.a:0 "領土的譲歩を申し出る"
- 
+
  plus_cs_diplomacy.21.t:0 "外交的見返り"
  plus_cs_diplomacy.21.d:0 "[From.GetNameDef]は、国境に展開する我々の軍事力を見て、将来の不可侵を保証するならば、戦わずに領土要求に応じると申し出ています。"
  plus_cs_diplomacy.21.a:0 "同意する（領土を受け取る）"
  plus_cs_diplomacy.21.b:0 "武力ですべてを奪い取る！"
- 
+
  # --- Internal Crisis (国内危機) ---
  plus_cs_internal.1.t:0 "将軍たちの最後通牒"
  plus_cs_internal.1.d:0 "軍は血を流しすぎています。死傷者は危険なレベルを超えました。参謀本部は即時和平か政府の交代を要求しています。"
  plus_cs_internal.1.a:0 "粛清を行う（拒否）"
  plus_cs_internal.1.b:0 "政府が辞任する（クーデター）"
  army_purge_aftershock:0 "軍粛清の後遺症"
- 
+
  # --- Partisans (パルチザン) ---
  broken_nation_resistance:0 "砕かれたが征服されていない国"
  plus_cs_partisan_activity:0 "パルチザン活動（ゲリラ）"
- 
+
  # --- Crisis Decisions (危機への決断) ---
  plus_cs_marshall_law:0 "戒厳令を布告"
  plus_cs_marshall_law_desc:0 "秩序回復のための厳しい措置。生産性は低下しますが、国の崩壊を防ぎます。"
@@ -350,62 +350,99 @@
  plus_cs_internal.3.a:0 "提案を送る"
  plus_cs_purge_tt:0 "§R最高司令部の粛清により、90日間陸軍の組織率が低下します§!"
  peace_treaty_desc:0 ""
- 
+
  # --- LOGIC EVENTS (降伏に関する閣議) ---
  plus_cs_logic.1.t:0 "降伏に関する閣議"
  plus_cs_logic.1.d:0 "内閣は混乱状態にあります。敵は国境に迫り、政府内からは流血の停止を求める声が上がっています。しかし、強硬派は降伏こそが売国行為であると主張しています。"
  plus_cs_logic.1.a:0 "徹底抗戦だ！（拒否）"
  plus_cs_logic.1.b:0 "条件を模索すべきだ（降伏）"
  plus_cs_surrender_proceed_tt:0 "§G正式な降伏交渉へ進む§!"
- 
+
  # --- Leader Traits Debug ---
  plus_cs_spirit_fanatic_desc:0 "この指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\n\n§RAI講和受諾: -100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_defeatist_desc:0 "この指導者は悲観的で、問題の最初の兆候で講和を模索します。\n\n§GAI講和受諾: +100%§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_spirit_resilient_desc:0 "この指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
  plus_cs_diplomacy.20.b:0 "我々は屈しない！"
-  
-  # --- Leader Traits (Base) ---
-  plus_cs_spirit_fanatic:0 "狂信者"
-  plus_cs_spirit_defeatist:0 "敗北主義者"
-  plus_cs_spirit_resilient:0 "不屈"
-  
-  # --- DEBUG DECISION ---
-  plus_cs_debug_vars:0 "DEBUG: 隠された意思を確認"
-  plus_cs_debug_vars_desc:0 "§O現在の隠された意思: [?Root.plus_cs_hidden_resolve]§!\\n\\nこの決断を使用して値をログに記録します。"
-  plus_cs_debug_dump_all:0 "DEBUG: すべての国の意思をログに出力"
-  plus_cs_debug_dump_all_desc:0 "すべての国の隠された意思の値をerror.log (game.log)に書き込みます。"
-  
-  # --- CUSTOM TOOLTIPS ---
-  plus_cs_spirit_fanatic_tt:0 "国土防衛: §G+10.0%§!\\n師団組織率: §G+10.0%§!\\n\\nこの指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\\n\\n§RAI講和受諾: -100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
-  plus_cs_spirit_defeatist_tt:0 "師団回復率: §R-10.0%§!\\n降伏閾値: §R+10.0%§!\\n\\nこの指導者は悲観的で、問題の最初の兆候で講和を模索します。\\n\\n§GAI講和受諾: +100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
-  plus_cs_spirit_resilient_tt:0 "週間安定度: §G+0.10%§!\\n\\nこの指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
 
-  # --- MISSING KEYS ---
-  peace_economic_tribute:0 "停戦のための経済的貢物"
-  plus_cs_reparation_bonus_tt:0 "§G賠償ボーナス:§! [FROM.GetName] は平和を切望しており、賠償として §Y[?FROM.plus_cs_reparation_bonus] 政治力§! を提供しています。"
-  plus_cs_separate_peace_blocker:0 "単独講和の精神"
-  plus_cs_separate_peace_blocker_desc:0 "この国は単独講和条約を締結しました。陣営に参加したり同盟国を呼んだりすることはできませんが、国境は安全です。"
-  
-  # --- SYNERGY CRISIS ---
-  army_cohesion_crisis:0 "§R軍の崩壊§!"
-  army_cohesion_crisis_desc:0 "壊滅的な損害と将校不足により軍が崩壊しました。部隊は攻撃を拒否し、兵士は大量に脱走しています。"
-  homefront_collapse:0 "§R銃後の崩壊§!"
-  homefront_collapse_desc:0 "インフレと政治危機により経済が麻痺しています。工場ではストライキが発生し、食料配給の列が暴動に変わっています。"
-  total_exhaustion:0 "§R完全な疲弊§!"
-  total_exhaustion_desc:0 "もはや戦争を遂行することはできません。軍は解散し、経済は死に、政府は麻痺しています。"
-  political_paralysis:0 "§R政治麻痺§!"
-  political_paralysis_desc:0 "政府は統治能力を失いました。安定度と戦争協力度は危険なレベルまで低下しています。"
-  
-  # --- POLITICAL COLLAPSE EVENTS ---
-  plus_cs_internal.11.t:0 "軍事クーデター"
-  plus_cs_internal.11.d:0 "将軍たちが権力を掌握しました。国家の崩壊を見過ごすことができず、軍は秩序を回復するために政府を転覆させました。"
-  plus_cs_internal.11.a:0 "秩序を回復しなければならない"
-  plus_cs_internal.12.t:0 "政治的麻痺"
-  plus_cs_internal.12.d:0 "政府は完全にコントロールを失いました。終わりのない議論、ストライキ、騒乱が国家を麻痺させました。"
-  plus_cs_internal.12.a:0 "我々は無力だ..."
-  plus_cs_internal.13.t:0 "強制降伏"
-  plus_cs_internal.13.d:0 "政府は崩壊しました。完全な全滅を避けるため、残存する当局は敵への降伏を決定しました。"
-  plus_cs_internal.13.a:0 "選択肢はない"
-  plus_cs.300.c:0 "我々は孤立している。"
-  plus_cs_crisis_management:0 "危機管理"
-  plus_cs_debug_options:0 "デバッグオプション"
+ # --- Leader Traits (Base) ---
+ plus_cs_spirit_fanatic:0 "狂信者"
+ plus_cs_spirit_defeatist:0 "敗北主義者"
+ plus_cs_spirit_resilient:0 "不屈"
+
+ # --- DEBUG DECISION ---
+ plus_cs_debug_vars:0 "DEBUG: 隠された意思を確認"
+ plus_cs_debug_vars_desc:0 "§O現在の隠された意思: [?Root.plus_cs_hidden_resolve]§!\\n\\nこの決断を使用して値をログに記録します。"
+ plus_cs_debug_dump_all:0 "DEBUG: すべての国の意思をログに出力"
+ plus_cs_debug_dump_all_desc:0 "すべての国の隠された意思の値をerror.log (game.log)に書き込みます。"
+
+ # --- CUSTOM TOOLTIPS ---
+ plus_cs_spirit_fanatic_tt:0 "国土防衛: §G+10.0%§!\\n師団組織率: §G+10.0%§!\\n\\nこの指導者は、国家が完全に破壊されない限り、決して降伏を受け入れません。\\n\\n§RAI講和受諾: -100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_defeatist_tt:0 "師団回復率: §R-10.0%§!\\n降伏閾値: §R+10.0%§!\\n\\nこの指導者は悲観的で、問題の最初の兆候で講和を模索します。\\n\\n§GAI講和受諾: +100%§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+ plus_cs_spirit_resilient_tt:0 "週間安定度: §G+0.10%§!\\n\\nこの指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
+
+ # --- MISSING KEYS ---
+ peace_economic_tribute:0 "停戦のための経済的貢物"
+ plus_cs_reparation_bonus_tt:0 "§G賠償ボーナス:§! [FROM.GetName] は平和を切望しており、賠償として §Y[?FROM.plus_cs_reparation_bonus] 政治力§! を提供しています。"
+ plus_cs_separate_peace_blocker:0 "単独講和の精神"
+ plus_cs_separate_peace_blocker_desc:0 "この国は単独講和条約を締結しました。陣営に参加したり同盟国を呼んだりすることはできませんが、国境は安全です。"
+
+ # --- SYNERGY CRISIS ---
+ army_cohesion_crisis:0 "§R軍の崩壊§!"
+ army_cohesion_crisis_desc:0 "壊滅的な損害と将校不足により軍が崩壊しました。部隊は攻撃を拒否し、兵士は大量に脱走しています。"
+ homefront_collapse:0 "§R銃後の崩壊§!"
+ homefront_collapse_desc:0 "インフレと政治危機により経済が麻痺しています。工場ではストライキが発生し、食料配給の列が暴動に変わっています。"
+ total_exhaustion:0 "§R完全な疲弊§!"
+ total_exhaustion_desc:0 "もはや戦争を遂行することはできません。軍は解散し、経済は死に、政府は麻痺しています。"
+ political_paralysis:0 "§R政治麻痺§!"
+ political_paralysis_desc:0 "政府は統治能力を失いました。安定度と戦争協力度は危険なレベルまで低下しています。"
+
+ # --- POLITICAL COLLAPSE EVENTS ---
+ plus_cs_internal.11.t:0 "軍事クーデター"
+ plus_cs_internal.11.d:0 "将軍たちが権力を掌握しました。国家の崩壊を見過ごすことができず、軍は秩序を回復するために政府を転覆させました。"
+ plus_cs_internal.11.a:0 "秩序を回復しなければならない"
+ plus_cs_internal.12.t:0 "政治的麻痺"
+ plus_cs_internal.12.d:0 "政府は完全にコントロールを失いました。終わりのない議論、ストライキ、騒乱が国家を麻痺させました。"
+ plus_cs_internal.12.a:0 "我々は無力だ..."
+ plus_cs_internal.13.t:0 "強制降伏"
+ plus_cs_internal.13.d:0 "政府は崩壊しました。完全な全滅を避けるため、残存する当局は敵への降伏を決定しました。"
+ plus_cs_internal.13.a:0 "選択肢はない"
+ plus_cs.300.c:0 "我々は孤立している。"
+ plus_cs_crisis_management:0 "危機管理"
+ plus_cs_debug_options:0 "デバッグオプション"
+
+ plus_cp_demands:0 "外交的要求"
+ plus_cp_demands_desc:0 "外交的圧力と戦争の脅威を利用して譲歩を要求する。"
+ plus_cp_demand_core_states:0 "中核州の返還を要求する"
+ plus_cp_demand_core_states_title:0 "中核州の返還を要求する"
+ PLUS_CP_DEMAND_CORE_STATES_TITLE:0 "中核州の返還を要求する"
+ PLUS_CP_DEMAND_CORE_STATES_ACTION_DESC:0 "現在外国の支配下にある我々の正当な中核州の返還を要求する。拒否された場合、戦争を意味する。"
+ plus_cs_demands.1.t:0 "中核州に対する要求"
+ plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] は公式な最後通牒を送ってきた。直ちに中核州を返還するか、侵略に直面するかだ。"
+ plus_cs_demands.1.a:0 "屈する以外に選択肢はない。"
+ plus_cs_demands.1.b:0 "断じて否だ！戦争の準備を！"
+ plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] が屈服"
+ plus_cs_demands.2.d:0 "我々の軍事力を恐れて、彼らは我々の要求に屈し、領土を平和裏に返還した。"
+ plus_cs_demands.2.a:0 "無血の勝利だ。"
+ plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] が拒否"
+ plus_cs_demands.3.d:0 "彼らは厚かましくも我々の最後通牒を拒絶した。外交の時間は終わった。"
+ plus_cs_demands.3.a:0 "戦争だ！"
+
+ # --- 中核州要求の制約 ---
+ plus_cs_demand_not_core_tt:0 "対象は、我々の中核州または請求権のある州を少なくとも1つ支配していなければなりません。"
+ plus_cs_demand_not_at_war_tt:0 "両国が平和状態であり、内戦がないことが必要です。"
+ plus_cs_demand_not_faction_tt:0 "対象は我々の従属国、宗主国、または陣営メンバーであってはなりません。"
+ plus_cs_demand_no_recent_tt:0 "最近、領土の要求を送っていません。"
+ plus_cs_demand_full_annexation_tt:0 "対象は、我々の中核州では§Rない§!州を少なくとも1つ持っている必要があります。（国全体を平和的に併合することはできません）。"
+
+ plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs.250.a:0 "We submit... (Become puppet)"
+ plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
+ plus_cs.250.c:0 "Counter-propose conditional terms"
+ plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
+ plus_cs_internal.14.t:0 "Overlord Annexation"
+ plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
+ plus_cs_internal.14.a:0 "Submit to direct rule"
+ plus_cs_internal.15.t:0 "Defection to the Enemy"
+ plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
+ plus_cs_internal.15.a:0 "Switch sides to survive"

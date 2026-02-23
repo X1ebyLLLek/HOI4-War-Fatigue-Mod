@@ -1,5 +1,7 @@
 add_namespace = plus_cs_pulse
 
+
+
 # ==============================================================================
 # MONTHLY PEACE PULSE
 # Triggers once/month for every country at war.
@@ -13,7 +15,6 @@ country_event = {
 
 	trigger = {
 		has_war = yes
-		has_capitulated = no
 		is_puppet = no
 		NOT = { has_country_flag = plus_cs_waiting_response }
 		NOT = { has_country_flag = plus_cs_peace_cooldown }
@@ -35,26 +36,28 @@ country_event = {
 		# OPTIMIZATION: Removed expensive score loop.
 		# Just pick a Major Enemy or Neighbor. 99% of the time we don't do anything anyway.
 		
-		if = {
-			limit = { 
-				any_enemy_country = { is_major = yes } 
-			}
-			random_enemy_country = {
-				limit = { is_major = yes }
-				save_event_target_as = peace_target
-			}
-		}
-		else_if = {
+		# OPT: Removed duplicate any_enemy_country checks — random_ handles empty results
+		random_enemy_country = {
 			limit = {
-				any_enemy_country = { is_neighbor_of = ROOT }
+				is_major = yes
+				is_puppet = no  # NEVER target puppets — negotiate with their master
 			}
+			save_event_target_as = peace_target
+		}
+		if = {
+			limit = { NOT = { has_event_target = peace_target } }
 			random_enemy_country = {
-				limit = { is_neighbor_of = ROOT }
+				limit = {
+					is_neighbor_of = ROOT
+					is_puppet = no
+				}
 				save_event_target_as = peace_target
 			}
 		}
-		else = {
+		if = {
+			limit = { NOT = { has_event_target = peace_target } }
 			random_enemy_country = {
+				limit = { is_puppet = no }
 				save_event_target_as = peace_target
 			}
 		}
@@ -165,6 +168,8 @@ country_event = {
 							# Penalties (If losing, enemy UNLIKELY to accept, but AI might try)
 							modifier = { factor = 0.5 surrender_progress > 0.2 }
 							modifier = { factor = 0.1 surrender_progress > 0.4 }
+							# Extremely unlikely to ask for a white peace if already capitulated
+							modifier = { factor = 0.001 has_capitulated = yes }
 
 							log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] decided to propose WHITE PEACE."
 							
@@ -184,6 +189,11 @@ country_event = {
 							modifier = { add = 50 OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
 							modifier = { add = 80 has_dynamic_modifier = total_exhaustion }
 							modifier = { add = 40 has_country_leader_with_trait = plus_cs_spirit_defeatist }
+							
+							# Capitulated tags actively seek conditional surrender
+							modifier = { add = 200 has_capitulated = yes }
+							# If the enemy is capitulated, the victor desires to finalize it
+							modifier = { add = 80 event_target:peace_target = { has_capitulated = yes } }
 							
 							# Penalties
 							modifier = { factor = 0.1 surrender_progress < 0.1 } # Very rare to capitulate if winning, but theoretically possible (corruption/treason?)
@@ -220,6 +230,11 @@ country_event = {
 					modifier = {
 						add = 20
 						surrender_progress > 0.7
+					}
+					
+					modifier = {
+						add = 200
+						has_capitulated = yes
 					}
 					
 					# --- MODIFIERS ---
@@ -263,19 +278,110 @@ country_event = {
 					}
 					
 					# C. Not Losing Enough? (Still possible due to corruption/panic)
-					modifier = {
-						factor = 0.05
-						surrender_progress < 0.2
-					}
-
-					log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Surrender: [?surrender_progress]) decided to propose SUBMISSION to [peace_target.GetName]."
-                    
-					set_country_flag = { flag = plus_cs_waiting_response days = 1 }
-					event_target:peace_target = { save_event_target_as = peace_recipient }
-					save_event_target_as = peace_sender
-					
-					event_target:peace_target = { country_event = { id = plus_cs.201 } }
+				modifier = {
+					factor = 0.05
+					surrender_progress < 0.2
 				}
+				
+				# D. All allies capitulated = isolated and desperate
+				modifier = {
+					add = 40
+					is_in_faction = yes
+					NOT = {
+						any_other_country = {
+							is_in_faction_with = ROOT
+							NOT = { has_capitulated = yes }
+						}
+					}
+				}
+				
+				# E. War duration fatigue increases submission likelihood
+				modifier = {
+					add = 10
+					has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+					surrender_progress > 0.3
+				}
+
+				log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Surrender: [?surrender_progress]) decided to propose SUBMISSION to [peace_target.GetName]."
+                    
+				set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+				event_target:peace_target = { save_event_target_as = peace_recipient }
+				save_event_target_as = peace_sender
+				
+				event_target:peace_target = { country_event = { id = plus_cs.201 } }
+			}
+			
+			# ----------------------------------------------------------
+			# OPTION 4: VICTOR DEMAND SUBMISSION (Ultimatum)
+			# The WINNER demands the loser surrenders (puppet/annex)
+			# ----------------------------------------------------------
+			1 = {
+				# Base 1: Always a tiny chance of ultimatum
+				
+				# Only available when clearly winning
+				modifier = {
+					factor = 0
+					surrender_progress > 0.1  # Don't demand if not dominating
+				}
+				
+				# --- TRIGGERS ---
+				
+				# Enemy losing badly
+				modifier = {
+					add = 25
+					surrender_progress < 0.05
+					event_target:peace_target = { surrender_progress > 0.5 }
+				}
+				
+				# Enemy has capitulated = demand formalization
+				modifier = {
+					add = 100
+					event_target:peace_target = { has_capitulated = yes }
+				}
+				
+				# Enemy lost their capital
+				modifier = {
+					add = 30
+					event_target:peace_target = { 
+						capital_scope = { NOT = { is_controlled_by = PREV } }
+					}
+				}
+				
+				# All enemy allies dead = total victory demand
+				modifier = {
+					add = 40
+					event_target:peace_target = {
+						is_in_faction = yes
+						NOT = {
+							any_other_country = {
+								is_in_faction_with = PREV
+								NOT = { has_capitulated = yes }
+							}
+						}
+					}
+				}
+				
+				# --- IDEOLOGY DAMPENERS ---
+				# Democracies prefer negotiation to ultimatums
+				modifier = {
+					factor = 0.5
+					has_government = democratic
+				}
+				
+				# Totalitarians LOVE ultimatums
+				modifier = {
+					factor = 2.0
+					OR = { has_government = fascism has_government = communism }
+				}
+				
+				log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] is DEMANDING SUBMISSION from [peace_target.GetName] (Ultimatum)."
+				
+				set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+				event_target:peace_target = { save_event_target_as = peace_recipient }
+				save_event_target_as = peace_sender
+				
+				# Victor demands submission -> send submission event (loser receives)
+				event_target:peace_target = { country_event = { id = plus_cs.250 } }
 			}
 		}
 	}

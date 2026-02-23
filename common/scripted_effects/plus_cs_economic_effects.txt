@@ -18,10 +18,10 @@ plus_cs_economy_step = {
 		set_temp_variable = { current_econ_law = 1 } 
 		if = {
 			limit = { NOT = { has_dynamic_modifier = shadow_econ_civilian } }
-			remove_dynamic_modifier = { modifier = shadow_econ_early }
-			remove_dynamic_modifier = { modifier = shadow_econ_partial }
-			remove_dynamic_modifier = { modifier = shadow_econ_war }
-			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			if = { limit = { has_dynamic_modifier = shadow_econ_early } remove_dynamic_modifier = { modifier = shadow_econ_early } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_partial } remove_dynamic_modifier = { modifier = shadow_econ_partial } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_war } remove_dynamic_modifier = { modifier = shadow_econ_war } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_total } remove_dynamic_modifier = { modifier = shadow_econ_total } }
 			add_dynamic_modifier = { modifier = shadow_econ_civilian }
 		}
 	}
@@ -30,10 +30,10 @@ plus_cs_economy_step = {
 		set_temp_variable = { current_econ_law = 2 } 
 		if = {
 			limit = { NOT = { has_dynamic_modifier = shadow_econ_early } }
-			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
-			remove_dynamic_modifier = { modifier = shadow_econ_partial }
-			remove_dynamic_modifier = { modifier = shadow_econ_war }
-			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			if = { limit = { has_dynamic_modifier = shadow_econ_civilian } remove_dynamic_modifier = { modifier = shadow_econ_civilian } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_partial } remove_dynamic_modifier = { modifier = shadow_econ_partial } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_war } remove_dynamic_modifier = { modifier = shadow_econ_war } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_total } remove_dynamic_modifier = { modifier = shadow_econ_total } }
 			add_dynamic_modifier = { modifier = shadow_econ_early }
 		}
 	}
@@ -42,10 +42,10 @@ plus_cs_economy_step = {
 		set_temp_variable = { current_econ_law = 3 } 
 		if = {
 			limit = { NOT = { has_dynamic_modifier = shadow_econ_partial } }
-			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
-			remove_dynamic_modifier = { modifier = shadow_econ_early }
-			remove_dynamic_modifier = { modifier = shadow_econ_war }
-			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			if = { limit = { has_dynamic_modifier = shadow_econ_civilian } remove_dynamic_modifier = { modifier = shadow_econ_civilian } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_early } remove_dynamic_modifier = { modifier = shadow_econ_early } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_war } remove_dynamic_modifier = { modifier = shadow_econ_war } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_total } remove_dynamic_modifier = { modifier = shadow_econ_total } }
 			add_dynamic_modifier = { modifier = shadow_econ_partial }
 		}
 	}
@@ -54,10 +54,10 @@ plus_cs_economy_step = {
 		set_temp_variable = { current_econ_law = 4 } 
 		if = {
 			limit = { NOT = { has_dynamic_modifier = shadow_econ_war } }
-			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
-			remove_dynamic_modifier = { modifier = shadow_econ_early }
-			remove_dynamic_modifier = { modifier = shadow_econ_partial }
-			remove_dynamic_modifier = { modifier = shadow_econ_total }
+			if = { limit = { has_dynamic_modifier = shadow_econ_civilian } remove_dynamic_modifier = { modifier = shadow_econ_civilian } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_early } remove_dynamic_modifier = { modifier = shadow_econ_early } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_partial } remove_dynamic_modifier = { modifier = shadow_econ_partial } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_total } remove_dynamic_modifier = { modifier = shadow_econ_total } }
 			add_dynamic_modifier = { modifier = shadow_econ_war }
 		}
 	}
@@ -66,10 +66,10 @@ plus_cs_economy_step = {
 		set_temp_variable = { current_econ_law = 5 } 
 		if = {
 			limit = { NOT = { has_dynamic_modifier = shadow_econ_total } }
-			remove_dynamic_modifier = { modifier = shadow_econ_civilian }
-			remove_dynamic_modifier = { modifier = shadow_econ_early }
-			remove_dynamic_modifier = { modifier = shadow_econ_partial }
-			remove_dynamic_modifier = { modifier = shadow_econ_war }
+			if = { limit = { has_dynamic_modifier = shadow_econ_civilian } remove_dynamic_modifier = { modifier = shadow_econ_civilian } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_early } remove_dynamic_modifier = { modifier = shadow_econ_early } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_partial } remove_dynamic_modifier = { modifier = shadow_econ_partial } }
+			if = { limit = { has_dynamic_modifier = shadow_econ_war } remove_dynamic_modifier = { modifier = shadow_econ_war } }
 			add_dynamic_modifier = { modifier = shadow_econ_total }
 		}
 	}

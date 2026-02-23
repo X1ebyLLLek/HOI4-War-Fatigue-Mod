@@ -1,0 +1,46 @@
+plus_cs_apply_scaled_penalty_from_vars = {
+	# C2 FIX: Was using plus_cs_war_exhaustion (never set — always 0 → mult always 1.0)
+	# Now uses plus_cs_pressure_ratio (actively calculated in plus_cs_calc_scores)
+	# we_mult = 1.0 + (pressure_ratio × 0.5), clamped [1.0, 3.0]
+	set_temp_variable = { we_mult = 1.0 }
+	if = {
+		limit = { check_variable = { plus_cs_pressure_ratio > 0 } }
+		set_temp_variable = { temp_we = plus_cs_pressure_ratio }
+		multiply_temp_variable = { temp_we = 0.5 }
+		add_to_temp_variable = { we_mult = temp_we }
+		clamp_temp_variable = { var = we_mult min = 1.0 max = 3.0 }
+	}
+
+	# Political Power (assumes caller set penalty_pp)
+	if = {
+		limit = { check_variable = { penalty_pp < 0 } }
+		multiply_temp_variable = { penalty_pp = we_mult }
+		add_political_power = var:penalty_pp
+	}
+	else_if = {
+		limit = { check_variable = { penalty_pp > 0 } }
+		add_political_power = var:penalty_pp
+	}
+
+	# Stability (assumes caller set penalty_stab)
+	if = {
+		limit = { check_variable = { penalty_stab < 0 } }
+		multiply_temp_variable = { penalty_stab = we_mult }
+		add_stability = var:penalty_stab
+	}
+	else_if = {
+		limit = { check_variable = { penalty_stab > 0 } }
+		add_stability = var:penalty_stab
+	}
+
+	# War Support (assumes caller set penalty_ws)
+	if = {
+		limit = { check_variable = { penalty_ws < 0 } }
+		multiply_temp_variable = { penalty_ws = we_mult }
+		add_war_support = var:penalty_ws
+	}
+	else_if = {
+		limit = { check_variable = { penalty_ws > 0 } }
+		add_war_support = var:penalty_ws
+	}
+}

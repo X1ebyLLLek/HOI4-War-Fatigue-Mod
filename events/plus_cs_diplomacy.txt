@@ -1,5 +1,7 @@
 add_namespace = plus_cs_diplomacy
 
+
+
 # ==============================================================================
 # SMART DIPLOMACY EVENTS
 # 1. Negotiated Vassalization (Minor seeking protection)
@@ -21,9 +23,21 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		# Gating: Only after Civil War
-		has_country_flag = plus_cs_had_civil_war
+		# Broadened from just plus_cs_had_civil_war — minor + weakened/desperate
 		is_puppet = no
+		is_major = no
+		# CIVIL WAR GUARD: Блокирует ванильные гражданки (Кайзер и т.д.)
+		OR = {
+			has_civil_war = no
+			has_country_flag = plus_cs_had_civil_war
+		}
+		OR = {
+			has_country_flag = plus_cs_had_civil_war
+			has_stability < 0.3
+			has_idea = internal_crisis_high
+			has_dynamic_modifier = homefront_collapse
+			has_dynamic_modifier = total_exhaustion
+		}
 	}
 
 	option = {
@@ -51,9 +65,9 @@ country_event = {
 						any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
 					}
 					
-					# Strength Ratio is terrifying (< 40%)
+					# Strength Ratio is terrifying (< 90%)
 					ROOT = { 
-						strength_ratio = { tag = PREV ratio < 0.4 } 
+						strength_ratio = { tag = PREV ratio < 0.9 } 
 					}
 				}
 				# Send Offer
@@ -76,10 +90,31 @@ country_event = {
 		name = plus_cs_diplomacy.2.a
 		ai_chance = {
 			# --- SCORE LOGIC ---
-			base = 100 # Default: YES! Free Puppet!
+			base = 50 
+			
+			# PRAGMATISM LOGIC (Busy or Crisis = Accept Free Puppet)
+			modifier = {
+				factor = 10.0
+				has_war = yes
+			}
+			modifier = {
+				factor = 50.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
+			modifier = {
+				factor = 5.0
+				OR = {
+					has_idea = internal_crisis_medium
+					has_idea = internal_crisis_high
+				}
+			}
 			
 			# WARMONGER LOGIC (Fascists/Communists/Fanatics)
-			# They might prefer to CONQUER (Annex) rather than Puppet.
+			# They prefer to CONQUER rather than Puppet.
 			modifier = {
 				factor = 0.1
 				OR = {
@@ -87,15 +122,26 @@ country_event = {
 					has_government = communism
 					has_country_leader_with_trait = plus_cs_spirit_fanatic
 				}
-				# BUT: If the target is tiny, just take it.
-				# If we are 5x stronger, just accept the easy win.
-				strength_ratio = { tag = FROM ratio < 5.0 }
+			}
+			# BUT: If the target is somewhat strong (we are < 2.5x stronger), accept the easy win rather than risk a bloodbath.
+			modifier = {
+				factor = 10.0
+				OR = {
+					has_government = fascism
+					has_government = communism
+					has_country_leader_with_trait = plus_cs_spirit_fanatic
+				}
+				strength_ratio = { tag = FROM ratio < 2.5 }
 			}
 			
-			# DEFEATIST LOGIC
+			# PACIFIST LOGIC (Democracies/Neutrals/Defeatists)
 			modifier = {
-				factor = 2.0
-				has_country_leader_with_trait = plus_cs_spirit_defeatist
+				factor = 100.0
+				OR = {
+					has_government = democratic
+					has_government = neutrality
+					has_country_leader_with_trait = plus_cs_spirit_defeatist
+				}
 			}
 		}
 		
@@ -116,7 +162,44 @@ country_event = {
 	# Option B: Refuse (Want it all)
 	option = {
 		name = plus_cs_diplomacy.2.b
-		ai_chance = { base = 10 }
+		ai_chance = { 
+			base = 50 
+			
+			# WARMONGER LOGIC
+			modifier = {
+				factor = 100.0
+				OR = {
+					has_government = fascism
+					has_government = communism
+					has_country_leader_with_trait = plus_cs_spirit_fanatic
+				}
+				# If they are very weak and we have time, just crush them
+				strength_ratio = { tag = FROM ratio > 2.5 }
+				has_war = no
+			}
+			
+			# BUSY LOGIC (Never refuse a free puppet if already fighting or collapsing)
+			modifier = {
+				factor = 0.01
+				OR = {
+					has_war = yes
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+					has_idea = internal_crisis_high
+				}
+			}
+			
+			# PACIFIST LOGIC
+			modifier = {
+				factor = 0.0
+				OR = {
+					has_government = democratic
+					has_government = neutrality
+					has_country_leader_with_trait = plus_cs_spirit_defeatist
+				}
+			}
+		}
 		
 		FROM = {
 			add_opinion_modifier = { target = ROOT modifier = diplo_insult }
@@ -155,13 +238,41 @@ country_event = {
 		name = plus_cs_diplomacy.10.a
 		ai_chance = {
 			base = 50
+			
+			# Master is dying: break free!
 			modifier = {
 				add = 50
-				overlord = { surrender_progress > 0.8 } # Master is almost dead
+				overlord = { surrender_progress > 0.8 }
 			}
+			
+			# Democrats: believe in self-determination
 			modifier = {
-				factor = 0
-				has_government = fascism # Fascist puppets fear or are fanatic
+				add = 30
+				has_government = democratic
+			}
+			
+			# Ideology mismatch with overlord: weaker loyalty
+			modifier = {
+				add = 25
+				NOT = { overlord = { has_government = ROOT } }
+			}
+			
+			# Long war: resentment grows
+			modifier = {
+				add = 20
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Fascist puppets of fascist masters are loyal (ideological solidarity)
+			modifier = {
+				factor = 0.1
+				has_government = fascism
+				overlord = { has_government = fascism }
+			}
+			
+			# High war support = loyalty (we believe in the cause)
+			modifier = {
+				factor = 0.3
 				has_war_support > 0.6
 			}
 		}
@@ -171,19 +282,55 @@ country_event = {
 		
 		leave_faction = yes
 		# FIX: white_peace = ALL_ENEMIES is invalid syntax
+		# FIX: Only non-puppets. Enemy puppets follow their master's wars.
 		every_enemy_country = {
+			limit = { is_puppet = no }
 			white_peace = ROOT
 		}
 		
-		add_stability = 0.10
-		add_war_support = -0.10
+		# Бунтовщики теряют стабильность (неопределённость нового пути)
+		set_temp_variable = { penalty_stab = -0.05 }
+		set_temp_variable = { penalty_ws = -0.10 }
+		set_temp_variable = { penalty_pp = 0 }
+		plus_cs_apply_scaled_penalty_from_vars = yes
 	}
 
 	# Option B: Remain Loyal
 	option = {
 		name = plus_cs_diplomacy.10.b
-		ai_chance = { base = 50 }
-		add_stability = -0.10
+		ai_chance = {
+			base = 50
+			
+			# Same ideology as overlord: strong bond
+			modifier = {
+				add = 40
+				overlord = { has_government = ROOT }
+			}
+			
+			# High war support: loyal
+			modifier = {
+				add = 30
+				has_war_support > 0.7
+			}
+			
+			# Overlord is dying: loyalty is suicidal
+			modifier = {
+				factor = 0.1
+				overlord = { surrender_progress > 0.8 }
+			}
+			
+			# Communist puppets are loyal (ideological discipline)
+			modifier = {
+				add = 30
+				has_government = communism
+				overlord = { has_government = communism }
+			}
+		}
+		# Лояльные получают стабильность (единство с оверлордом)
+		set_temp_variable = { penalty_stab = 0.05 }
+		set_temp_variable = { penalty_ws = 0 }
+		set_temp_variable = { penalty_pp = 0 }
+		plus_cs_apply_scaled_penalty_from_vars = yes
 	}
 }
 
@@ -237,12 +384,13 @@ country_event = {
 			
 			# --- 3. INTERNAL ROT (The "Will") ---
 			modifier = {
-				add = 20
-				has_stability < 0.5
-			}
-			modifier = {
-				add = 20
-				has_war_support < 0.5
+				add = 50
+				OR = {
+					has_idea = political_paralysis
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
 			}
 			
 			# --- 4. THE PRICE (Claims vs Cores) ---
@@ -303,10 +451,13 @@ country_event = {
 			base = 100
 			
 			# --- 1. PRAGMATISM ---
-			# Save manpower if low
+			# Save manpower if low/crisis
 			modifier = {
 				add = 50
-				has_manpower < 100000
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+				}
 			}
 			
 			# Democracies prefer peace
@@ -326,7 +477,7 @@ country_event = {
 			# "We are Giant" -> Only full annexation satisfies us
 			modifier = {
 				factor = 0.5
-				num_divisions > 100 # Arbitrary "Big Army" check
+				is_major = yes
 			}
 		}
 		

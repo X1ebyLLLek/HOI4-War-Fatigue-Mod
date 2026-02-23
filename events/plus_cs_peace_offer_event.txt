@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==========================================
 # PEACE NEGOTIATION EVENTS (OFFER)
 # ==========================================
@@ -18,7 +20,10 @@ country_event = {
 		FROM = { plus_cs_calc_reparation_bonus = yes }
 	}
 
-	trigger = { is_puppet = no }
+	trigger = {
+		is_puppet = no
+		NOT = { tag = FROM } # SELF-PEACE GUARD: страна не может вести переговоры сама с собой
+	}
 
 	# Option A: Accept Negotiation
 	option = {
@@ -62,69 +67,25 @@ country_event = {
 		if = {
 			limit = { FROM = { is_faction_leader = no } }
 			# WINNER LOOP: FROM and its puppets
-			every_country = {
-				limit = { OR = { tag = FROM is_puppet_of = FROM } }
+			FROM = {
 				save_event_target_as = current_winner
-				
-				# LOSER LOOP: Enemies of the Winner that belong to ROOT's side
-				every_enemy_country = {
-					limit = {
-						OR = {
-							AND = { ROOT = { is_faction_leader = no } OR = { tag = ROOT is_puppet_of = ROOT } }
-							AND = { ROOT = { is_faction_leader = yes } is_in_faction_with = ROOT }
-						}
-					}
-					# Assign Country-Level decisions to the Winner
-					event_target:current_winner = {
-						set_variable = { og_vp@PREV = cnt_og_vp@PREV }
-						activate_targeted_decision = { target = PREV decision = peace_war_reparations }
-						activate_targeted_decision = { target = PREV decision = peace_disarm }
-						activate_targeted_decision = { target = PREV decision = peace_puppet }
-						activate_targeted_decision = { target = PREV decision = peace_liberate }
-						activate_targeted_decision = { target = PREV decision = peace_claim }
-					}
-					# STATE LOOP
-					every_owned_state = {
-						event_target:current_winner = {
-							activate_targeted_decision = { target = PREV decision = peace_take_state }
-							activate_targeted_decision = { target = PREV decision = peace_set_dmz }
-						}
-					}
-					set_variable = { state_taken = 0 } # Reset var on Loser
+				plus_cs_apply_peace_decisions_to_losers = yes
+				every_subject_country = {
+					save_event_target_as = current_winner
+					plus_cs_apply_peace_decisions_to_losers = yes
 				}
 			}
 		}
 		else = {
 			# WINNER LOOP: FROM's faction
-			every_country = {
-				limit = { is_in_faction_with = FROM has_war_with = ROOT }
+			FROM = {
 				save_event_target_as = current_winner
+				plus_cs_apply_peace_decisions_to_losers = yes
 				
-				# LOSER LOOP: Enemies of the Winner that belong to ROOT's side
-				every_enemy_country = {
-					limit = {
-						OR = {
-							AND = { ROOT = { is_faction_leader = no } OR = { tag = ROOT is_puppet_of = ROOT } }
-							AND = { ROOT = { is_faction_leader = yes } is_in_faction_with = ROOT }
-						}
-					}
-					# Assign Country-Level decisions to the Winner
-					event_target:current_winner = {
-						set_variable = { og_vp@PREV = cnt_og_vp@PREV }
-						activate_targeted_decision = { target = PREV decision = peace_war_reparations }
-						activate_targeted_decision = { target = PREV decision = peace_disarm }
-						activate_targeted_decision = { target = PREV decision = peace_puppet }
-						activate_targeted_decision = { target = PREV decision = peace_liberate }
-						activate_targeted_decision = { target = PREV decision = peace_claim }
-					}
-					# STATE LOOP
-					every_owned_state = {
-						event_target:current_winner = {
-							activate_targeted_decision = { target = PREV decision = peace_take_state }
-							activate_targeted_decision = { target = PREV decision = peace_set_dmz }
-						}
-					}
-					set_variable = { state_taken = 0 } # Reset var on Loser
+				every_other_country = {
+					limit = { is_in_faction_with = FROM has_war_with = ROOT }
+					save_event_target_as = current_winner
+					plus_cs_apply_peace_decisions_to_losers = yes
 				}
 			}
 		}
@@ -199,19 +160,49 @@ country_event = {
 				FROM = { surrender_progress > 0.1 }
 			}
 			
+			# Ideology: totalitarians demand total victory
 			modifier = {
-				factor = 5.0
+				factor = 2.0
 				OR = {
 					has_government = fascism
 					has_government = communism
 				}
 			}
+			
+			# Democrats: pragmatic after long wars
 			modifier = {
-				add = 100
+				factor = 0.5
+				has_government = democratic
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			
+			# Territory claims: we want their land
+			modifier = {
+				add = 60
 				FROM = {
 					any_owned_state = { is_claimed_by = ROOT }
 				}
 			}
+			
+			# We have cores under enemy control
+			modifier = {
+				add = 80
+				FROM = { any_owned_state = { is_core_of = ROOT } }
+			}
+			
+			# Enemy has capitulated: absurd to refuse their surrender
+			modifier = {
+				factor = 0.05
+				FROM = { has_capitulated = yes }
+			}
+			
+			# Enemy lost capital: they're broken
+			modifier = {
+				factor = 0.3
+				FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } }
+			}
+			
+			# Exhaustion: accept any peace
 			modifier = {
 				factor = 0
 				OR = {
@@ -219,6 +210,12 @@ country_event = {
 					has_country_flag = plus_cs_urgent_peace
 					has_country_flag = plus_cs_stalemate
 				}
+			}
+			
+			# Long war: war weariness
+			modifier = {
+				factor = 0.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 		}
 		
@@ -250,7 +247,19 @@ country_event = {
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
+			set_country_flag = { flag = plus_cs_peace_cooldown days = 45 }
 			news_event = { id = plus_cs.6 }
 		}
+		
+		# === ESCALATION SYSTEM ===
+		# Repeated rejections have escalating political costs
+		if = {
+			limit = { FROM = { has_country_flag = plus_cs_offered_peace_before } }
+			# Second+ rejection: public frustration (war weariness)
+			add_stability = -0.05
+			add_war_support = -0.03
+			FROM = { set_country_flag = plus_cs_offered_peace_twice }
+		}
+		FROM = { set_country_flag = plus_cs_offered_peace_before }
 	}
 }

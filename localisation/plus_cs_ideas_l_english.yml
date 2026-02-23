@@ -5,10 +5,10 @@
  peace_civilian_economy:0 "Civilian Economy"
  peace_economic_tribute:0 "Economic Tribute for Ceasefire"
  ceasefire_economic_tribute:0 "Economic Tribute for Ceasefire"
- 
+
  # FIX: Renamed to avoid duplicate with decision
  idea_conditional_surrender:0 "Conditional Surrender (Spirit)"
- 
+
  internal_crisis_low:0 "Low Internal Crisis"
  internal_crisis_medium:0 "Medium Internal Crisis"
  internal_crisis_high:0 "High Internal Crisis"
@@ -20,19 +20,19 @@
  humiliated_leader_desc:0 "Accepting shameful peace terms has stained this leader's reputation."
 
  # --- NEW MECHANICS: Shadow Economy 5.0 ---
- 
+
  shadow_econ_civilian:0 "Investment Haven"
  shadow_econ_civilian_desc:0 "§GPeace Niche:§! Business booms while guns are silent. Provides massive Political Power and chance for §YPrivate Investments§!.\n\n§RIneffective at war.§!"
- 
+
  shadow_econ_early:0 "Engineering Prep"
  shadow_econ_early_desc:0 "§GLogistics Niche:§! State focuses on infrastructure and defense. Best for building bunkers, radar, and roads before the war."
- 
+
  shadow_econ_partial:0 "Quality Production"
  shadow_econ_partial_desc:0 "§GBalance:§! The sweet spot. Factories operate at peak efficiency and quality, but without forcing mass output."
- 
+
  shadow_econ_war:0 "War Assembly Line"
  shadow_econ_war_desc:0 "§GQuantity:§! Mass production of weapons at the cost of quality (reliability). \n\n§RWarning:§! Extended use in peacetime will cause §YEconomic Overheating§!."
- 
+
  shadow_econ_total:0 "Total Exhaustion"
  shadow_econ_total_desc:0 "§RDesperation:§! The country is a single military camp. Max construction speed at the cost of destroying §YScience§! and §YStability§!."
 
@@ -75,10 +75,10 @@
 
  economic_retooling_shock_minor:0 "Minor Retooling Shock"
  economic_retooling_shock_minor_desc:0 "Factories are adapting to new quotas. Temporary dip in production efficiency."
- 
+
  economic_retooling_shock_medium:0 "Industrial Retooling"
  economic_retooling_shock_medium_desc:0 "Significant changes in logistics and production lines. Factories are temporarily underperforming."
- 
+
  economic_retooling_shock_major:0 "Industrial Paralysis"
  economic_retooling_shock_major_desc:0 "Drastic economic shifts have caused chaos. Machinery is being replaced, workshops rebuilt. Production collapses."
 
@@ -91,7 +91,7 @@
 
  # National Spirit Description
  conditional_surrender_desc:0 "This country has admitted defeat on conditions. It cannot join factions or create alliances while treaty restrictions are active."
- 
+
  # --- Leader Traits (Base) ---
  plus_cs_spirit_fanatic:0 "Fanatic"
  plus_cs_spirit_fanatic_desc:0 "This leader will never accept surrender unless the nation is completely destroyed.\n\n§RAI Peace Acceptance: -100%§!\n§O[Debug]: Hidden Resolve: [?Root.plus_cs_hidden_resolve]§!"

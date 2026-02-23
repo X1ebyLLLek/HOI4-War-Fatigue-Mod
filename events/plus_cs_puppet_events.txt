@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==========================================
 # PUPPET & PATRON EVENTS (210, 300, 305)
 # ==========================================
@@ -18,6 +20,15 @@ country_event = {
 			base = 80
 			modifier = { factor = 0.5 has_government = fascism }
 			modifier = { factor = 0.5 has_government = communism }
+			# Desperation
+			modifier = {
+				factor = 5.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
 		}
 
 		if = {
@@ -43,6 +54,16 @@ country_event = {
 			base = 20
 			modifier = { factor = 2.0 has_government = fascism }
 			modifier = { factor = 1.5 strength_ratio = { tag = event_target:new_potential_master ratio > 0.4 } }
+			# Refuse to submit to a dying empire
+			modifier = {
+				factor = 100.0
+				event_target:new_potential_master = {
+					OR = {
+						has_idea = political_paralysis
+						has_idea = internal_crisis_high
+					}
+				}
+			}
 		}
 
 		set_autonomy = {
@@ -81,6 +102,7 @@ country_event = {
 		}
 		
 		# 2. Ищем лучшего кандидата среди врагов цели
+		# КОМПОЗИТНЫЙ СКОРИНГ: VP + потери + соседство + мажор
 		if = {
 			limit = { has_event_target = cw_target }
 			
@@ -95,14 +117,31 @@ country_event = {
 						NOT = { is_puppet = yes }     # Ищем независимого покровителя
 					}
 					
-					# Считываем вклад этого врага в войну против cw_target
-					# (Используем твою переменную vp@TAG из on_state_control_changed)
+					# === COMPOSITE SCORE ===
+					# 1. VP захваченных территорий (основной показатель)
 					set_temp_variable = { current_score = var:vp@event_target:cw_target }
-					
-					# Если переменной нет (начало войны), считаем за 0
 					if = {
 						limit = { NOT = { check_variable = { current_score > -1 } } }
 						set_temp_variable = { current_score = 0 }
+					}
+					
+					# 2. Потери в войне (показывает реальное участие)
+					# casualties = общие потери страны. Делим на 1000, cap 50
+					set_temp_variable = { cas_bonus = casualties }
+					divide_temp_variable = { cas_bonus = 1000 }
+					clamp_temp_variable = { var = cas_bonus max = 50 }
+					add_to_temp_variable = { current_score = cas_bonus }
+					
+					# 3. Соседство с целью (сухопутная граница = реальная угроза)
+					if = {
+						limit = { is_neighbor_of = event_target:cw_target }
+						add_to_temp_variable = { current_score = 30 }
+					}
+					
+					# 4. Мажор-бонус (небольшой, чтобы не перебивал вклад)
+					if = {
+						limit = { is_major = yes }
+						add_to_temp_variable = { current_score = 10 }
 					}
 					
 					# СРАВНЕНИЕ: Если этот кандидат лучше предыдущего
@@ -114,19 +153,19 @@ country_event = {
 				}
 			}
 			
-			# 3. РЕЗЕРВНЫЙ ВАРИАНТ (Если война только началась и очков захвата ни у кого нет)
-			# Выбираем просто самого мощного по заводам
+			# 3. ПОСЛЕДНИЙ РЕЗЕРВ (Если никто не набрал > 0 — все только вступили)
+			# Берём по фабрикам как тай-брейкер
 			if = {
 				limit = { NOT = { has_event_target = strong_master } }
 				event_target:cw_target = {
 					random_enemy_country = {
-						limit = { NOT = { tag = ROOT } }
+						limit = { NOT = { tag = ROOT } NOT = { is_puppet = yes } }
 						save_event_target_as = strong_master
 					}
-					# Пытаемся найти самого сильного, если рандом выбрал слабого
 					every_enemy_country = {
 						limit = {
 							NOT = { tag = ROOT }
+							NOT = { is_puppet = yes }
 							num_of_factories > event_target:strong_master.num_of_factories
 						}
 						save_event_target_as = strong_master
@@ -146,6 +185,16 @@ country_event = {
 			modifier = {
 				factor = 0.1
 				strength_ratio = { tag = event_target:strong_master ratio > 1.5 } # Враг слабее покровителя
+			}
+			# ИЛИ ЕСЛИ ПОКРОВИТЕЛЬ В КРИЗИСЕ - зачем к нему идти?
+			modifier = {
+				factor = 0.01
+				event_target:strong_master = {
+					OR = {
+						has_idea = political_paralysis
+						has_idea = internal_crisis_high
+					}
+				}
 			}
 		}
 
@@ -170,6 +219,15 @@ country_event = {
 			modifier = {
 				factor = 5.0
 				strength_ratio = { tag = event_target:cw_target ratio < 0.5 }
+			}
+			# Если мы сами в полном коллапсе, мы не будем объявлять войну случайному мажору
+			modifier = {
+				factor = 0.0
+				OR = {
+					has_idea = political_paralysis
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
 			}
 		}
 

@@ -1,5 +1,7 @@
 add_namespace = plus_cs_internal
 
+
+
 # ==============================================================================
 # INTERNAL CRISES EVENTS
 # 1. Military Ultimatum (Generals demand peace or purge)
@@ -48,9 +50,10 @@ country_event = {
 			}
 		}
 		
-		add_political_power = -100
-		add_stability = -0.15 # Shock
-		add_war_support = 0.10 # "Enemy at the gates" propaganda
+		set_temp_variable = { penalty_stab = -0.15 }
+			set_temp_variable = { penalty_ws = 0.05 }
+			set_temp_variable = { penalty_pp = -100 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
 		# Abstract penalty for purging army command
 		add_timed_idea = {
@@ -66,14 +69,48 @@ country_event = {
 		name = plus_cs_internal.1.b
 		ai_chance = {
 			base = 20
+			
+			# Democrats: civilian control prefers negotiation
 			modifier = {
 				factor = 5.0
 				has_government = democratic
 			}
+			
+			# Fascists hold on unless truly collapsing
 			modifier = {
 				factor = 0.1
 				has_government = fascism
 				check_variable = { plus_cs_pressure_ratio < 1.5 }
+			}
+			
+			# Defeatist leader: easy coup target
+			modifier = {
+				factor = 3.0
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
+			}
+			
+			# Capital lost: generals are angry
+			modifier = {
+				add = 30
+				capital_scope = { NOT = { is_controlled_by = ROOT } }
+			}
+			
+			# Long war: generals want it over
+			modifier = {
+				add = 20
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
+			
+			# All allies dead: hopeless
+			modifier = {
+				add = 30
+				is_in_faction = yes
+				NOT = {
+					any_other_country = {
+						is_in_faction_with = ROOT
+						NOT = { has_capitulated = yes }
+					}
+				}
 			}
 		}
 		
@@ -82,8 +119,10 @@ country_event = {
 		# 1. MILD CRISIS (Ratio < 1.1) -> Cabinet Reshuffle
 		if = {
 			limit = { check_variable = { plus_cs_pressure_ratio < 1.1 } }
-			add_political_power = -50
-			add_stability = -0.05
+			set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = 0 }
+			set_temp_variable = { penalty_pp = -50 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 			# Abstract "Reshuffle" effect: Dummy change
 			random_owned_controlled_state = {
 				add_extra_state_shared_building_slots = 1 
@@ -100,8 +139,10 @@ country_event = {
 					elections_allowed = no
 				}
 			}
-			add_stability = 0.10
-			add_war_support = 0.05
+			set_temp_variable = { penalty_stab = 0.10 }
+			set_temp_variable = { penalty_ws = 0.05 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		}
 		
 		# 3. COLLAPSE (Ratio > 1.5) -> Regime Change
@@ -121,8 +162,10 @@ country_event = {
 					elections_allowed = no
 				}
 			}
-			add_stability = -0.20
-			add_war_support = -0.50
+			set_temp_variable = { penalty_stab = -0.20 }
+			set_temp_variable = { penalty_ws = -0.50 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		}
 		
 		# Attempt White Peace
@@ -143,8 +186,10 @@ country_event = {
 	option = {
 		name = plus_cs_internal.3.a
 		
-		# FIX: Iterating over enemies to peace out
+		# FIX: Only peace with non-puppets. Puppeting/un-puppeting creates spam loops.
+		# Puppets follow their master's peace automatically.
 		every_enemy_country = {
+			limit = { is_puppet = no }
 			white_peace = ROOT
 		}
 		# TODO: Ideally this should send an offer, but for crisis collapse we force it for now
@@ -175,7 +220,36 @@ country_event = {
 				add_ideas = political_paralysis
 			}
 		}
-		# AI: Random collapse outcome
+		# AI PUPPET: Puppet-specific collapse outcomes
+		else_if = {
+			limit = { is_puppet = yes }
+			random_list = {
+				# 50%: Overlord Annexation — master absorbs the failing puppet
+				# Historical: Japan tightening control over collapsing Manchukuo
+				50 = {
+					modifier = {
+						factor = 0.5
+						overlord = { has_country_flag = plus_cs_exhausted }
+					}
+					country_event = { id = plus_cs_internal.14 }
+				}
+				# 30%: Defect to Enemy — puppet surrenders to whoever is conquering them
+				# Historical: Romania switching sides in WWII
+				30 = {
+					modifier = {
+						factor = 2.0
+						surrender_progress > 0.3
+					}
+					country_event = { id = plus_cs_internal.15 }
+				}
+				# 20%: Break Free — coup, declare independence, seek peace
+				# Historical: Finland separating from Axis
+				20 = {
+					country_event = { id = plus_cs_internal.11 }
+				}
+			}
+		}
+		# AI FREE NATION: Original collapse outcomes
 		else = {
 			random_list = {
 				40 = { # Military Coup
@@ -216,6 +290,16 @@ country_event = {
 		name = plus_cs_internal.11.a
 		ai_chance = { factor = 100 }
 		
+		# 0. PUPPET: Break free from overlord first
+		if = {
+			limit = { is_puppet = yes }
+			overlord = {
+				end_puppet = ROOT
+				add_opinion_modifier = { target = ROOT modifier = diplo_insult }
+			}
+			leave_faction = yes
+		}
+		
 		# 1. Change to military junta (neutrality)
 		set_politics = {
 			ruling_party = neutrality
@@ -254,7 +338,9 @@ country_event = {
 		}
 		
 		# 4. White peace with all enemies (they keep occupied territories)
+		# FIX: Only non-puppets. Puppets follow their master's peace.
 		every_enemy_country = {
+			limit = { is_puppet = no }
 			white_peace = ROOT
 		}
 		
@@ -262,17 +348,13 @@ country_event = {
 		plus_cs_restore_third_party_control = yes
 		
 		# 6. Stability boost from "order restored"
-		add_stability = 0.20
-		add_war_support = 0.10
+		set_temp_variable = { penalty_stab = 0.20 }
+			set_temp_variable = { penalty_ws = 0.10 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 		
-		# 7. Remove crisis ideas AND Synergy modifiers
-		remove_ideas = internal_crisis_high
-		remove_ideas = internal_crisis_medium
-		remove_ideas = internal_crisis_low
-		remove_ideas = political_paralysis
-		if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
-		if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
-		if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
+		# 7. Remove crisis ideas AND Synergy modifiers — OPT: using shared effect
+		plus_cs_cleanup_crisis_modifiers = yes
 	}
 }
 
@@ -297,8 +379,10 @@ country_event = {
 		}
 		
 		# Additional shock
-		add_stability = -0.05
-		add_war_support = -0.05
+		set_temp_variable = { penalty_stab = -0.10 }
+			set_temp_variable = { penalty_ws = -0.10 }
+			set_temp_variable = { penalty_pp = 0 }
+			plus_cs_apply_scaled_penalty_from_vars = yes
 	}
 }
 
@@ -357,13 +441,109 @@ country_event = {
 		# Restore third-party control
 		plus_cs_restore_third_party_control = yes
 		
-		# Remove crisis ideas AND Synergy modifiers
-		remove_ideas = internal_crisis_high
-		remove_ideas = internal_crisis_medium
-		remove_ideas = internal_crisis_low
-		remove_ideas = political_paralysis
-		if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
-		if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
-		if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
+		# Remove crisis ideas AND Synergy modifiers — OPT: using shared effect
+		plus_cs_cleanup_crisis_modifiers = yes
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 14. OVERLORD ANNEXATION (Puppet-specific)
+# The puppet is collapsing — overlord absorbs it directly.
+# Historical: Japan tightening control over failing Manchukuo
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.14
+	title = plus_cs_internal.14.t
+	desc = plus_cs_internal.14.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	trigger = {
+		is_puppet = yes
+	}
+	
+	option = {
+		name = plus_cs_internal.14.a
+		ai_chance = { factor = 100 }
+		
+		# Save third-party control
+		plus_cs_save_third_party_control = yes
+		
+		# Overlord annexes us
+		overlord = {
+			annex_country = { target = ROOT transfer_troops = yes }
+		}
+		
+		# Restore third-party control
+		plus_cs_restore_third_party_control = yes
+	}
+}
+
+# ------------------------------------------------------------------------------
+# 15. DEFECTION TO ENEMY (Puppet-specific)
+# The puppet switches sides — surrenders to whoever is conquering them.
+# Historical: Romania/Bulgaria switching to Allied side in 1944
+# ------------------------------------------------------------------------------
+country_event = {
+	id = plus_cs_internal.15
+	title = plus_cs_internal.15.t
+	desc = plus_cs_internal.15.d
+	picture = GFX_report_event_generic_sign_treaty1
+	is_triggered_only = yes
+	
+	trigger = {
+		is_puppet = yes
+	}
+	
+	immediate = {
+		# Find enemy with highest war contribution (= who is conquering us)
+		set_variable = { best_contribution = 0 }
+		every_enemy_country = {
+			if = {
+				limit = {
+					is_puppet = no
+					check_variable = { ROOT.vp@THIS > ROOT.best_contribution }
+				}
+				set_variable = { ROOT.best_contribution = ROOT.vp@THIS }
+				save_event_target_as = new_master
+			}
+		}
+		# Fallback: just pick any non-puppet enemy
+		if = {
+			limit = { NOT = { has_event_target = new_master } }
+			random_enemy_country = {
+				limit = { is_puppet = no }
+				save_event_target_as = new_master
+			}
+		}
+	}
+	
+	option = {
+		name = plus_cs_internal.15.a
+		ai_chance = { factor = 100 }
+		
+		# Save third-party control
+		plus_cs_save_third_party_control = yes
+		
+		# Break free from current overlord
+		overlord = {
+			end_puppet = ROOT
+			add_opinion_modifier = { target = ROOT modifier = diplo_insult }
+		}
+		leave_faction = yes
+		
+		# Become puppet of the enemy (switch sides)
+		if = {
+			limit = { has_event_target = new_master }
+			event_target:new_master = {
+				puppet = ROOT
+			}
+		}
+		
+		# Restore third-party control
+		plus_cs_restore_third_party_control = yes
+		
+		# Remove crisis ideas — OPT: using shared effect
+		plus_cs_cleanup_crisis_modifiers = yes
 	}
 }

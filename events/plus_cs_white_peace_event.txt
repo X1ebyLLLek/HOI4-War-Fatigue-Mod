@@ -1,5 +1,7 @@
 add_namespace = plus_cs
 
+
+
 # ==========================================
 # WHITE PEACE EVENTS
 # ==========================================
@@ -13,9 +15,14 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		# Gating: Only after Civil War
-		has_country_flag = plus_cs_had_civil_war
 		is_puppet = no
+		NOT = { tag = FROM } # SELF-PEACE GUARD
+		# CIVIL WAR GUARD: Блокирует ванильные гражданки (Кайзер и т.д.)
+		# Пропускает: обычные страны + модовые гражданки
+		OR = {
+			has_civil_war = no
+			has_country_flag = plus_cs_had_civil_war
+		}
 	}
 
 	immediate = {
@@ -51,7 +58,10 @@ country_event = {
 		# If ROOT is Faction Leader, we peace out OUR ENTIRE FACTION against FROM
 		if = {
 			limit = { is_faction_leader = yes }
-			every_country = {
+			white_peace = FROM
+			set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
+			every_other_country = {
 				limit = { is_in_faction_with = ROOT }
 				white_peace = FROM
 				set_country_flag = { flag = plus_cs_signed_separate_peace days = 360 }
@@ -99,20 +109,77 @@ country_event = {
 				surrender_progress < 0.1
 			}
 			
-			# If we are LOSING
+			# If we are LOSING (white peace is a gift)
 			modifier = {
 				factor = 0
 				surrender_progress > 0.25
 			}
+			
+			# Ideology: totalitarians refuse white peace easier
+			modifier = {
+				factor = 2.0
+				OR = { has_government = fascism has_government = communism }
+			}
+			
+			# Democrats: pragmatic, accept white peace more
+			modifier = {
+				factor = 0.5
+				has_government = democratic
+				has_country_flag = { flag = plus_cs_at_war_start days > 365 }
+			}
+			
+			# We have territorial claims → refuse
+			modifier = {
+				add = 40
+				FROM = { any_owned_state = { is_claimed_by = ROOT } }
+			}
+			
+			# We have cores under enemy control → refuse
+			modifier = {
+				add = 60
+				FROM = { any_owned_state = { is_core_of = ROOT } }
+			}
+			
+			# Exhaustion → don't refuse
+			modifier = {
+				factor = 0.1
+				OR = {
+					has_country_flag = plus_cs_exhausted
+					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			
+			# Long war: refusing white peace is unpopular
+			modifier = {
+				factor = 0.5
+				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+			}
+			modifier = {
+				factor = 0.3
+				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
+			}
 		}
 		
-		add_political_power = -10
+		set_temp_variable = { penalty_stab = 0 }
+		set_temp_variable = { penalty_ws = 0 }
+		set_temp_variable = { penalty_pp = -10 }
+		plus_cs_apply_scaled_penalty_from_vars = yes
+		
+		# White peace refusal → penalty during stalemate
+		if = {
+			limit = { has_country_flag = plus_cs_stalemate }
+			add_stability = -0.05
+			add_war_support = -0.05
+			custom_effect_tooltip = plus_cs.4.b.tooltip_1
+		}
 		
 		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] REFUSED White Peace from [FROM.GetName]."
 
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
 			set_country_flag = { flag = plus_cs_peace_cooldown days = 30 }
+			# Escalation tracking
+			set_country_flag = plus_cs_offered_peace_before
 			# BUGFIX: Notify sender about rejection
 			news_event = { id = plus_cs.6 }
 		}
