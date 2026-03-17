@@ -64,6 +64,108 @@ country_event = {
 		# Calculate Strategic Value of owned states
 		plus_cs_calculate_total_strategic_value = yes
 
+		# ============================================================
+		# BUGFIX: SURRENDER INVERSION
+		# When FROM has plus_cs_is_surrendering, FROM is the LOSER
+		# and ROOT is the WINNER. Cannot use plus_cs_apply_peace_decisions_to_losers
+		# because it uses ROOT to find losers, but here ROOT = winner.
+		# Inline the decision activation directly.
+		# ============================================================
+		if = {
+			limit = { FROM = { has_country_flag = plus_cs_is_surrendering } }
+			
+			# --- WINNER: ROOT (and allies) get decisions against FROM (loser) ---
+			
+			# Country-level decisions for ROOT against FROM
+			ROOT = {
+				save_event_target_as = current_winner
+				set_variable = { og_vp@FROM = cnt_og_vp@FROM }
+				activate_targeted_decision = { target = FROM decision = peace_war_reparations }
+				activate_targeted_decision = { target = FROM decision = peace_disarm }
+			}
+			# State-level decisions: iterate FROM's owned states
+			FROM = {
+				every_owned_state = {
+					set_variable = { is_peace_state_target = 1 }
+					event_target:current_winner = {
+						activate_targeted_decision = { target = PREV decision = peace_take_state }
+						activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+						activate_targeted_decision = { target = PREV decision = peace_puppet }
+						activate_targeted_decision = { target = PREV decision = peace_liberate }
+						activate_targeted_decision = { target = PREV decision = peace_claim }
+					}
+				}
+				set_variable = { state_taken = 0 }
+			}
+			
+			# ROOT's allies also get decisions (if ROOT is faction leader)
+			if = {
+				limit = { is_faction_leader = yes }
+				every_other_country = {
+					limit = { is_in_faction_with = ROOT has_war_with = FROM }
+					save_event_target_as = current_winner
+					set_variable = { og_vp@FROM = cnt_og_vp@FROM }
+					activate_targeted_decision = { target = FROM decision = peace_war_reparations }
+					activate_targeted_decision = { target = FROM decision = peace_disarm }
+					FROM = {
+						every_owned_state = {
+							set_variable = { is_peace_state_target = 1 }
+							event_target:current_winner = {
+								activate_targeted_decision = { target = PREV decision = peace_take_state }
+								activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+								activate_targeted_decision = { target = PREV decision = peace_puppet }
+								activate_targeted_decision = { target = PREV decision = peace_liberate }
+								activate_targeted_decision = { target = PREV decision = peace_claim }
+							}
+						}
+					}
+				}
+			}
+			else = {
+				# ROOT's puppets also get decisions
+				every_subject_country = {
+					save_event_target_as = current_winner
+					set_variable = { og_vp@FROM = cnt_og_vp@FROM }
+					activate_targeted_decision = { target = FROM decision = peace_war_reparations }
+					activate_targeted_decision = { target = FROM decision = peace_disarm }
+					FROM = {
+						every_owned_state = {
+							set_variable = { is_peace_state_target = 1 }
+							event_target:current_winner = {
+								activate_targeted_decision = { target = PREV decision = peace_take_state }
+								activate_targeted_decision = { target = PREV decision = peace_set_dmz }
+								activate_targeted_decision = { target = PREV decision = peace_puppet }
+								activate_targeted_decision = { target = PREV decision = peace_liberate }
+								activate_targeted_decision = { target = PREV decision = peace_claim }
+							}
+						}
+					}
+				}
+			}
+			
+			# White peace — FROM (loser) makes peace with ROOT (winner)
+			plus_cs_save_third_party_control = yes
+			white_peace = FROM
+			plus_cs_set_mutual_truce = yes
+			plus_cs_restore_third_party_control = yes
+			
+			FROM = {
+				clr_country_flag = plus_cs_is_surrendering
+				clr_country_flag = plus_cs_waiting_response
+				leave_faction = yes
+				add_timed_idea = {
+					idea = conditional_surrender
+					days = 720
+				}
+			}
+		}
+		# ============================================================
+		# STANDARD FLOW: FROM is the WINNER, ROOT is the LOSER
+		# (Player proposed peace, bot accepted)
+		# ============================================================
+		else = {
+		save_event_target_as = current_loser
+		
 		if = {
 			limit = { FROM = { is_faction_leader = no } }
 			# WINNER LOOP: FROM and its puppets
@@ -118,6 +220,9 @@ country_event = {
 			# НОВОЕ: Сохраняем контроль третьих сторон
 			plus_cs_save_third_party_control = yes
 			
+			# BUGFIX: Заключаем мир с самим FROM (инициатором мирного предложения)
+			white_peace = FROM
+			
 			every_enemy_country = {
 				limit = {
 					is_in_faction_with = FROM
@@ -145,6 +250,8 @@ country_event = {
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
 		}
+		
+		} # end else (standard flow)
 	}
 
 	# Option B: Decline Negotiation

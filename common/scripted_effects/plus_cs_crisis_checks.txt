@@ -46,8 +46,9 @@ plus_cs_crisis_step = {
 						set_temp_variable = { cw_size = 0.15 }
 						if = { limit = { has_government = democratic fascism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
 						else_if = { limit = { has_government = democratic fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
-						if = { limit = { has_government = neutrality fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
-						if = { limit = { has_government = fascism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = neutrality fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = fascism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = communism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						if = { limit = { has_government = communism democratic > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						
 						if = { limit = { has_government = democratic } start_civil_war = { ideology = fascism size = var:cw_size } }
@@ -59,9 +60,9 @@ plus_cs_crisis_step = {
 						set_temp_variable = { cw_size = 0.15 }
 						if = { limit = { has_government = democratic communism > 0.4 } set_temp_variable = { cw_size = 0.45 } }
 						else_if = { limit = { has_government = democratic communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
-						if = { limit = { has_government = neutrality communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
-						if = { limit = { has_government = fascism communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
-						if = { limit = { has_government = communism fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = neutrality communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = fascism communism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
+						else_if = { limit = { has_government = communism fascism > 0.3 } set_temp_variable = { cw_size = 0.35 } }
 						
 						if = { limit = { has_government = democratic } start_civil_war = { ideology = communism size = var:cw_size } }
 						if = { limit = { has_government = neutrality } start_civil_war = { ideology = communism size = var:cw_size } }
@@ -166,12 +167,16 @@ plus_cs_crisis_step = {
 			has_country_flag = plus_cs_at_war_start # Only if country has been at war
 		}
 		
-		# Duration multiplier based on THIS COUNTRY's war duration, not global date
+		# Realistic Fatigue factors replacing pure time-based drain
 		set_temp_variable = { fatigue_mult = 0 }
-		if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1825 } } set_temp_variable = { fatigue_mult = 3 } }      # 5+ years
-		else_if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } } set_temp_variable = { fatigue_mult = 2 } }  # 3+ years
-		else_if = { limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } } set_temp_variable = { fatigue_mult = 1 } }   # 2+ years
-		# Under 2 years: fatigue_mult = 0, no time-based drain at all
+		# Penalty for severe stalemates (no line movement for ~6+ months)
+		if = { limit = { has_country_flag = plus_cs_stalemate } add_to_temp_variable = { fatigue_mult = 1 } }
+		# Penalty for losing home territory
+		if = { limit = { surrender_progress > 0.1 } add_to_temp_variable = { fatigue_mult = 1 } }
+		if = { limit = { surrender_progress > 0.3 } add_to_temp_variable = { fatigue_mult = 1 } }
+		if = { limit = { surrender_progress > 0.5 } add_to_temp_variable = { fatigue_mult = 1 } }
+		# Clamp to prevent it from going too crazy
+		clamp_temp_variable = { var = fatigue_mult max = 3 }
 		
 		# Base Stab Hit (only if war is actually long enough)
 		if = {
@@ -180,50 +185,60 @@ plus_cs_crisis_step = {
 			multiply_temp_variable = { stab_hit = var:fatigue_mult }
 			add_stability = var:stab_hit
 		}
-		
-		# Casualty Fatigue — INDEPENDENT of war length, driven by real losses relative to population
-		if = {
-			limit = {
-				OR = {
-					has_dynamic_modifier = manpower_strain_mild
-					has_dynamic_modifier = manpower_strain_high
-					has_dynamic_modifier = manpower_strain_collapse
-				}
+	} # <--- CLOSE the base exhaustion wrapper HERE
+
+	# Casualty Fatigue — INDEPENDENT of war length, driven by real losses relative to population
+	if = {
+		limit = {
+			has_war = yes
+			OR = {
+				has_dynamic_modifier = manpower_strain_mild
+				has_dynamic_modifier = manpower_strain_high
+				has_dynamic_modifier = manpower_strain_collapse
 			}
-			set_temp_variable = { cas_hit = -0.0005 }
-			# Heavier casualties = heavier hit
-			if = { limit = { has_dynamic_modifier = manpower_strain_collapse } multiply_temp_variable = { cas_hit = 3 } }
-			else_if = { limit = { has_dynamic_modifier = manpower_strain_high } multiply_temp_variable = { cas_hit = 2 } }
-			add_stability = var:cas_hit
-			add_war_support = var:cas_hit
 		}
+		set_temp_variable = { cas_hit = -0.0005 }
+		# Heavier casualties = heavier hit
+		if = { limit = { has_dynamic_modifier = manpower_strain_collapse } multiply_temp_variable = { cas_hit = 3 } }
+		else_if = { limit = { has_dynamic_modifier = manpower_strain_high } multiply_temp_variable = { cas_hit = 2 } }
+		add_stability = var:cas_hit
+		add_war_support = var:cas_hit
+	}
+	
+	# Low War Support penalty — people don't want to fight
+	if = {
+		limit = { has_war = yes has_war_support < 0.3 }
+		add_stability = -0.0005
+	}
+	
+	# Democratic Sensitivity — independent additive, NOT triple-hit
+	if = {
+		limit = { has_war = yes has_government = democratic }
+		# Smaller additive penalty, not full stab_hit copy
+		set_temp_variable = { dem_hit = -0.0005 }
 		
-		# Low War Support penalty — people don't want to fight
-		if = {
-			limit = { has_war_support < 0.3 }
-			add_stability = -0.0005
-		}
+		# Recalculate fatigue_mult since it was local to the outer block
+		set_temp_variable = { fatigue_mult = 0 }
+		if = { limit = { has_country_flag = plus_cs_stalemate } add_to_temp_variable = { fatigue_mult = 1 } }
+		if = { limit = { surrender_progress > 0.1 } add_to_temp_variable = { fatigue_mult = 1 } }
+		if = { limit = { surrender_progress > 0.3 } add_to_temp_variable = { fatigue_mult = 1 } }
+		if = { limit = { surrender_progress > 0.5 } add_to_temp_variable = { fatigue_mult = 1 } }
+		clamp_temp_variable = { var = fatigue_mult max = 3 }
+
+		if = { limit = { check_variable = { fatigue_mult > 0 } } multiply_temp_variable = { dem_hit = var:fatigue_mult } }
+		add_stability = var:dem_hit
 		
-		# Democratic Sensitivity — independent additive, NOT triple-hit
+		# Long war radicalizes population
 		if = {
-			limit = { has_government = democratic }
-			# Smaller additive penalty, not full stab_hit copy
-			set_temp_variable = { dem_hit = -0.0005 }
-			if = { limit = { check_variable = { fatigue_mult > 0 } } multiply_temp_variable = { dem_hit = var:fatigue_mult } }
-			add_stability = var:dem_hit
-			
-			# Long war radicalizes population
+			limit = { check_variable = { fatigue_mult > 1 } }
+			set_temp_variable = { war_pop_drift = 0.0005 }
+			multiply_temp_variable = { war_pop_drift = var:fatigue_mult }
 			if = {
-				limit = { check_variable = { fatigue_mult > 1 } }
-				set_temp_variable = { war_pop_drift = 0.0005 }
-				multiply_temp_variable = { war_pop_drift = var:fatigue_mult }
-				if = {
-					limit = { fascism > communism }
-					add_popularity = { ideology = fascism popularity = var:war_pop_drift }
-				}
-				else = {
-					add_popularity = { ideology = communism popularity = var:war_pop_drift }
-				}
+				limit = { fascism > communism }
+				add_popularity = { ideology = fascism popularity = var:war_pop_drift }
+			}
+			else = {
+				add_popularity = { ideology = communism popularity = var:war_pop_drift }
 			}
 		}
 	}
@@ -239,6 +254,7 @@ plus_cs_internal_crisis_check_step = {
 	
 	if = {
 		limit = { 
+			has_war = yes
 			OR = { has_war_support < 0.2 has_stability < 0.2 }
 			# CIVIL WAR GUARD
 			OR = {
@@ -269,6 +285,7 @@ plus_cs_internal_crisis_check_step = {
 		remove_ideas = internal_crisis_high
 		remove_ideas = internal_crisis_medium
 		remove_ideas = internal_crisis_low
+		remove_ideas = political_paralysis
 	}
 	
 	# ========================================

@@ -88,10 +88,13 @@ country_event = {
 			}
 		}
 
-		# EFFECT: Find all states controlled by ROOT that are cores of the SENDER and transfer them
-		every_owned_state = {
+		# EFFECT: Find all states controlled by ROOT that are cores or claims of the SENDER and transfer them
+		every_controlled_state = {
 			limit = {
-				is_core_of = FROM
+				OR = {
+					is_core_of = FROM
+					is_claimed_by = FROM
+				}
 			}
 			FROM = { transfer_state = PREV }
 		}

@@ -68,8 +68,7 @@ plus_cs_calc_scores = {
 	if = {
 		limit = {
 			is_in_faction = yes
-			any_other_country = {
-				is_in_faction_with = ROOT
+			any_allied_country = {
 				is_major = yes
 				NOT = { has_capitulated = yes }
 			}
@@ -80,7 +79,7 @@ plus_cs_calc_scores = {
 	# === WAR SUPPORT AS MORALE ===
 	# High war_support = population endures more punishment
 	if = { limit = { has_war_support > 0.7 } add_to_variable = { plus_cs_resistance_target = 40 } }
-	if = { limit = { has_war_support > 0.5 } add_to_variable = { plus_cs_resistance_target = 20 } }
+	else_if = { limit = { has_war_support > 0.5 } add_to_variable = { plus_cs_resistance_target = 20 } }
 	
 	# === NATIONAL SPIRIT IDEAS ===
 	# "Fight for Survival" / "Desperate Defense" = rally effect
@@ -147,4 +146,9 @@ plus_cs_calc_scores = {
 	# --- 3. CALCULATE RATIO ---
 	set_variable = { plus_cs_pressure_ratio = plus_cs_current_pressure }
 	divide_variable = { plus_cs_pressure_ratio = plus_cs_resistance_target }
+
+	# --- 4. CALCULATE CRISIS MULTIPLIER (ADAPTIVE PENALTIES) ---
+	# Used by dynamic modifiers to scale debuffs based on actual situation!
+	set_variable = { plus_cs_crisis_multiplier = plus_cs_pressure_ratio }
+	clamp_variable = { var = plus_cs_crisis_multiplier min = 0.4 max = 2.5 }
 }

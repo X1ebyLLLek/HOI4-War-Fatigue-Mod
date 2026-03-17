@@ -27,7 +27,7 @@ leader_traits = {
 		sprite = 0
 		# Defeatists weaken the army morale
 		army_morale_factor = -0.1 # Recovery rate
-		surrender_limit = 0.1 # +10% Surrender Limit (easier to surrender)
+		surrender_limit = -0.1 # -10% Surrender Limit (easier to capitulate)
 		ai_will_do = {
 			factor = 1
 		}

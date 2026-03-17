@@ -51,6 +51,7 @@ country_event = {
 				is_faction_leader = no
 			}
 			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Minor Flow)."
+			FROM = { save_event_target_as = current_loser }
 			ROOT = {
 				save_event_target_as = current_winner
 				plus_cs_apply_peace_decisions_to_losers = yes
@@ -62,9 +63,10 @@ country_event = {
 		}
 		else = {
 			log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Conditional Surrender from [FROM.GetName] (Major Flow)."
+			FROM = { save_event_target_as = current_loser }
 			ROOT = {
 				save_event_target_as = current_winner
-				plus_cs_apply_conditional_demands = yes
+				plus_cs_apply_peace_decisions_to_losers = yes
 				
 				every_other_country = {
 					limit = {
@@ -72,7 +74,7 @@ country_event = {
 						has_war_with = FROM
 					}
 					save_event_target_as = current_winner
-					plus_cs_apply_conditional_demands = yes
+					plus_cs_apply_peace_decisions_to_losers = yes
 				}
 			}
 		}

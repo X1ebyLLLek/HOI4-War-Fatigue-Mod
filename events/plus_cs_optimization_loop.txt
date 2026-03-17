@@ -33,7 +33,11 @@ country_event = {
 
 		# --- TRAIT MANAGEMENT ---
 		# Ensures new leaders (after elections/civil wars) get a spirit
-		plus_cs_assign_fighting_spirit = yes
+		# GATED: Only runs for nations actively fighting to save CPU
+		if = {
+			limit = { has_war = yes }
+			plus_cs_assign_fighting_spirit = yes
+		}
 
 		# --- SCORE CALCULATION ---
 		if = {
@@ -248,15 +252,21 @@ country_event = {
 		}
 		
 		# Negotiated Vassalization Check (Smart Math)
-		# OPT: Merged any_neighbor_country check + random_neighbor_country into one pass
+		# OPT: Bypassed heavy strength_ratio checks for peaceful neighbors
 		if = {
 			limit = {
 				is_ai = yes
 				is_subject = no
 				has_war = no
+				any_neighbor_country = { 
+					OR = {
+						has_wargoal_against = ROOT
+						is_justifying_wargoal_against = ROOT
+					}
+				}
 			}
 			
-			# Find and save the threat (one pass instead of two)
+			# Find and save the threat
 			random_neighbor_country = {
 				limit = {
 					NOT = { is_in_faction_with = ROOT }
@@ -356,12 +366,13 @@ country_event = {
 		}
 		
 		# Pre-War Deal Check (FIXED)
-		# OPT: Removed duplicate any_neighbor_country check
+		# OPT: Bypassed heavy strength_ratio checks for peaceful neighbors
 		if = {
 			limit = {
 				is_ai = yes # Player never surrenders automatically
 				has_war = no
 				is_subject = no
+				any_neighbor_country = { has_wargoal_against = ROOT }
 			}
 			# Strict Logic: Only if we are truly terrified (< 20% strength)
 			random_neighbor_country = {

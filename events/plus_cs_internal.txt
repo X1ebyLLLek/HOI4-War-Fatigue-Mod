@@ -334,6 +334,7 @@ country_event = {
 					NOT = { tag = ROOT }
 				}
 				transfer_state = PREV
+				set_state_controller = PREV
 			}
 		}
 		

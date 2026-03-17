@@ -21,6 +21,7 @@ peace_treaty = {
 		fire_only_once = yes
 
 		visible = {
+			check_variable = { FROM.is_peace_state_target = 1 }
 			check_variable = { FROM.state_taken = 0 }
 			FROM = {
 				is_core_of = FROM.owner
@@ -123,6 +124,7 @@ peace_treaty = {
 						puppet = PREV
 						PREV = {
 							transfer_state = FROM
+							set_state_controller = FROM
 						}
 					}
 				}
@@ -224,20 +226,19 @@ peace_treaty = {
 
 		visible = {
 			is_puppet = no
+			check_variable = { FROM.is_peace_state_target = 1 }
 			check_variable = { FROM.state_taken = 0 }
-			any_of_scopes = {
-				array = var:global.countries
-				OR = {
-					exists = no
-					AND = {
-						is_puppet_of = ROOT
-						NOT = {
-							original_tag = FROM.owner
+			FROM = {
+				any_of_scopes = {
+					array = var:global.countries
+					OR = {
+						exists = no
+						AND = {
+							NOT = { original_tag = FROM.owner }
+							NOT = { has_war_with = ROOT }
 						}
 					}
-				}
-				FROM = {
-					is_core_of = PREV
+					FROM = { is_core_of = PREV }
 				}
 			}
 		}
@@ -245,19 +246,17 @@ peace_treaty = {
 		available = {
 			is_puppet = no
 			check_variable = { FROM.state_taken = 0 }
-			any_of_scopes = {
-				array = var:global.countries
-				OR = {
-					exists = no
-					AND = {
-						is_puppet_of = ROOT
-						NOT = {
-							original_tag = FROM.owner
+			FROM = {
+				any_of_scopes = {
+					array = var:global.countries
+					OR = {
+						exists = no
+						AND = {
+							NOT = { original_tag = FROM.owner }
+							NOT = { has_war_with = ROOT }
 						}
 					}
-				}
-				FROM = {
-					is_core_of = PREV
+					FROM = { is_core_of = PREV }
 				}
 			}
 			set_temp_variable = { pts = FROM.state_strategic_value }
@@ -295,61 +294,52 @@ peace_treaty = {
 			subtract_from_variable = { vp@FROM.owner = pts }
 			if = {
 				limit = {
-					any_country = {
-						is_puppet_of = ROOT
-						NOT = {
-							original_tag = FROM.owner
-						}
-						FROM = {
-							is_core_of = PREV
+					FROM = {
+						any_country = {
+							NOT = { original_tag = FROM.owner }
+							NOT = { has_war_with = ROOT }
+							FROM = { is_core_of = PREV }
 						}
 					}
 				}
-				random_country = {
-					limit = {
-						is_puppet_of = ROOT
-						FROM = {
-							is_core_of = PREV
+				FROM = {
+					random_country = {
+						limit = {
+							NOT = { original_tag = FROM.owner }
+							NOT = { has_war_with = ROOT }
+							FROM = { is_core_of = PREV }
 						}
+						transfer_state = FROM
+						set_state_controller = FROM
 					}
-					transfer_state = FROM
 				}
 			}
 			else = {
-				random_scope_in_array = {
-					array = var:global.countries
-					limit = {
-						exists = no
-						FROM = {
-							is_core_of = PREV
-						}
-					}
-					transfer_state = FROM
-					if = {
+				FROM = {
+					random_scope_in_array = {
+						array = var:global.countries
 						limit = {
-							ROOT = {
-								has_rule = can_puppet
+							exists = no
+							FROM = { is_core_of = PREV }
+						}
+						transfer_state = FROM
+						set_state_controller = FROM
+						if = {
+							limit = {
+								ROOT = {
+									has_elections = yes
+								}
+							}
+							set_politics = {
+								ruling_party = var:ROOT.current_party_ideology_group
+								elections_allowed = yes
 							}
 						}
-						ROOT = {
-							puppet = PREV
-						}
-					}
-					if = {
-						limit = {
-							ROOT = {
-								has_elections = yes
+						else = {
+							set_politics = {
+								ruling_party = var:ROOT.current_party_ideology_group
+								elections_allowed = no
 							}
-						}
-						set_politics = {
-							ruling_party = var:ROOT.current_party_ideology_group
-							elections_allowed = yes
-						}
-					}
-					else = {
-						set_politics = {
-							ruling_party = var:ROOT.current_party_ideology_group
-							elections_allowed = no
 						}
 					}
 				}
@@ -373,11 +363,13 @@ peace_treaty = {
 
 			modifier = {
 				add = 20
-				FROM = { is_core_of = FROM.owner }
-				any_of_scopes = {
-					array = var:global.countries
-					exists = no
-					FROM = { is_core_of = PREV }
+				FROM = { 
+					is_core_of = THIS.owner
+					any_of_scopes = {
+						array = var:global.countries
+						exists = no
+						FROM = { is_core_of = PREV }
+					}
 				}
 			}
 			

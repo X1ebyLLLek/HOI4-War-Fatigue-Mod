@@ -31,6 +31,7 @@ ideas = {
 
 		internal_crisis_low = {
 			picture = GFX_idea_internal_unrest_low
+			allowed = { always = no }
 			allowed_to_remove = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -41,6 +42,7 @@ ideas = {
 
 		internal_crisis_medium = {
 			picture = GFX_idea_internal_unrest_medium
+			allowed = { always = no }
 			allowed_to_remove = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -73,6 +75,7 @@ ideas = {
 
 		desperate_defense_effort = {
 			picture = GFX_idea_fortification_effort
+			allowed = { always = no }
 			allowed_to_remove = { always = no }
 			removal_cost = -1
 			modifier = {

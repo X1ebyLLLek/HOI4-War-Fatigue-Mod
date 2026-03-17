@@ -149,6 +149,7 @@ economic_retooling_shock_major = {
 # + Ежемесячно отнимает 0.5% стабильности и поддержки войны (через скрипт).
 # ----------------------------------------------------------------------
 war_inflation_crisis = {
+
 	icon = GFX_idea_generic_production_bonus 
 	enable = { always = yes }
 	

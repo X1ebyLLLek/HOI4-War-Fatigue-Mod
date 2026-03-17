@@ -43,6 +43,7 @@ scripted_diplomatic_actions = {
 			custom_trigger_tooltip = {
 				tooltip = plus_cs_demand_no_recent_tt
 				NOT = { has_country_flag = plus_cs_recent_demand }
+				ROOT = { NOT = { has_country_flag = plus_cs_recent_demand_sent } }
 			}
 			
 			custom_trigger_tooltip = {
@@ -81,8 +82,11 @@ scripted_diplomatic_actions = {
 		}
 
 		complete_effect = {
-			set_country_flag = { flag = plus_cs_recent_demand days = 180 }
-			country_event = { id = plus_cs_demands.1 days = 2 }
+			set_country_flag = { flag = plus_cs_recent_demand_sent days = 30 }
+			FROM = {
+				set_country_flag = { flag = plus_cs_recent_demand days = 180 }
+				country_event = { id = plus_cs_demands.1 days = 2 }
+			}
 		}
 
 		ai_desire = {

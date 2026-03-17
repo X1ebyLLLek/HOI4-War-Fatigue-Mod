@@ -220,6 +220,7 @@ country_event = {
 			# Ideology affinity with faction leader
 			modifier = {
 				add = 30
+				is_in_faction = yes
 				faction_leader = { has_government = ROOT }
 			}
 			
@@ -281,6 +282,7 @@ country_event = {
 			# Ideology mismatch: easier to break away
 			modifier = {
 				factor = 2.0
+				is_in_faction = yes
 				NOT = { faction_leader = { has_government = ROOT } }
 			}
 		}

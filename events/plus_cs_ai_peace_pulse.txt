@@ -204,6 +204,9 @@ country_event = {
 							event_target:peace_target = { save_event_target_as = peace_recipient }
 							save_event_target_as = peace_sender
 							set_country_flag = plus_cs_peace_type_negotiation
+							# BUGFIX: Mark that FROM is surrendering (loser), not proposing (winner)
+							# plus_cs.1 needs this to know ROOT is the winner, not FROM
+							set_country_flag = plus_cs_is_surrendering
 							event_target:peace_target = { country_event = { id = plus_cs.1 } }
 						}
 					}
@@ -384,5 +387,6 @@ country_event = {
 				event_target:peace_target = { country_event = { id = plus_cs.250 } }
 			}
 		}
+	}
 	}
 }

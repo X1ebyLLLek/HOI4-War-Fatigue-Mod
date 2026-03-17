@@ -71,7 +71,7 @@ plus_cs_heavy_calc_step = {
 		if = { limit = { is_major = yes } add_to_temp_variable = { officer_cap_calc = 500 } }
 
 		set_temp_variable = { total_strain = num_divisions }
-		subtract_from_temp_variable = { var = total_strain value = var:plus_cs_prev_battalions }
+		subtract_from_temp_variable = { total_strain = var:plus_cs_prev_battalions }
 		clamp_temp_variable = { var = total_strain min = 0 }
 		multiply_temp_variable = { total_strain = 0.5 } 
 
@@ -151,9 +151,12 @@ plus_cs_heavy_calc_step = {
 				}
 			}
 			
-			# OPT: every_subject_country is a no-op when no subjects exist, guard removed
 			every_subject_country = {
-				set_temp_variable = { subj_pop = core_population }
+				set_temp_variable = { subj_pop = 0 }
+				every_owned_state = {
+					limit = { is_core_of = PREV }
+					add_to_temp_variable = { subj_pop = state_population }
+				}
 				multiply_temp_variable = { var = subj_pop value = 0.25 }
 				add_to_variable = { var = ROOT.core_pop_calc value = subj_pop }
 			}
@@ -170,11 +173,7 @@ plus_cs_heavy_calc_step = {
 		if = { limit = { has_government = democratic } set_temp_variable = { manpower_ideo_mult = 0.85 } }
 		else_if = { limit = { OR = { has_government = fascism has_government = communism } } set_temp_variable = { manpower_ideo_mult = 1.3 } }
 		
-		# R1: Динамическая длительность флагов — зависит от давления
-		set_temp_variable = { exhaust_days = 28 }
-		if = { limit = { check_variable = { plus_cs_pressure_ratio > 1.5 } } set_temp_variable = { exhaust_days = 60 } }
-		else_if = { limit = { check_variable = { plus_cs_pressure_ratio > 1.0 } } set_temp_variable = { exhaust_days = 45 } }
-		
+
 		# Collapse (> 5% × ideology mult of core pop)
 		set_temp_variable = { limit_check = var:limit_base }
 		set_temp_variable = { crisis_threshold = 0.05 }
@@ -234,7 +233,8 @@ plus_cs_heavy_calc_step = {
 			limit = { 
 				is_major = no
 				has_war_with_major = yes
-				any_owned_state = { is_core_of = ROOT is_controlled_by = ROOT check_variable = { ROOT.surrender_progress > 0.05 } }
+				surrender_progress > 0.05
+				any_owned_state = { is_core_of = ROOT is_controlled_by = ROOT }
 			}
 			add_timed_idea = { idea = desperate_defense_effort days = 35 }
 		}
@@ -397,7 +397,7 @@ plus_cs_synergy_crisis_check = {
 			add_dynamic_modifier = { modifier = homefront_collapse days = 35 }
 			
 			# УБИРАЕМ базовые кризисы тыла (они поглощены)
-			remove_dynamic_modifier = { modifier = war_inflation_crisis }
+			if = { limit = { has_dynamic_modifier = war_inflation_crisis } remove_dynamic_modifier = { modifier = war_inflation_crisis } }
 			remove_ideas = internal_crisis_high
 			
 			# HOMEFRONT COLLAPSE = СИЛЬНЫЙ ДРИФТ К ОППОЗИЦИИ (3% за тик)
@@ -438,7 +438,16 @@ plus_cs_cleanup_crisis_modifiers = {
 	remove_ideas = internal_crisis_medium
 	remove_ideas = internal_crisis_low
 	remove_ideas = political_paralysis
+	remove_ideas = desperate_defense_effort
+	remove_ideas = panic_retreat_shock
 	if = { limit = { has_dynamic_modifier = homefront_collapse } remove_dynamic_modifier = { modifier = homefront_collapse } }
 	if = { limit = { has_dynamic_modifier = total_exhaustion } remove_dynamic_modifier = { modifier = total_exhaustion } }
 	if = { limit = { has_dynamic_modifier = army_cohesion_crisis } remove_dynamic_modifier = { modifier = army_cohesion_crisis } }
+	if = { limit = { has_dynamic_modifier = war_inflation_crisis } remove_dynamic_modifier = { modifier = war_inflation_crisis } }
+	if = { limit = { has_dynamic_modifier = manpower_strain_mild } remove_dynamic_modifier = { modifier = manpower_strain_mild } }
+	if = { limit = { has_dynamic_modifier = manpower_strain_high } remove_dynamic_modifier = { modifier = manpower_strain_high } }
+	if = { limit = { has_dynamic_modifier = manpower_strain_collapse } remove_dynamic_modifier = { modifier = manpower_strain_collapse } }
+	if = { limit = { has_dynamic_modifier = officer_shortage_mild } remove_dynamic_modifier = { modifier = officer_shortage_mild } }
+	if = { limit = { has_dynamic_modifier = officer_shortage_high } remove_dynamic_modifier = { modifier = officer_shortage_high } }
+	if = { limit = { has_dynamic_modifier = officer_shortage_collapse } remove_dynamic_modifier = { modifier = officer_shortage_collapse } }
 }
