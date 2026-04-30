@@ -23,6 +23,7 @@ peace_treaty = {
 		visible = {
 			check_variable = { FROM.is_peace_state_target = 1 }
 			check_variable = { FROM.state_taken = 0 }
+			is_puppet = no
 		}
 
 		available = {
@@ -162,6 +163,7 @@ peace_treaty = {
 		visible = {
 			check_variable = { FROM.is_peace_state_target = 1 }
 			check_variable = { FROM.state_taken = 0 }
+			is_puppet = no
 		}
 
 		available = {
@@ -252,6 +254,7 @@ peace_treaty = {
 		visible = {
 			check_variable = { FROM.is_peace_state_target = 1 }
 			check_variable = { FROM.state_taken = 0 }
+			is_puppet = no
 		}
 
 		available = {

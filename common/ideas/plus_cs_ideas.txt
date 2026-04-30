@@ -276,6 +276,11 @@ ideas = {
 				# Bonus: Protection/Defense (Requested by User)
 				army_core_defence_factor = 0.10
 			}
+			# NEW: Mechanically prevent joining/creating factions
+			rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 		}
 
 		# --- POLITICAL COLLAPSE ---
@@ -287,15 +292,15 @@ ideas = {
 			allowed_to_remove = { always = no }
 			removal_cost = -1
 			modifier = {
-				political_power_gain = -1.0
-				army_org_factor = -0.50
-				army_attack_factor = -0.50
-				army_defence_factor = -0.50
-				industrial_capacity_factory = -0.50
-				surrender_limit = -0.30
-				supply_consumption_factor = 1.0
-				training_time_army_factor = 0.50
-				planning_speed = -0.50
+				political_power_gain = -0.50
+				army_org_factor = -0.30
+				army_attack_factor = -0.30
+				army_defence_factor = -0.30
+				industrial_capacity_factory = -0.30
+				surrender_limit = -0.20
+				supply_consumption_factor = 0.50
+				training_time_army_factor = 0.30
+				planning_speed = -0.30
 			}
 		}
 	}

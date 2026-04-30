@@ -21,25 +21,44 @@ plus_cs_calc_negotiation_chance = {
 	plus_cs_calc_ai_situation = yes
 	
 	# === BASE RELUCTANCE ===
-	# Winner doesn't want to stop - but not TOO reluctant
-	subtract_from_temp_variable = { plus_cs_ai_score = 10 }
+	# Winner doesn't want to stop
+	subtract_from_temp_variable = { plus_cs_ai_score = 15 }
 	
 	# === I AM WINNING - GREED ===
+	# Winning hard = demand MORE, not conditional
 	if = {
 		limit = { 
 			surrender_progress < 0.1 
 			FROM = { surrender_progress > 0.2 }
 		}
-		subtract_from_temp_variable = { plus_cs_ai_score = 15 }
+		subtract_from_temp_variable = { plus_cs_ai_score = 30 }
+	}
+	# Crushing enemy = want unconditional, not conditional
+	if = {
+		limit = { 
+			surrender_progress < 0.05 
+			FROM = { surrender_progress > 0.5 }
+		}
+		subtract_from_temp_variable = { plus_cs_ai_score = 25 }
+	}
+	
+	# === WINNER IN CRISIS ===
+	# If winner is struggling internally, more willing to accept conditional terms
+	if = {
+		limit = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = total_exhaustion }
+		add_to_temp_variable = { plus_cs_ai_score = 25 }
 	}
 	
 	# === ENEMY DESPERATION BONUS ===
-	# The more desperate the enemy, the better their offer
-	if = { limit = { FROM = { surrender_progress > 0.3 } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
-	if = { limit = { FROM = { surrender_progress > 0.5 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
-	if = { limit = { FROM = { has_idea = internal_crisis_medium } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
-	if = { limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } } } add_to_temp_variable = { plus_cs_ai_score = 12 } }
-	if = { limit = { FROM = { has_dynamic_modifier = total_exhaustion } } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	if = { limit = { FROM = { surrender_progress > 0.3 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { FROM = { surrender_progress > 0.5 } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+	if = { limit = { FROM = { has_idea = internal_crisis_medium } } add_to_temp_variable = { plus_cs_ai_score = 6 } }
+	if = { limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
+	if = { limit = { FROM = { has_dynamic_modifier = total_exhaustion } } add_to_temp_variable = { plus_cs_ai_score = 15 } }
 	
 	# === IDEOLOGICAL HATRED ===
 	if = {
@@ -59,14 +78,12 @@ plus_cs_calc_negotiation_chance = {
 	}
 	
 	# === CAPITULATED ENEMY ===
-	# If the enemy has already capitulated, the victor eagerly accepts formal surrender
 	if = {
 		limit = { FROM = { has_capitulated = yes } }
 		add_to_temp_variable = { plus_cs_ai_score = 50 }
 	}
 	
 	# === IDEOLOGY AFFINITY ===
-	# Easier to negotiate with ideologically similar nations
 	if = {
 		limit = {
 			OR = {
@@ -80,13 +97,12 @@ plus_cs_calc_negotiation_chance = {
 	}
 	
 	# === ENEMY LOST CAPITAL ===
-	# If the sender lost their capital, victor sees them as already broken
 	if = {
 		limit = { FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } } }
 		add_to_temp_variable = { plus_cs_ai_score = 15 }
 	}
 	
-	# === ENEMY IS ISOLATED (all allies dead) ===
+	# === ENEMY IS ISOLATED ===
 	if = {
 		limit = {
 			FROM = {
@@ -100,6 +116,16 @@ plus_cs_calc_negotiation_chance = {
 			}
 		}
 		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
+	
+	# === LONG WAR FATIGUE ===
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } }
+		add_to_temp_variable = { plus_cs_ai_score = 8 }
+	}
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
 	}
 
 	# Final
@@ -125,20 +151,31 @@ plus_cs_calc_white_peace_chance = {
 	
 	# === BASE: STRONG RELUCTANCE ===
 	# White peace = giving up without gain. Nobody wants this unless forced.
-	subtract_from_temp_variable = { plus_cs_ai_score = 25 }
+	subtract_from_temp_variable = { plus_cs_ai_score = 40 }
 	
 	# === I AM WINNING ===
 	# If winning, white peace is TERRIBLE - lose all progress!
 	if = {
 		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.2 } }
-		subtract_from_temp_variable = { plus_cs_ai_score = 40 }
+		subtract_from_temp_variable = { plus_cs_ai_score = 60 }
 	}
 	
 	# === I AM LOSING ===
 	# If losing, white peace is salvation!
-	if = { limit = { surrender_progress > 0.2 } add_to_temp_variable = { plus_cs_ai_score = 20 } }
-	if = { limit = { surrender_progress > 0.4 } add_to_temp_variable = { plus_cs_ai_score = 25 } }
-	if = { limit = { surrender_progress > 0.6 } add_to_temp_variable = { plus_cs_ai_score = 20 } }
+	if = { limit = { surrender_progress > 0.2 } add_to_temp_variable = { plus_cs_ai_score = 25 } }
+	if = { limit = { surrender_progress > 0.4 } add_to_temp_variable = { plus_cs_ai_score = 35 } }
+	if = { limit = { surrender_progress > 0.6 } add_to_temp_variable = { plus_cs_ai_score = 25 } }
+	
+	# === WINNER IN CRISIS ===
+	# Even winners may want white peace if they're falling apart internally
+	if = {
+		limit = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
+		add_to_temp_variable = { plus_cs_ai_score = 20 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = total_exhaustion }
+		add_to_temp_variable = { plus_cs_ai_score = 30 }
+	}
 	
 	# === STALEMATE ===
 	if = {
@@ -183,7 +220,7 @@ plus_cs_calc_white_peace_chance = {
 		}
 		add_to_temp_variable = { plus_cs_ai_score = 12 }
 	}
-	# Fascist/Communist white peace is rarer (ideological stubbornness)
+	# Fascist/Communist white peace is rarer
 	if = {
 		limit = {
 			OR = { has_government = fascism has_government = communism }
@@ -192,14 +229,13 @@ plus_cs_calc_white_peace_chance = {
 	}
 	
 	# === War Duration Bonus ===
-	# White peace becomes more attractive the longer the war drags
 	if = {
 		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } }
-		add_to_temp_variable = { plus_cs_ai_score = 10 }
+		add_to_temp_variable = { plus_cs_ai_score = 12 }
 	}
 	if = {
 		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
-		add_to_temp_variable = { plus_cs_ai_score = 15 }
+		add_to_temp_variable = { plus_cs_ai_score = 18 }
 	}
 	
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }
@@ -215,9 +251,16 @@ plus_cs_calc_submission_chance = {
 	plus_cs_calc_ai_personality = yes
 	plus_cs_calc_ai_situation = yes
 	
-	# === BASE: VERY HIGH ===
-	# Free puppet is pure profit!
-	add_to_temp_variable = { plus_cs_ai_score = 80 }
+	# === BASE: MODERATE ===
+	# Free puppet is good, but not always worth it
+	add_to_temp_variable = { plus_cs_ai_score = 40 }
+	
+	# === ENEMY HAS SIGNIFICANT MILITARY ===
+	# Puppet will be expensive to maintain if they have a real army
+	if = {
+		limit = { FROM = { num_of_military_factories > 20 } }
+		subtract_from_temp_variable = { plus_cs_ai_score = 10 }
+	}
 	
 	# === ENEMY DESPERATION ===
 	if = {
@@ -242,13 +285,19 @@ plus_cs_calc_submission_chance = {
     }
 	
 	# === CAPITULATED ENEMY ===
-	# Even greater desire to puppet a capitulated country (officially ends resistance)
 	if = {
 		limit = { FROM = { has_capitulated = yes } }
 		add_to_temp_variable = { plus_cs_ai_score = 40 }
 	}
 	
-	# === ENEMY IS ISOLATED (no living allies) ===
+	# === WINNER IN CRISIS ===
+	# If the winner is falling apart, a puppet is more burden than benefit
+	if = {
+		limit = { OR = { has_dynamic_modifier = homefront_collapse has_dynamic_modifier = total_exhaustion } }
+		subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+	}
+	
+	# === ENEMY IS ISOLATED ===
 	if = {
 		limit = {
 			FROM = {
@@ -285,17 +334,28 @@ plus_cs_calc_conditional_surrender_chance = {
 	
 	# === BASE: LOW ===
 	# Conditional = I don't get everything. Reluctant.
-	subtract_from_temp_variable = { plus_cs_ai_score = 10 }
+	subtract_from_temp_variable = { plus_cs_ai_score = 15 }
 	
 	# === I AM WINNING EASILY ===
 	if = {
 		limit = { surrender_progress < 0.1 FROM = { surrender_progress > 0.2 } }
-		subtract_from_temp_variable = { plus_cs_ai_score = 20 }
+		subtract_from_temp_variable = { plus_cs_ai_score = 25 }
 	}
 	
 	# === ENEMY IS DESPERATE ===
 	if = { limit = { FROM = { surrender_progress > 0.4 } } add_to_temp_variable = { plus_cs_ai_score = 10 } }
 	if = { limit = { FROM = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse has_dynamic_modifier = total_exhaustion } } } add_to_temp_variable = { plus_cs_ai_score = 8 } }
+	
+	# === WINNER IN CRISIS ===
+	# Even winners may accept conditional terms if they're struggling
+	if = {
+		limit = { OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = total_exhaustion }
+		add_to_temp_variable = { plus_cs_ai_score = 25 }
+	}
 	
 	# === TRAIT MODIFIERS ===
 	if = { limit = { has_country_leader_with_trait = plus_cs_spirit_defeatist } add_to_temp_variable = { plus_cs_ai_score = 10 } }
@@ -322,6 +382,16 @@ plus_cs_calc_conditional_surrender_chance = {
 	if = {
 		limit = { FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } } }
 		add_to_temp_variable = { plus_cs_ai_score = 12 }
+	}
+	
+	# === LONG WAR FATIGUE ===
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 730 } }
+		add_to_temp_variable = { plus_cs_ai_score = 10 }
+	}
+	if = {
+		limit = { has_country_flag = { flag = plus_cs_at_war_start days > 1095 } }
+		add_to_temp_variable = { plus_cs_ai_score = 15 }
 	}
 
 	set_variable = { plus_cs_final_calc_score = plus_cs_ai_score }

@@ -116,6 +116,34 @@ decision_category_crisis_management = {
             }
         }
     }
+
+    # Стабилизация правительства — снятие политического паралича
+    decree_stabilize_government = {
+        icon = GFX_decision_generic_political_discourse
+        allowed = { always = yes }
+        cost = 50
+        days_re_enable = 90
+        
+        available = {
+            has_war = yes
+            has_idea = political_paralysis
+        }
+        
+        visible = {
+            has_idea = political_paralysis
+        }
+        
+        complete_effect = {
+            add_political_power = -50
+            remove_ideas = political_paralysis
+            add_stability = 0.05
+            add_war_support = 0.05
+        }
+        
+        ai_will_do = {
+            base = 200
+        }
+    }
 }
 
 # 2. РЕШЕНИЯ МИРНОГО ВРЕМЕНИ (ECONOMIC STIMULUS)

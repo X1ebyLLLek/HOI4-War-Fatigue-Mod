@@ -104,28 +104,6 @@ plus_cs_notify_faction_of_peace = {
 	}
 }
 
-# =============================================
-# plus_cs_calculate_war_contribution
-# Подсчитывает вклад страны в войну против врага
-# ROOT = страна для подсчета
-# FROM = враг
-# Результат в temp переменной: war_contribution
-# =============================================
-plus_cs_calculate_war_contribution = {
-	set_temp_variable = { war_contribution = 0 }
-	
-	# Добавляем очки за захваченные территории
-	if = {
-		limit = { check_variable = { vp@FROM > 0 } }
-		add_to_temp_variable = { war_contribution = vp@FROM }
-	}
-	
-	# Бонус за потери (показывает активное участие в войне)
-	set_temp_variable = { casualty_bonus = casualties }
-	divide_temp_variable = { casualty_bonus = 10000 }
-	clamp_temp_variable = { var = casualty_bonus max = 50 }
-	add_to_temp_variable = { war_contribution = casualty_bonus }
-}
 
 # =============================================
 # plus_cs_check_third_party_control

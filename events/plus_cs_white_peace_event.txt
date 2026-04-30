@@ -34,20 +34,51 @@ country_event = {
 	option = {
 		name = plus_cs.4.a
 		ai_chance = {
-			base = 5 # Always a small chance (Chaos Factor)
+			base = 3 # Micro-chance — never zero acceptance
 			
-			# === WEIGHTED PROBABILITY ===
-			# Score > 0: Increasing chance
-			modifier = { add = 10 check_variable = { plus_cs_final_calc_score > 0 } }
-			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 20 } }
-			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 40 } }
-			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
-			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 80 } }
-			
-			# Score < 0: Decreasing chance
+			# === SCORE-BASED PROBABILITY ===
+			modifier = { add = 8 check_variable = { plus_cs_final_calc_score > 0 } }
+			modifier = { add = 12 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 40 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 60 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 80 } }
+
+			# --- NEGATIVE SCORE PENALTIES ---
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
-			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -50 } } # Relaxed from 0.1 (Never zero chance)
-			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -80 } }
+			modifier = { factor = 0.2 check_variable = { plus_cs_final_calc_score < -50 } }
+			modifier = { factor = 0.05 check_variable = { plus_cs_final_calc_score < -100 } }
+			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -200 } }
+
+			# Winners: white peace = losing progress. Micro-chance to accept
+			modifier = {
+				factor = 0.08
+				surrender_progress < 0.1
+				NOT = { has_idea = internal_crisis_low }
+				NOT = { has_idea = internal_crisis_medium }
+				NOT = { has_idea = internal_crisis_high }
+				NOT = { has_dynamic_modifier = homefront_collapse }
+				NOT = { has_dynamic_modifier = total_exhaustion }
+			}
+			
+			# Losers: white peace is a gift — very likely to accept
+			modifier = { add = 30 surrender_progress > 0.2 }
+			modifier = { add = 40 surrender_progress > 0.4 }
+			modifier = { add = 25 surrender_progress > 0.6 }
+			
+			# Winner in crisis: white peace becomes attractive
+			modifier = {
+				add = 20
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
+			
+			# Negative score: less likely but NEVER zero
+			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
+			modifier = { factor = 0.4 check_variable = { plus_cs_final_calc_score < -50 } }
+			modifier = { factor = 0.2 check_variable = { plus_cs_final_calc_score < -80 } }
 		}
 
 		# Execute White Peace
@@ -90,6 +121,7 @@ country_event = {
 			clr_country_flag = plus_cs_waiting_response
 			# Notify sender (NEWS EVENT FIX)
 			news_event = { id = plus_cs.5 }
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
 		}
 		
 		add_political_power = 25
@@ -100,24 +132,28 @@ country_event = {
 	option = {
 		name = plus_cs.4.b
 		ai_chance = {
-			base = 50
+			base = 40
 			
-			# If we are WINNING
+			# === WINNER: refuse white peace aggressively ===
 			modifier = {
-				add = 100
+				add = 400
 				FROM = { surrender_progress > 0.1 }
 				surrender_progress < 0.1
 			}
 			
-			# If we are LOSING (white peace is a gift)
+			# === LOSER: unlikely to refuse, but micro-chance preserved ===
 			modifier = {
-				factor = 0
+				factor = 0.1
 				surrender_progress > 0.25
+			}
+			modifier = {
+				factor = 0.15
+				surrender_progress > 0.4
 			}
 			
 			# Ideology: totalitarians refuse white peace easier
 			modifier = {
-				factor = 2.0
+				factor = 1.8
 				OR = { has_government = fascism has_government = communism }
 			}
 			
@@ -140,12 +176,28 @@ country_event = {
 				FROM = { any_owned_state = { is_core_of = ROOT } }
 			}
 			
-			# Exhaustion → don't refuse
+			# Exhaustion → very reluctant to refuse but micro-chance
 			modifier = {
-				factor = 0.1
+				factor = 0.05
 				OR = {
 					has_country_flag = plus_cs_exhausted
 					has_country_flag = plus_cs_urgent_peace
+				}
+			}
+			
+			# Stalemate: reluctant to refuse but micro-chance
+			modifier = {
+				factor = 0.15
+				has_country_flag = plus_cs_stalemate
+			}
+			
+			# === WINNER IN CRISIS: less refuse ===
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
 				}
 			}
 			

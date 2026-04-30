@@ -78,3 +78,6 @@
  plus_cs_demand_not_faction_tt:0 "Target cannot be our subject, overlord, or faction member."
  plus_cs_demand_no_recent_tt:0 "We have not sent a territory demand to them recently."
  plus_cs_demand_full_annexation_tt:0 "Target must have at least one state that is §RNOT§! our core. (We cannot annex their entire country peacefully)."
+
+ decree_stabilize_government:0 "Stabilize Government"
+ decree_stabilize_government_desc:0 "Our government is paralyzed by internal conflicts. We must expend significant political capital to reorganize the administration and restore control."

@@ -49,7 +49,7 @@ shadow_econ_partial = {
 	# ПЛЮСЫ (Эффективность):
 	production_factory_efficiency_gain_factor = 0.10
 	production_factory_max_efficiency_factor = 0.05
-	industrial_capacity_factory = 0.05                # Общая эффективность заводов
+	industry_free_repair_factor = 0.05
 	
 	# МИНУСЫ:
 	political_power_gain = -0.05
@@ -96,10 +96,9 @@ shadow_econ_total = {
 
 # ----------------------------------------------------------------------
 # НОВОЕ: ПРОМЫШЛЕННАЯ ИНЕРЦИЯ (ECONOMIC RETOOLING SHOCK)
-# Штрафы за резкую смену законов экономики.
 # ----------------------------------------------------------------------
 
-# УРОВЕНЬ 1: Малый шок (Разница в 1 ступень, например Ранняя -> Частичная)
+# УРОВЕНЬ 1: Малый шок
 # Станки требуют легкой переналадки.
 economic_retooling_shock_minor = {
 	icon = GFX_idea_generic_production_bonus
@@ -107,10 +106,10 @@ economic_retooling_shock_minor = {
 	
 	production_factory_efficiency_gain_factor = -0.15
 	production_factory_max_efficiency_factor = -0.05
-	industrial_capacity_factory = -0.05
+	industry_free_repair_factor = -0.05
 }
 
-# УРОВЕНЬ 2: Средний шок (Разница в 2 ступени, например Гражданская -> Частичная)
+# УРОВЕНЬ 2: Средний шок
 # Серьезные изменения в логистике и планах.
 economic_retooling_shock_medium = {
 	icon = GFX_idea_generic_production_bonus
@@ -118,14 +117,14 @@ economic_retooling_shock_medium = {
 	
 	production_factory_efficiency_gain_factor = -0.30
 	production_factory_max_efficiency_factor = -0.10
-	industrial_capacity_factory = -0.10
+	industry_free_repair_factor = -0.10
 	production_speed_buildings_factor = -0.10
 	# NEW: Логистический хаос
 	supply_consumption_factor = 0.10
 	political_power_gain = -0.10
 }
 
-# УРОВЕНЬ 3: Тяжелый шок (Разница в 3+ ступени, например Гражданская -> Военная)
+# УРОВЕНЬ 3: Тяжелый шок
 # Полный хаос перепрофилирования. Заводы встают для переоборудования.
 economic_retooling_shock_major = {
 	icon = GFX_idea_generic_production_bonus
@@ -133,7 +132,7 @@ economic_retooling_shock_major = {
 	
 	production_factory_efficiency_gain_factor = -0.60
 	production_factory_max_efficiency_factor = -0.20
-	industrial_capacity_factory = -0.20
+	industry_free_repair_factor = -0.20
 	production_speed_buildings_factor = -0.25
 	# NEW: Полный коллапс логистики
 	supply_consumption_factor = 0.25
@@ -144,12 +143,8 @@ economic_retooling_shock_major = {
 
 # ----------------------------------------------------------------------
 # ИСПРАВЛЕНИЕ: ВОЕННАЯ ИНФЛЯЦИЯ (WAR INFLATION CRISIS)
-# Исправляет ошибку Invalid dynamic modifier из логов.
-# Накладывается при: Стаб < 35%, Поддержка войны < 30% или Критические потери.
-# + Ежемесячно отнимает 0.5% стабильности и поддержки войны (через скрипт).
 # ----------------------------------------------------------------------
 war_inflation_crisis = {
-
 	icon = GFX_idea_generic_production_bonus 
 	enable = { always = yes }
 	
@@ -170,7 +165,7 @@ war_inflation_crisis = {
 shadow_law_service_penalty = {
 	icon = GFX_idea_conscription_crisis
 	enable = { always = yes }
-	industrial_capacity_factory = -0.10
+	industry_free_repair_factor = -0.10
 	production_speed_buildings_factor = -0.10
 	# NEW: Рабочие ушли на фронт
 	local_resources_factor = -0.05
@@ -179,7 +174,7 @@ shadow_law_service_penalty = {
 shadow_law_adults_penalty = {
 	icon = GFX_idea_conscription_crisis
 	enable = { always = yes }
-	industrial_capacity_factory = -0.20
+	industry_free_repair_factor = -0.20
 	production_speed_buildings_factor = -0.20
 	production_factory_efficiency_gain_factor = -0.10
 	# NEW: Новобранцы неопытны
@@ -191,7 +186,7 @@ shadow_law_adults_penalty = {
 shadow_law_scraping_penalty = {
 	icon = GFX_idea_conscription_crisis
 	enable = { always = yes }
-	industrial_capacity_factory = -0.35
+	industry_free_repair_factor = -0.35
 	production_speed_buildings_factor = -0.30
 	production_factory_efficiency_gain_factor = -0.20
 	army_core_defence_factor = 0.05            # Отчаяние даёт бонус к обороне
@@ -202,3 +197,6 @@ shadow_law_scraping_penalty = {
 	experience_gain_army_factor = -0.25
 	attrition_for_controller = 0.05            # Больше небоевых потерь
 }
+
+
+

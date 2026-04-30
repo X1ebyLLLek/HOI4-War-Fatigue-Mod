@@ -14,8 +14,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	trigger = {
-		# Gating: Only after Civil War
-		has_country_flag = plus_cs_had_civil_war
 		is_puppet = no
 	}
 	
@@ -28,20 +26,29 @@ country_event = {
 	option = {
 		name = plus_cs.submission.1.a
 		ai_chance = {
-			base = 5 # Chaos Factor
+			base = 5 # Micro-chance
 			
-			# === WEIGHTED PROBABILITY ===
-			# Score > 0: Increasing chance
-			modifier = { add = 10 check_variable = { plus_cs_final_calc_score > 0 } }
-			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 20 } }
-			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 40 } }
-			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
+			# === SCORE-BASED PROBABILITY ===
+			modifier = { add = 8 check_variable = { plus_cs_final_calc_score > 0 } }
+			modifier = { add = 12 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 40 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 60 } }
 			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 80 } }
 			
-			# Score < 0: Decreasing chance
+			# Negative score: low but NEVER zero
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
-			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -50 } }
-			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -80 } }
+			modifier = { factor = 0.15 check_variable = { plus_cs_final_calc_score < -50 } }
+			modifier = { factor = 0.05 check_variable = { plus_cs_final_calc_score < -100 } }
+			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -200 } }
+			
+			# === WINNER IN CRISIS: might refuse puppet (can't maintain it) ===
+			modifier = {
+				factor = 0.4
+				OR = {
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
 		}
 		
 		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] ACCEPTED Submission from [FROM.GetName] (Puppet)."
@@ -110,9 +117,18 @@ country_event = {
 			modifier = { add = 25 check_variable = { plus_cs_final_calc_score < -40 } }
 			modifier = { add = 50 check_variable = { plus_cs_final_calc_score < -60 } }
 			
-			# Score > 0: Low chance to refuse
-			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score > 20 } }
-			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score > 60 } } # Never zero
+			# Score > 0: Very unlikely to refuse
+			modifier = { factor = 0.15 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score > 60 } }
+			
+			# === WINNER IN CRISIS: more likely to refuse (can't sustain puppet) ===
+			modifier = {
+				add = 30
+				OR = {
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
 		}
 
 		add_war_support = 0.05
@@ -354,201 +370,3 @@ news_event = {
 	}
 }
 
-# ==========================================
-# VICTOR ULTIMATUM EVENT (250)
-# Loser receives demand to surrender
-# FROM = Victor (demanding surrender)
-# ROOT = Loser (receiving ultimatum)
-# ==========================================
-country_event = {
-	id = plus_cs.250
-	title = plus_cs.250.t
-	desc = plus_cs.250.d
-	picture = GFX_report_event_generic_military_parade
-	is_triggered_only = yes
-	
-	trigger = {
-		is_puppet = no
-	}
-	
-	immediate = {
-		log = "[PEACE_LOG] EVENT: [ROOT.GetName] received ULTIMATUM from [FROM.GetName]."
-	}
-
-	# Option A: Submit (Become puppet)
-	option = {
-		name = plus_cs.250.a
-		ai_chance = {
-			base = 10
-			
-			# Capitulated: almost always submit
-			modifier = { add = 80 has_capitulated = yes }
-			
-			# Lost capital: strongly consider submission
-			modifier = { add = 40 capital_scope = { NOT = { is_controlled_by = ROOT } } }
-			
-			# High surrender = weakened resolve
-			modifier = { add = 20 surrender_progress > 0.4 }
-			modifier = { add = 30 surrender_progress > 0.6 }
-			
-			# Exhausted nations just want it to end
-			modifier = { add = 40 has_country_flag = plus_cs_exhausted }
-			modifier = { add = 25 has_dynamic_modifier = total_exhaustion }
-			
-			# Power imbalance
-			modifier = { add = 30 strength_ratio = { tag = FROM ratio < 0.1 } }
-			
-			# Defeatist leader
-			modifier = { add = 25 has_country_leader_with_trait = plus_cs_spirit_defeatist }
-			
-			# Ideology compatibility
-			modifier = {
-				add = 15
-				OR = {
-					AND = { has_government = democratic FROM = { has_government = democratic } }
-					AND = { has_government = neutrality FROM = { has_government = neutrality } }
-				}
-			}
-			
-			# All allies dead
-			modifier = {
-				add = 30
-				is_in_faction = yes
-				NOT = {
-					any_other_country = {
-						is_in_faction_with = ROOT
-						NOT = { has_capitulated = yes }
-					}
-				}
-			}
-			
-			# Democracy: more willing to submit to avoid bloodshed
-			modifier = { add = 15 has_government = democratic }
-			
-			# Fanatic: almost never accepts
-			modifier = { factor = 0.05 has_country_leader_with_trait = plus_cs_spirit_fanatic }
-			
-			# Fascist/Communist: stubborn resistance
-			modifier = { 
-				factor = 0.3 
-				OR = { has_government = fascism has_government = communism }
-				NOT = { has_capitulated = yes }
-			}
-			
-			# Living major ally: hope remains
-			modifier = {
-				factor = 0.2
-				is_in_faction = yes
-				any_other_country = {
-					is_in_faction_with = ROOT
-					NOT = { has_capitulated = yes }
-					is_major = yes
-				}
-			}
-		}
-		
-		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] SUBMITTED to ultimatum from [FROM.GetName]."
-		
-		# Identical to submission accept mechanics
-		FROM = {
-			clr_country_flag = plus_cs_waiting_response
-		}
-		
-		news_event = { id = plus_cs.220 }
-		
-		# Annex occupied states
-		every_owned_state = {
-			limit = {
-				is_controlled_by = FROM
-				NOT = { is_core_of = FROM }
-			}
-			FROM = { transfer_state = PREV }
-		}
-		
-		plus_cs_save_third_party_control = yes
-		FROM = { puppet = ROOT }
-		
-		if = {
-			limit = { is_in_faction = yes }
-			leave_faction = yes
-		}
-		
-		plus_cs_restore_third_party_control = yes
-		
-		FROM = {
-			add_political_power = 50
-			country_event = { id = plus_cs.202 }
-		}
-	}
-
-	# Option B: Resist ("Never!")
-	option = {
-		name = plus_cs.250.b
-		ai_chance = {
-			base = 40
-			
-			# Winning or stalemate: easy to refuse
-			modifier = { add = 60 surrender_progress < 0.2 }
-			
-			# Fanatic
-			modifier = { factor = 3.0 has_country_leader_with_trait = plus_cs_spirit_fanatic }
-			
-			# Fascist/Communist resolve
-			modifier = { factor = 2.0 OR = { has_government = fascism has_government = communism } }
-			
-			# Capitulated: hard to resist
-			modifier = { factor = 0.1 has_capitulated = yes }
-			
-			# Losing badly: stubbornness is futile
-			modifier = { factor = 0.3 surrender_progress > 0.5 }
-		}
-		
-		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] RESISTED ultimatum from [FROM.GetName]."
-		
-		# Rally effect: rejected ultimatum inspires resistance
-		add_war_support = 0.15
-		add_stability = 0.05
-		add_manpower = 25000
-		
-		# But there is international cost
-		add_political_power = -25
-		
-		FROM = {
-			clr_country_flag = plus_cs_waiting_response
-			set_country_flag = { flag = plus_cs_peace_cooldown days = 60 }
-		}
-	}
-
-	# Option C: Counter-propose (Conditional Surrender — keep independence)
-	option = {
-		name = plus_cs.250.c
-		
-		trigger = {
-			NOT = { has_capitulated = yes }
-			surrender_progress > 0.2
-		}
-		
-		ai_chance = {
-			base = 20
-			
-			# More likely if losing but not completely
-			modifier = { add = 25 surrender_progress > 0.3 }
-			modifier = { add = 15 surrender_progress > 0.5 }
-			
-			# Democrats prefer negotiation
-			modifier = { factor = 2.0 has_government = democratic }
-			
-			# Exhausted wants any deal
-			modifier = { add = 20 has_country_flag = plus_cs_exhausted }
-		}
-		
-		log = "[PEACE_LOG] OUTCOME: [ROOT.GetName] COUNTER-PROPOSED conditional surrender to [FROM.GetName]."
-		
-		# Send conditional surrender to the victor
-		FROM = {
-			clr_country_flag = plus_cs_waiting_response
-		}
-		set_country_flag = { flag = plus_cs_waiting_response days = 1 }
-		FROM = { country_event = { id = plus_cs.1 } }
-	}
-}

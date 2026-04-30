@@ -125,6 +125,7 @@ peace_treaty = {
 						PREV = {
 							transfer_state = FROM
 							set_state_controller = FROM
+							news_event = { id = plus_cs.400 hours = 1 }
 						}
 					}
 				}

@@ -32,6 +32,13 @@ plus_cs_init_hidden_resolve = {
 # Main Calculation Loop. Run monthly or before decisions.
 # =============================================
 plus_cs_calc_scores = {
+	# OPT: Skip if already calculated this day (peace events chain multiple calcs)
+	if = {
+		limit = { has_country_flag = plus_cs_scores_fresh }
+		# Use cached plus_cs_resistance_target, plus_cs_current_pressure, plus_cs_pressure_ratio
+	}
+	else = {
+	set_country_flag = { flag = plus_cs_scores_fresh days = 1 }
 	
 	# --- 1. CALCULATE RESISTANCE TARGET (CAPACITY) ---
 	# THIS = How much punishment we CAN absorb before breaking
@@ -151,4 +158,5 @@ plus_cs_calc_scores = {
 	# Used by dynamic modifiers to scale debuffs based on actual situation!
 	set_variable = { plus_cs_crisis_multiplier = plus_cs_pressure_ratio }
 	clamp_variable = { var = plus_cs_crisis_multiplier min = 0.4 max = 2.5 }
+	} # /else (cache miss)
 }

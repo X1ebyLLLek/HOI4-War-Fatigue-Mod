@@ -3,16 +3,24 @@
 # ==========================================
 
 on_actions = {
-	on_monthly = {
+	on_puppeted = {
 		effect = {
-			# FIX: on_monthly runs FOR EACH country. 
-			# We do not need 'every_country' here, or we multiply events by 100x.
-			if = {
-				limit = {
-					has_war = yes
-					is_ai = yes
+			# According to HOI4, ROOT is Overlord, FROM is Puppet.
+			# But we want the Puppet to send the event so that `[From.GetNameDef]` is the Puppet.
+			FROM = {
+				every_country = {
+					limit = {
+						NOT = { tag = PREV } # Don't notify the puppet itself endlessly
+						OR = {
+							tag = PREV.Overlord
+							has_war_with = PREV
+							is_in_faction_with = PREV
+							has_war_with = PREV.Overlord
+							is_in_faction_with = PREV.Overlord
+						}
+					}
+					news_event = { id = plus_cs.400 days = 1 }
 				}
-				country_event = { id = plus_cs_pulse.1 }
 			}
 		}
 	}

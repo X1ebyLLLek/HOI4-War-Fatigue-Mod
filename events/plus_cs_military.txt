@@ -35,36 +35,10 @@ country_event = {
 			retire_character = event_target:plus_cs_killed_general
 		}
 		
-		# --- FACTION PERMISSION CHECK ---
-		if = {
-			limit = {
-				is_in_faction = yes
-				is_faction_leader = no
-				# Only ask if leader is actually relevant (in war, major)
-				faction_leader = {
-					is_major = yes
-					has_war = yes
-				}
-			}
-			# Ask My Leader
-			faction_leader = {
-				country_event = { id = plus_cs.20 hours = 6 } # Permission event
-			}
-			set_country_flag = plus_cs_waiting_leader_permission
-		}
-		else = {
-			# Direct Offer Logic
-			# FIX: event_target:peace_recipient is not saved in this event's scope
-			# Use random_enemy_country to find a valid target
-			random_enemy_country = {
-				limit = { is_puppet = no }
-				save_event_target_as = peace_recipient
-				country_event = { id = plus_cs.1 }
-			}
-		}
-
-		add_political_power = -0.05
-		add_stability = -0.02
+		# --- DEMORALIZATION EFFECT ---
+		add_political_power = -20
+		add_stability = -0.05
+		add_war_support = -0.05
 	}
 }
 

@@ -161,7 +161,10 @@ country_event = {
 			}
 		}
 
-		# Give the sender a goal
+		# Refusing country rallies against aggression
+		add_war_support = 0.05
+
+		# Notify sender — they will declare war immediately
 		FROM = {
 			country_event = { id = plus_cs_demands.3 }
 		}
@@ -193,11 +196,10 @@ country_event = {
 
 	option = {
 		name = plus_cs_demands.3.a
-		# We get a wargoal (Take State / Conquer) against the stubborn target
-		create_wargoal = {
-			type = take_state_focus
+		# Refusal = immediate war. No wargoal spam possible.
+		declare_war_on = {
 			target = FROM
+			type = take_state_focus
 		}
-		add_war_support = 0.05
 	}
 }

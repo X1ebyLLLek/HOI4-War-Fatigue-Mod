@@ -97,40 +97,45 @@ peace_options = {
 			base = 0 # Default: No surrender
 			
 			# === PRESSURE RATIO (The Main Driver) ===
-			# Determines how bad the situation is relative to our national resilience
 			
 			modifier = {
-				add = 10
+				add = 5
 				check_variable = { plus_cs_pressure_ratio > 0.8 }
 			}
 			modifier = {
-				add = 30
-				check_variable = { plus_cs_pressure_ratio > 1.0 } # Standard Threshold
+				add = 15
+				check_variable = { plus_cs_pressure_ratio > 1.0 }
+			}
+			modifier = {
+				add = 50
+				check_variable = { plus_cs_pressure_ratio > 1.2 }
 			}
 			modifier = {
 				add = 100
-				check_variable = { plus_cs_pressure_ratio > 1.2 } # Critical
+				check_variable = { plus_cs_pressure_ratio > 1.5 }
 			}
 			modifier = {
-				add = 200
-				check_variable = { plus_cs_pressure_ratio > 1.5 } # Collapse
+				add = 300
+				has_capitulated = yes
 			}
+			
+			# === HEALTHY COUNTRY BLOCKER ===
+			# Micro-chance if situation is not bad
 			modifier = {
-				add = 500
-				has_capitulated = yes # Already capitulated, massive desire to end the war formally
+				factor = 0.02
+				NOT = { check_variable = { plus_cs_pressure_ratio > 0.6 } }
+				NOT = { has_capitulated = yes }
 			}
 			
-			# === PERSONALITY MODIFIERS (Accelerators/Brakes) ===
+			# === PERSONALITY MODIFIERS ===
 			
-			# Cowards panic earlier
 			modifier = {
 				factor = 2.0
 				has_country_leader_with_trait = plus_cs_spirit_defeatist
 			}
 			
-			# Fanatics hold out longer (require much higher pressure to actually click)
 			modifier = {
-				factor = 0.2
+				factor = 0.15
 				has_country_leader_with_trait = plus_cs_spirit_fanatic
 			}
 			
@@ -144,14 +149,13 @@ peace_options = {
 			}
 			
 			# === SITUATION ===
-			# Tiny vs Giant Panic
 			modifier = {
-				factor = 2.0
+				factor = 1.8
 				strength_ratio = { tag = FROM ratio < 0.1 }
 			}
 			# Total internal doom
 			modifier = {
-				factor = 5.0
+				factor = 3.0
 				OR = {
 					has_idea = political_paralysis
 					has_dynamic_modifier = homefront_collapse
@@ -159,16 +163,15 @@ peace_options = {
 				}
 			}
 			
-			# === NEW: CAPITAL LOST ===
+			# === CAPITAL LOST ===
 			modifier = {
-				add = 50
+				add = 25
 				capital_scope = { NOT = { is_controlled_by = ROOT } }
 			}
 			
-			# === NEW: ALLIANCE ISOLATION ===
-			# All allies dead — no hope of rescue
+			# === ALLIANCE ISOLATION ===
 			modifier = {
-				add = 40
+				add = 20
 				is_in_faction = yes
 				NOT = {
 					any_other_country = {
@@ -178,19 +181,19 @@ peace_options = {
 				}
 			}
 			
-			# === NEW: WAR DURATION FATIGUE ===
+			# === WAR DURATION FATIGUE ===
 			modifier = {
-				factor = 1.5
+				factor = 1.3
 				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
 			}
 			modifier = {
-				factor = 2.0
+				factor = 1.5
 				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 			
-			# === NEW: LOW WAR SUPPORT ===
+			# === LOW WAR SUPPORT ===
 			modifier = {
-				factor = 2.0
+				factor = 1.5
 				has_war_support < 0.25
 			}
 		}

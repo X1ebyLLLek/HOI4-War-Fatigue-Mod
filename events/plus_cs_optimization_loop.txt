@@ -1,39 +1,41 @@
 add_namespace = plus_cs_opt
 
-
-
 # ==============================================================================
 # SMART EVENT LOOP (TICK-SPREADING)
 # Replaces on_weekly for performance distribution.
-# Fires on average every 7 days (4-10 range).
+# Fires on average every 7 days (6-8 range).
 # Calls modular scripted effects for actual logic.
 # ==============================================================================
 
+# ROOT EVENT: optimization_loop_event
+# Runs for EVERY country to spread CPU load.
 country_event = {
 	id = plus_cs.999
-	title = "Technical Loop Event"
-	desc = "Optimization Loop"
-	is_triggered_only = yes
 	hidden = yes
+	is_triggered_only = yes
 
 	immediate = {
-		# 1. LOOP MAINTENANCE
+		# Marking the loop as active for the fail-safe
 		set_country_flag = plus_cs_loop_active
 		
-		# Plan next tick (6-8 days) - FIXED FREQUENCY for everyone
+		# Spreading logic:
+		# Instead of one giant daily tick, it is spread across the week.
+		
+		# Next Tick Scheduling
+		# Scheduled with a small random spread to prevent all countries 
+		# from alignment on the exact same day, which causes lag spikes.
 		random_list = {
 			33 = { country_event = { id = plus_cs.999 days = 6 } }
 			33 = { country_event = { id = plus_cs.999 days = 7 } }
-			33 = { country_event = { id = plus_cs.999 days = 8 } }
+			34 = { country_event = { id = plus_cs.999 days = 8 } }
 		}
 
 		# =============================================================
-		# 2. LOGIC MODULES
+		# LOGIC MODULES
 		# =============================================================
 
 		# --- TRAIT MANAGEMENT ---
 		# Ensures new leaders (after elections/civil wars) get a spirit
-		# GATED: Only runs for nations actively fighting to save CPU
 		if = {
 			limit = { has_war = yes }
 			plus_cs_assign_fighting_spirit = yes
@@ -61,7 +63,6 @@ country_event = {
 		}
 
 		# --- ECONOMIC LOGIC ---
-		# Always run economy step (lightweight) so peaceful minors get modifiers
 		plus_cs_economy_step = yes
 		
 		# Only run heavy crisis logic if Active or needs update
@@ -78,12 +79,11 @@ country_event = {
 			plus_cs_crisis_step = yes
 		}
 		
-		# --- CIVILIAN INVESTMENT (Always run weekly) ---
-		# User requested this to work "as before" (weekly checks)
+		# --- CIVILIAN INVESTMENT ---
 		plus_cs_civilian_investment_step = yes
 
 		# =============================================================
-		# 3. HEAVY LOGIC (MONTHLY-ISH)
+		# HEAVY LOGIC (MONTHLY-ISH)
 		# =============================================================
 		if = {
 			limit = {
@@ -92,12 +92,6 @@ country_event = {
 					has_war = yes
 					has_dynamic_modifier = war_inflation_crisis
 					has_country_flag = plus_cs_exhausted
-				}
-				
-				# CIVIL WAR GUARD: Only run for normal wars OR mod-induced civil wars
-				OR = {
-					has_civil_war = no
-					has_country_flag = plus_cs_had_civil_war
 				}
 			}
 			
@@ -119,12 +113,15 @@ country_event = {
 				plus_cs_heavy_calc_step = yes
 				plus_cs_internal_crisis_check_step = yes
 				plus_cs_political_collapse_check = yes
-				# NEW: Проверка комбинированных кризисов
 				plus_cs_synergy_crisis_check = yes
 				
-				# OPT: Removed duplicate plus_cs_economy_step
-				# Weekly gated logic (line 65) already covers active nations
-
+				# OPT: Peace pulse moved here from on_monthly (was every_country spike)
+				# Each country now checks peace on its own tick (~every 28 days)
+				if = {
+					limit = { is_ai = yes has_war = yes }
+					country_event = { id = plus_cs_pulse.1 }
+				}
+				
 				# --- STALEMATE & PANIC LOGIC ---
 				if = {
 					limit = { has_war = yes }
@@ -139,83 +136,74 @@ country_event = {
 						set_country_flag = { flag = plus_cs_urgent_peace days = 180 }
 					}
 					
-				# --- STALEMATE LOGIC (OPTIMIZED) ---
-				# Replaced expensive state counting with surrender_progress comparison.
-				# If surrender progress hasn't changed by +/- 1%, we are in stalemate.
-				
-				set_temp_variable = { current_surr = surrender_progress }
-				set_temp_variable = { delta = 0 }
-				
-				# Get delta (Absolute difference)
-				if = {
-					limit = { check_variable = { current_surr > plus_cs_last_surrender_progress } }
-					set_temp_variable = { delta = current_surr }
-					subtract_from_temp_variable = { delta = plus_cs_last_surrender_progress }
-				}
-				else = {
-					set_temp_variable = { delta = plus_cs_last_surrender_progress }
-					subtract_from_temp_variable = { delta = current_surr }
-				}
-				
-				# R2: Динамический порог стагнации — зависит от war_support
-				# Высокая WS — терпелив, низкая — любая стагнация раздражает
-				set_temp_variable = { stale_threshold = 0.005 }
-				if = { limit = { has_war_support > 0.7 } set_temp_variable = { stale_threshold = 0.002 } }
-				else_if = { limit = { has_war_support < 0.3 } set_temp_variable = { stale_threshold = 0.01 } }
-				
-				# Logic: If delta < threshold, consider it stalemate tick
-				if = {
-					limit = { check_variable = { delta < stale_threshold } }
-					add_to_variable = { plus_cs_stalemate_timer = 1 }
-				}
-				else = {
-					# Progress made! Reset timer.
-					set_variable = { plus_cs_stalemate_timer = 0 }
-				}
-				
-				# Update Memory
-				set_variable = { plus_cs_last_surrender_progress = current_surr }
+					# --- STALEMATE LOGIC ---
+					set_temp_variable = { current_surr = surrender_progress }
+					set_temp_variable = { delta = 0 }
+					
+					if = {
+						limit = { check_variable = { current_surr > plus_cs_last_surrender_progress } }
+						set_temp_variable = { delta = current_surr }
+						subtract_from_temp_variable = { delta = plus_cs_last_surrender_progress }
+					}
+					else = {
+						set_temp_variable = { delta = plus_cs_last_surrender_progress }
+						subtract_from_temp_variable = { delta = current_surr }
+					}
+					
+					set_temp_variable = { stale_threshold = 0.005 }
+					if = { limit = { has_war_support > 0.7 } set_temp_variable = { stale_threshold = 0.002 } }
+					else_if = { limit = { has_war_support < 0.3 } set_temp_variable = { stale_threshold = 0.01 } }
+					
+					if = {
+						limit = { check_variable = { delta < stale_threshold } }
+						add_to_variable = { plus_cs_stalemate_timer = 1 }
+					}
+					else = {
+						set_variable = { plus_cs_stalemate_timer = 0 }
+					}
+					
+					set_variable = { plus_cs_last_surrender_progress = current_surr }
 
-				# Trigger Flag if Stagnant for > 6 checks (approx 6 months)
-				if = {
-					limit = { check_variable = { plus_cs_stalemate_timer > 6 } }
-					set_country_flag = { flag = plus_cs_stalemate days = 90 }
-				}
+					if = {
+						limit = { check_variable = { plus_cs_stalemate_timer > 6 } }
+						set_country_flag = { flag = plus_cs_stalemate days = 90 }
+					}
 
-				# Casualties Events (scaled to population)
-				if = {
-					limit = {
-						OR = {
-							has_dynamic_modifier = manpower_strain_mild
-							has_dynamic_modifier = manpower_strain_high
-							has_dynamic_modifier = manpower_strain_collapse
+					# Casualties Events
+					if = {
+						limit = {
+							OR = {
+								has_dynamic_modifier = manpower_strain_mild
+								has_dynamic_modifier = manpower_strain_high
+								has_dynamic_modifier = manpower_strain_collapse
+							}
+						}
+						random_list = {
+							2 = { country_event = { id = plus_cs.1001 } }
+							98 = { }
 						}
 					}
-					random_list = {
-						2 = { country_event = { id = plus_cs.1001 } }
-						98 = { }
-					}
-				}
-				if = {
-					limit = {
-						OR = {
-							has_dynamic_modifier = manpower_strain_high
-							has_dynamic_modifier = manpower_strain_collapse
+					if = {
+						limit = {
+							OR = {
+								has_dynamic_modifier = manpower_strain_high
+								has_dynamic_modifier = manpower_strain_collapse
+							}
 						}
-					}
-					random_list = {
-						1 = { country_event = { id = plus_cs.1002 } }
-						99 = { }
+						random_list = {
+							1 = { country_event = { id = plus_cs.1002 } }
+							99 = { }
+						}
 					}
 				}
 			}
 		}
-		}
+
 		# =============================================================
-		# 4. RANDOM LOGIC INTEGRATION
+		# RANDOM LOGIC INTEGRATION
 		# =============================================================
 
-		# Strategic Collapse Check (Inflation Boost)
+		# Strategic Collapse Check
 		if = {
 			limit = {
 				has_war = yes
@@ -226,7 +214,6 @@ country_event = {
 		}
 
 		# Puppet Chain Reaction Check
-		# R3: Шанс масштабируется от surrender_progress оверлорда и состояния вассала
 		if = {
 			limit = {
 				is_puppet = yes
@@ -234,30 +221,26 @@ country_event = {
 			}
 			random_list = {
 				5 = {
-					# Оверлорд проигрывает сильнее → вассал смелее
 					modifier = { add = 5 overlord = { surrender_progress > 0.7 } }
 					modifier = { add = 15 overlord = { surrender_progress > 0.85 } }
-					# Низкая поддержка войны у вассала
 					modifier = { add = 5 has_war_support < 0.3 }
-					# Одна идеология — лояльнее
 					modifier = { factor = 0.3 overlord = { has_government = ROOT } }
 					country_event = { id = plus_cs_diplomacy.10 }
 				}
 				95 = {
-					# Компенсация: при сильном поражении оверлорда do_nothing вес падает
 					modifier = { add = -10 overlord = { surrender_progress > 0.7 } }
 					modifier = { add = -25 overlord = { surrender_progress > 0.85 } }
 				}
 			}
 		}
 		
-		# Negotiated Vassalization Check (Smart Math)
-		# OPT: Bypassed heavy strength_ratio checks for peaceful neighbors
+		# Negotiated Vassalization Check
 		if = {
 			limit = {
 				is_ai = yes
 				is_subject = no
 				has_war = no
+				NOT = { has_country_flag = plus_cs_vassalcheck_cd }
 				any_neighbor_country = { 
 					OR = {
 						has_wargoal_against = ROOT
@@ -265,8 +248,8 @@ country_event = {
 					}
 				}
 			}
+			set_country_flag = { flag = plus_cs_vassalcheck_cd days = 60 }
 			
-			# Find and save the threat
 			random_neighbor_country = {
 				limit = {
 					NOT = { is_in_faction_with = ROOT }
@@ -276,33 +259,26 @@ country_event = {
 						is_justifying_wargoal_against = ROOT
 						any_enemy_country = { any_controlled_state = { is_core_of = ROOT } }
 					}
-					# Basic strength check: The threat must at least be stronger than us
 					ROOT = { strength_ratio = { tag = PREV ratio < 0.9 } }
 				}
 				save_event_target_as = plus_cs_threatening_neighbor
 			}
 			
-			# Probability Calculation ("Smart Math" - Logic Buckets)
 			if = {
 				limit = { has_event_target = plus_cs_threatening_neighbor }
 				
-				# Base chance to surrender is extremely low (1 in 1000 daily check)
-				# But modifiers will increase this based on the situation.
 				random_list = {
 					1 = {
-						# --- ABSOLUTE OVERRIDES ---
 						modifier = {
-							factor = 0 # FANATICS never surrender
+							factor = 0 
 							has_country_leader_with_trait = plus_cs_spirit_fanatic
 						}
 						modifier = {
-							factor = 50 # DEFEATISTS are cowards
+							factor = 50 
 							has_country_leader_with_trait = plus_cs_spirit_defeatist
 						}
-						
-						# --- MOD MECHANICS (FATIGUE & CRISIS) ---
 						modifier = {
-							factor = 50 # ECONOMIC/POLITICAL COLLAPSE (Total ruin)
+							factor = 50 
 							OR = {
 								has_idea = political_paralysis
 								has_dynamic_modifier = homefront_collapse
@@ -310,71 +286,61 @@ country_event = {
 							}
 						}
 						modifier = {
-							factor = 10 # INTERNAL CRISIS (Severe issues)
+							factor = 10 
 							OR = {
 								has_idea = internal_crisis_medium
 								has_idea = internal_crisis_high
 							}
 						}
 						modifier = {
-							factor = 10 # TERRIFIED (They are >5x stronger)
+							factor = 10 
 							event_target:plus_cs_threatening_neighbor = {
 								ROOT = { strength_ratio = { tag = PREV ratio < 0.2 } }
 							}
 						}
 						modifier = {
-							factor = 3 # SCARED (They are >2x stronger)
+							factor = 3 
 							event_target:plus_cs_threatening_neighbor = {
 								ROOT = { strength_ratio = { tag = PREV ratio < 0.5 } }
 							}
 						}
-						
-						# --- STABILITY & SUPPORT ---
 						modifier = {
-							factor = 3 # CHAOS (Low Support & Stability)
+							factor = 3 
 							has_stability < 0.3
 							has_war_support < 0.3
 						}
 						modifier = {
-							factor = 0 # PROUD (High Support & Stability)
-							has_stability > 0.8
-							has_war_support > 0.8
-						}
-						
-						# --- IDEOLOGY ---
-						modifier = {
-							factor = 0.5 # IDEOLOGY (Democracies / Non-Aligned more likely to yield)
+							factor = 0.5 
 							OR = {
 								has_government = democratic
 								has_government = neutrality
 							}
 						}
 						modifier = {
-							factor = 0.1 # IDEOLOGY (Totalitarians fight to the end)
+							factor = 0.1 
 							OR = {
 								has_government = fascism
 								has_government = communism
 							}
 						}
-						
-						# The Event
 						country_event = { id = plus_cs_diplomacy.1 }
 					}
-					1000 = { } # Do Nothing
+					1000 = { } 
 				}
 			}
 		}
 		
-		# Pre-War Deal Check (FIXED)
-		# OPT: Bypassed heavy strength_ratio checks for peaceful neighbors
+		
+		# Pre-War Deal Check
+		# OPT: Reuses vassalcheck_cd cooldown — both checks share conditions
 		if = {
 			limit = {
-				is_ai = yes # Player never surrenders automatically
+				is_ai = yes
 				has_war = no
 				is_subject = no
+				NOT = { has_country_flag = plus_cs_vassalcheck_cd }
 				any_neighbor_country = { has_wargoal_against = ROOT }
 			}
-			# Strict Logic: Only if we are truly terrified (< 20% strength)
 			random_neighbor_country = {
 				limit = {
 					has_wargoal_against = ROOT
@@ -385,10 +351,8 @@ country_event = {
 			
 			if = {
 				limit = { has_event_target = plus_cs_scary_aggressor }
-				# Fire event directly (chance calculated inside)
 				country_event = { id = plus_cs_diplomacy.20 }
 			}
 		}
-
 	}
 }

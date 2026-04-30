@@ -29,35 +29,59 @@ country_event = {
 	option = {
 		name = plus_cs.1.a
 		ai_chance = {
-			base = 5 # Always a small chance (Chaos Factor)
+			base = 3 # Micro-chance (Chaos Factor) — never zero
 			
-			# === WEIGHTED PROBABILITY ===
-			# Score > 0: Increasing chance
-			modifier = { add = 10 check_variable = { plus_cs_final_calc_score > 0 } }
-			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 20 } }
-			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 40 } }
-			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 60 } }
-			modifier = { add = 25 check_variable = { plus_cs_final_calc_score > 80 } }
+			# === SCORE-BASED PROBABILITY ===
+			modifier = { add = 8 check_variable = { plus_cs_final_calc_score > 0 } }
+			modifier = { add = 12 check_variable = { plus_cs_final_calc_score > 20 } }
+			modifier = { add = 15 check_variable = { plus_cs_final_calc_score > 40 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 60 } }
+			modifier = { add = 20 check_variable = { plus_cs_final_calc_score > 80 } }
 			
-			# Score < 0: Decreasing chance (but not impossible unless extreme)
+			# Negative score: low but NEVER zero
 			modifier = { factor = 0.5 check_variable = { plus_cs_final_calc_score < -20 } }
-			modifier = { factor = 0.1 check_variable = { plus_cs_final_calc_score < -50 } }
-			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -80 } }
+			modifier = { factor = 0.15 check_variable = { plus_cs_final_calc_score < -50 } }
+			modifier = { factor = 0.05 check_variable = { plus_cs_final_calc_score < -100 } }
+			modifier = { factor = 0.01 check_variable = { plus_cs_final_calc_score < -200 } }
+			
+			# === WINNER GREED ===
+			# If I'm winning, I want MORE than conditional terms — micro-chance to accept
+			modifier = {
+				factor = 0.15
+				surrender_progress < 0.1
+				FROM = { surrender_progress > 0.2 }
+			}
+			
+			# === LOSER EAGERNESS ===
+			# If I'm losing, conditional terms are salvation — very likely accept
+			modifier = { add = 25 surrender_progress > 0.3 }
+			modifier = { add = 40 surrender_progress > 0.5 }
+			modifier = { add = 30 has_capitulated = yes }
+			
+			# === WINNER IN CRISIS ===
+			# Winner who is struggling internally may accept lesser terms
+			modifier = {
+				add = 15
+				surrender_progress < 0.1
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
+				}
+			}
 			
 			# === REPARATION BONUS ===
-			# If sender is in crisis, they offer bonus = more likely to accept
-			# Using FACTOR to multiply existing chance, not absolute add
-			modifier = { factor = 1.1 check_variable = { FROM.plus_cs_reparation_bonus > 0 } }   # +10%
-			modifier = { factor = 1.2 check_variable = { FROM.plus_cs_reparation_bonus > 20 } }  # +20% (total 1.32x)
-			modifier = { factor = 1.3 check_variable = { FROM.plus_cs_reparation_bonus > 40 } }  # +30% (total 1.72x)
-			modifier = { factor = 1.4 check_variable = { FROM.plus_cs_reparation_bonus > 80 } }  # +40% (total 2.40x)
+			modifier = { factor = 1.1 check_variable = { FROM.plus_cs_reparation_bonus > 0 } }
+			modifier = { factor = 1.15 check_variable = { FROM.plus_cs_reparation_bonus > 20 } }
+			modifier = { factor = 1.2 check_variable = { FROM.plus_cs_reparation_bonus > 40 } }
+			modifier = { factor = 1.3 check_variable = { FROM.plus_cs_reparation_bonus > 80 } }
 		}
 
 		# === REPARATION BONUS REWARD ===
-		# Recipient gets PP based on sender's crisis level
+		# Desperate country offers concessions: extra peace points for the winner
 		if = {
 			limit = { check_variable = { FROM.plus_cs_reparation_bonus > 0 } }
-			add_political_power = FROM.plus_cs_reparation_bonus
+			add_to_variable = { vp@FROM = FROM.plus_cs_reparation_bonus }
 			custom_effect_tooltip = plus_cs_reparation_bonus_tt
 		}
 
@@ -157,6 +181,10 @@ country_event = {
 					idea = conditional_surrender
 					days = 720
 				}
+				add_timed_idea = {
+					idea = plus_cs_separate_peace_blocker
+					days = 720
+				}
 			}
 		}
 		# ============================================================
@@ -210,26 +238,54 @@ country_event = {
 			plus_cs_restore_third_party_control = yes
 		}
 		else = {
-			every_enemy_country = {
+			# Peace out all participants robustly. 
+			# ROOT is Loser Faction Leader, FROM is Winner.
+			# We must ensure all active participants on both sides sign peace, 
+			# including capitulated ones so they can interact with the mod GUI.
+			
+			# 1. Kick Capitulated LOSERS from the Loser faction (ROOT's allies)
+			# This leaves them at war with the Winner, instantly triggering a 
+			# vanilla peace conference on the next daily tick for total annexation!
+			every_other_country = {
 				limit = {
-					is_in_faction_with = FROM
+					is_in_faction_with = ROOT
 					has_capitulated = yes
 				}
 				remove_from_faction = yes
 			}
+			
 			# НОВОЕ: Сохраняем контроль третьих сторон
 			plus_cs_save_third_party_control = yes
 			
-			# BUGFIX: Заключаем мир с самим FROM (инициатором мирного предложения)
-			white_peace = FROM
-			
+			# 2. Winner's faction makes peace with the Loser (ROOT)
 			every_enemy_country = {
 				limit = {
 					is_in_faction_with = FROM
-					has_capitulated = no
 				}
 				white_peace = ROOT
 			}
+			
+			# 3. Loser's SURVIVING active faction members make peace with Winner's faction
+			every_other_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_war_with = FROM
+					has_capitulated = no # Ensure they haven't capitulated
+				}
+				white_peace = FROM # Peace with the Winner
+				
+				# Peace with the Winner's active faction
+				every_enemy_country = {
+					limit = {
+						is_in_faction_with = FROM
+					}
+					white_peace = PREV
+				}
+			}
+			
+			# BUGFIX: Заключаем мир между самим FROM (Winner) и ROOT (Loser)
+			white_peace = FROM
+			
 			# Extended truce for faction peace (720 days, handles symmetric + puppets)
 			plus_cs_set_extended_truce = yes
 			
@@ -247,6 +303,13 @@ country_event = {
 				days = 720
 			}
 		}
+		
+		# BUGFIX: Ensure faction leaders also get peace blocker
+		if = {
+			limit = { is_faction_leader = yes }
+			add_timed_idea = { idea = plus_cs_separate_peace_blocker days = 365 }
+		}
+
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
 		}
@@ -258,18 +321,24 @@ country_event = {
 	option = {
 		name = plus_cs.1.b
 		ai_chance = {
-			base = 50
+			base = 40
 			
-			# Win Harder: If Winning, almost definitely Refuse
+			# === WINNER GREED: demand more! ===
 			modifier = {
-				add = 100
+				add = 150
 				surrender_progress < 0.1
 				FROM = { surrender_progress > 0.1 }
+			}
+			# Crushing enemy — demand unconditional, not conditional
+			modifier = {
+				add = 100
+				surrender_progress < 0.05
+				FROM = { surrender_progress > 0.4 }
 			}
 			
 			# Ideology: totalitarians demand total victory
 			modifier = {
-				factor = 2.0
+				factor = 1.8
 				OR = {
 					has_government = fascism
 					has_government = communism
@@ -297,25 +366,50 @@ country_event = {
 				FROM = { any_owned_state = { is_core_of = ROOT } }
 			}
 			
-			# Enemy has capitulated: absurd to refuse their surrender
+			# Enemy has capitulated: very unlikely to refuse their surrender (but micro-chance)
 			modifier = {
-				factor = 0.05
+				factor = 0.03
 				FROM = { has_capitulated = yes }
 			}
 			
 			# Enemy lost capital: they're broken
 			modifier = {
-				factor = 0.3
+				factor = 0.25
 				FROM = { capital_scope = { NOT = { is_controlled_by = FROM } } }
 			}
 			
-			# Exhaustion: accept any peace
+			# === LOSER: less likely to refuse (but micro-chance preserved) ===
 			modifier = {
-				factor = 0
+				factor = 0.3
+				surrender_progress > 0.3
+			}
+			modifier = {
+				factor = 0.2
+				surrender_progress > 0.5
+			}
+			
+			# Exhaustion: strongly prefer peace (but not factor 0!)
+			modifier = {
+				factor = 0.05
 				OR = {
 					has_country_flag = plus_cs_exhausted
 					has_country_flag = plus_cs_urgent_peace
-					has_country_flag = plus_cs_stalemate
+				}
+			}
+			
+			# Stalemate: less refuse but not zero
+			modifier = {
+				factor = 0.2
+				has_country_flag = plus_cs_stalemate
+			}
+			
+			# === WINNER IN CRISIS: more willing to accept (less refuse) ===
+			modifier = {
+				factor = 0.3
+				OR = {
+					has_idea = internal_crisis_high
+					has_dynamic_modifier = homefront_collapse
+					has_dynamic_modifier = total_exhaustion
 				}
 			}
 			
@@ -326,31 +420,7 @@ country_event = {
 			}
 		}
 		
-		add_war_support = 0.05
-		add_stability = 0.02
-		
-		if = {
-			limit = {
-				OR = {
-					has_country_flag = plus_cs_war_strain
-					has_country_flag = plus_cs_stalemate
-				}
-			}
-			add_war_support = -0.10
-			add_stability = -0.05
-			custom_effect_tooltip = plus_cs.1.b.tooltip_1
-		}
-		if = {
-			limit = {
-				OR = {
-					has_country_flag = plus_cs_exhausted
-					has_country_flag = plus_cs_urgent_peace
-				}
-			}
-			add_war_support = -0.15
-			add_stability = -0.10
-			custom_effect_tooltip = plus_cs.1.b.tooltip_2
-		}
+		# F2 FIX removed: No stability/war support penalty for declining peace with preferences.
 		
 		FROM = {
 			clr_country_flag = plus_cs_waiting_response
@@ -359,12 +429,9 @@ country_event = {
 		}
 		
 		# === ESCALATION SYSTEM ===
-		# Repeated rejections have escalating political costs
+		# Escalating tracking (penalties removed per user request)
 		if = {
 			limit = { FROM = { has_country_flag = plus_cs_offered_peace_before } }
-			# Second+ rejection: public frustration (war weariness)
-			add_stability = -0.05
-			add_war_support = -0.03
 			FROM = { set_country_flag = plus_cs_offered_peace_twice }
 		}
 		FROM = { set_country_flag = plus_cs_offered_peace_before }

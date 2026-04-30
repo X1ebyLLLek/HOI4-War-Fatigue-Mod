@@ -134,6 +134,7 @@ country_event = {
 			limit = { check_variable = { plus_cs_pressure_ratio < 1.5 } }
 			if = {
 				limit = { OR = { has_government = fascism has_government = communism } }
+				add_popularity = { ideology = neutrality popularity = 0.40 }
 				set_politics = {
 					ruling_party = neutrality
 					elections_allowed = no
@@ -150,6 +151,7 @@ country_event = {
 			# If fighting Democracies -> Become Democratic
 			if = {
 				limit = { any_enemy_country = { has_government = democratic } }
+				add_popularity = { ideology = democratic popularity = 0.40 }
 				set_politics = {
 					ruling_party = democratic
 					elections_allowed = yes
@@ -157,6 +159,7 @@ country_event = {
 			}
 			# Otherwise -> Neutrality (Order)
 			else = {
+				add_popularity = { ideology = neutrality popularity = 0.40 }
 				set_politics = {
 					ruling_party = neutrality
 					elections_allowed = no
@@ -301,6 +304,7 @@ country_event = {
 		}
 		
 		# 1. Change to military junta (neutrality)
+		add_popularity = { ideology = neutrality popularity = 0.40 }
 		set_politics = {
 			ruling_party = neutrality
 			elections_allowed = no

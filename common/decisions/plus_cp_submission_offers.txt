@@ -42,31 +42,85 @@ peace_options = {
 		}
 
 		ai_will_do = {
-		base = 0
-		
-		# Preventive: only tiny nations with compatible ideologies consider it
-		modifier = {
-			add = 15
-			OR = { has_government = democratic has_government = neutrality }
-			is_major = no
-			FROM = { is_major = yes }
-		}
-		# Power imbalance: we are massively outmatched
-		modifier = {
-			add = 30
-			strength_ratio = { tag = FROM ratio < 0.1 }
-		}
-		# Block if we have strong resolve
-		modifier = {
-			factor = 0
-			OR = { has_government = fascism has_government = communism }
-		}
-		modifier = {
-			factor = 0
-			has_country_leader_with_trait = plus_cs_spirit_fanatic
+			base = 0
+			
+			# === TRIGGERS: Why would I submit PREVENTIVELY? ===
+			
+			# Tiny democratic/neutral nation vs neighboring major
+			modifier = {
+				add = 1
+				OR = { has_government = democratic has_government = neutrality }
+				is_major = no
+				FROM = { is_major = yes }
+				any_neighbor_country = { tag = FROM }
+			}
+			
+			# Massively outmatched AND enemy is nearby
+			modifier = {
+				add = 2
+				strength_ratio = { tag = FROM ratio < 0.1 }
+				any_neighbor_country = { tag = FROM }
+			}
+			
+			# Outmatched but enemy far away (micro-chance only)
+			modifier = {
+				add = 1
+				strength_ratio = { tag = FROM ratio < 0.05 }
+				NOT = { any_neighbor_country = { tag = FROM } }
+			}
+			
+			# === FIGHTING SPIRITS ===
+			
+			modifier = {
+				add = 3
+				has_country_leader_with_trait = plus_cs_spirit_defeatist
+			}
+			
+			# === BLOCKERS ===
+			
+			# Enemy NOT neighbor
+			modifier = {
+				factor = 0.05
+				NOT = { any_neighbor_country = { tag = FROM } }
+			}
+			# Faction with alive major
+			modifier = {
+				factor = 0.02
+				is_in_faction = yes
+				any_other_country = {
+					is_in_faction_with = ROOT
+					NOT = { has_capitulated = yes }
+					is_major = yes
+				}
+			}
+			# Significant military - 100x less likely
+			modifier = {
+				factor = 0.01
+				num_of_military_factories > 20
+			}
+			# Majors are extremely stubborn unless crushed
+			modifier = {
+				factor = 0.01
+				is_major = yes
+				surrender_progress < 0.5
+			}
+			# Ideological resistance
+			modifier = {
+				factor = 0.01
+				OR = { has_government = fascism has_government = communism }
+			}
+			# Fanatic
+			modifier = {
+				factor = 0.005
+				has_country_leader_with_trait = plus_cs_spirit_fanatic
+			}
+			# Resilient
+			modifier = {
+				factor = 0.1
+				has_country_leader_with_trait = plus_cs_spirit_resilient
+			}
 		}
 	}
-}
 
 	offer_honorable_submission = {
 		icon = GFX_decision_generic_assassination
@@ -136,28 +190,28 @@ peace_options = {
 			# === ИДЕОЛОГИЯ: Градиент готовности к сдаче ===
 			# ===============================================
 			
-			# Демократии - очень склонны к переговорам
+			# Демократии - склонны к переговорам (но умеренно)
 			modifier = {
-				add = 40
+				add = 3
 				has_government = democratic
 			}
 			
 			# Нейтралы - прагматичны
 			modifier = {
-				add = 25
+				add = 1
 				has_government = neutrality
 			}
 			
 			# Фашисты - упорны, но сдадутся при полном разгроме
 			modifier = {
-				add = 10
+				add = 5
 				has_government = fascism
 				surrender_progress > 0.7
 			}
 			
 			# Коммунисты - очень упорны, сдадутся только при катастрофе
 			modifier = {
-				add = 5
+				add = 3
 				has_government = communism
 				surrender_progress > 0.8
 			}
@@ -166,9 +220,9 @@ peace_options = {
 			# === КРИТИЧЕСКИЕ СИТУАЦИИ ===
 			# ===============================================
 			
-			# Столица потеряна - огромный бонус к сдаче
+			# Столица потеряна - бонус к сдаче
 			modifier = {
-				add = 80
+				add = 10
 				capital_scope = { NOT = { is_controlled_by = ROOT } }
 			}
 			
@@ -180,18 +234,18 @@ peace_options = {
 			
 			# Страна истощена
 			modifier = {
-				add = 60
+				add = 30
 				has_country_flag = plus_cs_exhausted
 			}
 			
 			# Высокий surrender progress
 			modifier = {
-				add = 50
+				add = 25
 				surrender_progress > 0.5
 			}
 			
 			modifier = {
-				add = 30
+				add = 15
 				surrender_progress > 0.35
 			}
 			
@@ -199,31 +253,70 @@ peace_options = {
 			# === СООТНОШЕНИЕ СИЛ (Power Ratio) ===
 			# ===============================================
 			
-			# Мы значительно слабее врага - логично сдаться
+			# Мы значительно слабее врага
 			modifier = {
-				add = 30
+				add = 3
 				strength_ratio = { tag = FROM ratio < 0.2 }
 			}
 			
 			# Мы абсолютно ничтожны перед врагом
 			modifier = {
-				add = 40
+				add = 5
 				strength_ratio = { tag = FROM ratio < 0.05 }
 			}
 			
+			# --- PENALTIES ---
+			
+			# Distance/Border: more reluctant if far away
+			modifier = {
+				factor = 0.5
+				NOT = { any_neighbor_country = { tag = FROM } }
+			}
+			
+			# Faction with alive major — he will protect us
+			modifier = {
+				factor = 0.02
+				is_in_faction = yes
+				any_other_country = {
+					is_in_faction_with = ROOT
+					NOT = { has_capitulated = yes }
+					is_major = yes
+				}
+			}
+			
+			# Significant military — we can fight (100x penalty)
+			modifier = {
+				factor = 0.01
+				num_of_military_factories > 20
+			}
+			
+			# Majors are extremely stubborn unless crushed (100x penalty)
+			modifier = {
+				factor = 0.01
+				is_major = yes
+				surrender_progress < 0.5
+			}
+			
+			# Resilient leader: much less likely
+			modifier = {
+				factor = 0.1
+				has_country_leader_with_trait = plus_cs_spirit_resilient
+			}
+			
 			# ===============================================
+
 			# === ДЛИТЕЛЬНОСТЬ ВОЙНЫ ===
 			# ===============================================
 			
 			# Война длится больше 2 лет - усталость
 			modifier = {
-				add = 15
+				add = 8
 				has_country_flag = { flag = plus_cs_at_war_start days > 730 }
 			}
 			
 			# Война длится больше 3 лет - глубокая усталость
 			modifier = {
-				add = 20
+				add = 10
 				has_country_flag = { flag = plus_cs_at_war_start days > 1095 }
 			}
 			
@@ -231,21 +324,21 @@ peace_options = {
 			# === ВНУТРЕННЯЯ СИТУАЦИЯ ===
 			# ===============================================
 			
-			# Низкая стабильность - народ не хочет войны
+			# Низкая стабильность
 			modifier = {
-				add = 25
+				add = 12
 				has_stability < 0.3
 			}
 			
 			# Низкая военная поддержка
 			modifier = {
-				add = 35
+				add = 18
 				has_war_support < 0.25
 			}
 			
-			# Высокие потери (через динамические модификаторы, чтобы учитывался размер страны)
+			# Высокие потери
 			modifier = {
-				add = 20
+				add = 10
 				OR = {
 					has_dynamic_modifier = manpower_strain_mild
 					has_dynamic_modifier = manpower_strain_high
@@ -254,23 +347,23 @@ peace_options = {
 			}
 			
 			modifier = {
-				add = 30
+				add = 15
 				OR = {
 					has_dynamic_modifier = manpower_strain_high
 					has_dynamic_modifier = manpower_strain_collapse
 				}
 			}
 			
-			# Внутренний кризис прямо давит
+			# Внутренний кризис
 			modifier = {
-				add = 15
+				add = 8
 				OR = {
 					has_idea = internal_crisis_high
 					has_dynamic_modifier = homefront_collapse
 				}
 			}
 			modifier = {
-				add = 30
+				add = 15
 				has_dynamic_modifier = total_exhaustion
 			}
 			
@@ -278,9 +371,8 @@ peace_options = {
 			# === ИДЕОЛОГИЧЕСКАЯ СОВМЕСТИМОСТЬ С ВРАГОМ ===
 			# ===============================================
 			
-			# Легче сдаться стране с похожей идеологией
 			modifier = {
-				add = 15
+				add = 10
 				OR = {
 					AND = { has_government = democratic FROM = { has_government = democratic } }
 					AND = { has_government = neutrality FROM = { has_government = neutrality } }
@@ -300,31 +392,41 @@ peace_options = {
 			# ===============================================
 			
 			# Фашисты/коммунисты: фанатичное сопротивление до surrender > 0.6
+			# NOT factor=0! Micro-chance preserved
 			modifier = {
-				factor = 0
+				factor = 0.02
 				OR = {
 					has_government = fascism
 					has_government = communism
 				}
 				NOT = { has_country_flag = plus_cs_exhausted }
 				surrender_progress < 0.6
-				# Кроме случая потери столицы
 				capital_scope = { is_controlled_by = ROOT }
 			}
 
 			# === FIGHTING SPIRIT: VARIABILITY ===
 
-			# Fanatic: Will NOT offer submission unless absolutely crushed (>80%)
+			# Fanatic: micro-chance unless crushed (>80%)
 			modifier = {
-				factor = 0
+				factor = 0.01
 				has_country_leader_with_trait = plus_cs_spirit_fanatic
 				surrender_progress < 0.8
 			}
 
 			# Defeatist: Wants to quit early
 			modifier = {
-				add = 40
+				add = 20
 				has_country_leader_with_trait = plus_cs_spirit_defeatist
+			}
+			
+			# Здоровая страна без кризиса — микрошанс
+			modifier = {
+				factor = 0.02
+				surrender_progress < 0.2
+				NOT = { has_country_flag = plus_cs_exhausted }
+				NOT = { has_idea = internal_crisis_high }
+				NOT = { has_dynamic_modifier = homefront_collapse }
+				NOT = { has_dynamic_modifier = total_exhaustion }
 			}
 			
 			# В альянсе с живыми союзниками - ждём их
@@ -351,7 +453,7 @@ peace_options = {
 				}
 			}
 			
-			# Высокая военная поддержка - народ хочет воевать
+			# Высокая военная поддержка
 			modifier = {
 				factor = 0.4
 				has_war_support > 0.55
@@ -373,22 +475,22 @@ peace_options = {
 			
 			# Маленькая изолированная страна без союзников
 			modifier = {
-				add = 20
+				add = 10
 				is_in_faction = no
 				is_major = no
 				num_of_military_factories < 15
 			}
 			
-			# Окруженные (потеряли доступ к морю и границы с союзниками)
+			# Окруженные
 			modifier = {
-				add = 25
+				add = 12
 				is_in_faction = no
 				NOT = { any_owned_state = { is_coastal = yes } }
 			}
 			
 			# Мы единственный выживший в сломанном альянсе
 			modifier = {
-				add = 50
+				add = 25
 				is_in_faction = yes
 				NOT = {
 					any_other_country = {

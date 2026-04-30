@@ -81,8 +81,8 @@ plus_cs_economy_step = {
 			limit = { NOT = { has_dynamic_modifier = shadow_law_service_penalty } }
 			add_dynamic_modifier = { modifier = shadow_law_service_penalty }
 		}
-		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
-		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+		if = { limit = { has_dynamic_modifier = shadow_law_adults_penalty } remove_dynamic_modifier = { modifier = shadow_law_adults_penalty } }
+		if = { limit = { has_dynamic_modifier = shadow_law_scraping_penalty } remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty } }
 	}
 	else_if = {
 		limit = { has_idea = all_adults_serve }
@@ -90,8 +90,8 @@ plus_cs_economy_step = {
 			limit = { NOT = { has_dynamic_modifier = shadow_law_adults_penalty } }
 			add_dynamic_modifier = { modifier = shadow_law_adults_penalty }
 		}
-		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
-		remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
+		if = { limit = { has_dynamic_modifier = shadow_law_service_penalty } remove_dynamic_modifier = { modifier = shadow_law_service_penalty } }
+		if = { limit = { has_dynamic_modifier = shadow_law_scraping_penalty } remove_dynamic_modifier = { modifier = shadow_law_scraping_penalty } }
 	}
 	else_if = {
 		limit = { has_idea = scraping_the_barrel }
@@ -99,8 +99,8 @@ plus_cs_economy_step = {
 			limit = { NOT = { has_dynamic_modifier = shadow_law_scraping_penalty } }
 			add_dynamic_modifier = { modifier = shadow_law_scraping_penalty }
 		}
-		remove_dynamic_modifier = { modifier = shadow_law_service_penalty }
-		remove_dynamic_modifier = { modifier = shadow_law_adults_penalty }
+		if = { limit = { has_dynamic_modifier = shadow_law_service_penalty } remove_dynamic_modifier = { modifier = shadow_law_service_penalty } }
+		if = { limit = { has_dynamic_modifier = shadow_law_adults_penalty } remove_dynamic_modifier = { modifier = shadow_law_adults_penalty } }
 	}
 	else = {
 		if = { limit = { has_dynamic_modifier = shadow_law_service_penalty } remove_dynamic_modifier = { modifier = shadow_law_service_penalty } }

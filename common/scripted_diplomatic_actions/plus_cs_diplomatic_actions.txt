@@ -37,7 +37,17 @@ scripted_diplomatic_actions = {
 				tooltip = plus_cs_demand_not_faction_tt
 				NOT = { is_in_faction_with = ROOT }
 				NOT = { is_subject_of = ROOT }
-				ROOT = { NOT = { is_subject_of = THIS } }
+				ROOT = { NOT = { is_subject_of = PREV } }
+			}
+
+			custom_trigger_tooltip = {
+				tooltip = plus_cs_demand_no_puppet_tt
+				ROOT = { is_puppet = no }
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = plus_cs_demand_no_truce_tt
+				NOT = { has_truce_with = ROOT }
 			}
 			
 			custom_trigger_tooltip = {
@@ -82,8 +92,10 @@ scripted_diplomatic_actions = {
 		}
 
 		complete_effect = {
-			set_country_flag = { flag = plus_cs_recent_demand_sent days = 30 }
+			save_event_target_as = plus_cs_demand_sender
+			set_country_flag = { flag = plus_cs_recent_demand_sent days = 180 }
 			FROM = {
+				save_event_target_as = plus_cs_demand_recipient
 				set_country_flag = { flag = plus_cs_recent_demand days = 180 }
 				country_event = { id = plus_cs_demands.1 days = 2 }
 			}
@@ -94,7 +106,7 @@ scripted_diplomatic_actions = {
 			modifier = {
 				add = 100
 				# AI will only try this if they are significantly stronger or equal
-				ROOT = { strength_ratio = { tag = THIS ratio > 0.9 } }
+				ROOT = { strength_ratio = { tag = PREV ratio > 0.9 } }
 					
 				ROOT = {
 					OR = {

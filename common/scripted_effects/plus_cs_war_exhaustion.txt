@@ -151,14 +151,19 @@ plus_cs_heavy_calc_step = {
 				}
 			}
 			
+			# OPT: Flat approximation for subject population
+			# Old code: every_subject_country { every_owned_state } = O(N×M)
+			# New code: count subjects × fraction of own pop = O(N)
+			set_temp_variable = { subj_count = 0 }
 			every_subject_country = {
-				set_temp_variable = { subj_pop = 0 }
-				every_owned_state = {
-					limit = { is_core_of = PREV }
-					add_to_temp_variable = { subj_pop = state_population }
-				}
-				multiply_temp_variable = { var = subj_pop value = 0.25 }
-				add_to_variable = { var = ROOT.core_pop_calc value = subj_pop }
+				add_to_temp_variable = { subj_count = 1 }
+			}
+			if = {
+				limit = { check_variable = { subj_count > 0 } }
+				set_temp_variable = { subj_bonus = core_pop_calc }
+				multiply_temp_variable = { subj_bonus = 0.15 }
+				multiply_temp_variable = { subj_bonus = subj_count }
+				add_to_variable = { core_pop_calc = subj_bonus }
 			}
 		}
 
@@ -392,6 +397,8 @@ plus_cs_synergy_crisis_check = {
 			limit = {
 				check_variable = { has_inflation_crisis = 1 }
 				check_variable = { has_internal_crisis = 1 }
+				# FIX: Only trigger homefront collapse when actually losing territory
+				surrender_progress > 0.15
 			}
 			# Применяем Homefront Collapse
 			add_dynamic_modifier = { modifier = homefront_collapse days = 35 }
@@ -434,6 +441,18 @@ plus_cs_synergy_crisis_check = {
 # OPT: Extracted from 3 duplicate blocks in events.
 # =============================================
 plus_cs_cleanup_crisis_modifiers = {
+	# OPT: Fast path — skip all removes if country was never in crisis
+	if = {
+		limit = {
+			NOT = { has_country_flag = plus_cs_exhausted }
+			NOT = { has_country_flag = plus_cs_war_strain }
+			NOT = { has_idea = internal_crisis_high }
+			NOT = { has_idea = internal_crisis_medium }
+			NOT = { has_idea = internal_crisis_low }
+		}
+		# No crisis markers → nothing to clean up
+	}
+	else = {
 	remove_ideas = internal_crisis_high
 	remove_ideas = internal_crisis_medium
 	remove_ideas = internal_crisis_low
@@ -450,4 +469,5 @@ plus_cs_cleanup_crisis_modifiers = {
 	if = { limit = { has_dynamic_modifier = officer_shortage_mild } remove_dynamic_modifier = { modifier = officer_shortage_mild } }
 	if = { limit = { has_dynamic_modifier = officer_shortage_high } remove_dynamic_modifier = { modifier = officer_shortage_high } }
 	if = { limit = { has_dynamic_modifier = officer_shortage_collapse } remove_dynamic_modifier = { modifier = officer_shortage_collapse } }
+	}
 }

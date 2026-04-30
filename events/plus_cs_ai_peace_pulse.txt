@@ -1,11 +1,14 @@
 add_namespace = plus_cs_pulse
 
-
-
 # ==============================================================================
 # MONTHLY PEACE PULSE
 # Triggers once/month for every country at war.
 # Handles the PROBABILITY of offering peace.
+#
+# TARGET PROBABILITIES:
+#   Normal (no crisis): ~2% initiation/month
+#   Worst case (all debuffs): ≤10% initiation/month
+#   Variability: Even extreme scenarios never reach 0% or 100%
 # ==============================================================================
 
 country_event = {
@@ -14,17 +17,19 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		is_ai = yes
 		has_war = yes
 		is_puppet = no
 		NOT = { has_country_flag = plus_cs_waiting_response }
 		NOT = { has_country_flag = plus_cs_peace_cooldown }
 		
+		# 0. Startup Block
+		NOT = { has_global_flag = plus_cs_mod_startup_cooldown }
+		
 		# 1. Civil War Block
-		# Countries in civil war cannot use normal diplomacy
 		NOT = { has_civil_war = yes }
 		
 		# 2. Faction Hierarchy
-		# Only Faction Leaders or Independents can propose general peace.
 		OR = {
 			is_faction_leader = yes
 			is_in_faction = no
@@ -33,14 +38,10 @@ country_event = {
 
 	immediate = {
 		# 1. FIND BEST RECIPIENT (OPTIMIZED)
-		# OPTIMIZATION: Removed expensive score loop.
-		# Just pick a Major Enemy or Neighbor. 99% of the time we don't do anything anyway.
-		
-		# OPT: Removed duplicate any_enemy_country checks — random_ handles empty results
 		random_enemy_country = {
 			limit = {
 				is_major = yes
-				is_puppet = no  # NEVER target puppets — negotiate with their master
+				is_puppet = no
 			}
 			save_event_target_as = peace_target
 		}
@@ -67,15 +68,17 @@ country_event = {
 			limit = { has_event_target = peace_target }
 			
 			# === THE ROULETTE ===
+			# Base "Do Nothing" = 2000. Max combined initiative ≈ 200 → 200/2200 ≈ 9%
 			random_list = {
 				# ----------------------------------------------------------
 				# OPTION 1: DO NOTHING (Default)
 				# ----------------------------------------------------------
-				200 = {
-					# Base inertia: 200 (P5 FIX: was 120, increased to reduce premature proposals)
-					# Winning Bonus: If we are winning, this weight is HUGE.
+				72 = {
+					# Base inertia: 2000
+					modifier = { add = 1928 }
+					# Winning Bonus: If we are winning, even less likely to propose
 					modifier = {
-						add = 400
+						add = 500
 						surrender_progress < 0.1
 						event_target:peace_target = { surrender_progress > 0.1 }
 					}
@@ -86,29 +89,29 @@ country_event = {
 				# ----------------------------------------------------------
 				1 = {
 					# Base 1 (The "Chaos Factor"). 
-					# Even without any reason, there is a tiny chance (1/100) someone proposes peace.
+					# Even without any reason, there is a tiny chance (1/2000) someone proposes peace.
 					
 					# --- TRIGGERS (The "Entry Ticket") ---
 					
 					# Stalemate (Boredom) - main trigger for both sides
 					modifier = {
-						add = 25
+						add = 12
 						has_country_flag = plus_cs_stalemate
 					}
 					
-					# Crisis (Internal Pressure) - Calibrated for ~30% proposal
-					modifier = { add = 6 has_idea = internal_crisis_low }
-					modifier = { add = 15 has_idea = internal_crisis_medium }
-					modifier = { add = 30 has_idea = internal_crisis_high }
+					# Crisis (Internal Pressure)
+					modifier = { add = 3 has_idea = internal_crisis_low }
+					modifier = { add = 7 has_idea = internal_crisis_medium }
+					modifier = { add = 14 has_idea = internal_crisis_high }
 					
-					# FIX: Synergy crises (replace base, so must be checked separately)
-					modifier = { add = 35 has_dynamic_modifier = army_cohesion_crisis }
-					modifier = { add = 40 has_dynamic_modifier = homefront_collapse }
-					modifier = { add = 60 has_dynamic_modifier = total_exhaustion }
+					# Synergy crises
+					modifier = { add = 15 has_dynamic_modifier = army_cohesion_crisis }
+					modifier = { add = 18 has_dynamic_modifier = homefront_collapse }
+					modifier = { add = 25 has_dynamic_modifier = total_exhaustion }
 					
-					# Casualties (War Exhaustion) - Calibrated
+					# Casualties (War Exhaustion)
 					modifier = {
-						add = 20
+						add = 10
 						OR = {
 							has_dynamic_modifier = manpower_strain_high
 							has_dynamic_modifier = manpower_strain_collapse
@@ -120,11 +123,11 @@ country_event = {
 					# --- MODIFIERS ---
 					# Democracy preferred
 					modifier = {
-						add = 15
+						add = 8
 						has_government = democratic
 					}
 					
-					# Fascism penalty (Stubborn but NOT immune)
+					# Fascism/Communism penalty (Stubborn but NOT immune)
 					modifier = {
 						factor = 0.5
 						OR = { has_government = fascism has_government = communism }
@@ -132,21 +135,31 @@ country_event = {
 					
 					# Fanatic penalty (Extremely Rare but Possible)
 					modifier = {
-						factor = 0.05 # 5% of normal chance. Not zero.
+						factor = 0.05
 						has_country_leader_with_trait = plus_cs_spirit_fanatic
 					}
 
-					# WINNER Magnanimity (Attacker can propose peace too!)
-					# If crushing the enemy AND tired/democratic, offer peace
+					# WINNER: If crushing the enemy AND tired/democratic, may offer peace
 					modifier = {
-						add = 35
+						add = 8
 						surrender_progress < 0.05
 						event_target:peace_target = { surrender_progress > 0.4 }
 					}
 					
-					# Winner in crisis may offer to end war quickly
+					# Healthy winners almost never propose
 					modifier = {
-						add = 20
+						factor = 0.15
+						surrender_progress < 0.1
+						NOT = { has_idea = internal_crisis_low }
+						NOT = { has_idea = internal_crisis_medium }
+						NOT = { has_idea = internal_crisis_high }
+						NOT = { has_dynamic_modifier = homefront_collapse }
+						NOT = { has_dynamic_modifier = total_exhaustion }
+					}
+					
+					# Winner in crisis — wants to end war quickly
+					modifier = {
+						add = 10
 						surrender_progress < 0.1
 						OR = {
 							has_idea = internal_crisis_medium
@@ -157,19 +170,21 @@ country_event = {
 					}
 
 					# === SUB-SELECTION (What kind of peace?) ===
+					# Graduation: losing = more concessions, winning = demand more
 					random_list = {
 						# A. WHITE PEACE ("Let's just stop")
-						# Ideal for: Stalemate, Boredom, Magnanimity.
+						# Ideal for: Stalemate, Boredom, Magnanimity, winning side.
 						50 = {
-							# Modifiers
-							modifier = { add = 50 has_country_flag = plus_cs_stalemate }
-							modifier = { add = 100 surrender_progress < 0.05 } # Winning/Magnanimous
+							# Stalemate strongly favors white peace
+							modifier = { add = 40 has_country_flag = plus_cs_stalemate }
+							# Winners prefer white peace over surrender
+							modifier = { add = 30 surrender_progress < 0.05 }
 							
-							# Penalties (If losing, enemy UNLIKELY to accept, but AI might try)
+							# Losing = less likely to request white peace (enemy won't accept)
 							modifier = { factor = 0.5 surrender_progress > 0.2 }
-							modifier = { factor = 0.1 surrender_progress > 0.4 }
-							# Extremely unlikely to ask for a white peace if already capitulated
-							modifier = { factor = 0.001 has_capitulated = yes }
+							modifier = { factor = 0.3 surrender_progress > 0.4 }
+							# Capitulated = absurd to ask for white peace
+							modifier = { factor = 0.01 has_capitulated = yes }
 
 							log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] decided to propose WHITE PEACE."
 							
@@ -183,20 +198,35 @@ country_event = {
 						# B. CONDITIONAL SURRENDER ("I admit defeat")
 						# Ideal for: Losing, Pressure.
 						10 = {
-							# Modifiers
+							# Losing badly = strongly favors conditional surrender
 							modifier = { add = 30 surrender_progress > 0.2 }
-							modifier = { add = 60 surrender_progress > 0.4 }
-							modifier = { add = 50 OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
-							modifier = { add = 80 has_dynamic_modifier = total_exhaustion }
-							modifier = { add = 40 has_country_leader_with_trait = plus_cs_spirit_defeatist }
+							modifier = { add = 50 surrender_progress > 0.4 }
+							modifier = { add = 30 OR = { has_idea = internal_crisis_high has_dynamic_modifier = homefront_collapse } }
+							modifier = { add = 40 has_dynamic_modifier = total_exhaustion }
+							modifier = { add = 20 has_country_leader_with_trait = plus_cs_spirit_defeatist }
 							
 							# Capitulated tags actively seek conditional surrender
 							modifier = { add = 200 has_capitulated = yes }
 							# If the enemy is capitulated, the victor desires to finalize it
-							modifier = { add = 80 event_target:peace_target = { has_capitulated = yes } }
+							modifier = { add = 60 event_target:peace_target = { has_capitulated = yes } }
 							
-							# Penalties
-							modifier = { factor = 0.1 surrender_progress < 0.1 } # Very rare to capitulate if winning, but theoretically possible (corruption/treason?)
+							# NEW: Winner in deep crisis may offer conditional terms (concede to end war)
+							modifier = {
+								add = 25
+								surrender_progress < 0.1
+								OR = {
+									has_idea = internal_crisis_high
+									has_dynamic_modifier = homefront_collapse
+									has_dynamic_modifier = total_exhaustion
+								}
+							}
+							
+							# Winners rarely surrender conditionally unless in crisis
+							modifier = { factor = 0.05 surrender_progress < 0.1
+								NOT = { has_idea = internal_crisis_high }
+								NOT = { has_dynamic_modifier = homefront_collapse }
+								NOT = { has_dynamic_modifier = total_exhaustion }
+							}
 
 							log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] decided to propose CONDITIONAL SURRENDER."
 							
@@ -204,8 +234,6 @@ country_event = {
 							event_target:peace_target = { save_event_target_as = peace_recipient }
 							save_event_target_as = peace_sender
 							set_country_flag = plus_cs_peace_type_negotiation
-							# BUGFIX: Mark that FROM is surrendering (loser), not proposing (winner)
-							# plus_cs.1 needs this to know ROOT is the winner, not FROM
 							set_country_flag = plus_cs_is_surrendering
 							event_target:peace_target = { country_event = { id = plus_cs.1 } }
 						}
@@ -217,11 +245,10 @@ country_event = {
 				# ----------------------------------------------------------
 				1 = {
 					# Base 1 (The "Miracle/Disaster" Factor).
-					# Always a tiny non-zero chance.
 					
 					# --- TRIGGERS ---
 					modifier = {
-						add = 5
+						factor = 5.0
 						surrender_progress > 0.4
 						OR = {
 							has_idea = internal_crisis_high
@@ -231,12 +258,12 @@ country_event = {
 					}
 					
 					modifier = {
-						add = 20
+						factor = 10.0
 						surrender_progress > 0.7
 					}
 					
 					modifier = {
-						add = 200
+						factor = 80.0
 						has_capitulated = yes
 					}
 					
@@ -244,9 +271,7 @@ country_event = {
 					
 					# A. Tiny Nation
 					modifier = {
-						add = 5
-						# Result: ~5% chance per month (Base 1 + Mod 5 = 6 vs 100 Do Nothing).
-						
+						factor = 3.0
 						OR = { has_government = democratic has_government = neutrality }
 						event_target:peace_target = { 
 							ROOT = { strength_ratio = { tag = PREV ratio < 0.1 } } 
@@ -255,18 +280,31 @@ country_event = {
 					
 					# B. Defeatist
 					modifier = {
-						add = 60
+						factor = 25.0
 						has_country_leader_with_trait = plus_cs_spirit_defeatist
 					}
 					
 					# C. Peaceful Ideology
 					modifier = {
-						add = 15
+						factor = 8.0
 						OR = { has_government = democratic has_government = neutrality }
 						surrender_progress > 0.5 
 					}
 					
-					# --- DAMPENERS ---
+					# Winner in catastrophic crisis may offer OWN submission
+					modifier = {
+						factor = 5.0
+						surrender_progress < 0.15
+						OR = {
+							has_dynamic_modifier = total_exhaustion
+							AND = {
+								has_dynamic_modifier = homefront_collapse
+								has_idea = internal_crisis_high
+							}
+						}
+					}
+					
+					# --- HARD BLOCKERS ---
 					
 					# A. Stubborn Ideology
 					modifier = {
@@ -274,119 +312,58 @@ country_event = {
 						OR = { has_government = fascism has_government = communism }
 					}
 					
-					# B. Fanatic (Not Zero, but 1% chance)
+					# B. Fanatic/Resilient (Strictly Protected)
 					modifier = {
-						factor = 0.01
+						factor = 0.0
 						has_country_leader_with_trait = plus_cs_spirit_fanatic
+						surrender_progress < 0.8
+					}
+					modifier = {
+						factor = 0.0
+						has_country_leader_with_trait = plus_cs_spirit_resilient
+						surrender_progress < 0.3
 					}
 					
-					# C. Not Losing Enough? (Still possible due to corruption/panic)
-				modifier = {
-					factor = 0.05
-					surrender_progress < 0.2
-				}
-				
-				# D. All allies capitulated = isolated and desperate
-				modifier = {
-					add = 40
-					is_in_faction = yes
-					NOT = {
-						any_other_country = {
-							is_in_faction_with = ROOT
-							NOT = { has_capitulated = yes }
+					# C. MAJOR/STRENGTH Protection (Zero chance if strong)
+					modifier = {
+						factor = 0.0
+						OR = {
+							is_major = yes
+							num_of_military_factories > 20
 						}
+						surrender_progress < 0.4
+						NOT = { has_dynamic_modifier = total_exhaustion }
 					}
-				}
-				
-				# E. War duration fatigue increases submission likelihood
-				modifier = {
-					add = 10
-					has_country_flag = { flag = plus_cs_at_war_start days > 730 }
-					surrender_progress > 0.3
-				}
 
-				log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Surrender: [?surrender_progress]) decided to propose SUBMISSION to [peace_target.GetName]."
-                    
-				set_country_flag = { flag = plus_cs_waiting_response days = 1 }
-				event_target:peace_target = { save_event_target_as = peace_recipient }
-				save_event_target_as = peace_sender
-				
-				event_target:peace_target = { country_event = { id = plus_cs.201 } }
-			}
-			
-			# ----------------------------------------------------------
-			# OPTION 4: VICTOR DEMAND SUBMISSION (Ultimatum)
-			# The WINNER demands the loser surrenders (puppet/annex)
-			# ----------------------------------------------------------
-			1 = {
-				# Base 1: Always a tiny chance of ultimatum
-				
-				# Only available when clearly winning
-				modifier = {
-					factor = 0
-					surrender_progress > 0.1  # Don't demand if not dominating
-				}
-				
-				# --- TRIGGERS ---
-				
-				# Enemy losing badly
-				modifier = {
-					add = 25
-					surrender_progress < 0.05
-					event_target:peace_target = { surrender_progress > 0.5 }
-				}
-				
-				# Enemy has capitulated = demand formalization
-				modifier = {
-					add = 100
-					event_target:peace_target = { has_capitulated = yes }
-				}
-				
-				# Enemy lost their capital
-				modifier = {
-					add = 30
-					event_target:peace_target = { 
-						capital_scope = { NOT = { is_controlled_by = PREV } }
-					}
-				}
-				
-				# All enemy allies dead = total victory demand
-				modifier = {
-					add = 40
-					event_target:peace_target = {
+					# D. Isolated (Still reluctant if healthy)
+					modifier = {
+						factor = 10.0
 						is_in_faction = yes
 						NOT = {
 							any_other_country = {
-								is_in_faction_with = PREV
+								is_in_faction_with = ROOT
 								NOT = { has_capitulated = yes }
 							}
 						}
+						surrender_progress > 0.3 # At least some SP needed
 					}
+					
+					# E. War duration fatigue
+					modifier = {
+						factor = 5.0
+						has_country_flag = { flag = plus_cs_at_war_start days > 730 }
+						surrender_progress > 0.3
+					}
+					
+					log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] (Surrender: [?surrender_progress]) decided to propose SUBMISSION to [peace_target.GetName]."
+	                    
+					set_country_flag = { flag = plus_cs_waiting_response days = 1 }
+					event_target:peace_target = { save_event_target_as = peace_recipient }
+					save_event_target_as = peace_sender
+					
+					event_target:peace_target = { country_event = { id = plus_cs.201 } }
 				}
-				
-				# --- IDEOLOGY DAMPENERS ---
-				# Democracies prefer negotiation to ultimatums
-				modifier = {
-					factor = 0.5
-					has_government = democratic
-				}
-				
-				# Totalitarians LOVE ultimatums
-				modifier = {
-					factor = 2.0
-					OR = { has_government = fascism has_government = communism }
-				}
-				
-				log = "[PEACE_LOG] PROPOSAL: [ROOT.GetName] is DEMANDING SUBMISSION from [peace_target.GetName] (Ultimatum)."
-				
-				set_country_flag = { flag = plus_cs_waiting_response days = 1 }
-				event_target:peace_target = { save_event_target_as = peace_recipient }
-				save_event_target_as = peace_sender
-				
-				# Victor demands submission -> send submission event (loser receives)
-				event_target:peace_target = { country_event = { id = plus_cs.250 } }
-			}
-		}
-	}
-	}
-}
+			} # This closes the random_list correctly
+		} # This closes the target check if = { limit = { has_event_target = peace_target } }
+	} # This closes the immediate = { 
+} # This closes the country_event = {
