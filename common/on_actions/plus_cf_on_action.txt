@@ -9,10 +9,9 @@ on_actions = {
 				country_event = { id = plus_cs.3 }
 			}
 			
-			# INITIALIZE GLOBALS (Fix for Ceasefire/Liberation Logic)
-			# FIX: 'set_global_array' is invalid. Using 'clear_array' to init/reset.
+			# FIX: Restored global.countries — used by plus_cp_subject_decisions.txt
+			# Removed only global.province_controllers (unused, only in comments)
 			clear_array = global.countries
-			clear_array = global.province_controllers
 			
 			every_country = {
 				add_to_array = { global.countries = THIS }
@@ -36,13 +35,31 @@ on_actions = {
 				set_variable = { plus_cs_stalemate_timer = 0 }
 				
 				# Start Optimization Loop
-				country_event = { id = plus_cs.999 days = 1 } 
+				# Delayed from 1 to 14 days to prevent day-1 calculation lag and spam
+				country_event = { id = plus_cs.999 days = 14 } 
+				
+				# Global Startup Cooldown: Blocks all peace/submission actions for 30 days
+				if = {
+					limit = { NOT = { has_global_flag = plus_cs_mod_startup_cooldown } }
+					set_global_flag = { flag = plus_cs_mod_startup_cooldown days = 30 }
+				}
 			}
 		}
 	}
 
 	on_war_relation_added = {
 		effect = {
+			# BUGFIX 1: If this country signed a separate peace and has a truce with
+			# the new enemy, immediately white_peace — prevents overlords/faction leaders
+			# from dragging them back into a war they already left.
+			if = {
+				limit = {
+					has_country_flag = plus_cs_signed_separate_peace
+					has_truce_with = FROM
+				}
+				white_peace = FROM
+			}
+
 			set_variable = { plus_cs_war_count = 0 }
 			every_enemy_country = {
 				add_to_variable = { plus_cs_war_count = 1 }
@@ -207,7 +224,12 @@ on_actions = {
 			# Fail-safe: Если страна "выпала" из цикла или появилась только что
 			# OPT: Якорь на GER — проверяем только от одной страны вместо всех ~80
 			if = {
-				limit = { original_tag = GER }
+				limit = {
+					OR = {
+						is_ai = no
+						original_tag = GER
+					}
+				}
 				random_list = {
 					3 = {
 						random_country = {
@@ -242,13 +264,16 @@ on_actions = {
 				}
 			}
 			
+			# OPT: Debounce scorched earth — max once per 7 days per state
 			if = {
 				limit = {
 					FROM.FROM = { is_core_of = FROM }
 					FROM = { has_idea = fight_for_survival }
 					ROOT = { has_war_with = FROM }
+					NOT = { FROM.FROM = { has_state_flag = plus_cs_scorched_cd } }
 				}
 				FROM.FROM = {
+					set_state_flag = { flag = plus_cs_scorched_cd days = 7 }
 					damage_building = { type = infrastructure damage = 1.0 }
 					damage_building = { type = supply_node damage = 1.0 }
 					damage_building = { type = rail_way damage = 1.0 }
@@ -287,49 +312,16 @@ on_actions = {
 					clamp_variable = { var = FROM.vp@ROOT min = 0 }
 				}
 				else = {
-					# Fallback: Third-party capture (e.g., ally capturing from enemy)
-					# Only do expensive loop if truly necessary
-					set_temp_variable = { has_combatants = 0 }
-					FROM = {
-						random_enemy_country = {
-							limit = { 
-								check_variable = { num_armies_in_state@FROM.FROM > 0 }
-							}
-							set_temp_variable = { has_combatants = 1 }
-						}
-					}
-					
+					# OPT: Third-party capture — simplified VP assignment
+					# Instead of expensive double every_enemy_country loop,
+					# give all VP to ROOT (the new controller). This is a good
+					# approximation since ROOT is the one who captured it.
+					# The old O(N^2) loop was the #1 MP desync source.
 					if = {
-						limit = { check_variable = { has_combatants = 1 } }
-						
-						# First pass: calculate total points
-						FROM = {
-							every_enemy_country = {
-								limit = { 
-									check_variable = { num_armies_in_state@FROM.FROM > 0 }
-								}
-								add_to_temp_variable = { tot_pts = num_armies_in_state@FROM.FROM }
-							}
-						}
-						
-						# Second pass: distribute VP (only if total > 0)
-						if = {
-							limit = { check_variable = { tot_pts > 0 } }
-							FROM = {
-								every_enemy_country = {
-									limit = { 
-										check_variable = { num_armies_in_state@FROM.FROM > 0 }
-									}
-									set_temp_variable = { pts = num_armies_in_state@FROM.FROM }
-									divide_temp_variable = { pts = tot_pts }
-									multiply_temp_variable = { pts = state_vp }
-									
-									add_to_variable = { vp@PREV = pts }
-									subtract_from_variable = { PREV.vp@THIS = pts }
-									clamp_variable = { var = PREV.vp@THIS min = 0 }
-								}
-							}
-						}
+						limit = { ROOT = { has_war_with = FROM } }
+						add_to_variable = { ROOT.vp@FROM = state_vp }
+						subtract_from_variable = { FROM.vp@ROOT = state_vp }
+						clamp_variable = { var = FROM.vp@ROOT min = 0 }
 					}
 				}
 			}

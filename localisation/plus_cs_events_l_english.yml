@@ -1,262 +1,191 @@
-﻿l_english:
- plus_cs.1.t:0 "[From.GetnameDefCap] proposes peace"
- plus_cs.1.d:0 "The [From.GetAdjective] leader, [From.GetLeader], has proposed us to enter in peace negotiations with [From.GetName]."
- plus_cs.1.a:0 "We have no other option"
- plus_cs.1.b:0 "We shall never surrender!"
- plus_cs.2.t:0 "[From.GetNameDefCap] asks for conditional surrender talks"
- plus_cs.2.d:0 "[From.GetLeader], the [From.GetAdjective] leader, has made known to [This.GetNameDef] his willingness to start talks for the conditional surrender of [From.GetNameDef]."
- plus_cs.2.a:0 "We must restore peace"
- plus_cs.2.b:0 "We'll only accept unconditional surrender!"
- plus_cs.3.t:0 "Easy surrender mode"
- plus_cs.3.d:0 "If you activate this mode, enemy countries will be more likely to enter peace conversations with you.\n§RRemember§!\nPeace options are found on the 'Decisions' section."
- plus_cs.3.a:0 "Activate"
- plus_cs.3.b:0 "Don't activate"
- plus_cs.4.t:0 "[From.GetNameDefCap] proposes white peace"
- plus_cs.4.d:0 "The [From.GetAdjective] leader, [From.GetLeader], has proposed a white peace between our countries."
- plus_cs.4.a:0 "Let's stop this useless war"
- plus_cs.4.b:0 "We'll not give up easily"
- plus_cs.5.t:0 "[From.GetNameDefCap] accepts peace!"
- plus_cs.5.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has agreed to our peace proposal. The war is over!"
- plus_cs.5.a:0 "Finally, peace!"
- plus_cs.6.t:0 "[From.GetNameDefCap] refuses to have peace talks"
- plus_cs.6.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has wasted an opportunity to end the war earlier."
- plus_cs.6.a:0 "We're screwed!"
- plus_cs.7.t:0 "[From.GetNameDefCap] proposes ceasefire"
- plus_cs.7.d:0 "Today, [From.GetLeader] and the [From.GetRulingParty], have made a call to a temporary cessation of hostilities"
- plus_cs.7.a:0 "This may be the path to final peace"
- plus_cs.1.b.tooltip_1:0 "The people are disappointed by our refusal of peace, given our difficulties."
- plus_cs.1.b.tooltip_2:0 "Our refusal of peace amidst national exhaustion has caused serious discontent!"
- plus_cs.2.b.tooltip_1:0 "The people do not understand why we continue the war when the enemy was ready to surrender."
- plus_cs.2.b.tooltip_2:0 "Our refusal to accept surrender amidst national exhaustion has caused serious discontent!"
- plus_cs.4.b.tooltip_1:0 "Refusing a 'White Peace' during a stalemate on the front undermines morale."
- plus_cs_reparation_bonus_tt:0 "§GReparation Bonus:§! [FROM.GetName] is desperate for peace and offers §Y[?FROM.plus_cs_reparation_bonus] Political Power§! as reparations."
+l_english:
+  plus_cs.1.t:0 "[From.GetnameDefCap] proposes peace"
+  plus_cs.1.d:0 "The [From.GetAdjective] leader, [From.GetLeader], has proposed us to enter in peace negotiations with [From.GetName]."
+  plus_cs.1.a:0 "We have no other option"
+  plus_cs.1.b:0 "We shall never surrender!"
+  plus_cs.2.t:0 "[From.GetNameDefCap] asks for conditional surrender talks"
+  plus_cs.2.d:0 "[From.GetLeader], the [From.GetAdjective] leader, has made known to [This.GetNameDef] his willingness to start talks for the conditional surrender of [From.GetNameDef]."
+  plus_cs.2.a:0 "We must restore peace"
+  plus_cs.2.b:0 "We'll only accept unconditional surrender!"
+  plus_cs.3.t:0 "Easy surrender mode"
+  plus_cs.3.d:0 "If you activate this mode, enemy countries will be more likely to enter peace conversations with you.\n§RRemember§!\nPeace options are found on the 'Decisions' section."
+  plus_cs.3.a:0 "Activate"
+  plus_cs.3.b:0 "Don't activate"
+  plus_cs.4.t:0 "[From.GetNameDefCap] proposes white peace"
+  plus_cs.4.d:0 "The [From.GetAdjective] leader, [From.GetLeader], has proposed a white peace between our countries."
+  plus_cs.4.a:0 "Let's stop this useless war"
+  plus_cs.4.b:0 "We'll not give up easily"
+  plus_cs.5.t:0 "[From.GetNameDefCap] accepts peace!"
+  plus_cs.5.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has agreed to our peace proposal. The war is over!"
+  plus_cs.5.a:0 "Finally, peace!"
+  plus_cs.6.t:0 "[From.GetNameDefCap] refuses to have peace talks"
+  plus_cs.6.d:0 "[From.GetAdjectiveCap] leader, [From.GetLeader], has wasted an opportunity to end the war earlier."
+  plus_cs.6.a:0 "We're screwed!"
+  plus_cs.7.t:0 "[From.GetNameDefCap] proposes ceasefire"
+  plus_cs.7.d:0 "Today, [From.GetLeader] and the [From.GetRulingParty], have made a call to a temporary cessation of hostilities"
+  plus_cs.7.a:0 "This may be the path to final peace"
+  plus_cs.1.b.tooltip_1:0 "The people are disappointed by our refusal of peace, given our difficulties."
+  plus_cs.1.b.tooltip_2:0 "Our refusal of peace amidst national exhaustion has caused serious discontent!"
+  plus_cs.2.b.tooltip_1:0 "The people do not understand why we continue the war when the enemy was ready to surrender."
+  plus_cs.2.b.tooltip_2:0 "Our refusal to accept surrender amidst national exhaustion has caused serious discontent!"
+  plus_cs.4.b.tooltip_1:0 "Refusing a 'White Peace' during a stalemate on the front undermines morale."
+  plus_cs_reparation_bonus_tt:0 "§GReparation Bonus:§! [FROM.GetName] is desperate for peace and offers §Y[?FROM.plus_cs_reparation_bonus] Political Power§! as reparations."
 
- # --- ДОБАВЛЕННЫЕ ПЕРЕВОДЫ (Added missing translations) ---
- plus_cs.8.t:0 "Growing Unrest"
- plus_cs.8.d:0 "Internal unrest is intensifying due to the crisis. The opposition is gaining strength, and the country is on the brink of chaos."
- plus_cs.8.a:0 "Suppress the unrest"
- plus_cs.8.b:0 "Allow it to escalate"
+  # --- ADDED MISSING TRANSLATIONS ---
+  plus_cs.8.t:0 "Growing Unrest"
+  plus_cs.8.d:0 "Internal unrest is intensifying due to the crisis. The opposition is gaining strength, and the country is on the brink of chaos."
+  plus_cs.8.a:0 "Suppress the unrest"
+  plus_cs.8.b:0 "Allow it to escalate"
 
- plus_cs.9.t:0 "[From.GetNameDefCap] Suffers Major Uprising"
- plus_cs.9.d:0 "Our intelligence reports indicate that [From.GetNameDef] is suffering from a major internal crisis. Widespread revolts and strikes have erupted, crippling their war industry and causing significant losses in manpower. This is a golden opportunity for us."
- plus_cs.9.a:0 "Excellent."
+  plus_cs.9.t:0 "[From.GetNameDefCap] Suffers Major Uprising"
+  plus_cs.9.d:0 "Our intelligence reports indicate that [From.GetNameDef] is suffering from a major internal crisis. Widespread revolts and strikes have erupted, crippling their war industry and causing significant losses in manpower. This is a golden opportunity for us."
+  plus_cs.9.a:0 "Excellent."
 
- plus_cs.20.t:0 "[From.GetNameDefCap] Requests Peace Permission"
- plus_cs.20.d:0 "[From.GetNameDef] asks for our permission to negotiate peace with the enemy. They claim inability to continue the war."
- plus_cs.20.a:0 "Allow Negotiations"
- plus_cs.20.b:0 "Forbid! (Veto)"
+  plus_cs.20.t:0 "[From.GetNameDefCap] Requests Peace Permission"
+  plus_cs.20.d:0 "[From.GetNameDef] asks for our permission to negotiate peace with the enemy. They claim inability to continue the war."
+  plus_cs.20.a:0 "Allow Negotiations"
+  plus_cs.20.b:0 "Forbid! (Veto)"
 
- plus_cs.21.t:0 "Permission Granted"
- plus_cs.21.d:0 "Our faction leader has agreed to let us negotiate peace."
+  plus_cs.21.t:0 "Permission Granted"
+  plus_cs.21.d:0 "Our faction leader has agreed to let us negotiate peace."
 
- plus_cs.22.t:0 "Permission Denied"
- plus_cs.22.d:0 "Our faction leader has forbidden us from negotiating peace. They demand we fight on."
- plus_cs.22.a:0 "We must obey."
- plus_cs.22.b:0 "We will negotiate anyway! (Leave Faction)"
+  plus_cs.22.t:0 "Permission Denied"
+  plus_cs.22.d:0 "Our faction leader has forbidden us from negotiating peace. They demand we fight on."
+  plus_cs.22.a:0 "We must obey."
+  plus_cs.22.b:0 "We will negotiate anyway! (Leave Faction)"
 
- plus_cs.23.t:0 "[From.GetNameDefCap] Proposes Separate Peace"
- plus_cs.23.d:0 "[From.GetNameDef] offers a separate peace deal, defying their faction leader. If accepted, they will leave the faction."
- plus_cs.23.a:0 "Refuse"
- plus_cs.23.b:0 "Accept Separate Peace"
+  plus_cs.23.t:0 "[From.GetNameDefCap] Proposes Separate Peace"
+  plus_cs.23.d:0 "[From.GetNameDef] offers a separate peace deal, defying their faction leader. If accepted, they will leave the faction."
+  plus_cs.23.a:0 "Refuse"
+  plus_cs.23.b:0 "Accept Separate Peace"
 
- plus_cs_internal.3.t:0 "White Peace Negotiation"
- plus_cs_internal.3.d:0 "The new government seeks to end the war immediately."
- plus_cs_internal.3.a:0 "Send Offer"
- plus_cs_purge_tt:0 "§RHigh Command purge reduces Army Organization for 90 days§!"
+  plus_cs_internal.3.t:0 "White Peace Negotiation"
+  plus_cs_internal.3.d:0 "The new government seeks to end the war immediately."
+  plus_cs_internal.3.a:0 "Send Offer"
+  plus_cs_purge_tt:0 "§RHigh Command purge reduces Army Organization for 90 days§!"
 
- plus_cs.1001.t:0 "A General Has Been Killed"
- plus_cs.1001.d:0 "The brutal fighting on the front lines has claimed a valuable leader. General [?plus_cs_killed_leader_id.GetName], known for [?plus_cs_killed_leader_id.GetHisHer] aggressive tactics, was killed in action while leading [?plus_cs_killed_leader_id.GetHisHer] troops. This loss is a heavy blow to our command structure."
- plus_cs.1001.a:0 "A tragic loss."
+  plus_cs.1001.t:0 "A General Has Been Killed"
+  plus_cs.1001.d:0 "The brutal fighting on the front lines has claimed a valuable leader. General [?plus_cs_killed_leader_id.GetName], known for [?plus_cs_killed_leader_id.GetHisHer] aggressive tactics, was killed in action while leading [?plus_cs_killed_leader_id.GetHisHer] troops. This loss is a heavy blow to our command structure."
+  plus_cs.1001.a:0 "A tragic loss."
 
- plus_cs.1002.t:0 "A Marshal Has Been Wounded"
- plus_cs.1002.d:0 "We have received dire news from the front. Field Marshal [?plus_cs_wounded_leader_id.GetName] was caught in an artillery barrage and has been severely wounded. [?plus_cs_wounded_leader_id.GetHisHer] condition is critical, and it is uncertain if [?plus_cs_wounded_leader_id.GetHeShe] will be able to return to command."
- plus_cs.1002.a:0 "We must pray for [?plus_cs_wounded_leader_id.GetHisHer] recovery."
+  plus_cs.1002.t:0 "A Marshal Has Been Wounded"
+  plus_cs.1002.d:0 "We have received dire news from the front. Field Marshal [?plus_cs_wounded_leader_id.GetName] was caught in an artillery barrage and has been severely wounded. [?plus_cs_wounded_leader_id.GetHisHer] condition is critical, and it is uncertain if [?plus_cs_wounded_leader_id.GetHeShe] will be able to return to command."
+  plus_cs.1002.a:0 "We must pray for [?plus_cs_wounded_leader_id.GetHisHer] recovery."
 
- # --- NEW: Submission Events ---
- plus_cs_coalition_name:0 "Coalition of Salvation"
+  # --- SUBMISSION EVENTS ---
+  plus_cs_coalition_name:0 "Coalition of Salvation"
 
- plus_cs.submission.1.t:0 "[From.GetNameDefCap] Offers Submission"
- plus_cs.submission.1.d:0 "The government of [From.GetNameDef] realizes they cannot win. They offer an honorable submission: they will become our puppet state if we spare their population and government structure."
- plus_cs.submission.1.a:0 "Accept their submission (Puppet them)"
- plus_cs.submission.1.b:0 "No mercy! Total conquest!"
+  plus_cs.submission.1.t:0 "[From.GetNameDefCap] Offers Submission"
+  plus_cs.submission.1.d:0 "The government of [From.GetNameDef] realizes they cannot win. They offer an honorable submission: they will become our puppet state if we spare their population and government structure."
+  plus_cs.submission.1.a:0 "Accept their submission (Puppet them)"
+  plus_cs.submission.1.b:0 "No mercy! Total conquest!"
 
- plus_cs.submission.2.t:0 "Submission Accepted"
- plus_cs.submission.2.d:0 "The enemy has accepted our terms. We are now a subject nation, but we have survived the war. We must now look to the future."
- plus_cs.submission.2.a:0 "A bitter peace is better than ruin."
+  plus_cs.submission.2.t:0 "Submission Accepted"
+  plus_cs.submission.2.d:0 "The enemy has accepted our terms. We are now a subject nation, but we have survived the war. We must now look to the future."
+  plus_cs.submission.2.a:0 "A bitter peace is better than ruin."
 
- plus_cs.submission.3.t:0 "Submission Rejected!"
- plus_cs.submission.3.d:0 "They have refused our offer! They do not want our surrender; they want our destruction. There is no hope for diplomacy now. We must fight for our very survival!"
- plus_cs.submission.3.a:0 "Mobilize everyone! Save the Motherland!"
+  plus_cs.submission.3.t:0 "Submission Rejected!"
+  plus_cs.submission.3.d:0 "They have refused our offer! They do not want our surrender; they want our destruction. There is no hope for diplomacy now. We must fight for our very survival!"
+  plus_cs.submission.3.a:0 "Mobilize everyone! Save the Motherland!"
 
- plus_cs.submission.4.t:0 "Plea from [From.GetNameDef]"
- plus_cs.submission.4.d:0 "[From.GetNameDef] is facing total annihilation. The aggressor refused their surrender and intends to destroy them completely. They beg for our intervention."
- plus_cs.submission.4.a:0 "We must intervene! (Join War)"
- plus_cs.submission.4.b:0 "It is not our fight."
+  plus_cs.submission.4.t:0 "Plea from [From.GetNameDef]"
+  plus_cs.submission.4.d:0 "[From.GetNameDef] is facing total annihilation. The aggressor refused their surrender and intends to destroy them completely. They beg for our intervention."
+  plus_cs.submission.4.a:0 "We must intervene! (Join War)"
+  plus_cs.submission.4.b:0 "It is not our fight."
 
- # --- NEW: Puppet Fate Event (Add to end of file) ---
- plus_cs.puppet_fate.t:0 "The Fall of the Overlord"
- plus_cs.puppet_fate.d:0 "Our government has received shocking news: our overlord has capitulated and accepted the terms of [event_target:new_potential_master.GetNameDef]. The old order has collapsed.\n\nThe victors demand that we immediately lay down our arms and recognize their authority. The alternative is total independence, but at the cost of remaining at war with their powerful military machine."
- plus_cs.puppet_fate.a:0 "We acknowledge our new master (Economic Bonuses)"
- plus_cs.puppet_fate.b:0 "We will fight! For independence!"
+  plus_cs.submission.1.c:0 "Cede claimed territories (Peace)"
 
- # Missing option for submission event
- plus_cs.submission.1.c:0 "Cede claimed territories (Peace)"
+  plus_cs.submission.5.t:0 "Territorial Concessions"
+  plus_cs.submission.5.d:0 "To avoid total war, we were forced to hand over our territories to the aggressor. It is a national shame, but we saved the lives of our soldiers."
+  plus_cs.submission.5.a:0 "We will never forget this."
 
- # Event 205: Territory loss without war
- plus_cs.submission.5.t:0 "Territorial Concessions"
- plus_cs.submission.5.d:0 "To avoid total war, we were forced to hand over our territories to the aggressor. It is a national shame, but we saved the lives of our soldiers."
- plus_cs.submission.5.a:0 "We will never forget this."
+  # --- PUPPET FATE EVENT ---
+  plus_cs.puppet_fate.t:0 "The Fall of the Overlord"
+  plus_cs.puppet_fate.d:0 "Our government has received shocking news: our overlord has capitulated and accepted the terms of [event_target:new_potential_master.GetNameDef]. The old order has collapsed.\n\nThe victors demand that we immediately lay down our arms and recognize their authority. The alternative is total independence, but at the cost of remaining at war with their powerful military machine."
+  plus_cs.puppet_fate.a:0 "We acknowledge our new master (Economic Bonuses)"
+  plus_cs.puppet_fate.b:0 "We will fight! For independence!"
 
- # Event 300: Revolutionary Dilemma
- plus_cs.300.t:0 "Fate of the Revolution"
- plus_cs.300.d:0 "Our civil war has escalated. The original government is at war with a major power. We have a choice: seek patronage from our enemy's enemies or seize the chaos to take power by force."
- plus_cs.300.a:0 "Seek patronage (Become puppet of major power)"
- plus_cs.300.b:0 "No masters! (Declare war on everyone and seize power)"
+  plus_cs_logic.1.t:0 "Council Debate on Surrender"
+  plus_cs_logic.1.d:0 "The cabinet is in turmoil. The enemy presses on our borders, and voices within the government are calling for an end to the bloodshed. However, the hardliners insist that surrender is treason."
+  plus_cs_logic.1.a:0 "We shall fight on! (Refuse)"
+  plus_cs_logic.1.b:0 "We must seek terms (Surrender)"
+  plus_cs_surrender_proceed_tt:0 "§GProceed to formal surrender negotiations§!"
 
- # Event 301: Coup Success
- plus_cs.301.t:0 "New Order"
- plus_cs.301.d:0 "Thanks to foreign support, the old regime has fallen. We now control the country, but we owe a debt to our benefactors."
- plus_cs.301.a:0 "Long live our new alliance!"
+  plus_cs.300.t:0 "Fate of the Revolution"
+  plus_cs.300.d:0 "Our civil war has escalated. The original government is at war with a major power. We have a choice: seek patronage from our enemy's enemies or seize the chaos to take power by force."
+  plus_cs.300.a:0 "Seek patronage (Become puppet of major power)"
+  plus_cs.300.b:0 "No masters! (Declare war on everyone and seize power)"
 
- # ==============================================================================
- # NEW: WORLD WAR AND ALLIANCE MECHANICS
- # ==============================================================================
+  plus_cs.301.t:0 "New Order"
+  plus_cs.301.d:0 "Thanks to foreign support, the old regime has fallen. We now control the country, but we owe a debt to our benefactors."
+  plus_cs.301.a:0 "Long live our new alliance!"
 
- # --- Notification about separate peace ---
- plus_cs.410.t:0 "Separate Peace on [From.GetAdjective] Front"
- plus_cs.410.d:0 "[From.GetNameDef] has concluded a separate peace with our enemy. However, thanks to our military presence, control over territories we occupy has been preserved."
- plus_cs.410.a:0 "Our positions are secured."
- plus_cs_territory_preserved_tt:0 "§GTerritories under our control have been preserved!§!"
+  # --- WORLD WAR AND ALLIANCE ---
+  plus_cs.410.t:0 "Separate Peace on [From.GetAdjective] Front"
+  plus_cs.410.d:0 "[From.GetNameDef] has concluded a separate peace with our enemy. However, thanks to our military presence, control over territories we occupy has been preserved."
+  plus_cs.410.a:0 "Our positions are secured."
+  plus_cs_territory_preserved_tt:0 "§GTerritories under our control have been preserved!§!"
 
- # --- Faction leader: member wants to leave ---
- plus_cs.420.t:0 "[From.GetNameDefCap] Requests to Leave the Alliance"
- plus_cs.420.d:0 "The government of [From.GetNameDef] has requested permission to leave our alliance in order to negotiate a separate peace. They claim their country can no longer bear the burdens of war."
- plus_cs.420.a:0 "We release them (Allow exit)"
- plus_cs.420.b:0 "They must fight! (Deny)"
+  plus_cs.420.t:0 "[From.GetNameDefCap] Requests to Leave the Alliance"
+  plus_cs.420.d:0 "The government of [From.GetNameDef] has requested permission to leave our alliance in order to negotiate a separate peace."
+  plus_cs.420.a:0 "We release them (Allow exit)"
+  plus_cs.420.b:0 "They must fight! (Deny)"
 
- # --- Faction member: allowed to leave ---
- plus_cs.421.t:0 "Permission to Leave Granted"
- plus_cs.421.d:0 "Our alliance leader understood our situation and has allowed us to leave the alliance. We can now negotiate a separate peace."
- plus_cs.421.a:0 "We are grateful for the understanding."
- plus_cs_can_now_peace_tt:0 "§GYou can now negotiate a separate peace§!"
+  plus_cs.421.t:0 "Permission to Leave Granted"
+  plus_cs.421.d:0 "Our alliance leader understood our situation and has allowed us to leave the alliance."
+  plus_cs.421.a:0 "We are grateful."
+  plus_cs_can_now_peace_tt:0 "§GYou can now negotiate a separate peace§!"
 
- # --- Faction member: denied exit ---
- plus_cs.422.t:0 "Exit Denied!"
- plus_cs.422.d:0 "Our alliance leader has rejected our request to leave. They demand we continue fighting despite our country's exhaustion.\n\nWe can comply with their decision or go against the alliance's will and leave unilaterally."
- plus_cs.422.a:0 "Comply and continue the war"
- plus_cs.422.b:0 "Leave against their will! (Consequences)"
+  plus_cs.422.t:0 "Exit Denied!"
+  plus_cs.430.t:0 "[From.GetNameDefCap] Requests Surrender"
+  plus_cs.431.t:0 "Permission Granted"
+  plus_cs.432.t:0 "Surrender Denied"
 
- # --- Capitulated ally wants peace ---
- plus_cs.430.t:0 "[From.GetNameDefCap] Requests Surrender"
- plus_cs.430.d:0 "[From.GetNameDef] has capitulated and requests our permission for complete surrender to the enemy. If we allow it, they will leave our alliance."
- plus_cs.430.a:0 "Allow separate surrender"
- plus_cs.430.b:0 "They must wait for a general peace"
+  # --- SMART DIPLOMACY ---
+  plus_cs_diplomacy.1.t:0 "Sovereignty Question"
+  plus_cs_diplomacy.1.d:0 "Facing superiority, we seek to save the nation by offering to become a protectorate."
+  plus_cs_diplomacy.1.a:0 "Send Offer"
 
- # --- Separate surrender allowed ---
- plus_cs.431.t:0 "Permission Granted"
- plus_cs.431.d:0 "Our alliance leader has allowed us to negotiate separate peace. We are leaving the alliance."
- plus_cs.431.a:0 "This is the only way..."
+  plus_cs_diplomacy.2.t:0 "Submission Offer"
+  plus_cs_diplomacy.2.d:0 "[From.GetNameDef] offers to become our protectorate."
+  plus_cs_diplomacy.2.a:0 "Accept oath"
+  plus_cs_diplomacy.2.b:0 "Annex them instead!"
 
- # --- Surrender denied ---
- plus_cs.432.t:0 "Surrender Denied"
- plus_cs.432.d:0 "We have been denied the right to separate peace. We remain a capitulated member of the alliance and must await the general outcome of the war."
- plus_cs.432.a:0 "We have no choice..."
+  plus_cs_diplomacy.10.t:0 "Overlord Collapse"
+  plus_cs_diplomacy.20.t:0 "Invasion Threat"
+  plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
 
- # --- New ideas ---
- forced_continuation_war:0 "Forced Continuation of War"
- forced_continuation_war_desc:0 "Our alliance demands we continue fighting despite our exhaustion. The population is demoralized, the army is tired, but we are not allowed to surrender."
+  # --- INTERNAL CRISIS & COLLAPSE ---
+  plus_cs_internal.1.t:0 "Generals' Ultimatum"
+  plus_cs_internal.11.t:0 "Military Coup"
+  plus_cs_internal.12.t:0 "Political Paralysis"
+  plus_cs_internal.13.t:0 "Forced Capitulation"
+  plus_cs_internal.14.t:0 "Overlord Annexation"
+  plus_cs_internal.15.t:0 "Defection to the Enemy"
 
- # --- Opinion Modifiers ---
- faction_betrayal:0 "Alliance Betrayal"
- faction_deserter:0 "Alliance Desertion"
- peace_territory_preserved:0 "Territory Control Preserved"
+  plus_cs.300.c:0 "We stand alone."
 
- # --- Smart Diplomacy & Crises (Update 4-5) ---
+  # --- DEMANDS ---
+  plus_cs_demands.1.t:0 "Demand for Core Territories"
+  plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] return territories or face invasion."
+  plus_cs_demands.1.a:0 "Yield."
+  plus_cs_demands.1.b:0 "Never! War!"
+  plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Yields"
+  plus_cs_demands.2.d:0 "They bowed to our demands."
+  plus_cs_demands.2.a:0 "Victory."
+  plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Refuses"
+  plus_cs_demands.3.a:0 "To war!"
 
- plus_cs_diplomacy.1.t:0 "Sovereignty Question"
- plus_cs_diplomacy.1.d:0 "Facing the overwhelming superiority of our neighbor, our command considers war suicide. We have a chance to save the nation by offering to become a protectorate."
- plus_cs_diplomacy.1.a:0 "Send Vassalization Offer"
+  # --- Civil War Outbreak Notification ---
+  plus_cs.401.t:0 "Civil War in [Root.GetNameDef]!"
+  plus_cs.401.d:0 "Intelligence reports that [Root.GetNameDef] is engulfed in civil war. Rebels have seized part of the country. This instability may present opportunities — or dangers."
+  plus_cs.401.a:0 "We are watching closely."
 
- plus_cs_diplomacy.2.t:0 "Submission Offer"
- plus_cs_diplomacy.2.d:0 "[From.GetNameDef] understands the inevitable and offers to become our protectorate in exchange for protection. This allows us to expand our influence without firing a shot."
- plus_cs_diplomacy.2.a:0 "Accept their oath of allegiance"
- plus_cs_diplomacy.2.b:0 "We want their land, not oaths! (Annexation)"
- peaceful_vassalization:0 "Peaceful Vassalization"
- diplo_insult:0 "Diplomatic Insult"
+  # --- Patron choice: decline option ---
+  plus_cs.305.b:0 "We have no interest in their affairs."
 
- plus_cs_diplomacy.10.t:0 "Overlord Collapse"
- plus_cs_diplomacy.10.d:0 "Our master [Overlord.GetName] is losing the war. Chaos in the metropole gives us a unique chance to regain independence."
- plus_cs_diplomacy.10.a:0 "Declare Independence!"
- plus_cs_diplomacy.10.b:0 "We will remain loyal to the end"
-
- plus_cs_diplomacy.20.t:0 "Invasion Threat"
- plus_cs_diplomacy.20.d:0 "The enemy is preparing an invasion, and our chances in war are zero. We must offer any concessions to prevent a catastrophe."
- plus_cs_diplomacy.20.a:0 "Offer Territorial Concessions"
- plus_cs_diplomacy.20.b:0 "We will not bow!"
-
- plus_cs_diplomacy.21.t:0 "Diplomatic Payoff"
- plus_cs_diplomacy.21.d:0 "[From.GetNameDef], seeing the might of our army on the border, offers to meet our territorial demands without a fight if we guarantee non-aggression in the future."
- plus_cs_diplomacy.21.a:0 "Agree (Receive Territories)"
- plus_cs_diplomacy.21.b:0 "We will take everything by force!"
-
- # --- Internal Crisis ---
- plus_cs_internal.1.t:0 "Generals' Ultimatum"
- plus_cs_internal.1.d:0 "The army is bled dry. Casualties have exceeded the critical mark. The General Staff demands either immediate peace or a change of government."
- plus_cs_internal.1.a:0 "Conduct Purges (Refuse)"
- plus_cs_internal.1.b:0 "Government Resigns (Coup)"
- army_purge_aftershock:0 "Aftermath of Army Purges"
-
- # --- Partisans ---
- broken_nation_resistance:0 "Broken but Unconquered Nation"
- plus_cs_partisan_activity:0 "Partisan Activity (Guerrilla)"
-
- # --- LOGIC EVENTS (Surrender Debate) ---
- plus_cs_logic.1.t:0 "Council Debate on Surrender"
- plus_cs_logic.1.d:0 "The cabinet is in turmoil. The enemy presses on our borders, and voices within the government are calling for an end to the bloodshed. However, the hardliners insist that surrender is treason."
- plus_cs_logic.1.a:0 "We shall fight on! (Refuse)"
- plus_cs_logic.1.b:0 "We must seek terms (Surrender)"
- plus_cs_surrender_proceed_tt:0 "§GProceed to formal surrender negotiations§!"
-
- # --- POLITICAL COLLAPSE EVENTS ---
- plus_cs_internal.11.t:0 "Military Coup"
- plus_cs_internal.11.d:0 "The generals have seized power. Unable to watch the nation crumble, the army has overthrown the government. The new military junta seeks to restore order and end the war."
- plus_cs_internal.11.a:0 "Order must be restored"
-
- plus_cs_internal.12.t:0 "Political Paralysis"
- plus_cs_internal.12.d:0 "The government has completely lost control. Endless debates, strikes, and public unrest have paralyzed the nation. Nothing works anymore."
- plus_cs_internal.12.a:0 "We are powerless..."
-
- plus_cs_internal.13.t:0 "Forced Capitulation"
- plus_cs_internal.13.d:0 "The government has collapsed. To avoid total annihilation, the remaining authorities have decided to surrender to the enemy."
- plus_cs_internal.13.a:0 "We have no choice"
- 
- plus_cs_internal.14.t:0 "Overlord Annexation"
- plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
- plus_cs_internal.14.a:0 "Submit to direct rule"
- 
- plus_cs_internal.15.t:0 "Defection to the Enemy"
- plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
- plus_cs_internal.15.a:0 "Switch sides to survive"
-
- # --- POLITICAL PARALYSIS IDEA ---
- political_paralysis:0 "Political Paralysis"
- political_paralysis_desc:0 "The government has completely lost the ability to govern. The country is paralyzed by internal conflicts and cannot effectively wage war."
- plus_cs.300.c:0 "We stand alone."
-
- plus_cs_demands.1.t:0 "Demand for Core Territories"
- plus_cs_demands.1.d:0 "[event_target:plus_cs_demand_sender.GetNameDef] has sent us a formal ultimatum: return their core territories immediately or face an invasion."
- plus_cs_demands.1.a:0 "We have no choice but to yield."
- plus_cs_demands.1.b:0 "Never! Prepare for war!"
- plus_cs_demands.2.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Yields"
- plus_cs_demands.2.d:0 "Fearing our military might, they have bowed to our demands and peacefully returned our territories."
- plus_cs_demands.2.a:0 "A bloodless victory."
- plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] Refuses"
- plus_cs_demands.3.d:0 "They have brazenly rejected our ultimatum. The time for diplomacy is over."
- plus_cs_demands.3.a:0 "To war!"
-
- # --- NEW: Victor Ultimatum Event ---
- plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs.250.a:0 "We submit... (Become puppet)"
- plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
- plus_cs.250.c:0 "Counter-propose conditional terms"
+  # --- NEW: Global Puppet Notification Event ---
+  plus_cs_demand_no_puppet_tt:0 "Puppets cannot make territorial demands."
+  plus_cs.400.t:0 "New Puppet Regime in [From.GetNameDef]"
+  plus_cs.400.d:0 "[From.GetNameDef] officially acknowledges the supremacy of [From.Overlord.GetNameDef]."
+  plus_cs.400.a:0 "The world changes."

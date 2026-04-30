@@ -381,7 +381,6 @@
  plus_cs_spirit_resilient_tt:0 "週間安定度: §G+0.10%§!\\n\\nこの指導者は頑固で、降伏に強く抵抗します。\n\n§YAI講和受諾: 通常§!\\n§O[デバッグ]: 隠された意思: [?Root.plus_cs_hidden_resolve]§!"
 
  # --- MISSING KEYS ---
- peace_economic_tribute:0 "停戦のための経済的貢物"
  plus_cs_reparation_bonus_tt:0 "§G賠償ボーナス:§! [FROM.GetName] は平和を切望しており、賠償として §Y[?FROM.plus_cs_reparation_bonus] 政治力§! を提供しています。"
  plus_cs_separate_peace_blocker:0 "単独講和の精神"
  plus_cs_separate_peace_blocker_desc:0 "この国は単独講和条約を締結しました。陣営に参加したり同盟国を呼んだりすることはできませんが、国境は安全です。"
@@ -434,15 +433,23 @@
  plus_cs_demand_no_recent_tt:0 "最近、領土の要求を送っていません。"
  plus_cs_demand_full_annexation_tt:0 "対象は、我々の中核州では§Rない§!州を少なくとも1つ持っている必要があります。（国全体を平和的に併合することはできません）。"
 
- plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs.250.a:0 "We submit... (Become puppet)"
- plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
- plus_cs.250.c:0 "Counter-propose conditional terms"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs_internal.14.t:0 "Overlord Annexation"
- plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
- plus_cs_internal.14.a:0 "Submit to direct rule"
- plus_cs_internal.15.t:0 "Defection to the Enemy"
- plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
- plus_cs_internal.15.a:0 "Switch sides to survive"
+ # --- NEW: Global Puppet Notification Event ---
+ plus_cs.400.t:0 "[From.GetNameDef]の新傀儡政権"
+ plus_cs.400.d:0 "[From.GetNameDef]は[From.Overlord.GetNameDef]の宗主権を正式に認め、従属国となりました。その旧来の主権は終了し、外交政策は新しい宗主国によって指導されます。"
+ plus_cs.400.a:0 "世界は変わる。"
+ plus_cs_internal.14.t:0 "宗主国による併合"
+ plus_cs_internal.14.d:0 "国内危機が深刻化し、政府がすべての統制を失ったため、我が国の宗主国は直接介入することを決定しました。秩序を維持し、戦略的利益を確保するため、彼らは公式に我が国の領土を帝国に併合しています。我々はもはや主権国家ではありません。"
+ plus_cs_internal.14.a:0 "直接統治を受け入れる"
+ plus_cs_internal.15.t:0 "敵への寝返り"
+ plus_cs_internal.15.d:0 "我が国は崩壊しつつあり、いわゆる宗主国は何の救いももたらしません。生き残るための絶望的な試みとして、我が国の残存政府内の勢力は突然の寝返りを交渉しました。現在の主人との関係を断ち切り、制圧しに来た敵軍に降伏します。彼らが新しい主人として我々をより良く扱ってくれることを願って。"
+ plus_cs_internal.15.a:0 "生き残るために陣営を切り替える"
+ decree_stabilize_government:0 "政府の安定化"
+ decree_stabilize_government_desc:0 "我が国の政府は内部対立によって麻痺しています。行政を再編し、統制を回復するために、多大な政治力（PP）を費やす必要があります。"
+
+ # --- 内戦通知 ---
+ plus_cs.401.t:0 "[Root.GetNameDef]での内戦！"
+ plus_cs.401.d:0 "情報によると、[Root.GetNameDef]は内戦に突入しています。反乱軍が国の一部を制圧しました。この不安定情勢は新たな機会をもたらすかもしれません — あるいは危険を。"
+ plus_cs.401.a:0 "状況を注視しています。"
+
+ # --- 後援の拒否 ---
+ plus_cs.305.b:0 "我々にはその件に関わる意向はない。"

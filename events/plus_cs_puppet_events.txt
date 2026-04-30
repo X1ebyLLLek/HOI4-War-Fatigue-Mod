@@ -198,10 +198,37 @@ country_event = {
 			}
 		}
 
-		event_target:strong_master = {
-			country_event = { id = plus_cs.305 }
+		# BUGFIX 2b: Give the human player first choice to patron the revolter.
+		# If the player is at war with cw_target, they get event 305 instead of the AI strong_master.
+		if = {
+			limit = {
+				has_event_target = cw_target
+				event_target:cw_target = {
+					any_enemy_country = {
+						is_ai = no
+						NOT = { tag = ROOT }
+						NOT = { is_puppet = yes }
+					}
+				}
+			}
+			event_target:cw_target = {
+				random_enemy_country = {
+					limit = {
+						is_ai = no
+						NOT = { tag = ROOT }
+						NOT = { is_puppet = yes }
+					}
+					country_event = { id = plus_cs.305 }
+				}
+			}
 		}
-		
+		else_if = {
+			limit = { has_event_target = strong_master }
+			event_target:strong_master = {
+				country_event = { id = plus_cs.305 }
+			}
+		}
+
 		add_stability = 0.10
 		add_war_support = 0.10
 	}
@@ -260,7 +287,15 @@ country_event = {
 
 	option = {
 		name = plus_cs.301.a
+		ai_chance = { base = 100 }
 		puppet = FROM
 		add_political_power = 25
 	}
+
+	# BUGFIX 2b: Player can decline to patron the revolter — they remain independent.
+	option = {
+		name = plus_cs.305.b
+		ai_chance = { base = 0 }
+	}
 }
+

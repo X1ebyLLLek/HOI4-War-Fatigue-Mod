@@ -1,7 +1,5 @@
 add_namespace = plus_cs
 
-
-
 # ==========================================
 # PEACE OUTCOME & NEWS EVENTS
 # ==========================================
@@ -95,5 +93,32 @@ country_event = {
 		remove_ideas = internal_crisis_high
 		add_timed_idea = { idea = internal_crisis_medium days = 30 }
 		clr_country_flag = civil_war_risk_active
+	}
+}
+
+# Event 401: Civil War Outbreak Notification
+# Sent to player countries at war with or neighboring the country experiencing the civil war.
+news_event = {
+	id = plus_cs.401
+	title = plus_cs.401.t
+	desc = plus_cs.401.d
+	is_triggered_only = yes
+	picture = GFX_news_event_generic_revolters
+
+	option = {
+		name = plus_cs.401.a
+	}
+}
+
+# Event 400: Global Puppet Notification
+news_event = {
+	id = plus_cs.400
+	title = plus_cs.400.t
+	desc = plus_cs.400.d
+	picture = GFX_news_event_generic_sign_treaty1
+	is_triggered_only = yes
+
+	option = {
+		name = plus_cs.400.a
 	}
 }

@@ -232,18 +232,10 @@
 
 
  # Fehlende Option im Kapitulations-Event
- plus_cs.submission.1.c:0 "Geforderte Gebiete abtreten (Frieden)"
 
  # Event 205: Gebietsverlust ohne Krieg
- plus_cs.submission.5.t:0 "Gebietsabtretungen"
- plus_cs.submission.5.d:0 "Um einen umfassenden Krieg zu vermeiden, waren wir gezwungen, unsere Gebiete an den Aggressor zu übergeben. Es ist eine nationale Schande, aber wir haben das Leben unserer Soldaten gerettet."
- plus_cs.submission.5.a:0 "Wir werden das niemals vergessen."
 
  # Event 300: Das Dilemma der Revolutionäre
- plus_cs.300.t:0 "Das Schicksal der Revolution"
- plus_cs.300.d:0 "Unser Bürgerkrieg ist eskaliert. Die ursprüngliche Regierung befindet sich im Krieg mit einer Großmacht. Wir haben eine Wahl: Schutz bei den Feinden unseres Feindes suchen oder das Chaos nutzen, um die Macht mit Gewalt zu ergreifen."
- plus_cs.300.a:0 "Schutz suchen (Marionette einer Großmacht werden)"
- plus_cs.300.b:0 "Keine Herren! (Allen den Krieg erklären und die Macht ergreifen)"
 
  # Event 305 (Schlüssel 301): Erfolgreicher Putsch
  plus_cs.301.t:0 "Neue Ordnung"
@@ -462,15 +454,23 @@
  plus_cs_demand_no_recent_tt:0 "Wir haben ihm in letzter Zeit keine Gebietsforderung gestellt."
  plus_cs_demand_full_annexation_tt:0 "Das Ziel muss mindestens einen Staat haben, der §RNICHT§! unser Kerngebiet ist. (Wir können nicht ihr gesamtes Land friedlich annektieren)."
 
- plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs.250.a:0 "We submit... (Become puppet)"
- plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
- plus_cs.250.c:0 "Counter-propose conditional terms"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs_internal.14.t:0 "Overlord Annexation"
- plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
- plus_cs_internal.14.a:0 "Submit to direct rule"
- plus_cs_internal.15.t:0 "Defection to the Enemy"
- plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
- plus_cs_internal.15.a:0 "Switch sides to survive"
+ # --- NEW: Global Puppet Notification Event ---
+ plus_cs.400.t:0 "Neues Marionettenregime in [From.GetNameDef]"
+ plus_cs.400.d:0 "[From.GetNameDef] erkennt offiziell die Vorherrschaft von [From.Overlord.GetNameDef] an und wird ein abhängiger Staat. Seine alte Souveränität ist beendet, und seine Außenpolitik wird nun von seinem neuen Lehnsherrn geleitet."
+ plus_cs.400.a:0 "Die Welt ändert sich."
+ plus_cs_internal.14.t:0 "Annexion durch den Lehnsherrn"
+ plus_cs_internal.14.d:0 "Da sich unsere innere Krise verschärft und die Regierung jegliche Kontrolle verliert, hat unser Lehnsherr beschlossen, direkt einzugreifen. Um die Ordnung aufrechtzuerhalten und seine strategischen Interessen zu sichern, annektiert er unser Territorium offiziell in sein Reich. Wir sind keine souveräne Nation mehr."
+ plus_cs_internal.14.a:0 "Der direkten Herrschaft unterwerfen"
+ plus_cs_internal.15.t:0 "Überlaufen zum Feind"
+ plus_cs_internal.15.d:0 "Unsere Nation bricht zusammen, und unser sogenannter Lehnsherr bietet keine Rettung. In einem verzweifelten Überlebenskampf haben Elemente unserer verbliebenen Regierung ein plötzliches Überlaufen ausgehandelt. Wir werden die Verbindung zu unserem derzeitigen Herrn abbrechen und uns den siegreichen feindlichen Streitkräften ergeben, in der Hoffnung, dass sie uns als ihre neuen Untertanen besser behandeln werden."
+ plus_cs_internal.15.a:0 "Die Fronten wechseln, um zu überleben"
+ decree_stabilize_government:0 "Regierung stabilisieren"
+ decree_stabilize_government_desc:0 "Unsere Regierung ist durch interne Konflikte gelähmt. Wir müssen erhebliches politisches Kapital aufwenden, um die Verwaltung neu zu organisieren und die Kontrolle wiederherzustellen."
+
+ # --- Bürgerkriegs-Benachrichtigung ---
+ plus_cs.401.t:0 "Bürgerkrieg in [Root.GetNameDef]!"
+ plus_cs.401.d:0 "Unsere Geheimdienste berichten, dass [Root.GetNameDef] in einen Bürgerkrieg verwickelt ist. Rebellen haben Teile des Landes übernommen. Diese Instabilität kann Möglichkeiten eröffnen — oder Gefahren mit sich bringen."
+ plus_cs.401.a:0 "Wir beobachten die Lage genau."
+
+ # --- Ablehnung der Schirmherrschaft ---
+ plus_cs.305.b:0 "Das ist nicht unsere Angelegenheit."

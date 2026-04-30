@@ -1,4 +1,4 @@
-﻿l_spanish:
+l_spanish:
  # --- Categorías de Decisión ---
  peace_options:0 "Opciones de paz"
  peace_treaty:0 "Tratado de paz"
@@ -444,15 +444,23 @@
  plus_cs_demand_no_recent_tt:0 "No les hemos enviado una demanda territorial recientemente."
  plus_cs_demand_full_annexation_tt:0 "El objetivo debe tener al menos un estado que §RNO§! sea de nuestro núcleo. (No podemos anexar pacíficamente a todo su país)."
 
- plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs.250.a:0 "We submit... (Become puppet)"
- plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
- plus_cs.250.c:0 "Counter-propose conditional terms"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs_internal.14.t:0 "Overlord Annexation"
- plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
- plus_cs_internal.14.a:0 "Submit to direct rule"
- plus_cs_internal.15.t:0 "Defection to the Enemy"
- plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
- plus_cs_internal.15.a:0 "Switch sides to survive"
+ # --- NEW: Global Puppet Notification Event ---
+ plus_cs.400.t:0 "Nuevo régimen títere en [From.GetNameDef]"
+ plus_cs.400.d:0 "[From.GetNameDef] reconoce oficialmente la supremacía de [From.Overlord.GetNameDef] y se convierte en un estado dependiente. Su antigua soberanía ha terminado y su política exterior ahora es dirigida por su nuevo señor supremo."
+ plus_cs.400.a:0 "El mundo cambia."
+ plus_cs_internal.14.t:0 "Anexión por el Señor Supremo"
+ plus_cs_internal.14.d:0 "A medida que nuestra crisis interna se profundiza y el gobierno pierde todo el control, nuestro señor supremo ha decidido intervenir directamente. Para mantener el orden y asegurar sus intereses estratégicos, están anexando oficialmente nuestro territorio a su imperio. Ya no somos una nación soberana."
+ plus_cs_internal.14.a:0 "Someterse al gobierno directo"
+ plus_cs_internal.15.t:0 "Deserción al Enemigo"
+ plus_cs_internal.15.d:0 "Nuestra nación se está colapsando y nuestro supuesto señor supremo no ofrece salvación. En un intento desesperado por sobrevivir, elementos dentro de nuestro gobierno restante han negociado una deserción repentina. Romperemos los lazos con nuestro maestro actual y nos rendiremos a las fuerzas enemigas conquistadoras, con la esperanza de que nos traten mejor como su nuevo súbdito."
+ plus_cs_internal.15.a:0 "Cambiar de bando para sobrevivir"
+ decree_stabilize_government:0 "Estabilizar el Gobierno"
+ decree_stabilize_government_desc:0 "Nuestro gobierno está paralizado por conflictos internos. Debemos gastar un capital político significativo para reorganizar la administración y restaurar el control."
+
+ # --- Notificación de guerra civil ---
+ plus_cs.401.t:0 "¡Guerra civil en [Root.GetNameDef]!"
+ plus_cs.401.d:0 "La inteligencia informa que [Root.GetNameDef] está sumida en una guerra civil. Los rebeldes han tomado parte del país. Esta inestabilidad puede presentar oportunidades — o peligros."
+ plus_cs.401.a:0 "Lo estamos observando de cerca."
+
+ # --- Rechazo del patrocinio ---
+ plus_cs.305.b:0 "No tenemos interés en sus asuntos."

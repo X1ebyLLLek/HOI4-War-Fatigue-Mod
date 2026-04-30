@@ -368,7 +368,6 @@
 
  # --- LOGIC EVENTS (Débat sur la Reddition) ---
  plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
- plus_cs_logic.1.t:0 "Débat du Conseil sur la Reddition"
  plus_cs_logic.1.d:0 "Le cabinet est dans la tourmente. L'ennemi presse nos frontières, et des voix s'élèvent pour demander la fin de l'effusion de sang. Cependant, les partisans de la ligne dure insistent sur le fait que la reddition est une trahison."
  plus_cs_logic.1.a:0 "Nous continuerons le combat ! (Refuser)"
  plus_cs_logic.1.b:0 "Il faut négocier (Reddition)"
@@ -441,7 +440,6 @@
  plus_cs_demands.2.a:0 "Une victoire sans effusion de sang."
  plus_cs_demands.3.t:0 "[event_target:plus_cs_demand_recipient.GetNameDef] refuse"
  plus_cs_demands.3.d:0 "Ils ont effrontément rejeté notre ultimatum. Le temps de la diplomatie est révolu."
- plus_cs_demands.3.a:0 "À la guerre !"
 
  # --- Contraintes de Demande de Territoires Nationaux ---
  plus_cs_demand_not_core_tt:0 "La cible doit contrôler au moins un de nos États nationaux ou revendiqués."
@@ -450,15 +448,23 @@
  plus_cs_demand_no_recent_tt:0 "Nous ne leur avons pas envoyé de demande territoriale récemment."
  plus_cs_demand_full_annexation_tt:0 "La cible doit avoir au moins un État qui n'est §RPAS§! notre territoire national. (Impossible d'annexer tout le pays pacifiquement)."
 
- plus_cs.250.t:0 "Ultimatum from [From.GetNameDefCap]!"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs.250.a:0 "We submit... (Become puppet)"
- plus_cs.250.b:0 "NEVER! We will fight to the last! (Rally)"
- plus_cs.250.c:0 "Counter-propose conditional terms"
- plus_cs.250.d:0 "[From.GetLeader] has sent an ultimatum: surrender immediately or face total destruction. Our military situation is dire, and [From.GetNameDef] demands we submit to their authority as a puppet state.\\n\\nWe have three options: accept their terms and become a puppet, resist the ultimatum and rally the nation, or counter-propose conditional surrender to preserve some autonomy."
- plus_cs_internal.14.t:0 "Overlord Annexation"
- plus_cs_internal.14.d:0 "As our internal crisis deepens and the government loses all control, our overlord has decided to step in directly. To maintain order and secure their strategic interests, they are officially annexing our territory into their empire. We are no longer a sovereign nation."
- plus_cs_internal.14.a:0 "Submit to direct rule"
- plus_cs_internal.15.t:0 "Defection to the Enemy"
- plus_cs_internal.15.d:0 "Our nation is collapsing, and our so-called overlord offers no salvation. In a desperate bid for survival, elements within our remaining government have negotiated a sudden defection. We will break ties with our current master and surrender ourselves to the conquering enemy forces, hoping they will treat us better as their new subject."
- plus_cs_internal.15.a:0 "Switch sides to survive"
+ # --- NEW: Global Puppet Notification Event ---
+ plus_cs.400.t:0 "Nouveau régime fantoche en [From.GetNameDef]"
+ plus_cs.400.d:0 "[From.GetNameDef] reconnaît officiellement la suprématie de [From.Overlord.GetNameDef] et devient un État dépendant. Son ancienne souveraineté a pris fin et sa politique étrangère est désormais dirigée par son nouveau suzerain."
+ plus_cs.400.a:0 "Le monde change."
+ plus_cs_internal.14.t:0 "Annexion par le suzerain"
+ plus_cs_internal.14.d:0 "Alors que notre crise interne s'aggrave et que le gouvernement perd tout contrôle, notre suzerain a décidé d'intervenir directement. Pour maintenir l'ordre et garantir ses intérêts stratégiques, il annexe officiellement notre territoire à son empire. Nous ne sommes plus une nation souveraine."
+ plus_cs_internal.14.a:0 "Se soumettre au régime direct"
+ plus_cs_internal.15.t:0 "Défection vers l'ennemi"
+ plus_cs_internal.15.d:0 "Notre nation s'effondre et notre soi-disant suzerain n'offre aucun salut. Dans une tentative désespérée de survie, des éléments de notre gouvernement restant ont négocié une défection soudaine. Nous rompons les liens avec notre maître actuel et nous nous rendons aux forces ennemies conquérantes, espérant qu'elles nous traiteront mieux en tant que nouveaux sujets."
+ plus_cs_internal.15.a:0 "Changer de camp pour survivre"
+ decree_stabilize_government:0 "Stabiliser le gouvernement"
+ decree_stabilize_government_desc:0 "Notre gouvernement est paralysé par des conflits internes. Nous devons dépenser un capital politique important pour réorganiser l'administration et restaurer le contrôle."
+
+ # --- Notification de guerre civile ---
+ plus_cs.401.t:0 "Guerre civile à [Root.GetNameDef] !"
+ plus_cs.401.d:0 "Les services de renseignement rapportent que [Root.GetNameDef] est plongée dans une guerre civile. Des rebelles ont pris le contrôle d'une partie du pays. Cette instabilité peut présenter des opportunités — ou des dangers."
+ plus_cs.401.a:0 "Nous observons la situation de près."
+
+ # --- Refus de parrainage ---
+ plus_cs.305.b:0 "Cela ne nous concerne pas."
