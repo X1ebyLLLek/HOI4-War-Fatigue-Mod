@@ -433,6 +433,17 @@ country_event = {
 		# Save third-party control
 		plus_cs_save_third_party_control = yes
 		
+		# BUGFIX: Сохраняем VP-вклад врагов, которые НЕ top_contributor,
+		# чтобы они не потеряли свои очки когда мы становимся марионеткой
+		every_enemy_country = {
+			limit = {
+				NOT = { tag = event_target:top_contributor }
+				is_puppet = no
+				check_variable = { ROOT.vp@THIS > 0 }
+			}
+			set_variable = { plus_cs_fc_preserved_vp = ROOT.vp@THIS }
+		}
+		
 		# Become puppet of top contributor
 		if = {
 			limit = { has_event_target = top_contributor }
@@ -445,6 +456,21 @@ country_event = {
 		
 		# Restore third-party control
 		plus_cs_restore_third_party_control = yes
+		
+		# BUGFIX: Восстанавливаем VP для стран, не ставших покровителями.
+		# vp@ROOT (вклад против нас) хранится НА каждой вражеской стране.
+		# Восстанавливаем в scope каждого такого врага через его переменную.
+		every_country = {
+			limit = {
+				check_variable = { plus_cs_fc_preserved_vp > 0 }
+				NOT = { tag = event_target:top_contributor }
+				is_puppet = no
+			}
+			# В scope этого врага: записываем vp@ROOT (т.е. vp против нас, теперь марионетки)
+			add_to_variable = { vp@ROOT = plus_cs_fc_preserved_vp }
+			clamp_variable = { var = vp@ROOT min = 0 }
+			clear_variable = plus_cs_fc_preserved_vp
+		}
 		
 		# Remove crisis ideas AND Synergy modifiers — OPT: using shared effect
 		plus_cs_cleanup_crisis_modifiers = yes

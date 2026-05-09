@@ -61,7 +61,23 @@ country_event = {
 		# 2. News Event (FIXED ID)
 		news_event = { id = plus_cs.220 }
 		
-		# 3. ANNEX OCCUPIED STATES (Winner keeps what they took)
+		# BUGFIX: Сохраняем VP-вклад всех союзников ROOT, воевавших с FROM.
+		# После puppet = FROM война завершается и переменные vp@FROM сбрасываются.
+		# Сохраняем их ЗАРАНЕЕ, чтобы потом восстановить через plus_cs_sub_vp_*
+		every_other_country = {
+			limit = {
+				has_war_with = FROM
+				NOT = { tag = ROOT }
+				OR = {
+					is_in_faction_with = ROOT
+					is_puppet_of = ROOT
+				}
+			}
+			# Сохраняем VP как резервную переменную на стране союзника
+			set_variable = { plus_cs_sub_preserved_vp = vp@FROM }
+		}
+		
+		# 3. ANNEX OCCUPIED STATES (Root keeps what ROOT took)
 		FROM = {
 			every_owned_state = {
 				limit = {
@@ -72,7 +88,7 @@ country_event = {
 			}
 		}
 		
-		# 4. Save Control (Custom Logic)
+		# 4. Save Control (Custom Logic) — теперь включает союзников ROOT (BUGFIX)
 		plus_cs_save_third_party_control = yes
 		
 		# 5. Puppet (ends war automatically in HOI4)
@@ -95,8 +111,30 @@ country_event = {
 			}
 		}
 		
-		# 7. Restore Control & Finalize
+		# 7. Restore Control & Finalize (союзники получают владение занятыми стейтами)
 		plus_cs_restore_third_party_control = yes
+		
+		# BUGFIX: Восстанавливаем VP-вклад союзников ROOT.
+		# vp@TAG хранится НА самой стране, которая набрала очки (союзник/игрок),
+		# а не на цели. Поэтому восстанавливаем в scope союзника через его же переменную.
+		# puppet = FROM завершает войну, но vp@ переменные не чистятся автоматически.
+		# Однако если страна стала марионеткой — она меняет tag на FROM.
+		# Ключевое: мы записываем vp@FROM (тег новой марионетки) в scope союзника,
+		# что эквивалентно тому как работают решения peace_take_state (vp@FROM.owner).
+		every_other_country = {
+			limit = {
+				OR = {
+					is_in_faction_with = ROOT
+					is_puppet_of = ROOT
+				}
+				check_variable = { plus_cs_sub_preserved_vp > 0 }
+			}
+			# Восстанавливаем очки: пишем vp@FROM на scope союзника (так же как работает мод)
+			add_to_variable = { vp@FROM = plus_cs_sub_preserved_vp }
+			# Гарантируем что vp не уйдёт в минус (не бывает отрицательного вклада)
+			clamp_variable = { var = vp@FROM min = 0 }
+			clear_variable = plus_cs_sub_preserved_vp
+		}
 		
 		# 8. Notify Sender
 		FROM = {

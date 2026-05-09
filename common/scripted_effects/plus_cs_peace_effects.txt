@@ -18,20 +18,25 @@ plus_cs_save_third_party_control = {
 	# Сохраняем TAG врага для восстановления
 	set_variable = { plus_cs_peace_target = FROM.id }
 	
-	# Проходим по всем стейтам врага
+	# Проходим по всем стейтам сдающейся страны (FROM)
+	# BUGFIX: Сохраняем провинции для ВСЕХ воюющих с FROM, включая союзников ROOT.
+	# Без этого игрок, воевавший вместе с принимающей страной (ROOT),
+	# терял свои занятые территории после puppet/white_peace.
 	FROM = {
 		every_owned_state = {
-			# Проверяем: контролирует ли этот стейт третья сторона?
+			# Любой контролёр, воюющий с владельцем стейта — кроме самого ROOT
+			# (ROOT уже получает свои провинции напрямую через annex_occupied_states)
 			if = {
 				limit = {
 					controller = {
 						has_war_with = PREV.owner
 						NOT = { tag = ROOT }
-						NOT = { is_in_faction_with = ROOT }
-						NOT = { is_puppet_of = ROOT }
+						# BUGFIX: убрана проверка is_in_faction_with = ROOT
+						# Раньше союзники ROOT исключались — это приводило к потере
+						# оккупированных игроком территорий при coalition wars
 					}
 				}
-				# Сохраняем ID стейта и контролера
+				# Сохраняем ID стейта и контролёра
 				ROOT = {
 					add_to_array = { plus_cs_preserved_states = PREV.id }
 				}
@@ -59,9 +64,30 @@ plus_cs_restore_third_party_control = {
 		set_temp_variable = { temp_controller = plus_cs_preserved_controllers^i }
 		set_temp_variable = { temp_state = v }
 		
-		# Восстанавливаем контроль третьей стороне
-		var:temp_controller = {
-			set_state_controller = var:temp_state
+		# BUGFIX: Для союзников ROOT (co-belligerents, например игрок) —
+		# передаём стейт им во ВЛАДЕНИЕ, чтобы марионетка не вернула его себе.
+		# Для независимых третьих сторон — только восстанавливаем контроль.
+		if = {
+			limit = {
+				var:temp_controller = {
+					OR = {
+						is_in_faction_with = ROOT
+						is_puppet_of = ROOT
+						has_opinion = { target = ROOT value > 50 }
+					}
+				}
+			}
+			# Союзник: передаём владение + контроль
+			# (иначе марионетка как владелец вернёт провинцию себе)
+			var:temp_controller = {
+				transfer_state = var:temp_state
+			}
+		}
+		else = {
+			# Независимая третья сторона: только контроль (как раньше)
+			var:temp_controller = {
+				set_state_controller = var:temp_state
+			}
 		}
 	}
 	
