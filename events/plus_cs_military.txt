@@ -69,7 +69,7 @@ country_event = {
 					limit = { has_event_target = plus_cs_wounded_general }
 					retire_character = event_target:plus_cs_wounded_general
 				}
-				add_political_power = -0.03
+				add_political_power = -5
 			}
 			80 = {
 				if = {

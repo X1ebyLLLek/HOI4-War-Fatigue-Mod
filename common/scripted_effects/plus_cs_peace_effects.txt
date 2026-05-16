@@ -92,6 +92,8 @@ plus_cs_restore_third_party_control = {
 	}
 	
 	# Уведомляем третьи стороны о сепаратном мире (опционально)
+	# BUGFIX: has_war check prevents event 410 from firing on countries
+	# that just received white_peace in the same peace chain (internal.11/13/15)
 	if = {
 		limit = {
 			check_variable = { plus_cs_preserved_states^num > 0 }
@@ -99,8 +101,11 @@ plus_cs_restore_third_party_control = {
 		for_each_loop = {
 			array = plus_cs_preserved_controllers
 			var:v = {
-				add_opinion_modifier = { target = ROOT modifier = peace_territory_preserved }
-				country_event = { id = plus_cs.410 hours = 6 }
+				if = {
+					limit = { has_war = yes }
+					add_opinion_modifier = { target = ROOT modifier = peace_territory_preserved }
+					country_event = { id = plus_cs.410 hours = 6 }
+				}
 			}
 		}
 	}
